@@ -88,6 +88,14 @@ export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
   workingyears?: string;
 }
 
+export interface GetSubdivisionlabelsQueryParams {
+  /**
+   *
+   * 职位类型
+   */
+  jobName: string;
+}
+
 export interface HRInformation {
   /**
    *
@@ -102,6 +110,12 @@ export interface HRInformation {
    *
    */
   avatar: string;
+  /**
+   *
+   * 公司ID
+   *
+   */
+  companyInfoId: string;
   /**
    *
    * 创建时间
@@ -736,6 +750,41 @@ export interface JobInformation {
   hrId: string;
   /**
    *
+   * 面试信息
+   *
+   */
+  interviewInfo: {
+    /**
+     *
+     * 面试说明
+     *
+     * {1:可周末面试,2:包含笔试,3:可下班面试,4:包含面试作业}
+     */
+    illustrate: "1" | "2" | "3" | "4";
+    /**
+     *
+     * 面试形式
+     *
+     * {1:现场面试,2:视频面试,3:电话面试}
+     */
+    situation: "1" | "2" | "3";
+    /**
+     *
+     * 面试时长
+     *
+     * {1:一天内完成,2:分多次完成}
+     */
+    time: "1" | "2";
+    /**
+     *
+     * 面试轮数
+     *
+     * {1:1-2轮次,2:3-4轮次,3:5-6轮次,4:暂不确定}
+     */
+    wheel: "1" | "2" | "3" | "4";
+  };
+  /**
+   *
    * 职位描述
    *
    */
@@ -787,10 +836,23 @@ export interface JobInformation {
   updatedAt: string;
   /**
    *
+   * 周末休息时间
+   *
+   * {1周末双休:,2:周末单休,3:大小周}
+   */
+  weekendReleseTime: "1" | "2" | "3";
+  /**
+   *
    * 工作地区
    *
    */
   workArea: string;
+  /**
+   *
+   * 上班时间
+   *
+   */
+  workTime: string[];
   /**
    *
    * 工作地点

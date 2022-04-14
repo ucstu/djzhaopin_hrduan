@@ -176,7 +176,7 @@
               <el-col :span="11">
                 <div class="demo-range">
                   <el-time-picker
-                    v-model="workTime"
+                    v-model="jobTypeList.workTime"
                     clearable="false"
                     is-range
                     range-separator="到"
@@ -215,6 +215,7 @@
 </template>
 
 <script setup lang="ts">
+import { postCompanyinfosCompanyinfoidPositioninfos } from "@/services/services";
 import { JobInformation } from "@/services/types";
 import { key } from "@/stores";
 import { FormInstance } from "element-plus";
@@ -244,6 +245,9 @@ const jobTypeList = reactive<JobInformation>({
     longitude: 1,
   },
   workingYears: "0",
+  interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
+  workTime: [],
+  weekendReleseTime: "1",
 });
 const interviewInfo = reactive([1, 2, 3]);
 onUpdated(() => {
@@ -273,8 +277,11 @@ const rules = reactive({
 });
 const publishPost = () => {
   console.log("submit");
+  postCompanyinfosCompanyinfoidPositioninfos(
+    store.state.hrInfo.companyInfoId,
+    jobTypeList
+  ).then((res) => {});
 };
-// postCompanyinfosCompanyinfoidPositioninfos(store.state.companyInfo.companyId, jobTypeList)
 </script>
 
 <style lang="scss" scoped>

@@ -124,6 +124,8 @@ const formLabelAlign = reactive({
   phoneNumber: "",
   createdAt: "",
   updatedAt: "",
+  companyId: "",
+  companyInfoId: "",
 });
 
 const imageUrl = ref("");

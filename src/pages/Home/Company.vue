@@ -221,10 +221,7 @@ const options = reactive([
   },
 ]);
 //表格数据
-const gridData = reactive([]);
-// const citys = getCityinfos().then(res => {
-//     res.data[0]
-// })
+
 const formCompany = reactive<CompanyInformation>({
   address: "",
   about: "",
@@ -246,10 +243,6 @@ const formCompany = reactive<CompanyInformation>({
   createdAt: "",
   updatedAt: "",
 });
-// onMounted(() => {
-//     console.log(route.params.companyName);
-
-// })
 const financingStageMap = [
   "",
   "未融资",
@@ -328,9 +321,9 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
-// const handleChange = (value: any) => {
-//   console.log(value);
-// };
+const handleChange = (value: any) => {
+  console.log(value);
+};
 const confirmCompany = (formEl: FormInstance | undefined) => {
   console.log(formEl);
   if (!formEl) return;

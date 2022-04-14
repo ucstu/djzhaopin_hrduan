@@ -1,0 +1,6 @@
+{
+    "url": "https://www.ucstu.com/projects/djzhaopin/swagger.json",
+    "generateEnumAsType": true,
+    "dir": "./src/services",
+    "prefix": "/v1"
+}

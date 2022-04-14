@@ -17,7 +17,7 @@
     <div class="main">
       <div class="above">
         <div class="top">
-          <img src="../../assets/logo1 1.png" alt="网络问题，请刷新" />
+          <img src="@/assets/logo.png" alt="网络问题，请刷新" />
           <div class="line"></div>
           <span>HR端</span>
         </div>
@@ -150,7 +150,7 @@ a:hover {
         justify-content: center;
         width: 100%;
         height: 165px;
-        background-image: url("../../assets/background1.png");
+        background-image: url("@/assets/background1.png");
 
         span {
           font-size: 30px;

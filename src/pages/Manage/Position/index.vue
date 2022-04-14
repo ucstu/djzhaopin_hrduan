@@ -88,6 +88,10 @@
 
 <script setup lang="ts">
 import { CirclePlus, Search } from "@element-plus/icons-vue";
+// import { useStore } from "vuex";
+// const store = useStore(key);
+// const { companyinfoId } = store.state.hrInfo;
+
 const input2 = "";
 </script>
 

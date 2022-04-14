@@ -5,13 +5,11 @@
 declare module 'vue' {
   export interface GlobalComponents {
     ElAside: typeof import('element-plus/es')['ElAside']
-    ElBadge: typeof import('element-plus/es')['ElBadge']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElCascader: typeof import('element-plus/es')['ElCascader']
-    ElCheckTag: typeof import('element-plus/es')['ElCheckTag']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
@@ -27,24 +25,19 @@ declare module 'vue' {
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElRadio: typeof import('element-plus/es')['ElRadio']
-    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
-    ElTag: typeof import('element-plus/es')['ElTag']
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    Manage: typeof import('./src/components/Manage.vue')['default']
     Setting: typeof import('./src/components/Setting.vue')['default']
     SettingHeader: typeof import('./src/components/SettingHeader.vue')['default']
     System: typeof import('./src/components/System.vue')['default']
     SystemHeadeer: typeof import('./src/components/SystemHeadeer.vue')['default']
-    SystemHeader: typeof import('./src/components/SystemHeader.vue')['default']
   }
 }
 

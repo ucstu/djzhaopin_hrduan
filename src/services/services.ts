@@ -8,32 +8,13 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
-  DeleteAccountsAccountidQueryParams,
-  GetAreaInformationsQueryParams,
-  HRInformation,
-  CityInformations,
+  AccountInformation, AreaInformations, AttentionRecord,
+  CityInformations, CompanyInformation, DeleteAccountsAccountidQueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
+  GetSubdivisionlabelsQueryParams, HRInformation,
   InspectionRecord,
-  CompanyInformation,
-  JobTypes,
-  AttentionRecord,
-  MessageRecord,
-  ProjectExperience,
-  EducationExperience,
-  JobInformation,
-  JobExpectation,
-  FilterInformation,
-  AreaInformations,
-  WorkExperience,
-  GarnerRecord,
-  DirectionTags,
-  AccountInformation,
-  UserInformation,
-  DeliveryRecord,
+  JobExpectation, JobInformation, JobTypes, MessageRecord, ProjectExperience,
+  UserInformation, WorkExperience
 } from "./types";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const __DEV__ = process.env.NODE_ENV !== "production";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function overrideConfig(
@@ -671,11 +652,12 @@ getRecommendations.key = "/recommendations";
  * 查询细分标签
  */
 export const getSubdivisionlabels = (
+  queryParams: GetSubdivisionlabelsQueryParams,
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<DirectionTags>> => {
   return Http.getRequest(
     getSubdivisionlabels.key,
-    undefined,
+    queryParams,
     undefined,
     undefined,
     overrideConfig(_CONSTANT0, configOverride)
@@ -1612,6 +1594,45 @@ export const putAccounts = (
 
 /** Key is end point string without base url */
 putAccounts.key = "/accounts";
+
+/**
+ *
+ * 忘记密码
+ */
+export const putAccounts0 = (
+  requestBody: {
+    /**
+     *
+     * 密码
+     *
+     */
+    password: string;
+    /**
+     *
+     * 手机号
+     *
+     */
+    phoneNumber: string;
+    /**
+     *
+     * 验证码
+     *
+     */
+    verificationCode: number;
+  },
+  configOverride?: AxiosRequestConfig
+): Promise<SwaggerResponse<AccountInformation>> => {
+  return Http.putRequest(
+    putAccounts0.key,
+    undefined,
+    requestBody,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+putAccounts0.key = "/accounts/0";
 
 /**
  *
