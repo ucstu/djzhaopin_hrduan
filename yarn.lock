@@ -1475,6 +1475,11 @@ tsc-prog@^2.2.1:
   resolved "https://registry.yarnpkg.com/tsc-prog/-/tsc-prog-2.2.1.tgz#7ea892e1628f1ef93ae6f4d0a97c8a9518e4b408"
   integrity sha512-whYQUQjB+wm9c2FoikigaBVnXesgAjIYXgHrbzlK+Etg9L657a92MSUcbi5hrD/YBaRmjuDcTIQVZmo/f74OZQ==
 
+typescript@^4.6.3:
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
+  integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
+
 unplugin-auto-import@^0.6.9:
   version "0.6.9"
   resolved "https://registry.yarnpkg.com/unplugin-auto-import/-/unplugin-auto-import-0.6.9.tgz#0ecdc7cf38aaf94f22358b56703e059f41b6f367"
