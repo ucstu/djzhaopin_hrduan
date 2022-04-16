@@ -25,6 +25,44 @@ export interface GetAreaInformationsQueryParams {
   city: string;
 }
 
+export interface GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams {
+  /**
+   *
+   * 年龄限制{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
+   */
+  age?: string;
+  /**
+   *
+   * 投递日期
+   */
+  deliveryDate?: string;
+  /**
+   *
+   * 投递职位
+   */
+  jobId?: string;
+  /**
+   *
+   * 搜索内容
+   */
+  search?: string;
+  /**
+   *
+   * 性别
+   */
+  sex?: string;
+  /**
+   *
+   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  state?: string;
+  /**
+   *
+   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
+   */
+  workingYears?: string;
+}
+
 export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
   /**
    *
@@ -88,12 +126,20 @@ export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
   workingyears?: string;
 }
 
-export interface GetSubdivisionlabelsQueryParams {
+export interface GetDirectiontagsQueryParams {
   /**
    *
    * 职位类型
    */
-  jobName: string;
+  positionName: string;
+}
+
+export interface GetVerificationCodeQueryParams {
+  /**
+   *
+   * 手机号码
+   */
+  phoneNumber: string;
 }
 
 export interface HRInformation {
@@ -126,7 +172,6 @@ export interface HRInformation {
    *
    * HRID
    *
-   * 增加可以留“”
    */
   hrId: string;
   /**
@@ -215,7 +260,6 @@ export interface AttentionRecord {
    *
    * 关注记录ID
    *
-   * 增加可以留“”
    */
   attentionRecordId: string;
   /**
@@ -288,7 +332,6 @@ export interface CompanyInformation {
    *
    * 公司ID
    *
-   * 增加可以留“”
    */
   companyId: string;
   /**
@@ -390,7 +433,6 @@ export interface DeliveryRecord {
    *
    * 投递记录ID
    *
-   * 增加可以留“”
    */
   deliveryRecordId: string;
   /**
@@ -471,7 +513,6 @@ export interface EducationExperience {
    *
    * 教育经历ID
    *
-   * 增加可以留“”
    */
   educationExperienceId: string;
   /**
@@ -499,34 +540,14 @@ export interface ErrorInformation {
    *
    * 错误代码
    *
-   * {1001:请求有误,1002:没有权限,1003:禁止访问,2001:验证码错误}
    */
-  eno: "1001" | "1002" | "1003" | "2001";
+  eno: number;
   /**
    *
    * 错误消息
    *
    */
   msg: string;
-  /**
-   *
-   * 错误内容
-   *
-   */
-  err?: {
-    /**
-     *
-     * 错误消息
-     *
-     */
-    msg: string;
-    /**
-     *
-     * 参数名
-     *
-     */
-    name: string;
-  }[];
 }
 
 export interface FilterInformation {
@@ -536,12 +557,6 @@ export interface FilterInformation {
    *
    */
   IndustryField: string[];
-  /**
-   *
-   * 工作性质
-   *
-   */
-  NatureWork: string[];
   /**
    *
    * 公司规模
@@ -568,6 +583,12 @@ export interface FilterInformation {
   financingStage: string[];
   /**
    *
+   * 工作性质
+   *
+   */
+  natureWork: string[];
+  /**
+   *
    * 细分方向
    *
    */
@@ -591,7 +612,6 @@ export interface GarnerRecord {
    *
    * 收藏记录ID
    *
-   * 增加可以留“”
    */
   garnerRecordId: string;
   /**
@@ -631,7 +651,6 @@ export interface InspectionRecord {
    *
    * 查看记录ID
    *
-   * 增加可以留“”
    */
   inspectionRecordId: string;
   /**
@@ -678,7 +697,6 @@ export interface JobExpectation {
    *
    * 求职期望ID
    *
-   * 增加可以留“”
    */
   jobExpectationId: string;
   /**
@@ -703,7 +721,53 @@ export interface JobExpectation {
   updatedAt: string;
 }
 
-export interface JobInformation {
+export interface MessageRecord {
+  /**
+   *
+   * 消息内容
+   *
+   */
+  content: string;
+  /**
+   *
+   * 创建时间
+   *
+   */
+  createdAt: string;
+  /**
+   *
+   * 来源用户ID
+   *
+   */
+  from: string;
+  /**
+   *
+   * 消息记录ID
+   *
+   */
+  messageRecordId: string;
+  /**
+   *
+   * 去向用户ID
+   *
+   */
+  to: string;
+  /**
+   *
+   * 消息类型
+   *
+   * {1:文字,2:图片,3:语音,4:文件}
+   */
+  type: "1" | "2" | "3" | "4";
+  /**
+   *
+   * 更新时间
+   *
+   */
+  updatedAt: string;
+}
+
+export interface PositionInformation {
   /**
    *
    * 上限薪资
@@ -731,6 +795,12 @@ export interface JobInformation {
   department: string;
   /**
    *
+   * 职位描述
+   *
+   */
+  description: string;
+  /**
+   *
    * 细化标签
    *
    */
@@ -742,6 +812,12 @@ export interface JobInformation {
    * {0:不要求,1:大专,2:本科,3:硕士,4:博士}
    */
   education: "0" | "1" | "2" | "3" | "4";
+  /**
+   *
+   * 职位亮点
+   *
+   */
+  highlights: string[];
   /**
    *
    * HRID
@@ -785,29 +861,16 @@ export interface JobInformation {
   };
   /**
    *
-   * 职位描述
-   *
-   */
-  jobDescription: string;
-  /**
-   *
-   * 职位亮点
-   *
-   */
-  jobHighlights: string[];
-  /**
-   *
-   * 职位信息ID
-   *
-   * 增加可以留“”
-   */
-  jobInformationId: string;
-  /**
-   *
    * 职位名称
    *
    */
   name: string;
+  /**
+   *
+   * 职位信息ID
+   *
+   */
+  positionInformationId: string;
   /**
    *
    * 职位类型
@@ -852,7 +915,7 @@ export interface JobInformation {
    * 上班时间
    *
    */
-  workTime: string[];
+  workTime: string;
   /**
    *
    * 工作地点
@@ -881,7 +944,7 @@ export interface JobInformation {
   workingYears: "0" | "1" | "2" | "3" | "4" | "5";
 }
 
-export type JobTypes = {
+export type PositionTypes = {
   /**
    *
    * 方向
@@ -909,53 +972,6 @@ export type JobTypes = {
   fieldName: string;
 }[];
 
-export interface MessageRecord {
-  /**
-   *
-   * 消息内容
-   *
-   */
-  content: string;
-  /**
-   *
-   * 创建时间
-   *
-   */
-  createdAt: string;
-  /**
-   *
-   * 来源用户ID
-   *
-   */
-  from: string;
-  /**
-   *
-   * 消息记录ID
-   *
-   * 增加可以留“”
-   */
-  messageRecordId: string;
-  /**
-   *
-   * 去向用户ID
-   *
-   */
-  to: string;
-  /**
-   *
-   * 消息类型
-   *
-   * {1:文字,2:图片,3:语音,4:文件}
-   */
-  type: "1" | "2" | "3" | "4";
-  /**
-   *
-   * 更新时间
-   *
-   */
-  updatedAt: string;
-}
-
 export interface ProjectExperience {
   /**
    *
@@ -979,7 +995,6 @@ export interface ProjectExperience {
    *
    * 项目经历ID
    *
-   * 增加可以留“”
    */
   projectExperienceId: string;
   /**
@@ -1064,7 +1079,6 @@ export interface UserInformation {
    *
    */
   email: string;
-  field4: string;
   /**
    *
    * 姓
@@ -1131,7 +1145,6 @@ export interface UserInformation {
    *
    * 用户ID
    *
-   * 增加可以留“”
    */
   userId: string;
   /**
@@ -1143,12 +1156,6 @@ export interface UserInformation {
 }
 
 export interface WorkExperience {
-  /**
-   *
-   * 所属部门
-   *
-   */
-  Department: string;
   /**
    *
    * 公司领域
@@ -1169,6 +1176,12 @@ export interface WorkExperience {
   createdAt: string;
   /**
    *
+   * 所属部门
+   *
+   */
+  department: string;
+  /**
+   *
    * 离职时间
    *
    */
@@ -1179,6 +1192,12 @@ export interface WorkExperience {
    *
    */
   jobContent: string;
+  /**
+   *
+   * 职位名称
+   *
+   */
+  positionName: string;
   /**
    *
    * 职位类型
@@ -1202,7 +1221,6 @@ export interface WorkExperience {
    *
    * 工作经历ID
    *
-   * 增加可以留“”
    */
   workExperienceId: string;
 }
