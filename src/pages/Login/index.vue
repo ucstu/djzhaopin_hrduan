@@ -35,10 +35,8 @@
               >登录</el-button
             >
           </el-form-item>
-          <el-form-item>
-            <router-link to="/enroll">还没有账号？点击注册</router-link>
-          </el-form-item>
         </el-form>
+        <router-link to="/enroll">还没有账号？点击注册</router-link>
       </div>
     </div>
     <div class="footer"></div>
@@ -57,7 +55,6 @@ const store = useStore(key);
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
-    console.log(1111111);
   } else {
     if (ruleForm.phoneNumber !== "") {
       if (!ruleFormRef.value) return;
@@ -87,6 +84,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putAccounts(ruleForm).then((res) => {
+        console.log(res);
+
         store.commit("setToken", res.data.body.token);
         store.commit("setAccountInfo", res.data.body.accountInfo);
         router.replace("/home");

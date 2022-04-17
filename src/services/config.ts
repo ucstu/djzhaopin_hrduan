@@ -4,16 +4,13 @@
  * @version 5
  */
 import Axios, {
-  AxiosRequestConfig,
-  AxiosError,
-  AxiosResponse,
-  AxiosInstance,
+  AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse
 } from "axios";
 //@ts-ignore
 import qs from "qs";
 
 const baseConfig: AxiosRequestConfig = {
-  baseURL: "", // <--- Add your base url
+  baseURL: (import.meta.env.VITE_BASE_URL as string) || "", // <--- Add your base url
   headers: {
     "Content-Encoding": "UTF-8",
     Accept: "application/json",
@@ -100,6 +97,6 @@ class RequestError extends Error {
 
 export type Security = any[] | undefined;
 
-export interface SwaggerResponse<R> extends AxiosResponse<R> {}
+export type SwaggerResponse<R> = AxiosResponse<R>;
 
 export { getAxiosInstance, RequestError };

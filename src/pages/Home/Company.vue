@@ -61,11 +61,7 @@
               <span>{{ formCompany.comprehension || "请选择" }}</span>
               <img src="../../assets/down.png" />
             </div>
-            <el-dialog
-              v-model="dialogFormVisible"
-              title="请选择公司行业"
-              :scroll-lock="false"
-            >
+            <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
               <Tag @submit-data="submitData" />
               <template #footer>
                 <span class="dialog-footer">
@@ -79,10 +75,9 @@
           </el-form-item>
           <el-form-item label="所在城市">
             <el-cascader
-              v-model="value"
-              :options="options"
+              v-model="formCompany.city"
+              :options="cityMap"
               placeholder="请选择"
-              @change="handleChange"
             />
           </el-form-item>
           <el-form-item label="公司规模" prop="scale">
@@ -112,18 +107,19 @@
           </el-form-item>
           <el-form-item label="公司福利">
             <el-select
-              v-model="value"
+              v-model="formCompany.benefits"
               multiple
               filterable
               allow-create
               default-first-option
               :reserve-keyword="false"
-              placeholder="选择公司福利"
+              placeholder="请选择"
             >
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :value="item.value"
+                v-for="item in benefitsMap"
+                :key="item"
+                :label="item"
+                :value="item"
               />
             </el-select>
           </el-form-item>
@@ -199,11 +195,11 @@
 <script setup lang="ts">
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import router from "../../router";
-import { postCompanyinfos } from "../../services/services";
+import { getCityinfos, postCompanyinfos } from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
@@ -212,16 +208,9 @@ const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
 const imageUrl = ref("");
-const value = ref([]);
 const route = useRoute();
 const dialogFormVisible = ref(false);
 
-const options = reactive([
-  {
-    value: [],
-    options: [],
-  },
-]);
 //表格数据
 
 const formCompany = reactive<CompanyInformation>({
@@ -265,6 +254,7 @@ const scaleMap = [
   "500-2000人",
   "2000人以上",
 ];
+const benefitsMap = ["全年13薪", "全年14薪"];
 interface companyInfo {
   logo: string;
   name: string;
@@ -335,9 +325,29 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
-const handleChange = (value: any) => {
-  console.log(value);
-};
+interface cityInfo {
+  children: { value: string; label: string }[];
+  value: string;
+  label: string;
+}
+const cityMap = ref<cityInfo[]>([]);
+onMounted(() => {
+  getCityinfos().then((res) => {
+    cityMap.value = res.data.body.map((item) => {
+      return {
+        value: item.provinceName,
+        label: item.provinceName,
+        children: item.cities.map((city) => {
+          return {
+            value: city,
+            label: city,
+          };
+        }),
+      };
+    });
+  });
+});
+
 const confirmCompany = (formEl: FormInstance | undefined) => {
   console.log(formEl);
   if (!formEl) return;
