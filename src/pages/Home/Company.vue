@@ -272,7 +272,9 @@ interface companyInfo {
   industry: string;
   size: string;
 }
-const submitData = (data) => {
+const submitData = (data: {
+  data: { checked: any; directionName: string };
+}) => {
   if (data.data.checked) {
     formCompany.comprehension = data.data.directionName;
   }

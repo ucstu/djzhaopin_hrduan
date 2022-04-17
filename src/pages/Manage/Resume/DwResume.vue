@@ -5,25 +5,33 @@
         <div class="total">
           <div class="top">
             <div class="second-line abcdefg">
-              <el-select v-model="value" class="m-2" placeholder="Select">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="按反馈"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in feedbackMap"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 />
               </el-select>
-              <el-select v-model="value" class="m-2" placeholder="Select">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="投递职位"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in education"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 />
               </el-select>
 
               <el-input
-                v-model="input2"
+                v-model="deliveryRecord.interviewTime"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
                 placeholder="Type something"
@@ -78,10 +86,7 @@ const deliveryRecord = reactive<DeliveryRecord>({
 });
 const checked1 = ref(false);
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
-const gander = ["男", "女"];
-const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const education = ["大专", "本科", "硕士", "博士"];
-const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 </script>
 
 <style scoped lang="scss">

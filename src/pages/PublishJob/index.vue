@@ -246,7 +246,7 @@ const jobTypeList = reactive<PositionInformation>({
   },
   workingYears: "0",
   interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
-  workTime: [],
+  workTime: "",
   weekendReleseTime: "1",
 });
 const weekendReleseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);

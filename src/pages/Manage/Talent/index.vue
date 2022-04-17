@@ -4,33 +4,90 @@
       <div class="center">
         <div class="total">
           <div class="top">
+            <div class="first-line">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="按反馈"
+              >
+                <el-option
+                  v-for="item in feedbackMap"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="工作经验"
+              >
+                <el-option
+                  v-for="item in workExperience"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="学历"
+              >
+                <el-option
+                  v-for="item in education"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-date-picker
+                v-model="deliveryRecord.interviewTime"
+                type="date"
+                placeholder="Pick a date"
+                class="data-picker"
+                :default-value="new Date(2010, 9, 1)"
+              />
+            </div>
             <div class="second-line">
-              <el-select v-model="value" class="m-2" placeholder="Select">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="性别"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in gander"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 />
               </el-select>
-              <el-select v-model="value" class="m-2" placeholder="Select">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="年龄"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in age"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 />
               </el-select>
-              <el-select v-model="value" class="m-2" placeholder="Select">
+              <el-select
+                v-model="deliveryRecord.interviewTime"
+                class="m-2"
+                placeholder="投递职位"
+              >
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in education"
+                  :key="item"
+                  :label="item"
+                  :value="item"
                 />
               </el-select>
               <el-input
-                v-model="input2"
+                v-model="deliveryRecord.interviewTime"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
                 placeholder="Type something"
@@ -126,6 +183,18 @@ const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
           flex-direction: column;
           justify-content: center;
           margin-top: 20px;
+
+          .first-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50px;
+
+            .data-picker {
+              max-width: 200px;
+              margin: 0 2px;
+            }
+          }
 
           .second-line {
             display: flex;

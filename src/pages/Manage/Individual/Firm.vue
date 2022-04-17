@@ -17,14 +17,14 @@
         <el-form-item label="Activity name">
           <el-input v-model="sizeForm.name" type="textarea" />
         </el-form-item>
-        <el-form-item label="所在城市">
+        <!-- <el-form-item label="所在城市">
           <el-cascader
             v-model="value"
             :options="options"
             placeholder="请选择"
             @change="handleChange"
           />
-        </el-form-item>
+        </el-form-item> -->
         <div class="bottom-btn">
           <el-button type="primary" @click="confirmCompany(formRef)"
             >确认</el-button
@@ -36,7 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { FormInstance } from "element-plus";
+import { reactive, ref } from "vue";
+const formRef = ref<FormInstance>();
+const formCompany = reactive({});
 const sizeForm = reactive({
   name: "",
   region: "",
@@ -46,6 +49,14 @@ const sizeForm = reactive({
   type: [],
   resource: "",
   desc: "",
+});
+const confirmCompany = (formEl: FormInstance | undefined) => {
+  formEl?.validate(() => {
+    console.log(sizeForm);
+  });
+};
+const rule = reactive({
+  name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 });
 </script>
 

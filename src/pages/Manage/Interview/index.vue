@@ -7,7 +7,7 @@
             <div class="first-line">
               <h1>面试时间：</h1>
               <el-date-picker
-                v-model="value1"
+                v-model="deliveryRecord.interviewTime"
                 type="daterange"
                 range-separator="To"
                 start-placeholder="Start date"
@@ -60,11 +60,6 @@ const deliveryRecord = reactive<DeliveryRecord>({
 });
 
 const checked1 = ref(false);
-const feedbackMap = ["已通过", "已拒绝", "待审核"];
-const gander = ["男", "女"];
-const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
-const education = ["大专", "本科", "硕士", "博士"];
-const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 </script>
 
 <style scoped lang="scss">
