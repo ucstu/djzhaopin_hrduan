@@ -8,9 +8,31 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  AccountInformation, AreaInformations,
-  AttentionRecord, CityInformations, CompanyInformation, DeleteAccountsAccountidQueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams,
-  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams, GetCompanyinfosCompanyinfoidPositioninfosQueryParams, GetDirectiontagsQueryParams, GetVerificationCodeQueryParams, HRInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation, PositionTypes, ProjectExperience, UserInformation, WorkExperience
+  GetVerificationCodeQueryParams,
+  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
+  GetAreaInformationsQueryParams,
+  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
+  DeleteAccountsAccountidQueryParams,
+  GetDirectiontagsQueryParams,
+  PositionInformation,
+  AreaInformations,
+  AttentionRecord,
+  GarnerRecord,
+  PositionTypes,
+  JobExpectation,
+  WorkExperience,
+  CityInformations,
+  UserInformation,
+  AccountInformation,
+  HRInformation,
+  MessageRecord,
+  ProjectExperience,
+  InspectionRecord,
+  CompanyInformation,
+  EducationExperience,
+  DirectionTags,
+  FilterInformation,
+  DeliveryRecord,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

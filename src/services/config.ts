@@ -13,7 +13,7 @@ import Axios, {
 import qs from "qs";
 
 const baseConfig: AxiosRequestConfig = {
-  baseURL: (import.meta.env.VITE_BASE_URL as string) || "", // <--- Add your base url
+  baseURL: "", // <--- Add your base url
   headers: {
     "Content-Encoding": "UTF-8",
     Accept: "application/json",
