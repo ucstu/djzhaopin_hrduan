@@ -172,7 +172,6 @@ export interface HRInformation {
    *
    * HRID
    *
-   * 增加可以留“”
    */
   hrId: string;
   /**
@@ -261,7 +260,6 @@ export interface AttentionRecord {
    *
    * 关注记录ID
    *
-   * 增加可以留“”
    */
   attentionRecordId: string;
   /**
@@ -334,7 +332,6 @@ export interface CompanyInformation {
    *
    * 公司ID
    *
-   * 增加可以留“”
    */
   companyId: string;
   /**
@@ -436,7 +433,6 @@ export interface DeliveryRecord {
    *
    * 投递记录ID
    *
-   * 增加可以留“”
    */
   deliveryRecordId: string;
   /**
@@ -517,7 +513,6 @@ export interface EducationExperience {
    *
    * 教育经历ID
    *
-   * 增加可以留“”
    */
   educationExperienceId: string;
   /**
@@ -545,34 +540,14 @@ export interface ErrorInformation {
    *
    * 错误代码
    *
-   * {1001:请求有误,1002:没有权限,1003:禁止访问,2001:验证码错误}
    */
-  eno: "1001" | "1002" | "1003" | "2001";
+  eno: number;
   /**
    *
    * 错误消息
    *
    */
   msg: string;
-  /**
-   *
-   * 错误内容
-   *
-   */
-  err?: {
-    /**
-     *
-     * 错误消息
-     *
-     */
-    msg: string;
-    /**
-     *
-     * 参数名
-     *
-     */
-    name: string;
-  }[];
 }
 
 export interface FilterInformation {
@@ -637,7 +612,6 @@ export interface GarnerRecord {
    *
    * 收藏记录ID
    *
-   * 增加可以留“”
    */
   garnerRecordId: string;
   /**
@@ -677,7 +651,6 @@ export interface InspectionRecord {
    *
    * 查看记录ID
    *
-   * 增加可以留“”
    */
   inspectionRecordId: string;
   /**
@@ -724,7 +697,6 @@ export interface JobExpectation {
    *
    * 求职期望ID
    *
-   * 增加可以留“”
    */
   jobExpectationId: string;
   /**
@@ -772,7 +744,6 @@ export interface MessageRecord {
    *
    * 消息记录ID
    *
-   * 增加可以留“”
    */
   messageRecordId: string;
   /**
@@ -898,7 +869,6 @@ export interface PositionInformation {
    *
    * 职位信息ID
    *
-   * 增加可以留“”
    */
   positionInformationId: string;
   /**
@@ -945,7 +915,7 @@ export interface PositionInformation {
    * 上班时间
    *
    */
-  workTime: string[];
+  workTime: string;
   /**
    *
    * 工作地点
@@ -1025,7 +995,6 @@ export interface ProjectExperience {
    *
    * 项目经历ID
    *
-   * 增加可以留“”
    */
   projectExperienceId: string;
   /**
@@ -1176,7 +1145,6 @@ export interface UserInformation {
    *
    * 用户ID
    *
-   * 增加可以留“”
    */
   userId: string;
   /**
@@ -1188,12 +1156,6 @@ export interface UserInformation {
 }
 
 export interface WorkExperience {
-  /**
-   *
-   * 所属部门
-   *
-   */
-  Department: string;
   /**
    *
    * 公司领域
@@ -1214,6 +1176,12 @@ export interface WorkExperience {
   createdAt: string;
   /**
    *
+   * 所属部门
+   *
+   */
+  department: string;
+  /**
+   *
    * 离职时间
    *
    */
@@ -1224,6 +1192,12 @@ export interface WorkExperience {
    *
    */
   jobContent: string;
+  /**
+   *
+   * 职位名称
+   *
+   */
+  positionName: string;
   /**
    *
    * 职位类型
@@ -1247,7 +1221,6 @@ export interface WorkExperience {
    *
    * 工作经历ID
    *
-   * 增加可以留“”
    */
   workExperienceId: string;
 }
