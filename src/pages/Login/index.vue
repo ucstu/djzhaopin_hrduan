@@ -87,8 +87,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putAccounts(ruleForm).then((res) => {
-        store.commit("setToken", res.data.token);
-        store.commit("setAccountInfo", res.data.accountInfo);
+        store.commit("setToken", res.data.body.token);
+        store.commit("setAccountInfo", res.data.body.accountInfo);
         router.replace("/home");
       });
     } else {

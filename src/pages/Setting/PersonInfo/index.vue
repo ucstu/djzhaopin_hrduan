@@ -100,16 +100,16 @@ const imageUrl = ref("");
 onMounted(() => {
   getHrinfosHrinfoid(store.state.hrInfo.hrId).then((res) => {
     console.log(res);
-    imageUrl.value = res.data.avatar;
-    formHr.name = res.data.name;
-    formHr.post = res.data.post;
-    formHr.acceptEmail = res.data.acceptEmail;
-    formHr.phoneNumber = res.data.phoneNumber;
+    imageUrl.value = res.data.body.avatar;
+    formHr.name = res.data.body.name;
+    formHr.post = res.data.body.post;
+    formHr.acceptEmail = res.data.body.acceptEmail;
+    formHr.phoneNumber = res.data.body.phoneNumber;
   });
   getCompanyinfosCompanyinfoid(store.state.companyInfo.companyId).then(
     (res) => {
       console.log(res);
-      formHr.fullName = res.data.fullName;
+      formHr.fullName = res.data.body.fullName;
     }
   );
 });

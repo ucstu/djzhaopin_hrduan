@@ -139,7 +139,7 @@ onMounted(() => {
 //         async (valid, fields) => {
 //             if (valid) {
 //                 const res = await putHrinfosHrinfoid(store.state.accountInfo.infoId, personForm)
-//                 store.commit('setHrInfo', res.data)
+//                 store.commit('setHrInfo', res.data.body)
 //             } else {
 //                 ElMessage.error('请填写完整信息')
 //             }
@@ -153,7 +153,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
       postCompanyinfos(companyForm)
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
-          store.commit("setCompanyInfo", res.data);
+          store.commit("setCompanyInfo", res.data.body);
         })
         .catch((reject) => {
           console.error(reject);

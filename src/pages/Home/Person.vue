@@ -165,7 +165,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
         store.state.accountInfo.infoId,
         formLabelAlign
       );
-      store.commit("setHrInfo", res.data);
+      store.commit("setHrInfo", res.data.body);
       router.push({
         name: "Company",
         params: { companyName: formLabelAlign.fullName },
