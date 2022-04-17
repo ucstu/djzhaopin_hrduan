@@ -13,7 +13,7 @@
               active-text-color="#999"
               text-color="#000"
               background-color="rgb(240, 250, 250)"
-              router="true"
+              :router="true"
             >
               <el-menu-item index="/System/Message">
                 <el-icon>

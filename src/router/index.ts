@@ -108,7 +108,20 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "Individual",
+        redirect: "/System/Individual/Guy",
         component: () => import("../pages/Manage/Individual/index.vue"),
+        children: [
+          {
+            name: "Guy",
+            path: "Guy",
+            component: () => import("../pages/Manage/Individual/Guy.vue"),
+          },
+          {
+            name: "Firm",
+            path: "Firm",
+            component: () => import("../pages/Manage/Individual/Firm.vue"),
+          },
+        ],
       },
     ],
   },

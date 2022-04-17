@@ -111,7 +111,7 @@
             >
             <el-form-item label="职位描述" prop="name">
               <el-input
-                v-model="jobTypeList.jobDescription"
+                v-model="jobTypeList.description"
                 minlength="20"
                 autosize
                 maxlength="2000"
@@ -131,7 +131,7 @@
             </el-form-item>
             <el-form-item label="职位亮点" prop="joblight">
               <el-input
-                v-model="jobTypeList.jobHighlights"
+                v-model="jobTypeList.highlights"
                 placeholder="请填写职位吸引力，如发展前景、团队实力等"
                 :autosize="{ minRows: 2, maxRows: 4 }"
                 maxlength="20"
@@ -158,11 +158,11 @@
             <el-form-item label="工作时间">
               <el-col :span="11">
                 <el-select
-                  v-model="jobTypeList.workingYears"
+                  v-model="jobTypeList.weekendReleseTime"
                   placeholder="请选择周末休息时间"
                 >
                   <el-option
-                    v-for="(item, index) in workingYears"
+                    v-for="(item, index) in weekendReleseTimeMap"
                     :key="item"
                     :label="item"
                     :value="index"
@@ -188,19 +188,19 @@
               </el-col>
             </el-form-item>
             <el-form-item label="面试信息">
-              <el-select
+              <!-- <el-select
                 v-model="jobTypeList.interviewInfo"
                 placeholder="添加面试信息标签"
                 multiple
               >
                 <el-option
-                  v-for="(item, index) in interviewInfo"
+                  v-for="(item, index) in interviewInfoMap"
                   :key="item"
                   :label="item"
                   :value="index"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="publishPost"
@@ -216,14 +216,14 @@
 
 <script setup lang="ts">
 import { postCompanyinfosCompanyinfoidPositioninfos } from "@/services/services";
-import { JobInformation } from "@/services/types";
+import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { FormInstance } from "element-plus";
-import { onUpdated, reactive, ref } from "vue";
+import { onUpdated, reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const formRef = ref<FormInstance>();
-const jobTypeList = reactive<JobInformation>({
+const jobTypeList = reactive<PositionInformation>({
   startingSalary: 0,
   ceilingSalary: 0,
   createdAt: "",
@@ -231,9 +231,9 @@ const jobTypeList = reactive<JobInformation>({
   directionTags: [],
   education: "0",
   hrId: "",
-  jobDescription: "",
-  jobHighlights: [],
-  jobInformationId: "",
+  description: "",
+  highlights: [],
+  positionInformationId: "",
   name: "",
   positionType: "1",
   companyId: "",
@@ -249,9 +249,18 @@ const jobTypeList = reactive<JobInformation>({
   workTime: [],
   weekendReleseTime: "1",
 });
-const interviewInfo = reactive([1, 2, 3]);
+const weekendReleseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
+const interviewInfoMap = reactive({
+  illustrate: "1",
+  situation: "1",
+  time: "1",
+  wheel: "1",
+});
 onUpdated(() => {
   console.log(jobTypeList.name);
+});
+watch(jobTypeList, () => {
+  console.log(jobTypeList.workTime);
 });
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
@@ -280,7 +289,7 @@ const publishPost = () => {
   postCompanyinfosCompanyinfoidPositioninfos(
     store.state.hrInfo.companyInfoId,
     jobTypeList
-  ).then((res) => {});
+  );
 };
 </script>
 
