@@ -109,7 +109,6 @@ const deletePrise = (index: number) => {
       height: 559px;
       margin-top: 15px;
       overflow: hidden;
-      overflow-y: scroll;
 
       .el-scrollbar {
         width: 100%;

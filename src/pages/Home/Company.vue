@@ -52,31 +52,31 @@
               </span>
             </div>
           </el-form-item>
-          <!-- <el-form-item label="公司行业" prop="name">
-                        <el-input
-                            v-model="formCompany.comprehension"
-                            :input-style="{ display: 'none' }"
-                        />
-                        <div class="select" @click="dialogFormVisible = true">
-                            <span>{{ formCompany.comprehension || "请选择" }}</span>
-                            <img src="../../assets/down.png" />
-                        </div>
-                        <el-dialog v-model="dialogFormVisible" title="请选择公司行业" :scroll-lock="false">
-                            <el-table :data="gridData">
-                                <el-table-column property="date" label="Date" width="150" />
-                                <el-table-column property="name" label="Name" width="200" />
-                                <el-table-column property="address" label="Address" />
-                            </el-table>
-
-                            <div @click="formCompany.comprehension = '149649419'">441156</div>
-                            <template #footer>
-                                <span class="dialog-footer">
-                                    <el-button @click="dialogFormVisible = false">取消</el-button>
-                                    <el-button type="primary" @click="dialogFormVisible = false">确定</el-button>
-                                </span>
-                            </template>
-                        </el-dialog>
-                    </el-form-item>-->
+          <el-form-item label="公司行业" prop="comprehension">
+            <el-input
+              v-model="formCompany.comprehension"
+              :input-style="{ display: 'none' }"
+            />
+            <div class="select" @click="dialogFormVisible = true">
+              <span>{{ formCompany.comprehension || "请选择" }}</span>
+              <img src="../../assets/down.png" />
+            </div>
+            <el-dialog
+              v-model="dialogFormVisible"
+              title="请选择公司行业"
+              :scroll-lock="false"
+            >
+              <Tag @submit-data="submitData" />
+              <template #footer>
+                <span class="dialog-footer">
+                  <el-button @click="dialogFormVisible = false">取消</el-button>
+                  <el-button type="primary" @click="dialogFormVisible = false"
+                    >确定</el-button
+                  >
+                </span>
+              </template>
+            </el-dialog>
+          </el-form-item>
           <el-form-item label="所在城市">
             <el-cascader
               v-model="value"
@@ -85,7 +85,7 @@
               @change="handleChange"
             />
           </el-form-item>
-          <el-form-item label="公司规模" prop="name">
+          <el-form-item label="公司规模" prop="scale">
             <el-select v-model="formCompany.scale" placeholder="请选择">
               <el-option label="少于15人" value="1" />
               <el-option label="15-50人" value="2" />
@@ -95,7 +95,7 @@
               <el-option label="2000人以上" value="6" />
             </el-select>
           </el-form-item>
-          <el-form-item label="发展阶段" prop="name">
+          <el-form-item label="发展阶段" prop="financingStage">
             <el-select
               v-model="formCompany.financingStage"
               placeholder="请选择"
@@ -207,6 +207,7 @@ import { postCompanyinfos } from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
+import Tag from "./Tag.vue";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
@@ -214,6 +215,7 @@ const imageUrl = ref("");
 const value = ref([]);
 const route = useRoute();
 const dialogFormVisible = ref(false);
+
 const options = reactive([
   {
     value: [],
@@ -270,6 +272,11 @@ interface companyInfo {
   industry: string;
   size: string;
 }
+const submitData = (data) => {
+  if (data.data.checked) {
+    formCompany.comprehension = data.data.directionName;
+  }
+};
 const formInstance = reactive<companyInfo[]>([
   {
     logo: "https://tse1-mm.cn.bing.net/th/id/R-C.f6ea7adbf0fd0e4b2f3299308aa92471?rik=YzXBT59%2bWCTZBQ&riu=http%3a%2f%2fwww.gaoruiad.com%2fuploads%2fimage%2f20190621%2f20190621181458_89994.jpg&ehk=vb99sP9BQF%2fKTXBJ6pul4F95H53QX22GJ36iRya2OQs%3d&risl=&pid=ImgRaw&r=0",
@@ -308,7 +315,12 @@ const handleAvatarError: UploadProps["onError"] = () => {
   ElMessage.error("对不起，上传失败，请重试");
 };
 const rule = reactive({
+  comprehension: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  scale: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  financingStage: [
+    { required: true, message: "此项不能为空", trigger: "blur" },
+  ],
 });
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
@@ -333,7 +345,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，公司创建成功");
           dialogFormVisible.value = false;
-          store.commit("setCompanyInfo", res.data);
+          store.commit("setCompanyInfo", res.data.body);
           router.push("/PublishJob");
         })
         .catch((reject) => {
@@ -378,9 +390,7 @@ a:hover {
 
       .el-form-item {
         .select {
-          display: flex;
-          align-items: center;
-          justify-content: space-around;
+          position: relative;
           width: 211px;
           height: 30px;
           line-height: 30px;
@@ -388,12 +398,16 @@ a:hover {
           border-radius: 4px;
 
           span {
-            margin-right: 117px;
+            position: absolute;
+            left: -5px;
             font-size: 14px;
             color: #ababb2;
           }
 
           img {
+            position: absolute;
+            top: 6px;
+            right: 10px;
             width: 16px;
             height: 16px;
           }
