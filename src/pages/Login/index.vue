@@ -16,9 +16,9 @@
           label-width="120px"
           class="demo-ruleForm"
         >
-          <el-form-item label="用户名" prop="phoneNumber">
+          <el-form-item label="用户名" prop="userName">
             <el-input
-              v-model="ruleForm.phoneNumber"
+              v-model="ruleForm.userName"
               type="text"
               placeholder="请输入用户名"
             />
@@ -57,7 +57,7 @@ const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
   } else {
-    if (ruleForm.phoneNumber !== "") {
+    if (ruleForm.userName !== "") {
       if (!ruleFormRef.value) return;
       ruleFormRef.value.validateField("checkPass", () => null);
     }
@@ -72,13 +72,13 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
   }
 };
 const ruleForm = reactive({
-  phoneNumber: "",
+  userName: "",
   verificationCode: "",
   password: "",
 });
 const rules = reactive({
   password: [{ validator: validatePass, trigger: "blur" }],
-  phoneNumber: [{ validator: validatePass2, trigger: "blur" }],
+  userName: [{ validator: validatePass2, trigger: "blur" }],
 });
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;

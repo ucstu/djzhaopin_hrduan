@@ -84,8 +84,10 @@ const deliveryRecord = reactive<DeliveryRecord>({
   interviewTime: "",
   jobInformationId: "",
 });
-const checked1 = ref(false);
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
+
+const checked1 = ref(false);
+
 const education = ["大专", "本科", "硕士", "博士"];
 </script>
 

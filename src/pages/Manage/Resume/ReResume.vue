@@ -6,91 +6,61 @@
           <div class="top">
             <div class="first-line">
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.state"
                 class="m-2"
                 placeholder="按反馈"
               >
                 <el-option
-                  v-for="item in feedbackMap"
+                  v-for="(item, index) in feedbackMap"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.workingYears"
                 class="m-2"
                 placeholder="工作经验"
               >
                 <el-option
-                  v-for="item in workExperience"
+                  v-for="(item, index) in workExperience"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="学历"
-              >
-                <el-option
-                  v-for="item in education"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
+
               <el-date-picker
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.deliveryDate"
                 type="date"
-                placeholder="Pick a date"
+                placeholder="选择日期"
                 class="data-picker"
                 :default-value="new Date(2010, 9, 1)"
               />
             </div>
             <div class="second-line">
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="性别"
-              >
+              <el-select v-model="valueMap.sex" class="m-2" placeholder="性别">
                 <el-option
-                  v-for="item in gander"
+                  v-for="(item, index) in gander"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="年龄"
-              >
+              <el-select v-model="valueMap.age" class="m-2" placeholder="年龄">
                 <el-option
-                  v-for="item in age"
+                  v-for="(item, index) in age"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="投递职位"
-              >
-                <el-option
-                  v-for="item in education"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
+
               <el-input
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.search"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
-                placeholder="Type something"
+                placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
             </div>
@@ -129,8 +99,11 @@
 
 <script setup lang="ts">
 import { DeliveryRecord } from "@/services/types";
+import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
+import { useStore } from "vuex";
+const store = useStore(key);
 const deliveryRecord = reactive<DeliveryRecord>({
   deliveryRecordId: "",
   createdAt: "",
@@ -140,11 +113,49 @@ const deliveryRecord = reactive<DeliveryRecord>({
   interviewTime: "",
   jobInformationId: "",
 });
+const valueMap = ref({
+  age: "",
+  /**
+   *
+   * 投递日期
+   */
+  deliveryDate: "",
+  /**
+   *
+   * 投递职位
+   */
+  jobId: "",
+  /**
+   *
+   * 搜索内容
+   */
+  search: "",
+  /**
+   *
+   * 性别
+   */
+  sex: "",
+  /**
+   *
+   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  state: "",
+  /**
+   *
+   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
+   */
+  workingYears: "",
+});
+// getCompanyinfosCompanyinfoidDeliveryrecords(
+//   store.state.companyInfo.companyId,
+//   valueMap.value
+// ).then((res) => {
+
+// });
 const checked1 = ref(false);
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
-const education = ["大专", "本科", "硕士", "博士"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 </script>
 

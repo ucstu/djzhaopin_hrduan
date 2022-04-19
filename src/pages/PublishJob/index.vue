@@ -358,7 +358,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
     if (valid) {
       postCompanyinfosCompanyinfoidPositioninfos(
         store.state.hrInfo.companyInfoId,
-        jobTypeList
+        jobTypeList.value
       )
         .then((res) => {
           ElMessage.success("恭喜您，公司创建成功");
@@ -378,7 +378,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
       putCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
         store.state.companyInfo.companyId,
         route.params.positionInfoId.toString(),
-        jobTypeList
+        jobTypeList.value
       ).then((res) => {
         ElMessage.success("恭喜您，职位信息修改成功");
         store.commit("setPositionInfo", res.data.body);

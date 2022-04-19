@@ -1,6 +1,6 @@
 <template>
   <div class="password">
-    <span>登录账号：{{ store.state.accountInfo.phoneNumber }}</span>
+    <span>登录账号：{{ store.state.accountInfo.userName }}</span>
     <div>
       <el-form
         ref="ruleFormRef"

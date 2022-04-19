@@ -7,7 +7,7 @@
             <div class="info-left">
               <div class="left-item">
                 <span>招聘中</span>
-                <div class="circle">{{ 1 }}</div>
+                <div class="circle">{{ jobTypeList.length }}</div>
               </div>
               <!-- <div class="left-item">
                 <span>暂停中</span>
@@ -32,7 +32,7 @@
         <div class="state">
           <div class="state-left">
             <span>展示状态</span>
-            <span>全部({{ 1 }})</span>
+            <span>全部({{ jobTypeList.length }})</span>
           </div>
           <div>
             <el-input
@@ -46,35 +46,40 @@
 
         <div class="position">
           <el-scrollbar height="400px">
-            <div class="position-list">
-              <div class="position-item">
-                <div class="item">
-                  <span>{{ "职位:" + name }}</span>
-                  <span>{{ "工作地点:" + workArea }}</span>
+            <template v-for="position in jobTypeList" :key="position.companyId">
+              <div v-if="positionInformationId" class="position-list">
+                <div class="position-item">
+                  <div class="item">
+                    <span>{{ "职位:" + position.name }}</span>
+                    <span>{{ "工作地点:" + position.workArea }}</span>
+                  </div>
+                  <div class="item">
+                    <span>{{ "上班时间:" + position.workTime }}</span>
+                    <span>{{ "职位类型:" + position.positionType }}</span>
+                  </div>
+                  <div class="item">
+                    <span>{{
+                      "薪酬:" +
+                      position.startingSalary +
+                      "-" +
+                      position.ceilingSalary
+                    }}</span>
+                  </div>
                 </div>
-                <div class="item">
-                  <span>{{ "上班时间:" + workTime }}</span>
-                  <span>{{ "福利待遇:" + highlights }}</span>
-                </div>
-                <div class="item">
-                  <span>{{
-                    "薪酬:" + startingSalary + "-" + ceilingSalary
-                  }}</span>
+                <div>
+                  <el-button
+                    type="primary"
+                    @click="updatePosition(positionInformationId)"
+                    >编辑职位</el-button
+                  >
+                  <el-button
+                    type="danger"
+                    @click="deletePosition(positionInformationId)"
+                    >删除职位</el-button
+                  >
                 </div>
               </div>
-              <div>
-                <el-button
-                  type="primary"
-                  @click="updatePosition(positionInformationId)"
-                  >编辑职位</el-button
-                >
-                <el-button
-                  type="danger"
-                  @click="deletePosition(positionInformationId)"
-                  >删除职位</el-button
-                >
-              </div>
-            </div>
+            </template>
             <el-divider />
           </el-scrollbar>
         </div>
@@ -99,24 +104,53 @@
 
 <script setup lang="ts">
 import router from "@/router";
+import {
+  deleteCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getCompanyinfosCompanyinfoidPositioninfos,
+} from "@/services/services";
+import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
-import { toRefs } from "vue";
+import { ElMessage } from "element-plus";
+import { ref, toRefs } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
-console.log(store.state.positionInfo);
-const {
-  name,
-  workTime,
-  startingSalary,
-  ceilingSalary,
-  workArea,
-  highlights,
-  positionInformationId,
-} = toRefs(store.state.positionInfo);
-// import { useStore } from "vuex";
-// const store = useStore(key);
-// const { companyinfoId } = store.state.hrInfo;
+const jobTypeList = ref<PositionInformation[]>([
+  {
+    startingSalary: 0,
+    ceilingSalary: 0,
+    createdAt: "",
+    department: "",
+    directionTags: [],
+    education: "0",
+    hrId: "",
+    description: "",
+    highlights: [],
+    positionInformationId: "",
+    name: "",
+    positionType: "1",
+    companyId: "",
+    releaseDate: "",
+    updatedAt: "",
+    workArea: "",
+    workingPlace: {
+      latitude: 1,
+      longitude: 1,
+    },
+    workingYears: "0",
+    interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
+    workTime: "",
+    weekendReleseTime: "1",
+  },
+]);
+getCompanyinfosCompanyinfoidPositioninfos(
+  store.state.companyInfo.companyId,
+  {}
+).then((res) => {
+  jobTypeList.value = res.data.body;
+});
+
+const { positionInformationId } = toRefs(store.state.positionInfo);
 
 const toPublish = () => {
   router.push("/PublishJob");
@@ -128,7 +162,17 @@ const updatePosition = (id: string) => {
     params: { PublishJobId: id },
   });
 };
-const deletePosition = (id: string) => {};
+const deletePosition = (id: string) => {
+  deleteCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+    store.state.companyInfo.companyId,
+    id
+  ).then((res) => {
+    store.state.positionInfo = res.data.body;
+    positionInformationId.value = "";
+    console.log(store.state.positionInfo);
+    ElMessage.success("删除成功");
+  });
+};
 </script>
 
 <style scoped lang="scss">
@@ -252,6 +296,7 @@ const deletePosition = (id: string) => {};
           display: flex;
           justify-content: space-around;
           margin-top: 15px;
+          border-bottom: 1px solid #d5d6d7;
 
           .position-item {
             display: flex;
@@ -261,6 +306,7 @@ const deletePosition = (id: string) => {};
             .item {
               display: flex;
               flex-direction: column;
+              width: 100%;
               text-align: center;
             }
           }
