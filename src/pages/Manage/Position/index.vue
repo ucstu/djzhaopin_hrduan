@@ -19,7 +19,7 @@
               </div> -->
             </div>
             <div class="info-right">
-              <el-button type="primary">
+              <el-button type="primary" @click="toPublish">
                 <el-icon>
                   <circle-plus />
                 </el-icon>
@@ -32,7 +32,7 @@
         <div class="state">
           <div class="state-left">
             <span>展示状态</span>
-            <span>全部({{}})</span>
+            <span>全部({{ 1 }})</span>
           </div>
           <div>
             <el-input
@@ -49,20 +49,30 @@
             <div class="position-list">
               <div class="position-item">
                 <div class="item">
-                  <span>职位</span>
-                  <span>工作地点</span>
+                  <span>{{ "职位:" + name }}</span>
+                  <span>{{ "工作地点:" + workArea }}</span>
                 </div>
                 <div class="item">
-                  <span>工作时间</span>
-                  <span>福利待遇</span>
+                  <span>{{ "上班时间:" + workTime }}</span>
+                  <span>{{ "福利待遇:" + highlights }}</span>
                 </div>
                 <div class="item">
-                  <span>薪酬</span>
+                  <span>{{
+                    "薪酬:" + startingSalary + "-" + ceilingSalary
+                  }}</span>
                 </div>
               </div>
               <div>
-                <el-button type="primary">编辑职位</el-button>
-                <el-button type="danger">删除职位</el-button>
+                <el-button
+                  type="primary"
+                  @click="updatePosition(positionInformationId)"
+                  >编辑职位</el-button
+                >
+                <el-button
+                  type="danger"
+                  @click="deletePosition(positionInformationId)"
+                  >删除职位</el-button
+                >
               </div>
             </div>
             <el-divider />
@@ -88,12 +98,37 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
+import { key } from "@/stores";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
+import { toRefs } from "vue";
+import { useStore } from "vuex";
+const store = useStore(key);
+console.log(store.state.positionInfo);
+const {
+  name,
+  workTime,
+  startingSalary,
+  ceilingSalary,
+  workArea,
+  highlights,
+  positionInformationId,
+} = toRefs(store.state.positionInfo);
 // import { useStore } from "vuex";
 // const store = useStore(key);
 // const { companyinfoId } = store.state.hrInfo;
 
+const toPublish = () => {
+  router.push("/PublishJob");
+};
 const input2 = "";
+const updatePosition = (id: string) => {
+  router.push({
+    name: "PublishJob",
+    params: { PublishJobId: id },
+  });
+};
+const deletePosition = (id: string) => {};
 </script>
 
 <style scoped lang="scss">
