@@ -162,11 +162,11 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       const res = await putHrinfosHrinfoid(
-        store.state.accountInfo.infoId,
+        store.state.accountInfo.hrInfoId,
         formLabelAlign
       );
       store.commit("setHrInfo", res.data.body);
-      router.push({
+      router.replace({
         name: "Company",
         params: { companyName: formLabelAlign.fullName },
       });

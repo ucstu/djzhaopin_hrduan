@@ -32,10 +32,10 @@
                 placeholder="请选择招聘类型"
               >
                 <el-option
-                  v-for="item in jobTypeMap"
+                  v-for="(item, index) in jobTypeMap"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index + 1"
                 >
                 </el-option>
               </el-select>
@@ -76,7 +76,7 @@
                     v-for="(item, index) in educationMap"
                     :key="item"
                     :label="item"
-                    :value="index"
+                    :value="index + 1"
                   >
                   </el-option>
                 </el-select>
@@ -169,7 +169,7 @@
                       v-for="(item, index) in weekendReleseTimeMap"
                       :key="item"
                       :label="item"
-                      :value="index"
+                      :value="index + 1"
                     >
                     </el-option>
                   </el-select>
@@ -194,8 +194,8 @@
                 </div>
               </el-col>
             </el-form-item>
-            <el-form-item label="面试信息">
-              <!-- <el-select
+            <!-- <el-form-item label="面试信息">
+              <el-select
                 v-model="jobTypeList.interviewInfo"
                 placeholder="添加面试信息标签"
                 multiple
@@ -207,11 +207,20 @@
                   :value="index"
                 >
                 </el-option>
-              </el-select> -->
-            </el-form-item>
+              </el-select>
+            </el-form-item> -->
             <el-form-item>
-              <el-button type="primary" @click="publishPost(formRef)"
+              <el-button
+                v-if="!route.params"
+                type="primary"
+                @click="publishPost(formRef)"
                 >发布职位</el-button
+              >
+              <el-button
+                v-if="route.params"
+                type="primary"
+                @click="updatelishPost(formRef)"
+                >编辑职位</el-button
               >
             </el-form-item>
           </el-form>
@@ -223,15 +232,21 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { postCompanyinfosCompanyinfoidPositioninfos } from "@/services/services";
+import {
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  postCompanyinfosCompanyinfoidPositioninfos,
+  putCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+} from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { ElMessage, FormInstance } from "element-plus";
-import { onUpdated, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const store = useStore(key);
+const route = useRoute();
 const formRef = ref<FormInstance>();
-const jobTypeList = reactive<PositionInformation>({
+const jobTypeList = ref<PositionInformation>({
   startingSalary: 0,
   ceilingSalary: 0,
   createdAt: "",
@@ -258,17 +273,15 @@ const jobTypeList = reactive<PositionInformation>({
   weekendReleseTime: "1",
 });
 const weekendReleseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
-const interviewInfoMap = reactive({
-  illustrate: "1",
-  situation: "1",
-  time: "1",
-  wheel: "1",
-});
-onUpdated(() => {
-  console.log(jobTypeList.name);
-});
+// const interviewInfoMap = reactive({
+//   illustrate: "1",
+//   situation: "1",
+//   time: "1",
+//   wheel: "1",
+// });
+
 watch(jobTypeList, () => {
-  console.log(jobTypeList.workTime);
+  console.log(jobTypeList.value.workTime);
 });
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
@@ -328,7 +341,17 @@ const rules = reactive({
     },
   ],
 });
-
+onMounted(() => {
+  if (route.params.PublishJobId) {
+    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      store.state.companyInfo.companyId,
+      route.params.PublishJobId.toString()
+    ).then((res) => {
+      jobTypeList.value = res.data.body;
+    });
+  }
+  console.log(route.params.PublishJobId);
+});
 const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
@@ -345,6 +368,22 @@ const publishPost = (formEl: FormInstance | undefined) => {
         .catch((err) => {
           ElMessage.error(err.message);
         });
+    }
+  });
+};
+const updatelishPost = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      putCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+        store.state.companyInfo.companyId,
+        route.params.positionInfoId.toString(),
+        jobTypeList
+      ).then((res) => {
+        ElMessage.success("恭喜您，职位信息修改成功");
+        store.commit("setPositionInfo", res.data.body);
+        router.replace("/Manage");
+      });
     }
   });
 };

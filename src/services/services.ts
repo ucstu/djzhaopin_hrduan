@@ -8,31 +8,32 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetVerificationCodeQueryParams,
-  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
-  GetAreaInformationsQueryParams,
-  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
   DeleteAccountsAccountidQueryParams,
+  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
   GetDirectiontagsQueryParams,
-  PositionInformation,
+  GetUserinfosUserinfoidDeliveryrecordsQueryParams,
+  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
+  GetVerificationCodeQueryParams,
+  GetAreaInformationsQueryParams,
+  CityInformations,
+  JobExpectation,
+  HRInformation,
+  InspectionRecord,
+  DirectionTags,
   AreaInformations,
   AttentionRecord,
-  GarnerRecord,
-  PositionTypes,
-  JobExpectation,
-  WorkExperience,
-  CityInformations,
-  UserInformation,
-  AccountInformation,
-  HRInformation,
-  MessageRecord,
-  ProjectExperience,
-  InspectionRecord,
-  CompanyInformation,
   EducationExperience,
-  DirectionTags,
-  FilterInformation,
   DeliveryRecord,
+  PositionInformation,
+  WorkExperience,
+  UserInformation,
+  FilterInformation,
+  GarnerRecord,
+  ProjectExperience,
+  AccountInformation,
+  CompanyInformation,
+  MessageRecord,
+  PositionTypes,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1477,6 +1478,7 @@ export const getUserinfosUserinfoidDeliveryrecords = (
    * 用户信息ID
    */
   userinfoid: string,
+  queryParams: GetUserinfosUserinfoidDeliveryrecordsQueryParams,
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
@@ -1508,7 +1510,7 @@ export const getUserinfosUserinfoidDeliveryrecords = (
 > => {
   return Http.getRequest(
     template(getUserinfosUserinfoidDeliveryrecords.key, { userinfoid }),
-    undefined,
+    queryParams,
     undefined,
     undefined,
     overrideConfig(_CONSTANT0, configOverride)
@@ -2291,10 +2293,10 @@ export const postAccounts = (
     password: string;
     /**
      *
-     * 手机号码
+     * 用户名
      *
      */
-    phoneNumber: string;
+    userName: string;
     /**
      *
      * 短信验证码
@@ -2315,6 +2317,74 @@ export const postAccounts = (
 
 /** Key is end point string without base url */
 postAccounts.key = "/accounts";
+
+/**
+ *
+ * 登录账号
+ */
+export const postAccountsLogin = (
+  requestBody: {
+    /**
+     *
+     * 密码
+     *
+     */
+    password: string;
+    /**
+     *
+     * 用户名
+     *
+     */
+    userName: string;
+  },
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 账号信息
+     *
+     */
+    body: {
+      accountInfo: AccountInformation;
+      /**
+       *
+       * TOKEN
+       *
+       */
+      token: string;
+    };
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.postRequest(
+    postAccountsLogin.key,
+    undefined,
+    requestBody,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+postAccountsLogin.key = "/accounts/login";
 
 /**
  *
@@ -3036,77 +3106,9 @@ postUserinfosUserinfoidWorkexperiences.key =
 
 /**
  *
- * 登录账号
- */
-export const putAccounts = (
-  requestBody: {
-    /**
-     *
-     * 密码
-     *
-     */
-    password: string;
-    /**
-     *
-     * 手机号码
-     *
-     */
-    phoneNumber: string;
-  },
-  configOverride?: AxiosRequestConfig
-): Promise<
-  SwaggerResponse<{
-    /**
-     *
-     * 账号信息
-     *
-     */
-    body: {
-      accountInfo: AccountInformation;
-      /**
-       *
-       * TOKEN
-       *
-       */
-      token: string;
-    };
-    /**
-     *
-     * 状态描述
-     *
-     */
-    message: string;
-    /**
-     *
-     * 响应状态
-     *
-     */
-    status: number;
-    /**
-     *
-     * 处理时间
-     *
-     */
-    timestamp: string;
-  }>
-> => {
-  return Http.putRequest(
-    putAccounts.key,
-    undefined,
-    requestBody,
-    undefined,
-    overrideConfig(_CONSTANT0, configOverride)
-  );
-};
-
-/** Key is end point string without base url */
-putAccounts.key = "/accounts";
-
-/**
- *
  * 忘记密码
  */
-export const putAccounts0 = (
+export const putAccountsForget = (
   requestBody: {
     /**
      *
@@ -3116,10 +3118,10 @@ export const putAccounts0 = (
     password: string;
     /**
      *
-     * 手机号
+     * 用户名
      *
      */
-    phoneNumber: string;
+    userName: string;
     /**
      *
      * 验证码
@@ -3152,7 +3154,7 @@ export const putAccounts0 = (
   }>
 > => {
   return Http.putRequest(
-    putAccounts0.key,
+    putAccountsForget.key,
     undefined,
     requestBody,
     undefined,
@@ -3161,7 +3163,7 @@ export const putAccounts0 = (
 };
 
 /** Key is end point string without base url */
-putAccounts0.key = "/accounts/0";
+putAccountsForget.key = "/accounts/forget";
 
 /**
  *

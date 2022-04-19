@@ -7,11 +7,6 @@
 export interface DeleteAccountsAccountidQueryParams {
   /**
    *
-   * 手机号码
-   */
-  phoneNumber: string;
-  /**
-   *
    * 验证码
    */
   verificationCode: string;
@@ -134,6 +129,14 @@ export interface GetDirectiontagsQueryParams {
   positionName: string;
 }
 
+export interface GetUserinfosUserinfoidDeliveryrecordsQueryParams {
+  /**
+   *
+   * 投递记录状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  status: string;
+}
+
 export interface GetVerificationCodeQueryParams {
   /**
    *
@@ -222,22 +225,28 @@ export interface AccountInformation {
   createdAt: string;
   /**
    *
-   * 信息ID
+   * HR信息ID
    *
    */
-  infoId: string;
-  /**
-   *
-   * 手机号码
-   *
-   */
-  phoneNumber: string;
+  hrInfoId: string;
   /**
    *
    * 更新时间
    *
    */
   updatedAt: string;
+  /**
+   *
+   * 用户信息ID
+   *
+   */
+  userInfoId: string;
+  /**
+   *
+   * 用户名
+   *
+   */
+  userName: string;
 }
 
 export type AreaInformations = {
@@ -706,6 +715,12 @@ export interface JobExpectation {
    * {1:全职,2:兼职,3:实习}
    */
   positionType: "1" | "2" | "3";
+  /**
+   *
+   * 职位名
+   *
+   */
+  positonName: string;
   /**
    *
    * 起始薪资

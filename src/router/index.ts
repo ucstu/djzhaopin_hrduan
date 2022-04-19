@@ -24,7 +24,8 @@ const leftBarRouteList: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/PublishJob",
+    name: "PublishJob",
+    path: "/PublishJob/:PublishJobId?",
     component: PublishJob,
   },
   {
@@ -80,6 +81,10 @@ const leftBarRouteList: RouteRecordRaw[] = [
       {
         path: "ResumeDownload",
         component: () => import("../pages/Manage/Resume/DwResume.vue"),
+      },
+      {
+        path: "Resume",
+        component: () => import("../pages/Manage/Resume/index.vue"),
       },
       {
         path: "Interview",

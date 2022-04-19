@@ -12,7 +12,6 @@
         <el-tab-pane :key="Privary" label="隐私设置" name="Privary">
           <Privary />
         </el-tab-pane>
-        <!-- <div :is="state.currentView" keep-alive></div> -->
       </el-tabs>
     </div>
   </div>
@@ -23,9 +22,6 @@ import { reactive, ref } from "vue";
 import Password from "./Password.vue";
 import Privary from "./Privary.vue";
 const tabPosition = ref("top");
-// const handleClick = () => {
-//     currentView.value = 'Password'
-// }
 const state = reactive({
   userID: "",
   // 默认组件，显示第一个组件

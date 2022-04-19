@@ -44,7 +44,7 @@
               <el-date-picker
                 v-model="deliveryRecord.interviewTime"
                 type="date"
-                placeholder="Pick a date"
+                placeholder="选择日期"
                 class="data-picker"
                 :default-value="new Date(2010, 9, 1)"
               />
@@ -90,7 +90,7 @@
                 v-model="deliveryRecord.interviewTime"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
-                placeholder="Type something"
+                placeholder="输入姓名查找"
                 :prefix-icon="Search"
               />
             </div>
@@ -128,9 +128,10 @@
 </template>
 
 <script setup lang="ts">
+import { getRecommendations } from "@/services/services";
 import { DeliveryRecord } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 const deliveryRecord = reactive<DeliveryRecord>({
   deliveryRecordId: "",
   createdAt: "",
@@ -146,6 +147,39 @@ const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const education = ["大专", "本科", "硕士", "博士"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
+interface TalentInfos {
+  name: string;
+  sex: string;
+  age: number;
+  education: string;
+  workingYears: number;
+  city: string;
+  positonName: string;
+  startingSalary: number;
+  positionType: "1" | "2" | "3";
+}
+const TalentInfo = ref<TalentInfos[]>([
+  {
+    name: "",
+    sex: "",
+    age: 0,
+    education: "",
+    workingYears: 0,
+    city: "",
+    positonName: "",
+    startingSalary: 0,
+    positionType: "1",
+  },
+]);
+onMounted(() => {
+  getRecommendations().then((res) => {
+    console.log(res);
+  });
+});
+// const filters = ref<FilterInformation>({
+
+// });
+// getFilterinfos().then((res) => {});
 </script>
 
 <style scoped lang="scss">

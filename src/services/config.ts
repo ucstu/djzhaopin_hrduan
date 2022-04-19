@@ -4,7 +4,10 @@
  * @version 5
  */
 import Axios, {
-  AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
 } from "axios";
 //@ts-ignore
 import qs from "qs";

@@ -97,6 +97,7 @@
 
 <script setup lang="ts">
 import SystemHeader from "@/components/SystemHeadeer.vue";
+import router from "@/router";
 import {
   getCompanyinfosCompanyinfoidDeliveryrecords,
   getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
@@ -163,6 +164,12 @@ onMounted(() => {
 
 const inspectionResume = (id: string) => {
   console.log(id);
+  router.push({
+    path: "/System/Resume",
+    query: {
+      id: id,
+    },
+  });
 };
 </script>
 

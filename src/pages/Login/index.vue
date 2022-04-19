@@ -48,8 +48,9 @@ import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import router from "../../router";
-import { putAccounts } from "../../services/services";
+import { postAccountsLogin } from "../../services/services";
 import { key } from "../../stores";
+
 const ruleFormRef = ref<FormInstance>();
 const store = useStore(key);
 const validatePass = (rule: any, value: any, callback: any) => {
@@ -83,9 +84,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAccounts(ruleForm)
+      postAccountsLogin(ruleForm)
         .then((res) => {
-          console.log(res);
           store.commit("setToken", res.data.body.token);
           store.commit("setAccountInfo", res.data.body.accountInfo);
           router.replace("/home");
