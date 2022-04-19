@@ -1,9 +1,15 @@
 <template>
-  <div><Tag /></div>
+  <div class="data">
+    <InspectionResume />
+  </div>
 </template>
 
 <script setup lang="ts">
-import Tag from "../../Home/Tag.vue";
+import InspectionResume from "../Resume/InspectionResume.vue";
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.data {
+  height: 100%;
+}
+</style>

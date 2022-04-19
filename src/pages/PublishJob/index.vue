@@ -20,13 +20,13 @@
         <div>
           <el-form
             ref="formRef"
-            v-model="jobTypeList"
+            :model="jobTypeList"
             label-width="120px"
             :rules="rules"
             size="large"
             style="max-width: 700px"
           >
-            <el-form-item label="招聘类型" prop="name">
+            <el-form-item label="招聘类型" prop="positionType">
               <el-select
                 v-model="jobTypeList.positionType"
                 placeholder="请选择招聘类型"
@@ -44,7 +44,6 @@
               <el-input
                 v-model="jobTypeList.name"
                 placeholder="职位名称建议包括工作内容和职位等级"
-                maxlength="20"
               />
             </el-form-item>
             <!-- <el-form-item label="职位类别" prop="name">
@@ -83,25 +82,29 @@
                 </el-select>
               </el-col>
             </el-form-item>
-            <el-form-item label="薪资范围" prop="name">
+            <el-form-item label="薪资范围">
               <el-col :span="11">
-                <el-input
-                  v-model.number="jobTypeList.startingSalary"
-                  placeholder="请输入起始薪资"
-                >
-                  <template #append>K</template>
-                </el-input>
+                <el-form-item prop="startingSalary">
+                  <el-input
+                    v-model.number="jobTypeList.startingSalary"
+                    placeholder="请输入起始薪资"
+                  >
+                    <template #append>K</template>
+                  </el-input>
+                </el-form-item>
               </el-col>
               <el-col :span="2" class="text-center">
                 <span class="text-gray-500">-</span>
               </el-col>
               <el-col :span="11">
-                <el-input
-                  v-model.number="jobTypeList.ceilingSalary"
-                  placeholder="请输入上限薪资"
-                >
-                  <template #append>K</template>
-                </el-input>
+                <el-form-item prop="ceilingSalary">
+                  <el-input
+                    v-model.number="jobTypeList.ceilingSalary"
+                    placeholder="请输入上限薪资"
+                  >
+                    <template #append>K</template>
+                  </el-input>
+                </el-form-item>
               </el-col>
             </el-form-item>
             <el-divider direction="vertical" class="divider" />
@@ -109,7 +112,7 @@
             <span class="explain"
               >详细的职位介绍信息能帮助你更快找到合适的候选人</span
             >
-            <el-form-item label="职位描述" prop="name">
+            <el-form-item label="职位描述" prop="description">
               <el-input
                 v-model="jobTypeList.description"
                 minlength="20"
@@ -129,7 +132,7 @@
                 type="textarea"
               />
             </el-form-item>
-            <el-form-item label="职位亮点" prop="joblight">
+            <el-form-item label="职位亮点" prop="highlights">
               <el-input
                 v-model="jobTypeList.highlights"
                 placeholder="请填写职位吸引力，如发展前景、团队实力等"
@@ -138,9 +141,9 @@
                 show-word-limit
               />
             </el-form-item>
-            <el-form-item label="工作地点" prop="address">
+            <el-form-item label="工作地点" prop="workArea">
               <el-input
-                v-model="jobTypeList.workingPlace"
+                v-model="jobTypeList.workArea"
                 placeholder="请输入工作地址"
               />
             </el-form-item>
@@ -157,33 +160,37 @@
             <span class="explain">完善附加信息可以让候选人更加了解职位</span>
             <el-form-item label="工作时间">
               <el-col :span="11">
-                <el-select
-                  v-model="jobTypeList.weekendReleseTime"
-                  placeholder="请选择周末休息时间"
-                >
-                  <el-option
-                    v-for="(item, index) in weekendReleseTimeMap"
-                    :key="item"
-                    :label="item"
-                    :value="index"
+                <el-form-item prop="weekendReleseTime">
+                  <el-select
+                    v-model="jobTypeList.weekendReleseTime"
+                    placeholder="请选择周末休息时间"
                   >
-                  </el-option>
-                </el-select>
+                    <el-option
+                      v-for="(item, index) in weekendReleseTimeMap"
+                      :key="item"
+                      :label="item"
+                      :value="index"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
               </el-col>
               <el-col :span="2" class="text-center">
                 <span class="text-gray-500"></span>
               </el-col>
               <el-col :span="11">
                 <div class="demo-range">
-                  <el-time-picker
-                    v-model="jobTypeList.workTime"
-                    clearable="false"
-                    is-range
-                    range-separator="到"
-                    start-placeholder="上班时间"
-                    end-placeholder="下班时间"
-                    format="HH:mm"
-                  />
+                  <el-form-item prop="workTime">
+                    <el-time-picker
+                      v-model="jobTypeList.workTime"
+                      :clearable="false"
+                      is-range
+                      range-separator="到"
+                      start-placeholder="上班时间"
+                      end-placeholder="下班时间"
+                      format="HH:mm"
+                    />
+                  </el-form-item>
                 </div>
               </el-col>
             </el-form-item>
@@ -203,7 +210,7 @@
               </el-select> -->
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="publishPost"
+              <el-button type="primary" @click="publishPost(formRef)"
                 >发布职位</el-button
               >
             </el-form-item>
@@ -215,10 +222,11 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { postCompanyinfosCompanyinfoidPositioninfos } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
-import { FormInstance } from "element-plus";
+import { ElMessage, FormInstance } from "element-plus";
 import { onUpdated, reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
@@ -275,21 +283,70 @@ const workingYears = reactive([
 ]);
 const rules = reactive({
   name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-  address: [{ required: true, message: "请选择工作地址", trigger: "blur" }],
-  joblight: [
+  workArea: [{ required: true, message: "请选择工作地址", trigger: "blur" }],
+  positionType: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  highlights: [
     {
       required: true,
       message: "请输入职位吸引候选人的亮点，如：福利待遇、发展前景等",
       trigger: "blur",
     },
   ],
+  startingSalary: [
+    {
+      required: true,
+      message: "请输入薪资范围，如：10-20",
+      trigger: "blur",
+    },
+  ],
+  ceilingSalary: [
+    {
+      required: true,
+      message: "请输入薪资范围，如：10-20",
+      trigger: "blur",
+    },
+  ],
+  description: [
+    {
+      required: true,
+      message: "请输入职位描述",
+      trigger: "blur",
+    },
+  ],
+  weekendReleseTime: [
+    {
+      required: true,
+      message: "请选择周末休息时间",
+      trigger: "blur",
+    },
+  ],
+  workTime: [
+    {
+      required: true,
+      message: "请选择工作时间",
+      trigger: "blur",
+    },
+  ],
 });
-const publishPost = () => {
-  console.log("submit");
-  postCompanyinfosCompanyinfoidPositioninfos(
-    store.state.hrInfo.companyInfoId,
-    jobTypeList
-  );
+
+const publishPost = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      postCompanyinfosCompanyinfoidPositioninfos(
+        store.state.hrInfo.companyInfoId,
+        jobTypeList
+      )
+        .then((res) => {
+          ElMessage.success("恭喜您，公司创建成功");
+          store.commit("setPositionInfo", res.data.body);
+          router.push("/Manage");
+        })
+        .catch((err) => {
+          ElMessage.error(err.message);
+        });
+    }
+  });
 };
 </script>
 

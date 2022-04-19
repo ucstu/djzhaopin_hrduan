@@ -41,7 +41,7 @@
                 class="avatar-uploader"
                 action="http://127.0.0.1:4523/mock/743652/avatars"
               >
-                <img v-if="imageUrl" :src="formCompany.logo" class="avatar" />
+                <img v-if="ImageUrl" :src="formCompany.logo" class="avatar" />
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
                   <Plus />
                 </el-icon>
@@ -59,7 +59,7 @@
             />
             <div class="select" @click="dialogFormVisible = true">
               <span>{{ formCompany.comprehension || "请选择" }}</span>
-              <img src="../../assets/down.png" />
+              <img src="../../assets/down.png" alt="" />
             </div>
             <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
               <Tag @submit-data="submitData" />
@@ -136,7 +136,7 @@
         <div class="my-company">
           <img
             :src="
-              imageUrl ||
+              ImageUrl ||
               'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             alt=""
@@ -207,8 +207,9 @@ import Tag from "./Tag.vue";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const imageUrl = ref("");
+const imageUrl = ref("../../assets/down.png");
 const route = useRoute();
+const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
 
 //表格数据

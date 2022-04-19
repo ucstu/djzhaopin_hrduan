@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormInstance } from "element-plus";
+import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import router from "../../router";
@@ -83,13 +83,20 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAccounts(ruleForm).then((res) => {
-        console.log(res);
-
-        store.commit("setToken", res.data.body.token);
-        store.commit("setAccountInfo", res.data.body.accountInfo);
-        router.replace("/home");
-      });
+      putAccounts(ruleForm)
+        .then((res) => {
+          console.log(res);
+          store.commit("setToken", res.data.body.token);
+          store.commit("setAccountInfo", res.data.body.accountInfo);
+          router.replace("/home");
+        })
+        .catch((err) => {
+          let msg = "";
+          for (const error of err.response.data.errors) {
+            msg += error.msg + "\n";
+          }
+          ElMessage.warning(msg);
+        });
     } else {
       console.log("error submit!");
       return false;

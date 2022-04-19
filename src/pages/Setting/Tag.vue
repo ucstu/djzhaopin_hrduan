@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="tag">
     <el-scrollbar height="400px">
       <div
@@ -49,21 +49,49 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-interface interview {
-  illustrate: string;
-  situation: string;
-  time: string;
-  wheel: string;
+import { onMounted, reactive, ref } from "vue";
+import { getPositiontypes } from "../../services/services";
+
+interface PositionType {
+  directions: {
+    directionName: string;
+    positions: {
+      positionName: string;
+      checked: boolean;
+    }[];
+  }[];
+  fieldName: string;
 }
-const interviewInfo = ref<interview[]>([
-  {
-    illustrate: "",
-    situation: "",
-    time: "",
-    wheel: "",
-  },
-]);
+
+const checkableJobTypes = ref<PositionType[]>([]);
+
+const checkablePositions = ref<PositionType["directions"][0]["positions"]>([]);
+
+onMounted(() => {
+  getPositiontypes().then((res) => {
+    console.log(res.data.body);
+    checkableJobTypes.value = res.data.body.map((jobType) => {
+      const checkableDirections = jobType.directions.map((direction) => {
+        const _checkablePositions = direction.positions.map((position) => {
+          let checkablePosition = reactive({
+            positionName: position,
+            checked: false,
+          });
+          checkablePositions.value.push(checkablePosition);
+          return checkablePosition;
+        });
+        return {
+          directionName: direction.directionName,
+          positions: _checkablePositions,
+        };
+      });
+      return {
+        fieldName: jobType.fieldName,
+        directions: checkableDirections,
+      };
+    });
+  });
+});
 </script>
 <style scoped lang="scss">
 .tag {
@@ -102,4 +130,4 @@ const interviewInfo = ref<interview[]>([
     }
   }
 }
-</style> -->
+</style>

@@ -5,20 +5,7 @@ import Home from "../pages/Home/index.vue";
 import HomePerson from "../pages/Home/Person.vue";
 import Login from "../pages/Login/index.vue";
 import PublishJob from "../pages/PublishJob/index.vue";
-
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/",
-    redirect: "/login",
-  },
-  {
-    path: "/Login",
-    component: Login,
-  },
-  {
-    path: "/Enroll",
-    component: Enroll,
-  },
+const leftBarRouteList: RouteRecordRaw[] = [
   {
     path: "/Home/",
     component: Home,
@@ -130,7 +117,27 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../pages/Manage/index.vue"),
   },
 ];
-
+const unAuthRouterList: RouteRecordRaw[] = [
+  {
+    path: "/",
+    redirect: "/login",
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/Login",
+    component: Login,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/Enroll",
+    component: Enroll,
+    meta: { requiresAuth: false },
+  },
+];
+const routes: Array<RouteRecordRaw> = [
+  ...unAuthRouterList,
+  ...leftBarRouteList,
+];
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
@@ -140,6 +147,9 @@ const router = createRouter({
 //     next();
 //   } else {
 //     if (localStorage.getItem("token")) {
+//       leftBarRouteList.forEach((item) => {
+//         router.addRoute(item);
+//       });
 //       next();
 //     } else {
 //       next("/Login");

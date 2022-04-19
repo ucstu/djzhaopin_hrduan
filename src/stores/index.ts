@@ -2,9 +2,11 @@ import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import VuexPersister from "vuex-persister";
 import {
-    AccountInformation,
-    CompanyInformation,
-    HRInformation
+  AccountInformation,
+  CompanyInformation,
+  DeliveryRecord,
+  HRInformation,
+  PositionInformation
 } from "../services/types";
 
 const vuexPersister = new VuexPersister<State>({});
@@ -15,6 +17,8 @@ export interface State {
   hrInfo: HRInformation;
   companyInfo: CompanyInformation;
   comprise: Array<string>;
+  positionInfo: PositionInformation;
+  deliveryRecord: DeliveryRecord;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -26,6 +30,8 @@ export const store = createStore<State>({
     hrInfo: {} as HRInformation,
     companyInfo: {} as CompanyInformation,
     comprise: [],
+    positionInfo: {} as PositionInformation,
+    deliveryRecord: {} as DeliveryRecord,
   }),
   mutations: {
     setPrise(state: State, payload: State["comprise"]) {
@@ -42,6 +48,12 @@ export const store = createStore<State>({
     },
     setCompanyInfo(state: State, companyInfo: State["companyInfo"]) {
       state.companyInfo = companyInfo;
+    },
+    setPositionInfo(state: State, positionInfo: State["positionInfo"]) {
+      state.positionInfo = positionInfo;
+    },
+    setDeliveryRecord(state: State, deliveryRecord: State["deliveryRecord"]) {
+      state.deliveryRecord = deliveryRecord;
     },
   },
   modules: {},

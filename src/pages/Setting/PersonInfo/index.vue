@@ -43,13 +43,13 @@
             placeholder="请填写你工作中的名字，便于向求职者展示"
           />
         </el-form-item>
-        <el-form-item label="职位" prop="name">
+        <el-form-item label="职位" prop="post">
           <el-input v-model="formHr.post" placeholder="请填写职位信息" />
         </el-form-item>
-        <el-form-item label="公司" prop="name">
+        <el-form-item label="公司" prop="fullName">
           <el-input v-model="formHr.fullName" placeholder="请填写公司信息" />
         </el-form-item>
-        <el-form-item label="手机" prop="phone">
+        <el-form-item label="手机" prop="phoneNumber">
           <el-input
             v-model="formHr.phoneNumber"
             placeholder="请填写工作手机号"
@@ -73,6 +73,11 @@
         >
           <el-input v-model="formHr.acceptEmail" placeholder="请填写常用邮箱" />
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="updateHrinfo(ruleFormRef)"
+            >修改信息</el-button
+          >
+        </el-form-item>
       </el-form>
     </div>
     <div class="bottom">
@@ -87,15 +92,14 @@
 import {
   getCompanyinfosCompanyinfoid,
   getHrinfosHrinfoid,
+  putHrinfosHrinfoid,
 } from "@/services/services";
 import { Plus } from "@element-plus/icons-vue";
-import type { UploadProps } from "element-plus";
-import { ElMessage } from "element-plus";
+import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import router from "../../../router/index";
 import { store } from "../../../stores";
-const formSize = ref("default");
-
+const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
   getHrinfosHrinfoid(store.state.hrInfo.hrId).then((res) => {
@@ -113,20 +117,6 @@ onMounted(() => {
     }
   );
 });
-// const updateHrinfo = (rule: any, value: any, callback: any) => {
-//     if (value === '') {
-//         callback(new Error('请填写此项'))
-//     } else {
-//         if (useValidate(value)){
-//             formHr.value.validateField
-//         }
-//             // if (formHr.include !== '') {
-//             //     if (!ruleFormRef.value) return
-//             //     ruleFormRef.value.validateField('checkPass', () => null)
-//             // }
-//             callback()
-//     }
-// }
 const formHr = reactive({
   avatar: "",
   name: "",
@@ -135,6 +125,9 @@ const formHr = reactive({
   acceptEmail: "",
   hrId: "",
   phoneNumber: "",
+  companyInfoId: "",
+  createdAt: "",
+  updatedAt: "",
 });
 const rules = reactive({
   name: [
@@ -143,17 +136,27 @@ const rules = reactive({
       message: "此项不能为空",
       trigger: "blur",
     },
-    // {
-    //     validator: updateHrinfo,
-    //     trigger: 'change',
-    // },
   ],
-  phone: [
+  phoneNumber: [
     { required: true, message: "请输入手机号", trigger: "blur" },
     {
       pattern: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
       message: "请输入合法手机号/电话号",
-      trigger: "change",
+      trigger: "blur",
+    },
+  ],
+  post: [
+    {
+      required: true,
+      message: "请输入职位",
+      trigger: "blur",
+    },
+  ],
+  fullName: [
+    {
+      required: true,
+      message: "请输入公司名称",
+      trigger: "blur",
     },
   ],
 });
@@ -161,13 +164,10 @@ const rules = reactive({
 const Topassword = () => {
   router.push("/Setting/Other");
 };
-const handleAvatarSuccess: UploadProps["onSuccess"] = (
-  response,
-  uploadFile
-) => {
+const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
   imageUrl.value = response.url;
 };
-const handleAvatarError: UploadProps["onError"] = (err, uploadFile) => {
+const handleAvatarError: UploadProps["onError"] = () => {
   ElMessage.error("对不起，上传失败，请重试");
 };
 
@@ -181,6 +181,17 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
     return false;
   }
   return true;
+};
+const updateHrinfo = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      putHrinfosHrinfoid(store.state.hrInfo.hrId, formHr).then((res) => {
+        store.commit("setCompanyInfo", res.data.body);
+        ElMessage.success("修改成功");
+      });
+    }
+  });
 };
 </script>
 

@@ -1,10 +1,12 @@
 <template>
   <div class="top">
-    <div class="left">
-      <span>We</span>
-      <span class="red">❤</span>
-      <span>{{ store.state.companyInfo.fullName || "You" }}</span>
-    </div>
+    <router-link to="/Manage">
+      <div class="left">
+        <span>We</span>
+        <span class="red">❤</span>
+        <span>{{ store.state.companyInfo.fullName || "You" }}</span>
+      </div>
+    </router-link>
     <div class="right">
       <router-link to="/PublishJob">
         <img src="../assets/pub.png" />
@@ -35,6 +37,15 @@ const { name, avatar } = store.state.hrInfo;
 </script>
 
 <style scoped lang="scss">
+a {
+  color: rgb(255 255 255);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(176 163 192);
+}
+
 .top {
   display: flex;
   align-items: center;
@@ -85,15 +96,6 @@ const { name, avatar } = store.state.hrInfo;
           width: 60px;
           height: 60px;
         }
-      }
-
-      a {
-        color: rgb(255 255 255);
-        text-decoration: none;
-      }
-
-      a:hover {
-        color: rgb(176 163 192);
       }
     }
 

@@ -25,16 +25,15 @@
         </div>
         <div class="label">
           <div>
-            <span>1</span>
+            <span>{{ interviewNum.length }}</span>
             <span>新简历</span>
           </div>
           <div>
-            <span>2</span>
+            <span>{{ num.countComunication }}</span>
             <span>待沟通</span>
           </div>
           <div>
-            z
-            <span>3</span>
+            <span>{{ num.countInterviewed }}</span>
             <span> 今日已面试</span>
           </div>
           <div>
@@ -45,9 +44,9 @@
         <div class="bottom">
           <div class="notice">
             <div class="whole">
-              <span>全部({{}})</span>
+              <span>全部({{ interviewNum.length }})</span>
               <el-divider direction="vertical" />
-              <span>面试({{}})</span>
+              <span>面试({{ num.count }})</span>
             </div>
             <div class="add">
               <el-icon>
@@ -58,7 +57,12 @@
           </div>
           <div class="time-line">
             <el-timeline>
-              <el-timeline-item timestamp="2018/4/12" placement="top">
+              <el-timeline-item
+                v-for="interview in interviewNum"
+                :key="interview.updatedAt"
+                :timestamp="interview.createdAt"
+                placement="top"
+              >
                 <el-card class="el-card-define">
                   <div class="card">
                     <div class="left">
@@ -66,57 +70,19 @@
                       <div>
                         <h4>面试提醒</h4>
                         <div class="hint">
-                          <p>候选人:{{}}</p>
+                          <p>候选人:{{ interinfo.name }}</p>
                           <el-divider direction="vertical" />
-                          <p>应聘职位：{{}}</p>
+                          <p>应聘职位：{{ interinfo.post }}</p>
                         </div>
-                        <p>面试时间：{{}}</p>
+                        <p>面试时间：{{ interview.interviewTime }}</p>
                       </div>
                     </div>
                     <div class="right">
-                      <el-button type="primary">查看简历</el-button>
-                    </div>
-                  </div>
-                </el-card>
-              </el-timeline-item>
-              <el-timeline-item timestamp="2018/4/3" placement="top">
-                <el-card>
-                  <div class="card">
-                    <div class="left">
-                      <img src="../../assets/message.png" />
-                      <div>
-                        <h4>面试提醒</h4>
-                        <div class="hint">
-                          <p>候选人:{{}}</p>
-                          <el-divider direction="vertical" />
-                          <p>应聘职位：{{}}</p>
-                        </div>
-                        <p>面试时间：{{}}</p>
-                      </div>
-                    </div>
-                    <div class="right">
-                      <el-button type="primary">查看简历</el-button>
-                    </div>
-                  </div>
-                </el-card>
-              </el-timeline-item>
-              <el-timeline-item timestamp="2018/4/2" placement="top">
-                <el-card>
-                  <div class="card">
-                    <div class="left">
-                      <img src="../../assets/message.png" />
-                      <div>
-                        <h4>面试提醒</h4>
-                        <div class="hint">
-                          <p>候选人:{{}}</p>
-                          <el-divider direction="vertical" />
-                          <p>应聘职位：{{}}</p>
-                        </div>
-                        <p>面试时间：{{}}</p>
-                      </div>
-                    </div>
-                    <div class="right">
-                      <el-button type="primary">查看简历</el-button>
+                      <el-button
+                        type="primary"
+                        @click="inspectionResume(interview.deliveryRecordId)"
+                        >查看简历</el-button
+                      >
                     </div>
                   </div>
                 </el-card>
@@ -131,12 +97,73 @@
 
 <script setup lang="ts">
 import SystemHeader from "@/components/SystemHeadeer.vue";
+import {
+  getCompanyinfosCompanyinfoidDeliveryrecords,
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
+} from "@/services/services";
+import { DeliveryRecord } from "@/services/types";
 import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const ho = new Date().getHours();
 const greet = "";
+const interviewNum = ref<DeliveryRecord[]>([
+  {
+    createdAt: "",
+    deliveryRecordId: "",
+    interviewTime: "",
+    jobInformationId: "",
+    state: "1",
+    updatedAt: "",
+    userId: "",
+  },
+]);
+const num = ref({
+  count: 0,
+  countComunication: 0,
+  countInterviewed: 0,
+});
+const interinfo = ref({
+  name: "",
+  post: "",
+});
+onMounted(() => {
+  getCompanyinfosCompanyinfoidDeliveryrecords(
+    store.state.hrInfo.companyInfoId,
+    {}
+  ).then((res) => {
+    store.commit("setDeliveryRecord", res.data.body);
+    interviewNum.value = res.data.body;
+
+    interviewNum.value.map((item) => {
+      getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+        store.state.hrInfo.companyInfoId,
+        item.jobInformationId
+      ).then((response) => {
+        interinfo.value.post = response.data.body.name;
+      });
+      getUserinfosUserinfoid(item.userId).then((responseable) => {
+        interinfo.value.name =
+          responseable.data.body.firstName + responseable.data.body.lastName;
+      });
+      if (item.state == "4") {
+        num.value.count = num.value.count + 1;
+      } else if (item.state == "2") {
+        num.value.countComunication = num.value.countComunication + 1;
+      } else if (item.state == "3") {
+        num.value.countInterviewed = num.value.countInterviewed + 1;
+      }
+      return num;
+    });
+  });
+});
+
+const inspectionResume = (id: string) => {
+  console.log(id);
+};
 </script>
 
 <style scoped lang="scss">
@@ -144,13 +171,13 @@ const greet = "";
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  height: auto;
 
   .main {
     display: flex;
     justify-content: center;
     width: 95%;
-    height: 1100px;
+    height: auto;
     margin-top: 25px;
     border: solid 1px #ccc;
     border-radius: 10px;
@@ -176,7 +203,6 @@ const greet = "";
       .label {
         display: flex;
         align-items: center;
-        justify-content: space-around;
         justify-content: space-around;
         width: 100%;
         height: 100px;
