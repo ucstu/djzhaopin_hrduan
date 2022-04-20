@@ -83,7 +83,8 @@ const leftBarRouteList: RouteRecordRaw[] = [
         component: () => import("../pages/Manage/Resume/DwResume.vue"),
       },
       {
-        path: "Resume",
+        name: "Resume",
+        path: "Resume/:userId?",
         component: () => import("../pages/Manage/Resume/index.vue"),
       },
       {

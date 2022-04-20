@@ -26,9 +26,16 @@
             placeholder="请再次输入密码"
           />
         </el-form-item>
-        <!-- <el-form-item label="验证码">
-                    <el-input v-model="ruleForm.verificationCode" type="text" autocomplete="off" placeholder="请输入验证码" />
-                </el-form-item> -->
+        <el-form-item label="验证码">
+          <el-input
+            v-model.number="ruleForm.verificationCode"
+            placeholder="输入验证码"
+          >
+            <template #append>
+              <el-button @click="postverificationCode">发送验证码</el-button>
+            </template>
+          </el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="updateForm(ruleFormRef)"
             >保存</el-button
@@ -40,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { putAcocuntsAccountid } from "@/services/services";
+import { getVerificationCode, putAcocuntsAccountid } from "@/services/services";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -48,6 +55,7 @@ import { useStore } from "vuex";
 import { key } from "../../../stores";
 const ruleFormRef = ref<FormInstance>();
 const store = useStore(key);
+
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
@@ -72,12 +80,23 @@ const rules = reactive({
   password: [{ validator: validatePass, trigger: "blur" }],
   checkPass: [{ validator: validatePass2, trigger: "blur" }],
 });
-
-const ruleForm = reactive({
+interface rlueAccount {
+  password: string;
+  checkPass: string;
+  verificationCode?: number;
+}
+const ruleForm = reactive<rlueAccount>({
   password: "",
   checkPass: "",
-  verificationCode: 1321,
 });
+const postverificationCode = () => {
+  getVerificationCode({ phoneNumber: store.state.hrInfo.phoneNumber }).then(
+    (res) => {
+      console.log(Number(res.data.body.msg));
+      ElMessage.success("发送成功");
+    }
+  );
+};
 const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
@@ -88,6 +107,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
           if (res.status === 200) {
             ruleForm.password = "";
             ruleForm.checkPass = "";
+            ruleForm.verificationCode = "" as unknown as number;
             ElMessage.success("修改成功");
           }
         }

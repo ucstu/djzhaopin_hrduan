@@ -80,7 +80,7 @@
                     <div class="right">
                       <el-button
                         type="primary"
-                        @click="inspectionResume(interview.deliveryRecordId)"
+                        @click="inspectionResume(interview.userId)"
                         >查看简历</el-button
                       >
                     </div>
@@ -165,8 +165,8 @@ onMounted(() => {
 const inspectionResume = (id: string) => {
   console.log(id);
   router.push({
-    path: "/System/Resume",
-    query: {
+    name: "Resume",
+    params: {
       id: id,
     },
   });

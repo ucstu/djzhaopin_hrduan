@@ -41,6 +41,16 @@
               placeholder="请再次输入密码"
             />
           </el-form-item>
+          <el-form-item label="验证码">
+            <el-input
+              v-model.number="ruleForm.verificationCode"
+              placeholder="输入验证码"
+            >
+              <template #append>
+                <el-button @click="postverificationCode">发送验证码</el-button>
+              </template>
+            </el-input>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm(ruleFormRef)"
               >注册</el-button
@@ -54,7 +64,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormInstance } from "element-plus";
+import { getVerificationCode, postAccounts } from "@/services/services";
+import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 const ruleFormRef = ref<FormInstance>();
 const validateUser = (rule: any, value: any, callback: any) => {
@@ -87,8 +98,14 @@ const ruleForm = reactive({
   user: "",
   pass: "",
   checkPass: "",
+  verificationCode: "",
 });
-
+const postverificationCode = () => {
+  getVerificationCode({ phoneNumber: ruleForm.user }).then((res) => {
+    console.log(Number(res.data.body.msg));
+    ElMessage.success("发送成功");
+  });
+};
 const rules = reactive({
   user: [{ validator: validateUser, trigger: "blur" }],
   pass: [{ validator: validatePass, trigger: "blur" }],
@@ -98,7 +115,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log("submit!");
+      postAccounts({
+        accountType: "2",
+        userName: ruleForm.user,
+        password: ruleForm.pass,
+        verificationCode: ruleForm.verificationCode,
+      }).then((res) => {
+        console.log(res);
+        ElMessage.success("注册成功");
+      });
     } else {
       console.log("error submit!");
       return false;

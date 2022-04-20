@@ -6,43 +6,32 @@
           <div class="top">
             <div class="first-line">
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.state"
                 class="m-2"
                 placeholder="按反馈"
               >
                 <el-option
-                  v-for="item in feedbackMap"
+                  v-for="(item, index) in feedbackMap"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.workingYears"
                 class="m-2"
                 placeholder="工作经验"
               >
                 <el-option
-                  v-for="item in workExperience"
+                  v-for="(item, index) in workExperience"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="学历"
-              >
-                <el-option
-                  v-for="item in education"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
+
               <el-date-picker
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.deliveryDate"
                 type="date"
                 placeholder="选择日期"
                 class="data-picker"
@@ -50,73 +39,72 @@
               />
             </div>
             <div class="second-line">
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="性别"
-              >
+              <el-select v-model="valueMap.sex" class="m-2" placeholder="性别">
                 <el-option
-                  v-for="item in gander"
+                  v-for="(item, index) in gander"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="年龄"
-              >
+              <el-select v-model="valueMap.age" class="m-2" placeholder="年龄">
                 <el-option
-                  v-for="item in age"
+                  v-for="(item, index) in age"
                   :key="item"
                   :label="item"
-                  :value="item"
+                  :value="index - 1"
                 />
               </el-select>
-              <el-select
-                v-model="deliveryRecord.interviewTime"
-                class="m-2"
-                placeholder="投递职位"
-              >
-                <el-option
-                  v-for="item in education"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
+
               <el-input
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.search"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
-                placeholder="输入姓名查找"
+                placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
             </div>
           </div>
           <div class="resume">
             <el-scrollbar height="400px">
-              <div class="resume-item">
+              <div
+                v-for="Talent in TalentInfo"
+                :key="Talent.userId"
+                class="resume-item"
+              >
                 <div class="item-header">
-                  <el-checkbox v-model="checked1" />
-                  <img
-                    src="https://tse1-mm.cn.bing.net/th/id/R-C.b4504d02c6b9a71453c61fef88578b77?rik=rBhjlBcXKOZkiw&riu=http%3a%2f%2fimg.jj20.com%2fup%2fallimg%2ftx25%2f380412030426662.jpg&ehk=MrcDJRR%2fT3NWdla%2fkub6nInyr7M3eZF72Kzo%2brbcCVI%3d&risl=&pid=ImgRaw&r=0"
-                    alt=""
-                  />
+                  <el-checkbox v-model="checked" />
+                  <img :src="Talent.avatar" alt="" />
                   <div class="header-person">
-                    <span>姓名</span>
-                    <span>男·35岁·高中毕业·经验丰富</span>
-                    <span>想找：重庆|货运司机|面议</span>
+                    <span>{{ Talent.firstName + Talent.lastName }}</span>
+                    <span
+                      >{{ Talent.sex }}·{{ Talent.age }}岁·{{
+                        Talent.education
+                      }}·{{ slution[Talent.jobStatus] }}</span
+                    >
+                    <span
+                      >想找：{{ Talent.city }}|{{
+                        Talent.positonName
+                      }}|面议</span
+                    >
                   </div>
                 </div>
-                <div>{{ " 求高薪 | 求稳定 | 求发展 " }}</div>
-                <div><el-button type="primary">查看简历</el-button></div>
+                <div class="resume-label">
+                  {{ " 求高薪 | 求稳定 | 求发展 " }}
+                </div>
+                <div>
+                  <el-button
+                    type="primary"
+                    @click="inspectionResume(Talent.userId)"
+                  >
+                    >查看简历</el-button
+                  >
+                </div>
               </div>
             </el-scrollbar>
           </div>
           <div class="footer">
-            <el-checkbox v-model="checked1" label="全选" size="large" />
+            <el-checkbox v-model="checked" label="全选" size="large" />
             <el-button type="primary">面试邀请</el-button>
             <el-button type="primary" plain>删除简历</el-button>
             <el-button type="primary" plain>导出简历</el-button>
@@ -128,54 +116,115 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { getRecommendations } from "@/services/services";
-import { DeliveryRecord } from "@/services/types";
+import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
-import { onMounted, reactive, ref } from "vue";
-const deliveryRecord = reactive<DeliveryRecord>({
-  deliveryRecordId: "",
-  createdAt: "",
-  updatedAt: "",
-  userId: "",
-  state: "1",
-  interviewTime: "",
-  jobInformationId: "",
+import { onMounted, ref } from "vue";
+const valueMap = ref({
+  age: "",
+  /**
+   *
+   * 投递日期
+   */
+  deliveryDate: "",
+  /**
+   *
+   * 投递职位
+   */
+  jobId: "",
+  /**
+   *
+   * 搜索内容
+   */
+  search: "",
+  /**
+   *
+   * 性别
+   */
+  sex: "",
+  /**
+   *
+   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  state: "",
+  /**
+   *
+   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
+   */
+  workingYears: "",
 });
-const checked1 = ref(false);
+const checked = ref(false);
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
-const education = ["大专", "本科", "硕士", "博士"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
-interface TalentInfos {
-  name: string;
-  sex: string;
-  age: number;
-  education: string;
-  workingYears: number;
-  city: string;
-  positonName: string;
-  startingSalary: number;
-  positionType: "1" | "2" | "3";
-}
-const TalentInfo = ref<TalentInfos[]>([
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+const userInfo = ref<UserInformation>({
+  age: 0,
+  avatar: "",
+  city: "",
+  createdAt: "",
+  dateOfBirth: "",
+  education: "1",
+  email: "",
+  firstName: "",
+  jobStatus: "1",
+  lastName: "",
+  personalAdvantage: "",
+  phoneNumber: "",
+  pictureWorks: [],
+  privacySettings: "1",
+  sex: "",
+  socialHomepage: "",
+  updatedAt: "",
+  userId: "",
+  workingYears: 0,
+});
+const JobExpectative = ref<JobExpectation>({
+  ceilingSalary: 0,
+  city: "",
+  createdAt: "",
+  directionTags: [],
+  jobExpectationId: "",
+  positionType: "1",
+  positonName: "",
+  startingSalary: 0,
+  updatedAt: "",
+});
+
+const TalentInfo = ref([
   {
-    name: "",
-    sex: "",
-    age: 0,
-    education: "",
-    workingYears: 0,
-    city: "",
-    positonName: "",
-    startingSalary: 0,
-    positionType: "1",
+    ...userInfo.value,
+    ...JobExpectative.value,
+    ...checked,
   },
 ]);
+
 onMounted(() => {
   getRecommendations().then((res) => {
-    console.log(res);
+    res.data.body.map((item) => {
+      console.log(item);
+      TalentInfo.value.splice(0, 0, {
+        ...item.userInformation,
+        ...item.jobExpectation,
+        ...checked,
+      });
+    });
+    TalentInfo.value.pop();
+    console.log(TalentInfo);
   });
 });
+
+const inspectionResume = (id: string) => {
+  console.log(id);
+  router.push({
+    name: "Resume",
+    params: {
+      id: id,
+    },
+  });
+};
 // const filters = ref<FilterInformation>({
 
 // });
@@ -265,23 +314,33 @@ onMounted(() => {
             border-bottom: solid 1px rgb(221 221 221);
 
             .item-header {
+              position: relative;
               display: flex;
               align-items: center;
               justify-content: space-between;
-              width: 20%;
+              width: 40%;
               margin-left: 15px;
 
               img {
+                position: absolute;
+                left: 30px;
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
               }
 
               .header-person {
+                position: absolute;
+                left: 100px;
                 display: flex;
                 flex-direction: column;
                 font-size: 7px;
               }
+            }
+
+            .resume-label {
+              position: absolute;
+              left: 45%;
             }
 
             .el-button {
