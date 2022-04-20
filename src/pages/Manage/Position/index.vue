@@ -55,7 +55,9 @@
                   </div>
                   <div class="item">
                     <span>{{ "上班时间:" + position.workTime }}</span>
-                    <span>{{ "职位类型:" + position.positionType }}</span>
+                    <span>{{
+                      "职位类型:" + slution[position.positionType]
+                    }}</span>
                   </div>
                   <div class="item">
                     <span>{{
@@ -140,7 +142,7 @@ const jobTypeList = ref<PositionInformation[]>([
     workingYears: "0",
     interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
     workTime: "",
-    weekendReleseTime: "1",
+    weekendReleaseTime: "1",
   },
 ]);
 getCompanyinfosCompanyinfoidPositioninfos(
@@ -149,7 +151,7 @@ getCompanyinfosCompanyinfoidPositioninfos(
 ).then((res) => {
   jobTypeList.value = res.data.body;
 });
-
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const { positionInformationId } = toRefs(store.state.positionInfo);
 
 const toPublish = () => {

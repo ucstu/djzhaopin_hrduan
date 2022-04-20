@@ -73,7 +73,7 @@
                 class="resume-item"
               >
                 <div class="item-header">
-                  <el-checkbox v-model="checked" />
+                  <el-checkbox v-model="Talent.checked" />
                   <img :src="Talent.avatar" alt="" />
                   <div class="header-person">
                     <span>{{ Talent.firstName + Talent.lastName }}</span>
@@ -83,9 +83,9 @@
                       }}·{{ slution[Talent.jobStatus] }}</span
                     >
                     <span
-                      >想找：{{ Talent.city }}|{{
-                        Talent.positonName
-                      }}|面议</span
+                      >想找：{{ Talent.city }}|{{ Talent.positonName }}|{{
+                        Talent.startingSalary + "-" + Talent.ceilingSalary
+                      }}</span
                     >
                   </div>
                 </div>
@@ -97,14 +97,14 @@
                     type="primary"
                     @click="inspectionResume(Talent.userId)"
                   >
-                    >查看简历</el-button
+                    查看简历</el-button
                   >
                 </div>
               </div>
             </el-scrollbar>
           </div>
           <div class="footer">
-            <el-checkbox v-model="checked" label="全选" size="large" />
+            <el-checkbox :checked="checkeds" label="全选" size="large" />
             <el-button type="primary">面试邀请</el-button>
             <el-button type="primary" plain>删除简历</el-button>
             <el-button type="primary" plain>导出简历</el-button>
@@ -154,7 +154,9 @@ const valueMap = ref({
    */
   workingYears: "",
 });
-const checked = ref(false);
+const checkeds = ref(false);
+
+const checked = ref({ checked: false });
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
@@ -197,7 +199,7 @@ const TalentInfo = ref([
   {
     ...userInfo.value,
     ...JobExpectative.value,
-    ...checked,
+    ...checked.value,
   },
 ]);
 
@@ -208,7 +210,7 @@ onMounted(() => {
       TalentInfo.value.splice(0, 0, {
         ...item.userInformation,
         ...item.jobExpectation,
-        ...checked,
+        checked: false,
       });
     });
     TalentInfo.value.pop();
@@ -306,6 +308,7 @@ const inspectionResume = (id: string) => {
           }
 
           .resume-item {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;

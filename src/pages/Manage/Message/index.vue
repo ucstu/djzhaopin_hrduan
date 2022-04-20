@@ -7,16 +7,16 @@
           <span>快速处理</span>
         </div>
 
-        <div class="job-hunter">
+        <div class="job-hunter" @click="selectPerson">
           <el-badge is-dot class="item">
             <div class="hunter">
-              <img :src="imgUrl" alt="" />
+              <img :src="userInfos.avatar" alt="" />
               <div class="hunter-info">
-                <span>姓名</span>
+                <span>{{ userInfos.firstName + userInfos.lastName }}</span>
                 <div class="info">
-                  <span>姓名</span>
-                  <span>城市</span>
-                  <span>城市</span>
+                  <span>{{ userInfos.city }}</span>
+                  <span>{{ workExperience[userInfos.workingYears - 1] }}</span>
+                  <span>{{ slution[userInfos.jobStatus] }}</span>
                 </div>
               </div>
             </div>
@@ -33,28 +33,49 @@
 </template>
 
 <script setup lang="ts">
+import { getUserinfosUserinfoid } from "@/services/services";
+import { UserInformation } from "@/services/types";
 import { key } from "@/stores";
 import { onMounted, ref, toRaw } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
-interface userInfo {
-  userId: string;
-  userName: string;
-  age: number;
-  city: string;
-  education: string;
-  jobStatus: string;
-  workingYears: number;
-  imgUrl: string;
-}
-
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
+const userInfos = ref<UserInformation>({
+  age: 0,
+  avatar: "",
+  city: "",
+  createdAt: "",
+  dateOfBirth: "",
+  education: "1",
+  email: "",
+  firstName: "",
+  jobStatus: "1",
+  lastName: "",
+  personalAdvantage: "",
+  phoneNumber: "",
+  pictureWorks: [],
+  privacySettings: "1",
+  sex: "",
+  socialHomepage: "",
+  updatedAt: "",
+  userId: "",
+  workingYears: 0,
+});
 const imgUrl = ref(
   "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
 );
 console.log(toRaw(store.state.deliveryRecord));
 
-onMounted(() => {});
-
+onMounted(() => {
+  getUserinfosUserinfoid(store.state.deliveryRecord.userId).then((res) => {
+    console.log(res);
+    userInfos.value = res.data.body;
+  });
+});
+const selectPerson = () => {
+  console.log(11);
+};
 // getUserinfosUserinfoid
 </script>
 

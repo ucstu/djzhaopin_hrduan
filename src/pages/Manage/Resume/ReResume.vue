@@ -67,21 +67,80 @@
           </div>
           <div class="resume">
             <el-scrollbar height="400px">
-              <div class="resume-item">
+              <div
+                v-for="deliveryRecord in deliveryRecords"
+                :key="deliveryRecord.deliveryRecordId"
+                class="resume-item"
+              >
                 <div class="item-header">
                   <el-checkbox v-model="checked1" />
                   <img
-                    src="https://tse1-mm.cn.bing.net/th/id/R-C.b4504d02c6b9a71453c61fef88578b77?rik=rBhjlBcXKOZkiw&riu=http%3a%2f%2fimg.jj20.com%2fup%2fallimg%2ftx25%2f380412030426662.jpg&ehk=MrcDJRR%2fT3NWdla%2fkub6nInyr7M3eZF72Kzo%2brbcCVI%3d&risl=&pid=ImgRaw&r=0"
+                    :src="userInformations.get(deliveryRecord.userId)?.avatar"
                     alt=""
                   />
                   <div class="header-person">
-                    <span>姓名</span>
-                    <span>男·35岁·高中毕业·经验丰富</span>
-                    <span>想找：重庆|货运司机|面议</span>
+                    <span>{{
+                      userInformations.get(deliveryRecord.userId)?.firstName +
+                      "" +
+                      userInformations.get(deliveryRecord.userId)?.lastName
+                    }}</span>
+                    <span
+                      >男·{{
+                        userInformations.get(deliveryRecord.userId)?.age
+                      }}岁·{{
+                        education[
+                          userInformations.get(deliveryRecord.userId)!.education
+                        ]
+
+
+
+
+
+
+
+
+
+
+
+
+                      }}·{{
+                        slution[
+                          userInformations.get(deliveryRecord.userId)!.jobStatus
+                        ]
+                      }}</span
+                    >
+                    <span
+                      >想找：{{
+                        userInformations.get(deliveryRecord.userId)?.city
+                      }}|{{
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.name
+                      }}|{{
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.startingSalary +
+                        "K-" +
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.ceilingSalary +
+                        "K"
+                      }}</span
+                    >
                   </div>
                 </div>
-                <div>{{ " 求高薪 | 求稳定 | 求发展 " }}</div>
-                <div><el-button type="primary">查看简历</el-button></div>
+
+                <div class="resume-label">
+                  {{ " 求高薪 | 求稳定 | 求发展 " }}
+                </div>
+                <div>
+                  <el-button
+                    type="primary"
+                    @click="
+                      inspectionResume(
+                        userInformations.get(deliveryRecord.userId)!.userId
+                      )
+                    "
+                    >查看简历</el-button
+                  >
+                </div>
               </div>
             </el-scrollbar>
           </div>
@@ -98,20 +157,44 @@
 </template>
 
 <script setup lang="ts">
-import { DeliveryRecord } from "@/services/types";
+import router from "@/router";
+import {
+  getCompanyinfosCompanyinfoidDeliveryrecords,
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
+} from "@/services/services";
+import {
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
+} from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
-const deliveryRecord = reactive<DeliveryRecord>({
-  deliveryRecordId: "",
-  createdAt: "",
-  updatedAt: "",
-  userId: "",
-  state: "1",
-  interviewTime: "",
-  jobInformationId: "",
+const deliveryRecords = ref<DeliveryRecord[]>([]);
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+
+const userInformations = ref<Map<string, UserInformation>>(new Map());
+const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+
+getCompanyinfosCompanyinfoidDeliveryrecords(
+  store.state.companyInfo.companyId,
+  {}
+).then((res) => {
+  deliveryRecords.value = res.data.body;
+  deliveryRecords.value.forEach((item) => {
+    getUserinfosUserinfoid(item.userId).then((response) => {
+      userInformations.value.set(item.userId, response.data.body);
+    });
+    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      store.state.companyInfo.companyId,
+      item.jobInformationId
+    ).then((respones) => {
+      jobInformations.value.set(item.jobInformationId, respones.data.body);
+    });
+  });
 });
 const valueMap = ref({
   age: "",
@@ -146,6 +229,14 @@ const valueMap = ref({
    */
   workingYears: "",
 });
+const inspectionResume = (id: string) => {
+  router.push({
+    name: "Resume",
+    params: {
+      id: id,
+    },
+  });
+};
 // getCompanyinfosCompanyinfoidDeliveryrecords(
 //   store.state.companyInfo.companyId,
 //   valueMap.value
@@ -157,6 +248,7 @@ const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
+const education = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
 </script>
 
 <style scoped lang="scss">

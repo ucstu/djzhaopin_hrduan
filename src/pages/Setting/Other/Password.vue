@@ -83,12 +83,14 @@ const rules = reactive({
 interface rlueAccount {
   password: string;
   checkPass: string;
-  verificationCode?: number;
+  verificationCode: string;
 }
 const ruleForm = reactive<rlueAccount>({
   password: "",
   checkPass: "",
+  verificationCode: "",
 });
+
 const postverificationCode = () => {
   getVerificationCode({ phoneNumber: store.state.hrInfo.phoneNumber }).then(
     (res) => {
@@ -107,7 +109,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
           if (res.status === 200) {
             ruleForm.password = "";
             ruleForm.checkPass = "";
-            ruleForm.verificationCode = "" as unknown as number;
+            ruleForm.verificationCode = "";
             ElMessage.success("修改成功");
           }
         }

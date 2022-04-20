@@ -228,7 +228,7 @@ const formCompany = reactive<CompanyInformation>({
   logo: "",
   name: "",
   legalRepresentative: "",
-  organizatioType: "",
+  organizationType: "",
   recruitmentPosition: 5,
   scale: "1",
   registeredCapital: "",

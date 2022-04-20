@@ -403,7 +403,7 @@ export interface CompanyInformation {
    * 机构类型
    *
    */
-  organizatioType: string;
+  organizationType: string;
   /**
    *
    * 在招职位
@@ -788,6 +788,8 @@ export interface PositionInformation {
    * 上限薪资
    *
    * 单位K
+   * - minimum: 3
+   * - max: 200
    */
   ceilingSalary: number;
   /**
@@ -904,6 +906,8 @@ export interface PositionInformation {
    * 起始薪资
    *
    * 单位K
+   * - minimum: 1
+   * - max: 200
    */
   startingSalary: number;
   /**
@@ -918,7 +922,7 @@ export interface PositionInformation {
    *
    * {1周末双休:,2:周末单休,3:大小周}
    */
-  weekendReleseTime: "1" | "2" | "3";
+  weekendReleaseTime: "1" | "2" | "3";
   /**
    *
    * 工作地区

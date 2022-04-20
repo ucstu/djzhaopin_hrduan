@@ -137,6 +137,7 @@ onMounted(() => {
     {}
   ).then((res) => {
     store.commit("setDeliveryRecord", res.data.body);
+
     interviewNum.value = res.data.body;
 
     interviewNum.value.map((item) => {

@@ -6,7 +6,7 @@
           <div class="top">
             <div class="second-line abcdefg">
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.state"
                 class="m-2"
                 placeholder="按反馈"
               >
@@ -18,7 +18,7 @@
                 />
               </el-select>
               <el-select
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.jobId"
                 class="m-2"
                 placeholder="投递职位"
               >
@@ -31,31 +31,90 @@
               </el-select>
 
               <el-input
-                v-model="deliveryRecord.interviewTime"
+                v-model="valueMap.search"
                 class="w-50 m-2"
                 input-style="max-width: 220px;"
-                placeholder="Type something"
+                placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
             </div>
           </div>
           <div class="resume">
             <el-scrollbar height="400px">
-              <div class="resume-item">
+              <div
+                v-for="deliveryRecord in deliveryRecords"
+                :key="deliveryRecord.deliveryRecordId"
+                class="resume-item"
+              >
                 <div class="item-header">
                   <el-checkbox v-model="checked1" />
                   <img
-                    src="https://tse1-mm.cn.bing.net/th/id/R-C.b4504d02c6b9a71453c61fef88578b77?rik=rBhjlBcXKOZkiw&riu=http%3a%2f%2fimg.jj20.com%2fup%2fallimg%2ftx25%2f380412030426662.jpg&ehk=MrcDJRR%2fT3NWdla%2fkub6nInyr7M3eZF72Kzo%2brbcCVI%3d&risl=&pid=ImgRaw&r=0"
+                    :src="userInformations.get(deliveryRecord.userId)?.avatar"
                     alt=""
                   />
                   <div class="header-person">
-                    <span>姓名</span>
-                    <span>男·35岁·高中毕业·经验丰富</span>
-                    <span>想找：重庆|货运司机|面议</span>
+                    <span>{{
+                      userInformations.get(deliveryRecord.userId)?.firstName +
+                      "" +
+                      userInformations.get(deliveryRecord.userId)?.lastName
+                    }}</span>
+                    <span
+                      >男·{{
+                        userInformations.get(deliveryRecord.userId)?.age
+                      }}岁·{{
+                        education[
+                          userInformations.get(deliveryRecord.userId)!.education
+                        ]
+
+
+
+
+
+
+
+
+
+
+
+
+                      }}·{{
+                        slution[
+                          userInformations.get(deliveryRecord.userId)!.jobStatus
+                        ]
+                      }}</span
+                    >
+                    <span
+                      >想找：{{
+                        userInformations.get(deliveryRecord.userId)?.city
+                      }}|{{
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.name
+                      }}|{{
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.startingSalary +
+                        "K-" +
+                        jobInformations.get(deliveryRecord.jobInformationId)
+                          ?.ceilingSalary +
+                        "K"
+                      }}</span
+                    >
                   </div>
                 </div>
-                <div>{{ " 求高薪 | 求稳定 | 求发展 " }}</div>
-                <div><el-button type="primary">查看简历</el-button></div>
+
+                <div class="resume-label">
+                  {{ " 求高薪 | 求稳定 | 求发展 " }}
+                </div>
+                <div>
+                  <el-button
+                    type="primary"
+                    @click="
+                      inspectionResume(
+                        userInformations.get(deliveryRecord.userId)!.userId
+                      )
+                    "
+                    >查看简历</el-button
+                  >
+                </div>
               </div>
             </el-scrollbar>
           </div>
@@ -72,23 +131,89 @@
 </template>
 
 <script setup lang="ts">
-import { DeliveryRecord } from "@/services/types";
+import router from "@/router";
+import {
+  getCompanyinfosCompanyinfoidDeliveryrecords,
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
+} from "@/services/services";
+import {
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
+} from "@/services/types";
+import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
-import { reactive, ref } from "vue";
-const deliveryRecord = reactive<DeliveryRecord>({
-  deliveryRecordId: "",
-  createdAt: "",
-  updatedAt: "",
-  userId: "",
-  state: "1",
-  interviewTime: "",
-  jobInformationId: "",
+import { ref } from "vue";
+import { useStore } from "vuex";
+const deliveryRecords = ref<DeliveryRecord[]>([]);
+const userInformations = ref<Map<string, UserInformation>>(new Map());
+const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const store = useStore(key);
+
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+getCompanyinfosCompanyinfoidDeliveryrecords(
+  store.state.companyInfo.companyId,
+  {}
+).then((res) => {
+  deliveryRecords.value = res.data.body;
+  deliveryRecords.value.forEach((item) => {
+    getUserinfosUserinfoid(item.userId).then((res) => {
+      userInformations.value.set(item.userId, res.data.body);
+    });
+    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      store.state.companyInfo.companyId,
+      item.jobInformationId
+    ).then((res) => {
+      jobInformations.value.set(item.jobInformationId, res.data.body);
+    });
+  });
 });
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
-
+const valueMap = ref({
+  age: "",
+  /**
+   *
+   * 投递日期
+   */
+  deliveryDate: "",
+  /**
+   *
+   * 投递职位
+   */
+  jobId: "",
+  /**
+   *
+   * 搜索内容
+   */
+  search: "",
+  /**
+   *
+   * 性别
+   */
+  sex: "",
+  /**
+   *
+   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  state: "",
+  /**
+   *
+   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
+   */
+  workingYears: "",
+});
 const checked1 = ref(false);
 
 const education = ["大专", "本科", "硕士", "博士"];
+const inspectionResume = (id: string) => {
+  router.push({
+    name: "Resume",
+    params: {
+      id: id,
+    },
+  });
+};
 </script>
 
 <style scoped lang="scss">

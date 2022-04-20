@@ -9,31 +9,31 @@ import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
   DeleteAccountsAccountidQueryParams,
-  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
-  GetDirectiontagsQueryParams,
-  GetUserinfosUserinfoidDeliveryrecordsQueryParams,
-  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
-  GetVerificationCodeQueryParams,
   GetAreaInformationsQueryParams,
-  CityInformations,
-  JobExpectation,
-  HRInformation,
-  InspectionRecord,
-  DirectionTags,
-  AreaInformations,
-  AttentionRecord,
-  EducationExperience,
-  DeliveryRecord,
-  PositionInformation,
-  WorkExperience,
-  UserInformation,
-  FilterInformation,
-  GarnerRecord,
-  ProjectExperience,
-  AccountInformation,
+  GetDirectiontagsQueryParams,
+  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
+  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
+  GetUserinfosUserinfoidDeliveryrecordsQueryParams,
+  GetVerificationCodeQueryParams,
   CompanyInformation,
-  MessageRecord,
+  AreaInformations,
+  InspectionRecord,
+  AttentionRecord,
   PositionTypes,
+  UserInformation,
+  WorkExperience,
+  EducationExperience,
+  AccountInformation,
+  GarnerRecord,
+  FilterInformation,
+  DirectionTags,
+  HRInformation,
+  JobExpectation,
+  DeliveryRecord,
+  CityInformations,
+  PositionInformation,
+  ProjectExperience,
+  MessageRecord,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -3127,7 +3127,7 @@ export const putAccountsForget = (
      * 验证码
      *
      */
-    verificationCode: number;
+    verificationCode: string;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<
@@ -3183,7 +3183,7 @@ export const putAcocuntsAccountid = (
      * 验证码
      *
      */
-    verificationCode: number;
+    verificationCode: string;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<

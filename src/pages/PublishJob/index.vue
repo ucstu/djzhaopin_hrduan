@@ -160,13 +160,13 @@
             <span class="explain">完善附加信息可以让候选人更加了解职位</span>
             <el-form-item label="工作时间">
               <el-col :span="11">
-                <el-form-item prop="weekendReleseTime">
+                <el-form-item prop="weekendReleaseTime">
                   <el-select
-                    v-model="jobTypeList.weekendReleseTime"
+                    v-model="jobTypeList.weekendReleaseTime"
                     placeholder="请选择周末休息时间"
                   >
                     <el-option
-                      v-for="(item, index) in weekendReleseTimeMap"
+                      v-for="(item, index) in weekendReleaseTimeMap"
                       :key="item"
                       :label="item"
                       :value="index + 1"
@@ -270,9 +270,9 @@ const jobTypeList = ref<PositionInformation>({
   workingYears: "0",
   interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
   workTime: "",
-  weekendReleseTime: "1",
+  weekendReleaseTime: "1",
 });
-const weekendReleseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
+const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 // const interviewInfoMap = reactive({
 //   illustrate: "1",
 //   situation: "1",

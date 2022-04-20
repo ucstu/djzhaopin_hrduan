@@ -54,7 +54,7 @@
           </el-form-item>
           <el-form-item label="机构类型:" prop="pass">
             <el-input
-              v-model="companyForm.organizatioType"
+              v-model="companyForm.organizationType"
               type="text"
               autocomplete="off"
               placeholder="请填写机构类型"
@@ -89,7 +89,7 @@ import { CompanyInformation } from "@/services/types";
 import { store } from "@/stores";
 import { ElMessage, FormInstance } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
-const perFormRef = ref<FormInstance>();
+
 const comFormRef = ref<FormInstance>();
 const personForm = reactive({
   name: store.state.hrInfo.name,
@@ -118,7 +118,7 @@ const companyForm = reactive<CompanyInformation>({
   logo: "",
   name: "",
   legalRepresentative: "",
-  organizatioType: "",
+  organizationType: "",
   recruitmentPosition: 5,
   scale: "1",
   registeredCapital: "",
@@ -131,7 +131,7 @@ onMounted(() => {
   companyForm.legalRepresentative = store.state.companyInfo.legalRepresentative;
   companyForm.establishmentTime = store.state.companyInfo.establishmentTime;
   companyForm.registeredCapital = store.state.companyInfo.registeredCapital;
-  companyForm.organizatioType = store.state.companyInfo.organizatioType;
+  companyForm.organizationType = store.state.companyInfo.organizationType;
 });
 // const confirmPerson = (formEl: FormInstance | undefined) => {
 //     if (!formEl) return
