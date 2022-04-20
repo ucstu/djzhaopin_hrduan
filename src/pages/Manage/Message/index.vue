@@ -6,17 +6,39 @@
           <span>我的消息</span>
           <span>快速处理</span>
         </div>
-
-        <div class="job-hunter" @click="selectPerson">
+        <div
+          v-for="deliveryRecord in deliveryRecords"
+          :key="deliveryRecord.deliveryRecordId"
+          class="job-hunter"
+          @click="selectPerson(deliveryRecord.userId)"
+        >
           <el-badge is-dot class="item">
             <div class="hunter">
-              <img :src="userInfos.avatar" alt="" />
+              <img
+                :src="userInformations.get(deliveryRecord.userId)?.avatar"
+                alt=""
+              />
               <div class="hunter-info">
-                <span>{{ userInfos.firstName + userInfos.lastName }}</span>
+                <span>{{
+                  userInformations.get(deliveryRecord.userId)?.firstName +
+                  "" +
+                  userInformations.get(deliveryRecord.userId)?.lastName
+                }}</span>
                 <div class="info">
-                  <span>{{ userInfos.city }}</span>
-                  <span>{{ workExperience[userInfos.workingYears - 1] }}</span>
-                  <span>{{ slution[userInfos.jobStatus] }}</span>
+                  <span>{{
+                    userInformations.get(deliveryRecord.userId)?.city
+                  }}</span>
+                  <span>{{
+                    jobInformations.get(deliveryRecord.jobInformationId)?.name
+                  }}</span>
+                  <span>{{
+                    jobInformations.get(deliveryRecord.jobInformationId)
+                      ?.startingSalary +
+                    "K-" +
+                    jobInformations.get(deliveryRecord.jobInformationId)
+                      ?.ceilingSalary +
+                    "K"
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -24,59 +46,57 @@
         </div>
       </div>
       <div class="right">
-        <div class="right-chat"></div>
-        <div class="right-input"></div>
-        <div class="right-other"></div>
+        <el-empty
+          v-show="condition"
+          image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
+        />
+        <Chat v-show="!condition" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getUserinfosUserinfoid } from "@/services/services";
-import { UserInformation } from "@/services/types";
+import {
+  getCompanyinfosCompanyinfoidDeliveryrecords,
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
+} from "@/services/services";
+import {
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
+} from "@/services/types";
 import { key } from "@/stores";
-import { onMounted, ref, toRaw } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
+import Chat from "./Chat.vue";
+const condition = ref(true);
 const store = useStore(key);
-const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
-const userInfos = ref<UserInformation>({
-  age: 0,
-  avatar: "",
-  city: "",
-  createdAt: "",
-  dateOfBirth: "",
-  education: "1",
-  email: "",
-  firstName: "",
-  jobStatus: "1",
-  lastName: "",
-  personalAdvantage: "",
-  phoneNumber: "",
-  pictureWorks: [],
-  privacySettings: "1",
-  sex: "",
-  socialHomepage: "",
-  updatedAt: "",
-  userId: "",
-  workingYears: 0,
-});
-const imgUrl = ref(
-  "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
-);
-console.log(toRaw(store.state.deliveryRecord));
-
-onMounted(() => {
-  getUserinfosUserinfoid(store.state.deliveryRecord.userId).then((res) => {
-    console.log(res);
-    userInfos.value = res.data.body;
+const deliveryRecords = ref<DeliveryRecord[]>([]);
+const userInformations = ref<Map<string, UserInformation>>(new Map());
+const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+getCompanyinfosCompanyinfoidDeliveryrecords(
+  store.state.companyInfo.companyId,
+  {}
+).then((res) => {
+  deliveryRecords.value = res.data.body;
+  deliveryRecords.value.forEach((item) => {
+    getUserinfosUserinfoid(item.userId).then((res) => {
+      userInformations.value.set(item.userId, res.data.body);
+    });
+    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      store.state.companyInfo.companyId,
+      item.jobInformationId
+    ).then((res) => {
+      jobInformations.value.set(item.jobInformationId, res.data.body);
+    });
   });
 });
-const selectPerson = () => {
-  console.log(11);
+const selectPerson = (userId: string) => {
+  condition.value = false;
+  console.log(userId);
 };
-// getUserinfosUserinfoid
 </script>
 
 <style lang="scss" scoped>
@@ -89,6 +109,7 @@ const selectPerson = () => {
   background-color: rgb(245 245 250);
 
   .chat {
+    display: flex;
     width: 95%;
     height: 800px;
     background-color: rgb(255 255 255);
@@ -158,6 +179,16 @@ const selectPerson = () => {
           }
         }
       }
+
+      .job-hunter:hover {
+        cursor: pointer;
+        background-color: rgb(0 179 139);
+      }
+    }
+
+    .right {
+      width: 75%;
+      height: 100%;
     }
   }
 }

@@ -313,7 +313,7 @@ const inspectionResume = (id: string) => {
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            height: 49px;
+            height: 70px;
             border-bottom: solid 1px rgb(221 221 221);
 
             .item-header {

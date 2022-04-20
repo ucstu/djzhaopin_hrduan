@@ -79,51 +79,47 @@
                     alt=""
                   />
                   <div class="header-person">
-                    <span>{{
-                      userInformations.get(deliveryRecord.userId)?.firstName +
-                      "" +
-                      userInformations.get(deliveryRecord.userId)?.lastName
-                    }}</span>
-                    <span
-                      >男·{{
-                        userInformations.get(deliveryRecord.userId)?.age
-                      }}岁·{{
+                    <div>
+                      <span>{{
+                        userInformations.get(deliveryRecord.userId)?.firstName +
+                        "" +
+                        userInformations.get(deliveryRecord.userId)?.lastName
+                      }}</span>
+                      <span
+                        >·男·<span>{{
+                          userInformations.get(deliveryRecord.userId)?.age
+                        }}</span
+                        >岁·<span>{{
                         education[
                           userInformations.get(deliveryRecord.userId)!.education
                         ]
-
-
-
-
-
-
-
-
-
-
-
-
-                      }}·{{
+                        }}</span
+                        >·{{
                         slution[
                           userInformations.get(deliveryRecord.userId)!.jobStatus
                         ]
-                      }}</span
-                    >
-                    <span
-                      >想找：{{
-                        userInformations.get(deliveryRecord.userId)?.city
-                      }}|{{
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.name
-                      }}|{{
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.startingSalary +
-                        "K-" +
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.ceilingSalary +
-                        "K"
-                      }}</span
-                    >
+                        }}</span
+                      >
+                    </div>
+                    <div>
+                      <span
+                        >想找：{{
+                          userInformations.get(deliveryRecord.userId)?.city
+                        }}</span
+                      ><span
+                        >{{
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.name
+                        }}|{{
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.startingSalary +
+                          "K-" +
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.ceilingSalary +
+                          "K"
+                        }}</span
+                      >
+                    </div>
                   </div>
                 </div>
 
@@ -326,35 +322,49 @@ const education = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
           }
 
           .resume-item {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            height: 49px;
+            height: 70px;
             border-bottom: solid 1px rgb(221 221 221);
 
             .item-header {
+              position: relative;
               display: flex;
               align-items: center;
               justify-content: space-between;
-              width: 20%;
+              width: 40%;
               margin-left: 15px;
 
               img {
+                position: absolute;
+                left: 30px;
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
               }
 
               .header-person {
+                position: absolute;
+                left: 100px;
                 display: flex;
                 flex-direction: column;
+                width: 100%;
                 font-size: 7px;
+
+                div {
+                  display: flex;
+                  width: 100%;
+                  height: 100%;
+                }
               }
             }
 
-            .el-button {
-              margin-right: 20px;
+            .resume-label {
+              position: absolute;
+              left: 45%;
             }
           }
         }

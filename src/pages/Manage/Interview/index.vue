@@ -28,43 +28,47 @@
                     alt=""
                   />
                   <div class="header-person">
-                    <span>{{
-                      userInformations.get(deliveryRecord.userId)?.firstName +
-                      "" +
-                      userInformations.get(deliveryRecord.userId)?.lastName
-                    }}</span>
-                    <span
-                      >男·<span>{{
-                        userInformations.get(deliveryRecord.userId)?.age
-                      }}</span
-                      >岁·<span>{{
+                    <div>
+                      <span>{{
+                        userInformations.get(deliveryRecord.userId)?.firstName +
+                        "" +
+                        userInformations.get(deliveryRecord.userId)?.lastName
+                      }}</span>
+                      <span
+                        >·男·<span>{{
+                          userInformations.get(deliveryRecord.userId)?.age
+                        }}</span
+                        >岁·<span>{{
                         education[
                           userInformations.get(deliveryRecord.userId)!.education
                         ]
-                      }}</span
-                      >·{{
+                        }}</span
+                        >·{{
                         slution[
                           userInformations.get(deliveryRecord.userId)!.jobStatus
                         ]
-                      }}</span
-                    >
-                    <span
-                      >想找：{{
-                        userInformations.get(deliveryRecord.userId)?.city
-                      }}</span
-                    ><span
-                      >|{{
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.name
-                      }}|{{
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.startingSalary +
-                        "K-" +
-                        jobInformations.get(deliveryRecord.jobInformationId)
-                          ?.ceilingSalary +
-                        "K"
-                      }}</span
-                    >
+                        }}</span
+                      >
+                    </div>
+                    <div>
+                      <span
+                        >想找：{{
+                          userInformations.get(deliveryRecord.userId)?.city
+                        }}</span
+                      ><span
+                        >{{
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.name
+                        }}|{{
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.startingSalary +
+                          "K-" +
+                          jobInformations.get(deliveryRecord.jobInformationId)
+                            ?.ceilingSalary +
+                          "K"
+                        }}</span
+                      >
+                    </div>
                   </div>
                 </div>
 
@@ -214,7 +218,7 @@ const inspectionResume = (id: string) => {
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            height: 49px;
+            height: 70px;
             border-bottom: solid 1px rgb(221 221 221);
 
             .item-header {
@@ -238,7 +242,14 @@ const inspectionResume = (id: string) => {
                 left: 100px;
                 display: flex;
                 flex-direction: column;
+                width: 100%;
                 font-size: 7px;
+
+                div {
+                  display: flex;
+                  width: 100%;
+                  height: 100%;
+                }
               }
             }
 
