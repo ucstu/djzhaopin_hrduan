@@ -102,7 +102,7 @@ const userInfo = ref<UserInformation>({
   userId: "",
   workingYears: 1,
 });
-const positionInfo = ref<PositionInformation>({});
+const positionInfo = ref<PositionInformation>({} as any);
 const educationMap = reactive({ 1: "大专", 2: "本科", 3: "硕士", 4: "博士" });
 const JobstatusMap = ref({ 1: "随时入职", 2: "2周内入职", 3: "1月内入职" });
 const imgUrl = ref(
