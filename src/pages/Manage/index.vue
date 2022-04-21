@@ -37,7 +37,7 @@
             <span> 今日已面试</span>
           </div>
           <div>
-            <span>4</span>
+            <span>{{ store.state.companyInfo.recruitmentPosition }}</span>
             <span>在招职位试</span>
           </div>
         </div>
@@ -70,9 +70,21 @@
                       <div>
                         <h4>面试提醒</h4>
                         <div class="hint">
-                          <p>候选人:{{ interinfo.name }}</p>
+                          <p>
+                            候选人:{{
+                              userInformations.get(interview.userId)
+                                ?.firstName +
+                              "" +
+                              userInformations.get(interview.userId)?.lastName
+                            }}
+                          </p>
                           <el-divider direction="vertical" />
-                          <p>应聘职位：{{ interinfo.post }}</p>
+                          <p>
+                            应聘职位：{{
+                              jobInformations.get(interview.jobInformationId)
+                                ?.name
+                            }}
+                          </p>
                         </div>
                         <p>面试时间：{{ interview.interviewTime }}</p>
                       </div>
@@ -103,7 +115,11 @@ import {
   getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
   getUserinfosUserinfoid,
 } from "@/services/services";
-import { DeliveryRecord } from "@/services/types";
+import {
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
+} from "@/services/types";
 import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import { onMounted, ref } from "vue";
@@ -111,26 +127,15 @@ import { useStore } from "vuex";
 const store = useStore(key);
 const ho = new Date().getHours();
 const greet = "";
-const interviewNum = ref<DeliveryRecord[]>([
-  {
-    createdAt: "",
-    deliveryRecordId: "",
-    interviewTime: "",
-    jobInformationId: "",
-    state: "1",
-    updatedAt: "",
-    userId: "",
-  },
-]);
+const interviewNum = ref<DeliveryRecord[]>([]);
 const num = ref({
   count: 0,
   countComunication: 0,
   countInterviewed: 0,
 });
-const interinfo = ref({
-  name: "",
-  post: "",
-});
+const userInformations = ref<Map<string, UserInformation>>(new Map());
+const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+
 onMounted(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
     store.state.hrInfo.companyInfoId,
@@ -140,16 +145,15 @@ onMounted(() => {
 
     interviewNum.value = res.data.body;
 
-    interviewNum.value.map((item) => {
+    interviewNum.value.forEach((item) => {
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
         store.state.hrInfo.companyInfoId,
         item.jobInformationId
       ).then((response) => {
-        interinfo.value.post = response.data.body.name;
+        jobInformations.value.set(item.jobInformationId, response.data.body);
       });
       getUserinfosUserinfoid(item.userId).then((responseable) => {
-        interinfo.value.name =
-          responseable.data.body.firstName + responseable.data.body.lastName;
+        userInformations.value.set(item.userId, responseable.data.body);
       });
       if (item.state == "4") {
         num.value.count = num.value.count + 1;
@@ -158,7 +162,6 @@ onMounted(() => {
       } else if (item.state == "3") {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
-      return num;
     });
   });
 });

@@ -30,21 +30,25 @@
               >
               <span class="state">期望职位：{{ userInfo.jobStatus }}</span>
               <span class="state">期望地点：{{ userInfo.city }}</span>
-              <span class="state">期望薪资：{{}}</span>
+              <span class="state"
+                >期望薪资：{{
+                  positionInfo.startingSalary + "-" + positionInfo.ceilingSalary
+                }}</span
+              >
               <el-button
                 type="primary"
                 @click="toMessage(store.state.deliveryRecord.userId)"
                 >在线沟通</el-button
               >
               <h3>个人优势：</h3>
-              <p>{{ "ssscad" }}</p>
+              <p>{{ userInfo.personalAdvantage }}</p>
             </div>
             <div class="info2">
               <div class="img-docu">
-                <h3>图片作品：</h3>
+                <h3>图片作品：{{ userInfo.pictureWorks }}</h3>
               </div>
               <div class="project-docu">
-                <h3>项目经历</h3>
+                <h3>项目经历:{{}}</h3>
               </div>
             </div>
           </div>
@@ -68,10 +72,13 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { getUserinfosUserinfoid } from "@/services/services";
-import { UserInformation } from "@/services/types";
+import {
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
+} from "@/services/services";
+import { PositionInformation, UserInformation } from "@/services/types";
 import { key } from "@/stores";
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const userInfo = ref<UserInformation>({
@@ -95,17 +102,23 @@ const userInfo = ref<UserInformation>({
   userId: "",
   workingYears: 1,
 });
+const positionInfo = ref<PositionInformation>({});
 const educationMap = reactive({ 1: "大专", 2: "本科", 3: "硕士", 4: "博士" });
 const JobstatusMap = ref({ 1: "随时入职", 2: "2周内入职", 3: "1月内入职" });
 const imgUrl = ref(
   "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
 );
-onMounted(() => {
-  getUserinfosUserinfoid(store.state.deliveryRecord.userId).then((res) => {
-    userInfo.value = res.data.body;
-  });
-  // getUserinfosUserinfoidJobexpectationsJobexpectationid(store.state.deliveryRecord.userId,)
+
+getUserinfosUserinfoid(store.state.deliveryRecord.userId).then((res) => {
+  userInfo.value = res.data.body;
 });
+getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+  store.state.companyInfo.companyId,
+  store.state.deliveryRecord.jobInformationId
+).then((res) => {
+  positionInfo.value = res.data.body;
+});
+
 const toMessage = (id: string) => {
   router.push({
     name: "message",
@@ -191,11 +204,18 @@ const toMessage = (id: string) => {
           }
 
           .info2 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
             width: 40%;
             height: 100%;
-            padding-top: 30px;
 
             .img-docu {
+              width: 100%;
+              height: 50px;
+            }
+
+            .project-docu {
               width: 100%;
               height: 50px;
             }
