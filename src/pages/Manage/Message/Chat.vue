@@ -31,6 +31,7 @@ const sendMsg = () => {
 .chat-content {
   box-sizing: border-box;
   width: 100%;
+  height: 600px;
   padding: 10px;
   border: 1px solid #ddd;
   border-bottom: none;
@@ -101,23 +102,27 @@ const sendMsg = () => {
   }
 }
 
-.empty {
-  padding: 50px 0;
-  font-size: 14px;
-  text-align: center;
-}
+.chat-bottom {
+  display: flex;
 
-.chat-input {
-  &:deep(el-input__inner) {
+  .empty {
+    padding: 50px 0;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .chat-input {
+    &:deep(el-input__inner) {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .chat-btn {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
-}
-
-.chat-btn {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
 }
 </style>

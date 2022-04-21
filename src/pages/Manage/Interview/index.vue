@@ -144,7 +144,7 @@ const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
     params: {
-      id: id,
+      userId: id,
     },
   });
 };

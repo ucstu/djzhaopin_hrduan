@@ -1,7 +1,7 @@
 <template>
   <div class="this">
     <div class="person">
-      招聘者身份认定
+      招聘者企业认定
       <div class="line"></div>
       <div class="information">
         <img :src="imageUrl" alt="加载失败" />

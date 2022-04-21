@@ -140,7 +140,7 @@ import {
 } from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
-import { ref } from "vue";
+import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -148,24 +148,6 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const store = useStore(key);
 
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyId,
-  {}
-).then((res) => {
-  deliveryRecords.value = res.data.body;
-  deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userId).then((res) => {
-      userInformations.value.set(item.userId, res.data.body);
-    });
-    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyId,
-      item.jobInformationId
-    ).then((res) => {
-      jobInformations.value.set(item.jobInformationId, res.data.body);
-    });
-  });
-});
-const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const valueMap = ref({
   age: "",
   /**
@@ -199,6 +181,45 @@ const valueMap = ref({
    */
   workingYears: "",
 });
+getCompanyinfosCompanyinfoidDeliveryrecords(
+  store.state.companyInfo.companyId,
+  {}
+).then((res) => {
+  deliveryRecords.value = res.data.body;
+  deliveryRecords.value.forEach((item) => {
+    getUserinfosUserinfoid(item.userId).then((res) => {
+      userInformations.value.set(item.userId, res.data.body);
+    });
+    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      store.state.companyInfo.companyId,
+      item.jobInformationId
+    ).then((res) => {
+      jobInformations.value.set(item.jobInformationId, res.data.body);
+    });
+  });
+});
+onUpdated(() => {
+  getCompanyinfosCompanyinfoidDeliveryrecords(
+    store.state.companyInfo.companyId,
+    valueMap.value
+  ).then((res) => {
+    deliveryRecords.value = res.data.body;
+    deliveryRecords.value.forEach((item) => {
+      getUserinfosUserinfoid(item.userId).then((res) => {
+        userInformations.value.set(item.userId, res.data.body);
+      });
+      getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+        store.state.companyInfo.companyId,
+        item.jobInformationId
+      ).then((res) => {
+        jobInformations.value.set(item.jobInformationId, res.data.body);
+      });
+    });
+  });
+});
+
+const feedbackMap = ["已通过", "已拒绝", "待审核"];
+
 const checked1 = ref(false);
 
 const education = ["大专", "本科", "硕士", "博士"];
@@ -206,7 +227,7 @@ const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
     params: {
-      id: id,
+      userId: id,
     },
   });
 };

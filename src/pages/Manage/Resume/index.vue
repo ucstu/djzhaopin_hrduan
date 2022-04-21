@@ -79,7 +79,9 @@ import {
 import { PositionInformation, UserInformation } from "@/services/types";
 import { key } from "@/stores";
 import { reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+const route = useRoute();
 const store = useStore(key);
 const userInfo = ref<UserInformation>({
   age: 1,
@@ -109,7 +111,7 @@ const imgUrl = ref(
   "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
 );
 
-getUserinfosUserinfoid(store.state.deliveryRecord.userId).then((res) => {
+getUserinfosUserinfoid(route.params.userId.toString()).then((res) => {
   userInfo.value = res.data.body;
 });
 getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(

@@ -166,7 +166,7 @@ import {
 } from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
-import { ref } from "vue";
+import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -229,10 +229,29 @@ const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
     params: {
-      id: id,
+      userId: id,
     },
   });
 };
+onUpdated(() => {
+  getCompanyinfosCompanyinfoidDeliveryrecords(
+    store.state.companyInfo.companyId,
+    valueMap.value
+  ).then((res) => {
+    deliveryRecords.value = res.data.body;
+    deliveryRecords.value.forEach((item) => {
+      getUserinfosUserinfoid(item.userId).then((res) => {
+        userInformations.value.set(item.userId, res.data.body);
+      });
+      getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+        store.state.companyInfo.companyId,
+        item.jobInformationId
+      ).then((res) => {
+        jobInformations.value.set(item.jobInformationId, res.data.body);
+      });
+    });
+  });
+});
 // getCompanyinfosCompanyinfoidDeliveryrecords(
 //   store.state.companyInfo.companyId,
 //   valueMap.value
