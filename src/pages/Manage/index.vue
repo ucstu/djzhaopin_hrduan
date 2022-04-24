@@ -138,7 +138,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 onMounted(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
-    store.state.hrInfo.companyInfoId,
+    store.state.hrInfo.companyInformationId,
     {}
   ).then((res) => {
     store.commit("setDeliveryRecord", res.data.body);
@@ -147,7 +147,7 @@ onMounted(() => {
 
     interviewNum.value.forEach((item) => {
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.hrInfo.companyInfoId,
+        store.state.hrInfo.companyInformationId,
         item.jobInformationId
       ).then((response) => {
         jobInformations.value.set(item.jobInformationId, response.data.body);

@@ -129,14 +129,14 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-getCompanyinfosCompanyinfoidDeliveryrecords,
-getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-getUserinfosUserinfoid
+  getCompanyinfosCompanyinfoidDeliveryrecords,
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getUserinfosUserinfoid,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";

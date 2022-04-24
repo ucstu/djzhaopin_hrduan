@@ -100,16 +100,12 @@ const personForm = reactive({
   phoneNumber: "",
 });
 
-// const routerRefresh = inject('routerRefresh')
-// onMounted(() => {
-//     routerRefresh
-// })
 const companyForm = reactive<CompanyInformation>({
   address: "",
   about: "",
   benefits: [],
   city: "",
-  companyId: "",
+  companyInformationId: "",
   comprehension: "",
   establishmentTime: "",
   financingStage: "1",
@@ -133,18 +129,6 @@ onMounted(() => {
   companyForm.registeredCapital = store.state.companyInfo.registeredCapital;
   companyForm.organizationType = store.state.companyInfo.organizationType;
 });
-// const confirmPerson = (formEl: FormInstance | undefined) => {
-//     if (!formEl) return
-//     formEl.validate(
-//         async (valid, fields) => {
-//             if (valid) {
-//                 const res = await putHrinfosHrinfoid(store.state.accountInfo.infoId, personForm)
-//                 store.commit('setHrInfo', res.data.body)
-//             } else {
-//                 ElMessage.error('请填写完整信息')
-//             }
-//         })
-// }
 const confirmCompany = (formEl: FormInstance | undefined) => {
   console.log(formEl);
   if (!formEl) return;

@@ -46,10 +46,7 @@
                   <Plus />
                 </el-icon>
               </el-upload>
-              <span>
-                温馨提示：已默认生成文字logo，如需替换可点击重新选择或制作
-                <br />logo要求：不能为二维码、营业执照、公司门头等
-              </span>
+              <span> logo要求：不能为二维码、营业执照、公司门头等 </span>
             </div>
           </el-form-item>
           <el-form-item label="公司行业" prop="comprehension">
@@ -219,7 +216,7 @@ const formCompany = reactive<CompanyInformation>({
   about: "",
   benefits: [],
   city: "",
-  companyId: "",
+  companyInformationId: "",
   comprehension: "",
   establishmentTime: "",
   financingStage: "1",

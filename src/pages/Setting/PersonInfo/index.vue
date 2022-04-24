@@ -47,7 +47,7 @@
           <el-input v-model="formHr.post" placeholder="请填写职位信息" />
         </el-form-item>
         <el-form-item label="公司" prop="fullName">
-          <el-input v-model="formHr.fullName" placeholder="请填写公司信息" />
+          <el-input v-model="companyName" placeholder="请填写公司信息" />
         </el-form-item>
         <el-form-item label="手机" prop="phoneNumber">
           <el-input
@@ -89,20 +89,21 @@
   </div>
 </template>
 <script setup lang="ts">
+import router from "@/router/index";
 import {
-  getCompanyinfosCompanyinfoid,
-  getHrinfosHrinfoid,
-  putHrinfosHrinfoid,
+getCompanyinfosCompanyinfoid,
+getHrinfosHrinfoid,
+putHrinfosHrinfoid
 } from "@/services/services";
+import { HRInformation } from "@/services/types";
+import { store } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
-import router from "../../../router/index";
-import { store } from "../../../stores";
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrinfosHrinfoid(store.state.hrInfo.hrId).then((res) => {
+  getHrinfosHrinfoid(store.state.hrInfo.hrInformationId).then((res) => {
     console.log(res);
     imageUrl.value = res.data.body.avatar;
     formHr.name = res.data.body.name;
@@ -110,25 +111,25 @@ onMounted(() => {
     formHr.acceptEmail = res.data.body.acceptEmail;
     formHr.phoneNumber = res.data.body.phoneNumber;
   });
-  getCompanyinfosCompanyinfoid(store.state.companyInfo.companyId).then(
-    (res) => {
-      console.log(res);
-      formHr.fullName = res.data.body.fullName;
-    }
-  );
+  getCompanyinfosCompanyinfoid(
+    store.state.companyInfo.companyInformationId
+  ).then((res) => {
+    console.log(res);
+    companyName.value = res.data.body.fullName;
+  });
 });
-const formHr = reactive({
+const formHr = reactive<HRInformation>({
   avatar: "",
   name: "",
   post: "",
-  fullName: "",
   acceptEmail: "",
-  hrId: "",
+  hrInformationId: "",
   phoneNumber: "",
-  companyInfoId: "",
   createdAt: "",
   updatedAt: "",
+  companyInformationId: "",
 });
+const companyName = ref("");
 const rules = reactive({
   name: [
     {
@@ -186,10 +187,12 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrinfosHrinfoid(store.state.hrInfo.hrId, formHr).then((res) => {
-        store.commit("setCompanyInfo", res.data.body);
-        ElMessage.success("修改成功");
-      });
+      putHrinfosHrinfoid(store.state.hrInfo.hrInformationId, formHr).then(
+        (res) => {
+          store.commit("setCompanyInfo", res.data.body);
+          ElMessage.success("修改成功");
+        }
+      );
     }
   });
 };
@@ -241,7 +244,7 @@ $info-height: 85vh;
             border-radius: 5px;
           }
 
-          span {
+          & > span {
             margin-left: 15px;
             font-size: 8px;
             color: #999;
@@ -268,10 +271,10 @@ $info-height: 85vh;
 
       span {
         margin-left: 30px;
-      }
 
-      span:hover {
-        color: rgb(0 139 100);
+        &:hover {
+          color: rgb(0 179 139);
+        }
       }
     }
   }

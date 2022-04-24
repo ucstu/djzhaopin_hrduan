@@ -101,7 +101,7 @@ const userInfo = ref<UserInformation>({
   sex: "",
   socialHomepage: "",
   updatedAt: "",
-  userId: "",
+  userInformationId: "",
   workingYears: 1,
 });
 const positionInfo = ref<PositionInformation>({} as any);
@@ -115,7 +115,7 @@ getUserinfosUserinfoid(route.params.userId.toString()).then((res) => {
   userInfo.value = res.data.body;
 });
 getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-  store.state.companyInfo.companyId,
+  store.state.companyInfo.companyInformationId,
   store.state.deliveryRecord.jobInformationId
 ).then((res) => {
   positionInfo.value = res.data.body;

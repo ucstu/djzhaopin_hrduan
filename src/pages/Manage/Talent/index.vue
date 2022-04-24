@@ -69,7 +69,7 @@
             <el-scrollbar height="400px">
               <div
                 v-for="Talent in TalentInfo"
-                :key="Talent.userId"
+                :key="Talent.userInformationId"
                 class="resume-item"
               >
                 <div class="item-header">
@@ -95,7 +95,7 @@
                 <div>
                   <el-button
                     type="primary"
-                    @click="inspectionResume(Talent.userId)"
+                    @click="inspectionResume(Talent.userInformationId)"
                   >
                     查看简历</el-button
                   >
@@ -123,35 +123,17 @@ import { Search } from "@element-plus/icons-vue";
 import { onMounted, ref } from "vue";
 const valueMap = ref({
   age: "",
-  /**
-   *
-   * 投递日期
-   */
+
   deliveryDate: "",
-  /**
-   *
-   * 投递职位
-   */
+
   jobId: "",
-  /**
-   *
-   * 搜索内容
-   */
+
   search: "",
-  /**
-   *
-   * 性别
-   */
+
   sex: "",
-  /**
-   *
-   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-   */
+
   state: "",
-  /**
-   *
-   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
-   */
+
   workingYears: "",
 });
 const checkeds = ref(false);
@@ -180,7 +162,7 @@ const userInfo = ref<UserInformation>({
   sex: "",
   socialHomepage: "",
   updatedAt: "",
-  userId: "",
+  userInformationId: "",
   workingYears: 0,
 });
 const JobExpectative = ref<JobExpectation>({

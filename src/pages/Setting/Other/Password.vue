@@ -103,17 +103,18 @@ const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAcocuntsAccountid(store.state.accountInfo.accountId, ruleForm).then(
-        (res) => {
-          console.log(res);
-          if (res.status === 200) {
-            ruleForm.password = "";
-            ruleForm.checkPass = "";
-            ruleForm.verificationCode = "";
-            ElMessage.success("修改成功");
-          }
+      putAcocuntsAccountid(
+        store.state.accountInfo.accountInformationId,
+        ruleForm
+      ).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          ruleForm.password = "";
+          ruleForm.checkPass = "";
+          ruleForm.verificationCode = "";
+          ElMessage.success("修改成功");
         }
-      );
+      });
     } else {
       console.log("error submit!");
       return false;

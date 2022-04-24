@@ -9,7 +9,7 @@
           style="max-width: 500px"
           :rules="rule"
         >
-          <el-form-item label="头像" prop="name">
+          <el-form-item label="头像">
             <div class="avatar">
               <el-upload
                 ref="uploadRef"
@@ -42,15 +42,15 @@
               placeholder="请填写你工作中的名字，便于向求职者展示"
             />
           </el-form-item>
-          <el-form-item label="职位" prop="name">
+          <el-form-item label="职位" prop="post">
             <el-input
               v-model="formLabelAlign.post"
               placeholder="请填写当前公司的任职职位"
             />
           </el-form-item>
-          <el-form-item label="公司全称" prop="name">
+          <el-form-item label="公司名称" prop="name">
             <el-input
-              v-model="formLabelAlign.fullName"
+              v-model="company.name"
               placeholder="请填写与营业执照名称/劳动合同/公司发票抬头一致的公司全称"
             />
           </el-form-item>
@@ -94,7 +94,7 @@
         </div>
         <div class="line"></div>
         <div class="bottom">
-          <span>{{ formLabelAlign.fullName || "公司全称" }}</span>
+          <span>{{ company.name || "公司名称" }}</span>
           <span>{{ formLabelAlign.acceptEmail || "邮箱" }}</span>
         </div>
       </div>
@@ -103,6 +103,7 @@
 </template>
 
 <script setup lang="ts">
+import { HRInformation } from "@/services/types";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
@@ -114,27 +115,27 @@ import { key } from "../../stores";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const formLabelAlign = reactive({
+const formLabelAlign = reactive<HRInformation>({
   avatar: "",
   name: "",
   post: "",
-  fullName: "",
   acceptEmail: "",
-  hrId: "",
   phoneNumber: "",
   createdAt: "",
   updatedAt: "",
-  companyId: "",
-  companyInfoId: "",
+  companyInformationId: "",
+  hrInformationId: "",
 });
-
+const company = ref({
+  name: "",
+});
 const imageUrl = ref("");
-
 const handleAvatarSuccess: UploadProps["onSuccess"] = (
   response
   // uploadFile
 ) => {
   imageUrl.value = response.url;
+  formLabelAlign.avatar = response.url;
 };
 const handleAvatarError: UploadProps["onError"] = () =>
   // err,
@@ -156,19 +157,27 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
 };
 const rule = reactive({
   name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  avatar: [
+    {
+      required: true,
+      message: "请上传头像",
+      trigger: "blur",
+    },
+  ],
+  post: [{ required: true, message: "此项填入职位", trigger: "blur" }],
 });
 const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
       const res = await putHrinfosHrinfoid(
-        store.state.accountInfo.hrInfoId,
+        store.state.accountInfo.hrInfomationId,
         formLabelAlign
       );
       store.commit("setHrInfo", res.data.body);
       router.replace({
         name: "Company",
-        params: { companyName: formLabelAlign.fullName },
+        params: { companyName: company.value.name },
       });
     } else {
       ElMessage.error("请填写完整信息");

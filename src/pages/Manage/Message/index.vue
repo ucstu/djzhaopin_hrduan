@@ -58,14 +58,14 @@
 
 <script setup lang="ts">
 import {
-  getCompanyinfosCompanyinfoidDeliveryrecords,
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
+getCompanyinfosCompanyinfoidDeliveryrecords,
+getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+getUserinfosUserinfoid
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { key } from "@/stores";
 import { ref } from "vue";
@@ -77,7 +77,7 @@ const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyId,
+  store.state.companyInfo.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -86,7 +86,7 @@ getCompanyinfosCompanyinfoidDeliveryrecords(
       userInformations.value.set(item.userId, res.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyId,
+      store.state.companyInfo.companyInformationId,
       item.jobInformationId
     ).then((res) => {
       jobInformations.value.set(item.jobInformationId, res.data.body);

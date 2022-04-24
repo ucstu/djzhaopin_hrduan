@@ -477,10 +477,22 @@ export interface AccountInformation {
   createdAt: string;
   /**
    *
+   * HR信息ID
+   *
+   */
+  hrInfomationId: string;
+  /**
+   *
    * 更新时间
    *
    */
   updatedAt: string;
+  /**
+   *
+   * 用户信息ID
+   *
+   */
+  userInfomationId: string;
   /**
    *
    * 用户名

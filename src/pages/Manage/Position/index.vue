@@ -146,7 +146,7 @@ const jobTypeList = ref<PositionInformation[]>([
   },
 ]);
 getCompanyinfosCompanyinfoidPositioninfos(
-  store.state.companyInfo.companyId,
+  store.state.companyInfo.companyInformationId,
   {}
 ).then((res) => {
   jobTypeList.value = res.data.body;
@@ -166,7 +166,7 @@ const updatePosition = (id: string) => {
 };
 const deletePosition = (id: string) => {
   deleteCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-    store.state.companyInfo.companyId,
+    store.state.companyInfo.companyInformationId,
     id
   ).then((res) => {
     store.state.positionInfo = res.data.body;

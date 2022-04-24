@@ -1,34 +1,31 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import Enroll from "../pages/Enroll/index.vue";
-import HomeCompany from "../pages/Home/Company.vue";
-import Home from "../pages/Home/index.vue";
-import HomePerson from "../pages/Home/Person.vue";
-import Login from "../pages/Login/index.vue";
-import PublishJob from "../pages/PublishJob/index.vue";
 const leftBarRouteList: RouteRecordRaw[] = [
   {
+    meta: { requiresAuth: true },
     path: "/Home/",
-    component: Home,
+    component: () => import("../pages/Home/index.vue"),
     redirect: "/Home/Person",
     children: [
       {
         name: "Company",
         path: "Company/:companyName",
-        component: HomeCompany,
+        component: () => import("../pages/Home/Company.vue"),
       },
       {
         name: "Person",
         path: "Person",
-        component: HomePerson,
+        component: () => import("../pages/Home/Person.vue"),
       },
     ],
   },
   {
+    meta: { requiresAuth: true },
     name: "PublishJob",
     path: "/PublishJob/:PublishJobId?",
-    component: PublishJob,
+    component: () => import("../pages/PublishJob/index.vue"),
   },
   {
+    meta: { requiresAuth: true },
     path: "/Setting/",
     redirect: "/Setting/PersonInfo",
     component: () => import("../components/Setting.vue"),
@@ -62,6 +59,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     ],
   },
   {
+    meta: { requiresAuth: true },
     path: "/System/",
     redirect: "/System/Message",
     component: () => import("../components/System.vue"),
@@ -119,6 +117,8 @@ const leftBarRouteList: RouteRecordRaw[] = [
     ],
   },
   {
+    meta: { requiresAuth: true },
+    name: "Manage",
     path: "/Manage",
     component: () => import("../pages/Manage/index.vue"),
   },
@@ -131,12 +131,12 @@ const unAuthRouterList: RouteRecordRaw[] = [
   },
   {
     path: "/Login",
-    component: Login,
+    component: () => import("../pages/Login/index.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/Enroll",
-    component: Enroll,
+    component: () => import("../pages/Enroll/index.vue"),
     meta: { requiresAuth: false },
   },
 ];
@@ -148,19 +148,4 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-// router.beforeEach((to, from, next) => {
-//   if (to.path === "/Login") {
-//     next();
-//   } else {
-//     if (localStorage.getItem("token")) {
-//       leftBarRouteList.forEach((item) => {
-//         router.addRoute(item);
-//       });
-//       next();
-//     } else {
-//       next("/Login");
-//     }
-//   }
-// });
-
 export default router;

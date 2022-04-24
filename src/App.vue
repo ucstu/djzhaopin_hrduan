@@ -9,7 +9,7 @@ import router from "./router";
 import { getAxiosInstance } from "./services/config";
 const store = useStore(key);
 onMounted(() => {
-  if (!store.state.token) {
+  if (store.state.token === "") {
     router.push("/login");
     return;
   }

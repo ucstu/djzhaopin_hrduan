@@ -247,32 +247,7 @@ import { useStore } from "vuex";
 const store = useStore(key);
 const route = useRoute();
 const formRef = ref<FormInstance>();
-const jobTypeList = ref<PositionInformation>({
-  startingSalary: 0,
-  ceilingSalary: 0,
-  createdAt: "",
-  department: "",
-  directionTags: [],
-  education: "0",
-  hrId: "",
-  description: "",
-  highlights: [],
-  positionInformationId: "",
-  name: "",
-  positionType: "1",
-  companyId: "",
-  releaseDate: "",
-  updatedAt: "",
-  workArea: "",
-  workingPlace: {
-    latitude: 1,
-    longitude: 1,
-  },
-  workingYears: "0",
-  interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
-  workTime: "",
-  weekendReleaseTime: "1",
-});
+const jobTypeList = ref<PositionInformation>({} as PositionInformation);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 // const interviewInfoMap = reactive({
 //   illustrate: "1",
@@ -351,7 +326,6 @@ onMounted(() => {
       jobTypeList.value = res.data.body;
     });
   }
-  console.log(route.params.PublishJobId);
 });
 const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;

@@ -6,10 +6,10 @@ import router from ".";
 import { key } from "../stores";
 const store = useStore(key);
 NProgress.configure({ showSpinner: false });
-const whitelist = ["/login"];
+const whitelist = ["/login", "/Enroll"];
 router.beforeEach(async (to, _, next) => {
   NProgress.start();
-  if (store.state.token) {
+  if (to.meta.requiresAuth && store.state.token) {
     if (to.path == "/login") {
       next({ path: "/" });
       NProgress.done();

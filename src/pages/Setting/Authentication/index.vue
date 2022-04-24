@@ -66,8 +66,6 @@ const scaleMap = [
   "500-2000人",
   "2000人以上",
 ];
-console.log(store.state.hrInfo.hrId);
-
 const toExecution = () => {
   router.push("/setting/Execution");
 };

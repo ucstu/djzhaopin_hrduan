@@ -131,7 +131,7 @@
                     type="primary"
                     @click="
                       inspectionResume(
-                        userInformations.get(deliveryRecord.userId)!.userId
+                        userInformations.get(deliveryRecord.userId)!.userInformationId
                       )
                     "
                     >查看简历</el-button
@@ -176,7 +176,7 @@ const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyId,
+  store.state.companyInfo.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -185,7 +185,7 @@ getCompanyinfosCompanyinfoidDeliveryrecords(
       userInformations.value.set(item.userId, response.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyId,
+      store.state.companyInfo.companyInformationId,
       item.jobInformationId
     ).then((respones) => {
       jobInformations.value.set(item.jobInformationId, respones.data.body);
@@ -235,19 +235,19 @@ const inspectionResume = (id: string) => {
 };
 onUpdated(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
-    store.state.companyInfo.companyId,
+    store.state.companyInfo.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserinfosUserinfoid(item.userId).then((res) => {
-        userInformations.value.set(item.userId, res.data.body);
+      getUserinfosUserinfoid(item.userId).then((response) => {
+        userInformations.value.set(item.userId, response.data.body);
       });
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.companyInfo.companyId,
+        store.state.companyInfo.companyInformationId,
         item.jobInformationId
-      ).then((res) => {
-        jobInformations.value.set(item.jobInformationId, res.data.body);
+      ).then((resposable) => {
+        jobInformations.value.set(item.jobInformationId, resposable.data.body);
       });
     });
   });

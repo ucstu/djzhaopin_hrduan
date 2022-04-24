@@ -116,7 +116,7 @@ const formCompany = reactive<CompanyInformation>({
   about: "",
   benefits: [],
   city: "",
-  companyId: "",
+  companyInformationId: "",
   comprehension: "",
   establishmentTime: "",
   financingStage: "1",
@@ -197,7 +197,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyinfosCompanyinfoid(
-        store.state.companyInfo.companyId,
+        store.state.companyInfo.companyInformationId,
         formCompany
       )
         .then((res) => {
