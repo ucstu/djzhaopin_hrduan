@@ -123,7 +123,7 @@ a {
     background-color: rgb(0 179 139);
 
     .image {
-      width: 6vw;
+      width: 80px;
       height: 80px;
       margin-left: 20vw;
       border-radius: 5px;
@@ -144,7 +144,7 @@ a {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 30vw;
+      width: 500px;
       height: 240px;
       background-color: rgb(255 255 255);
       border: solid 1px rgb(155 160 158 / 50%);

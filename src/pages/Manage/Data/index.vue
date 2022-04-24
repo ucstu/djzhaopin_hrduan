@@ -23,6 +23,15 @@
         :tab-position="tabPosition"
         class="demo-tabs"
       >
+        <div class="map-info">
+          <el-date-picker
+            v-model="value1"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :default-value="[new Date(2010, 9, 1), new Date(2010, 10, 1)]"
+          />
+        </div>
         <el-tab-pane :key="Scan" label="获得浏览量" name="Scan">
           <Scan />
         </el-tab-pane>
@@ -33,15 +42,6 @@
           <Vita />
         </el-tab-pane>
       </el-tabs>
-      <div class="map-info">
-        <el-date-picker
-          v-model="value1"
-          type="daterange"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-value="[new Date(2010, 9, 1), new Date(2010, 10, 1)]"
-        />
-      </div>
     </div>
   </div>
 </template>

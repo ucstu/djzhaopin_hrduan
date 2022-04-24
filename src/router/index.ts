@@ -28,7 +28,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     path: "/Setting/",
     redirect: "/Setting/PersonInfo",
-    component: () => import("../components/Setting.vue"),
+    component: () => import("../components/Setting/Setting.vue"),
     children: [
       {
         name: "PersonInfo",
@@ -62,7 +62,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     path: "/System/",
     redirect: "/System/Message",
-    component: () => import("../components/System.vue"),
+    component: () => import("../components/System/System.vue"),
     children: [
       {
         path: "Message",

@@ -16,6 +16,7 @@
           :rules="rules"
           label-width="120px"
           class="demo-ruleForm"
+          min-width="600px"
         >
           <el-form-item label="用户名" prop="user">
             <el-input
@@ -47,7 +48,12 @@
               placeholder="输入验证码"
             >
               <template #append>
-                <el-button @click="postverificationCode">发送验证码</el-button>
+                <el-button v-if="!btn" @click="postverificationCode">{{
+                  vcode
+                }}</el-button>
+                <el-button v-if="btn" @click="postverificationCode">{{
+                  vcode
+                }}</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -72,6 +78,8 @@ import { useStore } from "vuex";
 import { key } from "../../stores";
 const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
+const vcode = ref("获取验证码");
+const btn = ref(false);
 const validateUser = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入用户名"));
@@ -109,6 +117,17 @@ const postverificationCode = () => {
     console.log(Number(res.data.body.msg));
     ElMessage.success("发送成功");
   });
+  btn.value = true;
+  let time = 60;
+  const timer = setInterval(() => {
+    time--;
+    vcode.value = `${time}s`;
+    if (time === 0) {
+      clearInterval(timer);
+      vcode.value = "获取验证码";
+      btn.value = false;
+    }
+  }, 1000);
 };
 const rules = reactive({
   user: [{ validator: validateUser, trigger: "blur" }],
@@ -152,7 +171,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     background-color: rgb(0 179 139);
 
     .image {
-      width: 6vw;
+      width: 80px;
       height: 80px;
       margin-left: 20vw;
       border-radius: 5px;
@@ -173,7 +192,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 30vw;
+      width: 500px;
       height: 300px;
       background-color: rgb(255 255 255);
       border: solid 1px rgb(155 160 158 / 50%);
@@ -182,6 +201,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
       .el-form {
         margin-top: 20px;
         margin-right: 18%;
+
+        .el-button {
+          width: 100px;
+        }
       }
     }
   }

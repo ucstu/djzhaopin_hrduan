@@ -32,7 +32,12 @@
             placeholder="输入验证码"
           >
             <template #append>
-              <el-button @click="postverificationCode">发送验证码</el-button>
+              <el-button v-if="!btn" @click="postverificationCode">{{
+                vcode
+              }}</el-button>
+              <el-button v-if="btn" @click="postverificationCode">{{
+                vcode
+              }}</el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -55,7 +60,8 @@ import { useStore } from "vuex";
 import { key } from "../../../stores";
 const ruleFormRef = ref<FormInstance>();
 const store = useStore(key);
-
+const vcode = ref("获取验证码");
+const btn = ref(false);
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
@@ -98,6 +104,17 @@ const postverificationCode = () => {
       ElMessage.success("发送成功");
     }
   );
+  btn.value = true;
+  let time = 60;
+  const timer = setInterval(() => {
+    time--;
+    vcode.value = `${time}s`;
+    if (time === 0) {
+      clearInterval(timer);
+      vcode.value = "获取验证码";
+      btn.value = false;
+    }
+  }, 1000);
 };
 const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -134,7 +151,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
       margin: 40px 0;
 
       .el-button {
-        width: 20%;
+        width: 100px;
       }
     }
   }

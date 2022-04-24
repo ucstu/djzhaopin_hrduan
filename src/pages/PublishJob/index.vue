@@ -209,7 +209,6 @@
                 </el-option>
               </el-select>
             </el-form-item> -->
-
             <el-form-item>
               <el-button
                 v-if="!route.params.positionInfoId"
@@ -234,9 +233,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-postCompanyinfosCompanyinfoidPositioninfos,
-putCompanyinfosCompanyinfoidPositioninfosPositioninfoid
+  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  postCompanyinfosCompanyinfoidPositioninfos,
+  putCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -247,7 +246,9 @@ import { useStore } from "vuex";
 const store = useStore(key);
 const route = useRoute();
 const formRef = ref<FormInstance>();
-const jobTypeList = ref<PositionInformation>({} as PositionInformation);
+const jobTypeList = ref<PositionInformation>({
+  workTime: [] as unknown,
+} as PositionInformation);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 // const interviewInfoMap = reactive({
 //   illustrate: "1",

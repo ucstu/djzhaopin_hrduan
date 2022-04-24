@@ -9,7 +9,7 @@
     </router-link>
     <div class="right">
       <router-link to="/PublishJob">
-        <img src="../assets/pub.png" />
+        <img src="@/assets/pub.png" />
       </router-link>
       <img :src="avatar" />
       <div class="dropdown">
@@ -30,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
+import { key } from "@/stores";
 import { useStore } from "vuex";
-import { key } from "../stores";
 const store = useStore(key);
 const { name, avatar } = store.state.hrInfo;
 </script>

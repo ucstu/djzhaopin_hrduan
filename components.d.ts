@@ -42,10 +42,10 @@ declare module 'vue' {
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    Setting: typeof import('./src/components/Setting.vue')['default']
-    SettingHeader: typeof import('./src/components/SettingHeader.vue')['default']
-    System: typeof import('./src/components/System.vue')['default']
-    SystemHeadeer: typeof import('./src/components/SystemHeadeer.vue')['default']
+    Setting: typeof import('./src/components/Setting/Setting.vue')['default']
+    SettingHeader: typeof import('./src/components/Setting/SettingHeader.vue')['default']
+    System: typeof import('./src/components/System/System.vue')['default']
+    SystemHeadeer: typeof import('./src/components/System/SystemHeadeer.vue')['default']
   }
 }
 

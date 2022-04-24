@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
+import { key } from "@/stores";
 import { useStore } from "vuex";
-import { key } from "../stores";
 const store = useStore(key);
 const avatar = store.state.hrInfo.avatar;
 </script>

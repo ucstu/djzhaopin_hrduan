@@ -48,12 +48,7 @@
               <el-divider direction="vertical" />
               <span>面试({{ num.count }})</span>
             </div>
-            <div class="add">
-              <el-icon>
-                <Plus />
-              </el-icon>
-              <span>添加备注</span>
-            </div>
+            <div class="add"></div>
           </div>
           <div class="time-line">
             <el-timeline>
@@ -108,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import SystemHeader from "@/components/SystemHeadeer.vue";
+import SystemHeader from "@/components/System/SystemHeadeer.vue";
 import router from "@/router";
 import {
   getCompanyinfosCompanyinfoidDeliveryrecords,
@@ -121,7 +116,6 @@ import {
   UserInformation,
 } from "@/services/types";
 import { key } from "@/stores";
-import { Plus } from "@element-plus/icons-vue";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
