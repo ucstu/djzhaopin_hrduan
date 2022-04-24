@@ -105,7 +105,7 @@
                     type="primary"
                     @click="
                       inspectionResume(
-                        userInformations.get(deliveryRecord.userId)!.userId
+                        userInformations.get(deliveryRecord.userId)!.userInformationId
                       )
                     "
                     >查看简历</el-button
@@ -129,14 +129,14 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidDeliveryrecords,
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
+getCompanyinfosCompanyinfoidDeliveryrecords,
+getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+getUserinfosUserinfoid
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
@@ -182,7 +182,7 @@ const valueMap = ref({
   workingYears: "",
 });
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyId,
+  store.state.companyInfo.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -191,16 +191,20 @@ getCompanyinfosCompanyinfoidDeliveryrecords(
       userInformations.value.set(item.userId, res.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyId,
+      store.state.companyInfo.companyInformationId,
       item.jobInformationId
     ).then((res) => {
       jobInformations.value.set(item.jobInformationId, res.data.body);
     });
   });
 });
+
+const feedbackMap = ["已通过", "已拒绝", "待审核"];
+
+const checked1 = ref(false);
 onUpdated(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
-    store.state.companyInfo.companyId,
+    store.state.companyInfo.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
@@ -209,7 +213,7 @@ onUpdated(() => {
         userInformations.value.set(item.userId, res.data.body);
       });
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.companyInfo.companyId,
+        store.state.companyInfo.companyInformationId,
         item.jobInformationId
       ).then((res) => {
         jobInformations.value.set(item.jobInformationId, res.data.body);
@@ -217,11 +221,6 @@ onUpdated(() => {
     });
   });
 });
-
-const feedbackMap = ["已通过", "已拒绝", "待审核"];
-
-const checked1 = ref(false);
-
 const education = ["大专", "本科", "硕士", "博士"];
 const inspectionResume = (id: string) => {
   router.push({

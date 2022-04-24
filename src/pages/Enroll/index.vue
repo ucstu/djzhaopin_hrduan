@@ -41,7 +41,7 @@
               placeholder="请再次输入密码"
             />
           </el-form-item>
-          <el-form-item label="验证码">
+          <el-form-item label="验证码" prop="verificationCode">
             <el-input
               v-model.number="ruleForm.verificationCode"
               placeholder="输入验证码"
@@ -64,9 +64,13 @@
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
 import { getVerificationCode, postAccounts } from "@/services/services";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
+import { useStore } from "vuex";
+import { key } from "../../stores";
+const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
 const validateUser = (rule: any, value: any, callback: any) => {
   if (value === "") {
@@ -122,7 +126,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
         verificationCode: ruleForm.verificationCode,
       }).then((res) => {
         console.log(res);
+        store.commit("setAccountInfo", res.data.body);
         ElMessage.success("注册成功");
+        router.push("/login");
       });
     } else {
       console.log("error submit!");
@@ -168,12 +174,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
       align-items: center;
       justify-content: center;
       width: 30vw;
-      height: 240px;
+      height: 300px;
       background-color: rgb(255 255 255);
       border: solid 1px rgb(155 160 158 / 50%);
       border-radius: 5px;
 
       .el-form {
+        margin-top: 20px;
         margin-right: 18%;
       }
     }

@@ -56,6 +56,10 @@ export const store = createStore<State>({
       state.deliveryRecord = deliveryRecord;
     },
   },
+  getters: {
+    token: (state: State) => state.token,
+    userName: (state: State) => state.accountInfo.userName,
+  },
   modules: {},
   plugins: [vuexPersister.persist],
 });

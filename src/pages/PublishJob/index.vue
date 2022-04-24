@@ -209,15 +209,16 @@
                 </el-option>
               </el-select>
             </el-form-item> -->
+
             <el-form-item>
               <el-button
-                v-if="!route.params"
+                v-if="!route.params.positionInfoId"
                 type="primary"
                 @click="publishPost(formRef)"
                 >发布职位</el-button
               >
               <el-button
-                v-if="route.params"
+                v-if="route.params.positionInfoId"
                 type="primary"
                 @click="updatelishPost(formRef)"
                 >编辑职位</el-button
@@ -233,9 +234,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  postCompanyinfosCompanyinfoidPositioninfos,
-  putCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+postCompanyinfosCompanyinfoidPositioninfos,
+putCompanyinfosCompanyinfoidPositioninfosPositioninfoid
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -344,7 +345,7 @@ const rules = reactive({
 onMounted(() => {
   if (route.params.PublishJobId) {
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyId,
+      store.state.companyInfo.companyInformationId,
       route.params.PublishJobId.toString()
     ).then((res) => {
       jobTypeList.value = res.data.body;
@@ -357,7 +358,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       postCompanyinfosCompanyinfoidPositioninfos(
-        store.state.hrInfo.companyInfoId,
+        store.state.hrInfo.companyInformationId,
         jobTypeList.value
       )
         .then((res) => {
@@ -376,7 +377,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.companyInfo.companyId,
+        store.state.companyInfo.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value
       ).then((res) => {

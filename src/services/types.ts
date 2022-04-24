@@ -63,22 +63,27 @@ export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
    *
    * 领域名数组
    */
-  comprehension?: string;
+  comprehensions?: string;
   /**
    *
    * 细分标签名
    */
-  directiontags?: string;
+  directiontag?: string;
   /**
    *
    * 学历要求枚举数组，{0:不要求,1:大专,2:本科,3:硕士,4:博士}
    */
-  education?: string;
+  educations?: string;
   /**
    *
    * 融资阶段枚举，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
    */
-  financingstage?: string;
+  financingstages?: string;
+  /**
+   *
+   * 排序类型枚举，{1:推荐,2:最近,3:最新}
+   */
+  mainorder?: string;
   /**
    *
    * 职位名
@@ -86,14 +91,14 @@ export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
   name?: string;
   /**
    *
-   * 排序类型枚举，{1:推荐,2:最近,3:最新}
+   * 当前页
    */
-  order?: string;
+  page?: string;
   /**
    *
    * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
    */
-  positiontype?: string;
+  positiontypes?: string;
   /**
    *
    * 薪资范围，(start,end) ，单位K
@@ -103,7 +108,95 @@ export interface GetCompanyinfosCompanyinfoidPositioninfosQueryParams {
    *
    * 公司规模枚举数组，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
    */
-  scale?: string;
+  scales?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+  /**
+   *
+   * 区县名
+   */
+  workarea?: string;
+  /**
+   *
+   * 经纬度坐标
+   */
+  workingplace?: string;
+  /**
+   *
+   * 工作年限枚举数组，{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
+   */
+  workingyears?: string;
+}
+
+export interface GetCompanyinfosPositioninfosQueryParams {
+  /**
+   *
+   * 领域名数组
+   */
+  comprehensions?: string;
+  /**
+   *
+   * 细分标签名
+   */
+  directiontag?: string;
+  /**
+   *
+   * 学历要求枚举数组，{0:不要求,1:大专,2:本科,3:硕士,4:博士}
+   */
+  educations?: string;
+  /**
+   *
+   * 融资阶段枚举，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+   */
+  financingstages?: string;
+  /**
+   *
+   * 排序类型枚举，{1:推荐,2:最近,3:最新}
+   */
+  mainorder?: string;
+  /**
+   *
+   * 职位名
+   */
+  name?: string;
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   */
+  positiontypes?: string;
+  /**
+   *
+   * 薪资范围，(start,end) ，单位K
+   */
+  salary?: string;
+  /**
+   *
+   * 公司规模枚举数组，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
+   */
+  scales?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
   /**
    *
    * 区县名
@@ -129,12 +222,171 @@ export interface GetDirectiontagsQueryParams {
   positionName: string;
 }
 
+export interface GetUserinfosQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidAttentionrecordsQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
 export interface GetUserinfosUserinfoidDeliveryrecordsQueryParams {
   /**
    *
    * 投递记录状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
   status: string;
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidEduexperiencesQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidGarnerrecordsQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidInspectionrecordsQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidJobexpectationsQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidProjectexperiencesQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
+export interface GetUserinfosUserinfoidWorkexperiencesQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
 }
 
 export interface GetVerificationCodeQueryParams {
@@ -164,7 +416,7 @@ export interface HRInformation {
    * 公司ID
    *
    */
-  companyInfoId: string;
+  companyInformationId: string;
   /**
    *
    * 创建时间
@@ -176,7 +428,7 @@ export interface HRInformation {
    * HRID
    *
    */
-  hrId: string;
+  hrInformationId: string;
   /**
    *
    * 姓名
@@ -209,7 +461,7 @@ export interface AccountInformation {
    * 账号ID
    *
    */
-  accountId: string;
+  accountInformationId: string;
   /**
    *
    * 账号类型
@@ -225,22 +477,10 @@ export interface AccountInformation {
   createdAt: string;
   /**
    *
-   * HR信息ID
-   *
-   */
-  hrInfoId: string;
-  /**
-   *
    * 更新时间
    *
    */
   updatedAt: string;
-  /**
-   *
-   * 用户信息ID
-   *
-   */
-  userInfoId: string;
   /**
    *
    * 用户名
@@ -342,7 +582,7 @@ export interface CompanyInformation {
    * 公司ID
    *
    */
-  companyId: string;
+  companyInformationId: string;
   /**
    *
    * 领域
@@ -542,21 +782,6 @@ export interface EducationExperience {
    *
    */
   updatedAt: string;
-}
-
-export interface ErrorInformation {
-  /**
-   *
-   * 错误代码
-   *
-   */
-  eno: number;
-  /**
-   *
-   * 错误消息
-   *
-   */
-  msg: string;
 }
 
 export interface FilterInformation {
@@ -1165,7 +1390,7 @@ export interface UserInformation {
    * 用户ID
    *
    */
-  userId: string;
+  userInformationId: string;
   /**
    *
    * 工作年限

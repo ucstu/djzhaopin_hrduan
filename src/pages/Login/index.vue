@@ -25,7 +25,7 @@
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
-              v-model="ruleForm.password"
+              v-model.trim="ruleForm.password"
               type="password"
               placeholder="请输入密码"
             />
@@ -50,9 +50,8 @@ import { useStore } from "vuex";
 import router from "../../router";
 import { postAccountsLogin } from "../../services/services";
 import { key } from "../../stores";
-
-const ruleFormRef = ref<FormInstance>();
 const store = useStore(key);
+const ruleFormRef = ref<FormInstance>();
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
