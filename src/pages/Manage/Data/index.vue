@@ -122,6 +122,7 @@ const state = reactive({
     border-radius: 5px;
 
     .el-tabs {
+      height: 100%;
       margin-left: 20px;
     }
 

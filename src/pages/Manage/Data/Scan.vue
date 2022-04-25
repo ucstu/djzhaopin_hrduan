@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <div class="echarts-box">
-      <div id="myEcharts" :style="{ width: '900px', height: '300px' }"></div>
+      <div id="myEcharts" :style="{ width: '1200px', height: '400px' }"></div>
     </div>
   </div>
 </template>
@@ -39,5 +39,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  .echarts-box {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
