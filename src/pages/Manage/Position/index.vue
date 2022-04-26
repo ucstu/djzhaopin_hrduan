@@ -47,7 +47,7 @@
         <div class="position">
           <el-scrollbar height="400px">
             <template v-for="position in jobTypeList" :key="position.companyId">
-              <div v-if="positionInformationId" class="position-list">
+              <div v-if="!positionInformationId" class="position-list">
                 <div class="position-item">
                   <div class="item">
                     <span>{{ "职位:" + position.name }}</span>
@@ -145,10 +145,12 @@ const jobTypeList = ref<PositionInformation[]>([
     weekendReleaseTime: "1",
   },
 ]);
+const input2 = ref("");
 getCompanyinfosCompanyinfoidPositioninfos(
   store.state.companyInfo.companyInformationId,
   {}
 ).then((res) => {
+  console.log(res.data.body);
   jobTypeList.value = res.data.body;
 });
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -157,7 +159,7 @@ const { positionInformationId } = toRefs(store.state.positionInfo);
 const toPublish = () => {
   router.push("/PublishJob");
 };
-const input2 = "";
+
 const updatePosition = (id: string) => {
   router.push({
     name: "PublishJob",
