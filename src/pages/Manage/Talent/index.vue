@@ -83,7 +83,7 @@
                       }}·{{ slution[Talent.jobStatus] }}</span
                     >
                     <span
-                      >想找：{{ Talent.city }}|{{ Talent.positonName }}|{{
+                      >想找：{{ Talent.city }}|{{ Talent.positionName }}|{{
                         Talent.startingSalary + "-" + Talent.ceilingSalary
                       }}</span
                     >
@@ -172,7 +172,7 @@ const JobExpectative = ref<JobExpectation>({
   directionTags: [],
   jobExpectationId: "",
   positionType: "1",
-  positonName: "",
+  positionName: "",
   startingSalary: 0,
   updatedAt: "",
 });

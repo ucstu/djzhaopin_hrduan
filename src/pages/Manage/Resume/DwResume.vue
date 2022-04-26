@@ -49,28 +49,34 @@
                 <div class="item-header">
                   <el-checkbox v-model="checked1" />
                   <img
-                    :src="userInformations.get(deliveryRecord.userId)?.avatar"
+                    :src="
+                      userInformations.get(deliveryRecord.userInformationId)
+                        ?.avatar
+                    "
                     alt=""
                   />
                   <div class="header-person">
                     <div>
                       <span>{{
-                        userInformations.get(deliveryRecord.userId)?.firstName +
+                        userInformations.get(deliveryRecord.userInformationId)
+                          ?.firstName +
                         "" +
-                        userInformations.get(deliveryRecord.userId)?.lastName
+                        userInformations.get(deliveryRecord.userInformationId)
+                          ?.lastName
                       }}</span>
                       <span
                         >·男·<span>{{
-                          userInformations.get(deliveryRecord.userId)?.age
+                          userInformations.get(deliveryRecord.userInformationId)
+                            ?.age
                         }}</span
                         >岁·<span>{{
                         education[
-                          userInformations.get(deliveryRecord.userId)!.education
+                          userInformations.get(deliveryRecord.userInformationId)!.education
                         ]
                         }}</span
                         >·{{
                         slution[
-                          userInformations.get(deliveryRecord.userId)!.jobStatus
+                          userInformations.get(deliveryRecord.userInformationId)!.jobStatus
                         ]
                         }}</span
                       >
@@ -78,7 +84,8 @@
                     <div>
                       <span
                         >想找：{{
-                          userInformations.get(deliveryRecord.userId)?.city
+                          userInformations.get(deliveryRecord.userInformationId)
+                            ?.city
                         }}</span
                       ><span
                         >{{
@@ -105,7 +112,7 @@
                     type="primary"
                     @click="
                       inspectionResume(
-                        userInformations.get(deliveryRecord.userId)!.userInformationId
+                        userInformations.get(deliveryRecord.userInformationId)!.userInformationId
                       )
                     "
                     >查看简历</el-button
@@ -182,16 +189,16 @@ const valueMap = ref({
   workingYears: "",
 });
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyInformationId,
+  store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userId).then((res) => {
-      userInformations.value.set(item.userId, res.data.body);
+    getUserinfosUserinfoid(item.userInformationId).then((res) => {
+      userInformations.value.set(item.userInformationId, res.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyInformationId,
+      store.state.companyInformation.companyInformationId,
       item.jobInformationId
     ).then((res) => {
       jobInformations.value.set(item.jobInformationId, res.data.body);
@@ -204,16 +211,16 @@ const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const checked1 = ref(false);
 onUpdated(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
-    store.state.companyInfo.companyInformationId,
+    store.state.companyInformation.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserinfosUserinfoid(item.userId).then((res) => {
-        userInformations.value.set(item.userId, res.data.body);
+      getUserinfosUserinfoid(item.userInformationId).then((res) => {
+        userInformations.value.set(item.userInformationId, res.data.body);
       });
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.companyInfo.companyInformationId,
+        store.state.companyInformation.companyInformationId,
         item.jobInformationId
       ).then((res) => {
         jobInformations.value.set(item.jobInformationId, res.data.body);
@@ -226,7 +233,7 @@ const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
     params: {
-      userId: id,
+      userInformationId: id,
     },
   });
 };

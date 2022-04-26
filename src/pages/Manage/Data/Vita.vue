@@ -11,9 +11,9 @@
 <script setup lang="ts">
 import { LineChart } from "echarts/charts";
 import {
+  GridComponent,
   LegendComponent,
   TitleComponent,
-  GridComponent,
   TooltipComponent,
 } from "echarts/components";
 import { use } from "echarts/core";
@@ -29,7 +29,7 @@ use([
   TooltipComponent,
   LegendComponent,
 ]);
-provide(THEME_KEY);
+provide(THEME_KEY, "dark");
 const option = ref({
   title: {
     text: "Traffic Sources",

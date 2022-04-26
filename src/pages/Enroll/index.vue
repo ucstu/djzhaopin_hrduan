@@ -136,23 +136,35 @@ const rules = reactive({
 });
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  formEl.validate((valid) => {
-    if (valid) {
-      postAccounts({
-        accountType: "2",
-        userName: ruleForm.user,
-        password: ruleForm.pass,
-        verificationCode: ruleForm.verificationCode,
-      }).then((res) => {
-        console.log(res);
-        store.commit("setAccountInfo", res.data.body);
-        ElMessage.success("注册成功");
-        router.push("/login");
-      });
-    } else {
-      console.log("error submit!");
-      return false;
-    }
+  // formEl.validate((valid) => {
+  //   if (valid) {
+  //     console.log(111);
+  //     postAccounts({
+  //       accountType: "2",
+  //       userName: ruleForm.user,
+  //       password: ruleForm.pass,
+  //       verificationCode: ruleForm.verificationCode,
+  //     }).then((res) => {
+  //       console.log(res);
+  //       store.commit("setAccountInfo", res.data.body);
+  //       ElMessage.success("注册成功");
+  //       router.push("/login");
+  //     });
+  //   } else {
+  //     console.log("error submit!");
+  //     return false;
+  //   }
+  // });
+  postAccounts({
+    accountType: "2",
+    userName: ruleForm.user,
+    password: ruleForm.pass,
+    verificationCode: ruleForm.verificationCode,
+  }).then((res) => {
+    console.log(res);
+    store.commit("setAccountInfo", res.data.body);
+    ElMessage.success("注册成功");
+    router.push("/login");
   });
 };
 </script>

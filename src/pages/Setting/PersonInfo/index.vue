@@ -91,9 +91,9 @@
 <script setup lang="ts">
 import router from "@/router/index";
 import {
-getCompanyinfosCompanyinfoid,
-getHrinfosHrinfoid,
-putHrinfosHrinfoid
+  getCompanyinfosCompanyinfoid,
+  getHrinfosHrinfoid,
+  putHrinfosHrinfoid,
 } from "@/services/services";
 import { HRInformation } from "@/services/types";
 import { store } from "@/stores";
@@ -103,7 +103,7 @@ import { onMounted, reactive, ref } from "vue";
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrinfosHrinfoid(store.state.hrInfo.hrInformationId).then((res) => {
+  getHrinfosHrinfoid(store.state.hrInformation.hrInformationId).then((res) => {
     console.log(res);
     imageUrl.value = res.data.body.avatar;
     formHr.name = res.data.body.name;
@@ -112,7 +112,7 @@ onMounted(() => {
     formHr.phoneNumber = res.data.body.phoneNumber;
   });
   getCompanyinfosCompanyinfoid(
-    store.state.companyInfo.companyInformationId
+    store.state.companyInformation.companyInformationId
   ).then((res) => {
     console.log(res);
     companyName.value = res.data.body.fullName;
@@ -187,12 +187,13 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrinfosHrinfoid(store.state.hrInfo.hrInformationId, formHr).then(
-        (res) => {
-          store.commit("setCompanyInfo", res.data.body);
-          ElMessage.success("修改成功");
-        }
-      );
+      putHrinfosHrinfoid(
+        store.state.hrInformation.hrInformationId,
+        formHr
+      ).then((res) => {
+        store.commit("setCompanyInfo", res.data.body);
+        ElMessage.success("修改成功");
+      });
     }
   });
 };

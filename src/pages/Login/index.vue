@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getAxiosInstance } from "@/services/config";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
@@ -87,7 +88,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
         .then((res) => {
           store.commit("setToken", res.data.body.token);
           store.commit("setAccountInfo", res.data.body.accountInfo);
-          router.replace("/home");
+          getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
+            "Bearer " + res.data.body.token;
+          router.replace("/Home");
         })
         .catch((err) => {
           let msg = "";

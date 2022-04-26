@@ -19,7 +19,7 @@
                   ? '下午好'
                   : '晚上好')
             "
-            >{{ greet }}，{{ store.state.hrInfo.name }}</span
+            >{{ greet }}，{{ store.state.hrInformation.name }}</span
           >
           <span>时间和注意力是你最宝贵的财富！~</span>
         </div>
@@ -37,7 +37,9 @@
             <span> 今日已面试</span>
           </div>
           <div>
-            <span>{{ store.state.companyInfo.recruitmentPosition }}</span>
+            <span>{{
+              store.state.companyInformation.recruitmentPosition
+            }}</span>
             <span>在招职位试</span>
           </div>
         </div>
@@ -67,10 +69,11 @@
                         <div class="hint">
                           <p>
                             候选人:{{
-                              userInformations.get(interview.userId)
+                              userInformations.get(interview.userInformationId)
                                 ?.firstName +
                               "" +
-                              userInformations.get(interview.userId)?.lastName
+                              userInformations.get(interview.userInformationId)
+                                ?.lastName
                             }}
                           </p>
                           <el-divider direction="vertical" />
@@ -87,7 +90,7 @@
                     <div class="right">
                       <el-button
                         type="primary"
-                        @click="inspectionResume(interview.userId)"
+                        @click="inspectionResume(interview.userInformationId)"
                         >查看简历</el-button
                       >
                     </div>
@@ -132,7 +135,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 onMounted(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
-    store.state.hrInfo.companyInformationId,
+    store.state.hrInformation.companyInformationId,
     {}
   ).then((res) => {
     store.commit("setDeliveryRecord", res.data.body);
@@ -141,13 +144,16 @@ onMounted(() => {
 
     interviewNum.value.forEach((item) => {
       getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.hrInfo.companyInformationId,
+        store.state.hrInformation.companyInformationId,
         item.jobInformationId
       ).then((response) => {
         jobInformations.value.set(item.jobInformationId, response.data.body);
       });
-      getUserinfosUserinfoid(item.userId).then((responseable) => {
-        userInformations.value.set(item.userId, responseable.data.body);
+      getUserinfosUserinfoid(item.userInformationId).then((responseable) => {
+        userInformations.value.set(
+          item.userInformationId,
+          responseable.data.body
+        );
       });
       if (item.state == "4") {
         num.value.count = num.value.count + 1;

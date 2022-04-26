@@ -321,7 +321,7 @@ const rules = reactive({
 onMounted(() => {
   if (route.params.PublishJobId) {
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyInformationId,
+      store.state.companyInformation.companyInformationId,
       route.params.PublishJobId.toString()
     ).then((res) => {
       jobTypeList.value = res.data.body;
@@ -333,7 +333,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       postCompanyinfosCompanyinfoidPositioninfos(
-        store.state.hrInfo.companyInformationId,
+        store.state.hrInformation.companyInformationId,
         jobTypeList.value
       )
         .then((res) => {
@@ -352,7 +352,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.companyInfo.companyInformationId,
+        store.state.companyInformation.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value
       ).then((res) => {

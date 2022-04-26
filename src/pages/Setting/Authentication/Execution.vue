@@ -92,7 +92,7 @@ import { onMounted, reactive, ref } from "vue";
 
 const comFormRef = ref<FormInstance>();
 const personForm = reactive({
-  name: store.state.hrInfo.name,
+  name: store.state.hrInformation.name,
   avatar: "",
   post: "",
   acceptEmail: "",
@@ -122,12 +122,16 @@ const companyForm = reactive<CompanyInformation>({
   updatedAt: "",
 });
 onMounted(() => {
-  personForm.name = store.state.hrInfo.name;
-  companyForm.fullName = store.state.companyInfo.fullName;
-  companyForm.legalRepresentative = store.state.companyInfo.legalRepresentative;
-  companyForm.establishmentTime = store.state.companyInfo.establishmentTime;
-  companyForm.registeredCapital = store.state.companyInfo.registeredCapital;
-  companyForm.organizationType = store.state.companyInfo.organizationType;
+  personForm.name = store.state.hrInformation.name;
+  companyForm.fullName = store.state.companyInformation.fullName;
+  companyForm.legalRepresentative =
+    store.state.companyInformation.legalRepresentative;
+  companyForm.establishmentTime =
+    store.state.companyInformation.establishmentTime;
+  companyForm.registeredCapital =
+    store.state.companyInformation.registeredCapital;
+  companyForm.organizationType =
+    store.state.companyInformation.organizationType;
 });
 const confirmCompany = (formEl: FormInstance | undefined) => {
   console.log(formEl);

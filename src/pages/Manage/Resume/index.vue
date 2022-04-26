@@ -37,7 +37,7 @@
               >
               <el-button
                 type="primary"
-                @click="toMessage(store.state.deliveryRecord.userId)"
+                @click="toMessage(store.state.deliveryRecord.userInformationId)"
                 >在线沟通</el-button
               >
               <h3>个人优势：</h3>
@@ -115,7 +115,7 @@ getUserinfosUserinfoid(route.params.userId.toString()).then((res) => {
   userInfo.value = res.data.body;
 });
 getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-  store.state.companyInfo.companyInformationId,
+  store.state.companyInformation.companyInformationId,
   store.state.deliveryRecord.jobInformationId
 ).then((res) => {
   positionInfo.value = res.data.body;

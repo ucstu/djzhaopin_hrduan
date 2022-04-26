@@ -13,11 +13,11 @@ const vuexPersister = new VuexPersister<State>({});
 
 export interface State {
   token: string;
-  accountInfo: AccountInformation;
-  hrInfo: HRInformation;
-  companyInfo: CompanyInformation;
+  hrInformation: HRInformation;
+  accountInformation: AccountInformation;
+  companyInformation: CompanyInformation;
   comprise: Array<string>;
-  positionInfo: PositionInformation;
+  positionInformation: PositionInformation;
   deliveryRecord: DeliveryRecord;
 }
 
@@ -26,31 +26,40 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: () => ({
     token: "",
-    accountInfo: {} as AccountInformation,
-    hrInfo: {} as HRInformation,
-    companyInfo: {} as CompanyInformation,
+    hrInformation: {} as HRInformation,
+    accountInformation: {} as AccountInformation,
+    companyInformation: {} as CompanyInformation,
     comprise: [],
-    positionInfo: {} as PositionInformation,
+    positionInformation: {} as PositionInformation,
     deliveryRecord: {} as DeliveryRecord,
   }),
   mutations: {
-    setPrise(state: State, payload: State["comprise"]) {
-      state.comprise = payload;
-    },
     setToken(state: State, token: State["token"]) {
       state.token = token;
     },
-    setAccountInfo(state: State, accountInfo: State["accountInfo"]) {
-      state.accountInfo = accountInfo;
+    setHrInfo(state: State, hrInformation: State["hrInformation"]) {
+      state.hrInformation = hrInformation;
     },
-    setHrInfo(state: State, hrInfo: State["hrInfo"]) {
-      state.hrInfo = hrInfo;
+    setAccountInfo(
+      state: State,
+      accountInformation: State["accountInformation"]
+    ) {
+      state.accountInformation = accountInformation;
     },
-    setCompanyInfo(state: State, companyInfo: State["companyInfo"]) {
-      state.companyInfo = companyInfo;
+    setCompanyInfo(
+      state: State,
+      companyInformation: State["companyInformation"]
+    ) {
+      state.companyInformation = companyInformation;
     },
-    setPositionInfo(state: State, positionInfo: State["positionInfo"]) {
-      state.positionInfo = positionInfo;
+    setCompose(state: State, comprise: State["comprise"]) {
+      state.comprise = comprise;
+    },
+    setPositionInfo(
+      state: State,
+      positionInformation: State["positionInformation"]
+    ) {
+      state.positionInformation = positionInformation;
     },
     setDeliveryRecord(state: State, deliveryRecord: State["deliveryRecord"]) {
       state.deliveryRecord = deliveryRecord;
@@ -58,7 +67,7 @@ export const store = createStore<State>({
   },
   getters: {
     token: (state: State) => state.token,
-    userName: (state: State) => state.accountInfo.userName,
+    userName: (state: State) => state.accountInformation.userName,
   },
   modules: {},
   plugins: [vuexPersister.persist],

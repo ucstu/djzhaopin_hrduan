@@ -56,7 +56,7 @@ const formLabelAlign = ref<HRInformation>({
   companyInformationId: "",
 });
 onMounted(() => {
-  getHrinfosHrinfoid(store.state.hrInfo.hrInformationId).then((res) => {
+  getHrinfosHrinfoid(store.state.hrInformation.hrInformationId).then((res) => {
     formLabelAlign.value = res.data.body;
   });
 });

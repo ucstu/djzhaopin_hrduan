@@ -1,6 +1,6 @@
 <template>
   <div class="password">
-    <span>登录账号：{{ store.state.accountInfo.userName }}</span>
+    <span>登录账号：{{ store.state.accountInformation.userName }}</span>
     <div>
       <el-form
         ref="ruleFormRef"
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { getVerificationCode, putAcocuntsAccountid } from "@/services/services";
+import { getVerificationCode, putAccountsAccountid } from "@/services/services";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -98,12 +98,12 @@ const ruleForm = reactive<rlueAccount>({
 });
 
 const postverificationCode = () => {
-  getVerificationCode({ phoneNumber: store.state.hrInfo.phoneNumber }).then(
-    (res) => {
-      console.log(Number(res.data.body.msg));
-      ElMessage.success("发送成功");
-    }
-  );
+  getVerificationCode({
+    phoneNumber: store.state.hrInformation.phoneNumber,
+  }).then((res) => {
+    console.log(Number(res.data.body.msg));
+    ElMessage.success("发送成功");
+  });
   btn.value = true;
   let time = 60;
   const timer = setInterval(() => {
@@ -120,10 +120,10 @@ const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAcocuntsAccountid(
-        store.state.accountInfo.accountInformationId,
+      putAccountsAccountid(
+        store.state.accountInformation.accountInformationId,
         ruleForm
-      ).then((res) => {
+      ).then((res: { status: number }) => {
         console.log(res);
         if (res.status === 200) {
           ruleForm.password = "";

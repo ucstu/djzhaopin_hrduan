@@ -4,7 +4,7 @@
       <div class="left-we">
         <span>We</span>
         <span class="red">❤</span>
-        <span>{{ store.state.companyInfo.fullName || "You" }}</span>
+        <span>{{ store.state.companyInformation.fullName || "You" }}</span>
       </div>
       <div class="left-route">
         <router-link to="/Manage">
@@ -30,7 +30,7 @@
 import { key } from "@/stores";
 import { useStore } from "vuex";
 const store = useStore(key);
-const avatar = store.state.hrInfo.avatar;
+const avatar = store.state.hrInformation.avatar;
 </script>
 
 <style scoped lang="scss">

@@ -47,16 +47,16 @@ const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyInformationId,
+  store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userId).then((res) => {
-      userInformations.value.set(item.userId, res.data.body);
+    getUserinfosUserinfoid(item.userInformationId).then((res) => {
+      userInformations.value.set(item.userInformationId, res.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyInformationId,
+      store.state.companyInformation.companyInformationId,
       item.jobInformationId
     ).then((res) => {
       jobInformations.value.set(item.jobInformationId, res.data.body);

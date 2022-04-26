@@ -115,17 +115,7 @@ import { key } from "../../stores";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const formLabelAlign = reactive<HRInformation>({
-  avatar: "",
-  name: "",
-  post: "",
-  acceptEmail: "",
-  phoneNumber: "",
-  createdAt: "",
-  updatedAt: "",
-  companyInformationId: "",
-  hrInformationId: "",
-});
+const formLabelAlign = reactive<HRInformation>(store.state.hrInformation);
 const company = ref({
   name: "",
 });
@@ -171,7 +161,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       const res = await putHrinfosHrinfoid(
-        store.state.accountInfo.hrInfomationId,
+        store.state.accountInformation.hrInformationId,
         formLabelAlign
       );
       store.commit("setHrInfo", res.data.body);

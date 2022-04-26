@@ -38,6 +38,11 @@ export interface GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams {
   jobId?: string;
   /**
    *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
    * 搜索内容
    */
   search?: string;
@@ -46,6 +51,16 @@ export interface GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams {
    * 性别
    */
   sex?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
   /**
    *
    * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
@@ -214,12 +229,48 @@ export interface GetCompanyinfosPositioninfosQueryParams {
   workingyears?: string;
 }
 
+export interface GetCompanyinfosQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
+}
+
 export interface GetDirectiontagsQueryParams {
   /**
    *
    * 职位类型
    */
   positionName: string;
+}
+
+export interface GetHrinfosQueryParams {
+  /**
+   *
+   * 当前页
+   */
+  page?: string;
+  /**
+   *
+   * 页大小
+   */
+  size?: string;
+  /**
+   *
+   * 排序方式
+   */
+  sort?: string;
 }
 
 export interface GetUserinfosQueryParams {
@@ -480,7 +531,7 @@ export interface AccountInformation {
    * HR信息ID
    *
    */
-  hrInfomationId: string;
+  hrInformationId: string;
   /**
    *
    * 更新时间
@@ -492,7 +543,7 @@ export interface AccountInformation {
    * 用户信息ID
    *
    */
-  userInfomationId: string;
+  userInformationId: string;
   /**
    *
    * 用户名
@@ -528,7 +579,7 @@ export interface AttentionRecord {
    * 公司ID
    *
    */
-  companyId: string;
+  companyInformationId: string;
   /**
    *
    * 创建时间
@@ -546,7 +597,7 @@ export interface AttentionRecord {
    * 用户ID
    *
    */
-  userId: string;
+  userInformationId: string;
 }
 
 export type CityInformations = {
@@ -726,7 +777,7 @@ export interface DeliveryRecord {
    * 用户ID
    *
    */
-  userId: string;
+  userInformationId: string;
 }
 
 export type DirectionTags = {
@@ -753,12 +804,6 @@ export interface EducationExperience {
   admissionTime: string;
   /**
    *
-   * 毕业时间
-   *
-   */
-  araduationTime: string;
-  /**
-   *
    * 创建时间
    *
    */
@@ -776,6 +821,12 @@ export interface EducationExperience {
    *
    */
   educationExperienceId: string;
+  /**
+   *
+   * 毕业时间
+   *
+   */
+  graduationTime: string;
   /**
    *
    * 专业
@@ -874,10 +925,10 @@ export interface GarnerRecord {
   updatedAt: string;
   /**
    *
-   * 用户ID
+   * 用户信息ID
    *
    */
-  userId: string;
+  userInformationId: string;
 }
 
 export interface InspectionRecord {
@@ -947,17 +998,17 @@ export interface JobExpectation {
   jobExpectationId: string;
   /**
    *
+   * 职位名
+   *
+   */
+  positionName: string;
+  /**
+   *
    * 职位类型
    *
    * {1:全职,2:兼职,3:实习}
    */
   positionType: "1" | "2" | "3";
-  /**
-   *
-   * 职位名
-   *
-   */
-  positonName: string;
   /**
    *
    * 起始薪资
@@ -1031,10 +1082,10 @@ export interface PositionInformation {
   ceilingSalary: number;
   /**
    *
-   * 公司ID
+   * 公司信息ID
    *
    */
-  companyId: string;
+  companyInformationId: string;
   /**
    *
    * 创建时间
@@ -1074,10 +1125,10 @@ export interface PositionInformation {
   highlights: string[];
   /**
    *
-   * HRID
+   * HR信息ID
    *
    */
-  hrId: string;
+  hrInformationId: string;
   /**
    *
    * 面试信息

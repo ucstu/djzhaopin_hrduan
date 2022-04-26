@@ -10,23 +10,27 @@
           v-for="deliveryRecord in deliveryRecords"
           :key="deliveryRecord.deliveryRecordId"
           class="job-hunter"
-          @click="selectPerson(deliveryRecord.userId)"
+          @click="selectPerson(deliveryRecord.userInformationId)"
         >
           <el-badge is-dot class="item">
             <div class="hunter">
               <img
-                :src="userInformations.get(deliveryRecord.userId)?.avatar"
+                :src="
+                  userInformations.get(deliveryRecord.userInformationId)?.avatar
+                "
                 alt=""
               />
               <div class="hunter-info">
                 <span>{{
-                  userInformations.get(deliveryRecord.userId)?.firstName +
+                  userInformations.get(deliveryRecord.userInformationId)
+                    ?.firstName +
                   "" +
-                  userInformations.get(deliveryRecord.userId)?.lastName
+                  userInformations.get(deliveryRecord.userInformationId)
+                    ?.lastName
                 }}</span>
                 <div class="info">
                   <span>{{
-                    userInformations.get(deliveryRecord.userId)?.city
+                    userInformations.get(deliveryRecord.userInformationId)?.city
                   }}</span>
                   <span>{{
                     jobInformations.get(deliveryRecord.jobInformationId)?.name
@@ -77,25 +81,25 @@ const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyinfosCompanyinfoidDeliveryrecords(
-  store.state.companyInfo.companyInformationId,
+  store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userId).then((res) => {
-      userInformations.value.set(item.userId, res.data.body);
+    getUserinfosUserinfoid(item.userInformationId).then((res) => {
+      userInformations.value.set(item.userInformationId, res.data.body);
     });
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-      store.state.companyInfo.companyInformationId,
+      store.state.companyInformation.companyInformationId,
       item.jobInformationId
     ).then((res) => {
       jobInformations.value.set(item.jobInformationId, res.data.body);
     });
   });
 });
-const selectPerson = (userId: string) => {
+const selectPerson = (userInformationId: string) => {
   condition.value = false;
-  console.log(userId);
+  console.log(userInformationId);
 };
 </script>
 

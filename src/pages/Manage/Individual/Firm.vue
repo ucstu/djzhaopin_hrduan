@@ -185,11 +185,11 @@ onMounted(() => {
       };
     });
   });
-  formCompany.fullName = store.state.companyInfo.fullName;
-  formCompany.logo = store.state.companyInfo.logo;
-  formCompany.about = store.state.companyInfo.about;
-  formCompany.address = store.state.companyInfo.address;
-  formCompany.scale = store.state.companyInfo.scale;
+  formCompany.fullName = store.state.companyInformation.fullName;
+  formCompany.logo = store.state.companyInformation.logo;
+  formCompany.about = store.state.companyInformation.about;
+  formCompany.address = store.state.companyInformation.address;
+  formCompany.scale = store.state.companyInformation.scale;
 });
 
 const updateCompany = (formEl: FormInstance | undefined) => {
@@ -197,7 +197,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyinfosCompanyinfoid(
-        store.state.companyInfo.companyInformationId,
+        store.state.companyInformation.companyInformationId,
         formCompany
       )
         .then((res) => {
