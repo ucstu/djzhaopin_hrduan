@@ -355,7 +355,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，公司创建成功");
           dialogFormVisible.value = false;
-          store.commit("setCompanyInfo", res.data.body);
+          store.commit("setCompanyInformation", res.data.body);
           router.replace({ name: "PublishJob" });
         })
         .catch((reject) => {

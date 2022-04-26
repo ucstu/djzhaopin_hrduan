@@ -37,25 +37,25 @@ export const store = createStore<State>({
     setToken(state: State, token: State["token"]) {
       state.token = token;
     },
-    setHrInfo(state: State, hrInformation: State["hrInformation"]) {
+    setHRInformation(state: State, hrInformation: State["hrInformation"]) {
       state.hrInformation = hrInformation;
     },
-    setAccountInfo(
+    setAccountInformation(
       state: State,
       accountInformation: State["accountInformation"]
     ) {
       state.accountInformation = accountInformation;
     },
-    setCompanyInfo(
+    setCompanyInformation(
       state: State,
       companyInformation: State["companyInformation"]
     ) {
       state.companyInformation = companyInformation;
     },
-    setCompose(state: State, comprise: State["comprise"]) {
+    setComprise(state: State, comprise: State["comprise"]) {
       state.comprise = comprise;
     },
-    setPositionInfo(
+    setPositionInformation(
       state: State,
       positionInformation: State["positionInformation"]
     ) {

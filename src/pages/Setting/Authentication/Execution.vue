@@ -141,7 +141,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
       postCompanyinfos(companyForm)
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
-          store.commit("setCompanyInfo", res.data.body);
+          store.commit("setCompanyInformation", res.data.body);
         })
         .catch((reject) => {
           console.error(reject);

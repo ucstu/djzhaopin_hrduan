@@ -202,7 +202,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
       )
         .then((res) => {
           ElMessage.success("修改成功");
-          store.commit("setCompanyInfo", res.data.body);
+          store.commit("setCompanyInformation", res.data.body);
         })
         .catch((reject) => {
           ElMessage.error(reject.response.data.message);

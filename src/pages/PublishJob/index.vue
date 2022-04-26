@@ -338,7 +338,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
       )
         .then((res) => {
           ElMessage.success("恭喜您，公司创建成功");
-          store.commit("setPositionInfo", res.data.body);
+          store.commit("setPositionInformation", res.data.body);
           router.push("/Manage");
         })
         .catch((err) => {
@@ -357,7 +357,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
         jobTypeList.value
       ).then((res) => {
         ElMessage.success("恭喜您，职位信息修改成功");
-        store.commit("setPositionInfo", res.data.body);
+        store.commit("setPositionInformation", res.data.body);
         router.replace("/Manage");
       });
     }

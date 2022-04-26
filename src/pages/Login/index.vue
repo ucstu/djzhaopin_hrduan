@@ -49,7 +49,7 @@ import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import router from "../../router";
-import { postAccountsLogin } from "../../services/services";
+import { getHrinfosHrinfoid, postAccountsLogin } from "../../services/services";
 import { key } from "../../stores";
 const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
@@ -87,10 +87,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
       postAccountsLogin(ruleForm)
         .then((res) => {
           store.commit("setToken", res.data.body.token);
-          store.commit("setAccountInfo", res.data.body.accountInfo);
+          store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
-          router.replace("/Home");
+          getHrinfosHrinfoid(res.data.body.accountInfo.hrInformationId)
+            .then((res) => {
+              store.commit("setHrInformation", res.data.body);
+              router.replace("/Home");
+            })
+            .catch((err) => {
+              ElMessage.error(err.data.body.message);
+            });
         })
         .catch((err) => {
           let msg = "";

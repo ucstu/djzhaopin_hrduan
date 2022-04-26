@@ -55,7 +55,7 @@ const addPrise = () => {
 const handleInputConfirm = () => {
   if (inputValue.value && prise.length < 16) {
     prise.unshift(inputValue.value);
-    store.commit("setPrise", prise);
+    store.commit("setComprise", prise);
   } else if (prise.length >= 16) {
     ElMessage.error("超出可设置常用语的最大值");
   }

@@ -162,7 +162,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     verificationCode: ruleForm.verificationCode,
   }).then((res) => {
     console.log(res);
-    store.commit("setAccountInfo", res.data.body);
+    store.commit("setAccountInformation", res.data.body);
     ElMessage.success("注册成功");
     router.push("/login");
   });
