@@ -3,8 +3,7 @@
 </template>
 <script setup lang="ts">
 import { key } from "@/stores";
-import * as echarts from "echarts";
-import { onMounted, provide } from "vue";
+import { onMounted } from "vue";
 import { useStore } from "vuex";
 import router from "./router";
 import { getAxiosInstance } from "./services/config";
@@ -17,7 +16,6 @@ onMounted(() => {
   getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
     "Bearer " + store.state.token;
 });
-provide("echarts", echarts);
 </script>
 
 <style lang="scss">

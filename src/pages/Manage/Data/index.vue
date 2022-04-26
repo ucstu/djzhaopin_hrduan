@@ -66,7 +66,7 @@ const state = reactive({
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: auto;
   background-color: rgb(240 255 250);
 
   .summary {
@@ -115,7 +115,7 @@ const state = reactive({
 
   .map {
     width: 90%;
-    height: 450px;
+    height: 480px;
     margin-top: 45px;
     background-color: rgb(255 255 255);
     border: solid 1px rgb(224 224 224);
@@ -128,6 +128,7 @@ const state = reactive({
 
     .map-info {
       width: 40%;
+      margin-bottom: 20px;
       margin-left: 40px;
     }
   }

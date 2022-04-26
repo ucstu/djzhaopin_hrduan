@@ -1,50 +1,69 @@
 <template>
-  <div class="center">
-    <div class="echarts-box">
-      <div id="myEcharts" :style="{ width: '1200px', height: '400px' }"></div>
-    </div>
+  <div class="content">
+    <v-chart class="chart" :option="option" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted } from "vue";
-let echarts = inject("echarts");
-onMounted(() => {
-  let myChart = echarts.init(document.getElementById("myEcharts"));
-  // 绘制图表
-  let option = {
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+import { LineChart } from "echarts/charts";
+import {
+  LegendComponent,
+  TitleComponent,
+  GridComponent,
+  TooltipComponent,
+} from "echarts/components";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { provide, ref } from "vue";
+import VChart, { THEME_KEY } from "vue-echarts";
+
+use([
+  CanvasRenderer,
+  LineChart,
+  GridComponent,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
+provide(THEME_KEY);
+const option = ref({
+  title: {
+    text: "Traffic Sources",
+    left: "center",
+  },
+  xAxis: {
+    data: ["A", "B", "C", "D", "E"],
+  },
+  yAxis: {},
+  series: [
+    {
+      data: [10, 22, 28, 23, 19],
+      type: "line",
+      areaStyle: {},
     },
-    yAxis: {
-      type: "value",
-    },
-    series: [
-      {
-        data: [150, 230, 224, 218, 135, 147, 260],
-        type: "line",
+    {
+      data: [25, 14, 23, 35, 10],
+      type: "line",
+      areaStyle: {
+        color: "#ff0",
+        opacity: 0.5,
       },
-    ],
-  };
-  myChart.setOption(option, true);
-  window.addEventListener("resize", () => {
-    myChart.resize();
-  });
+    },
+  ],
 });
 </script>
 
 <style scoped lang="scss">
-.center {
+.content {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
 
-  .echarts-box {
-    width: 100%;
-    height: 100%;
+  .chart {
+    width: 1000px;
+    height: 350px;
   }
 }
 </style>

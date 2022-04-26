@@ -109,6 +109,11 @@ import SystemHeadeer from "./SystemHeadeer.vue";
   .el.aside {
     height: 100%;
   }
+
+  .el-main {
+    height: 100%;
+    background-color: rgb(240 255 250);
+  }
 }
 
 .el-menu {

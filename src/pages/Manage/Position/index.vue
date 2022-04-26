@@ -190,7 +190,7 @@ const deletePosition = (id: string) => {
     align-items: center;
     justify-content: center;
     width: 95%;
-    height: 95%;
+    height: auto;
     background-color: rgb(245 245 250);
 
     .total {
