@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit --skipLibCheck && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "unplugin-element-plus": "^0.3.4",
     "unplugin-vue-components": "^0.18.5",
     "vite": "^2.9.0",
+    "vite-plugin-checker": "^0.4.6",
     "vue-tsc": "^0.29.8"
   }
 }
