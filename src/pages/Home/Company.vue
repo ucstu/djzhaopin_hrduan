@@ -196,7 +196,7 @@ import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import router from "../../router";
-import { getCityinfos, postCompanyinfos } from "../../services/services";
+import { getCityinformations, postCompanyinfos } from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
@@ -330,7 +330,7 @@ interface cityInfo {
 }
 const cityMap = ref<cityInfo[]>([]);
 onMounted(() => {
-  getCityinfos().then((res) => {
+  getCityinformations().then((res) => {
     cityMap.value = res.data.body.map((item) => {
       return {
         value: item.provinceName,

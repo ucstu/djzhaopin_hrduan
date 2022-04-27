@@ -850,12 +850,6 @@ export interface EducationExperience {
 export interface FilterInformation {
   /**
    *
-   * 行业领域
-   *
-   */
-  IndustryField: string[];
-  /**
-   *
    * 公司规模
    *
    */
@@ -878,6 +872,12 @@ export interface FilterInformation {
    *
    */
   financingStage: string[];
+  /**
+   *
+   * 行业领域
+   *
+   */
+  industryField: string[];
   /**
    *
    * 工作性质
@@ -1042,7 +1042,7 @@ export interface MessageRecord {
    * 来源用户ID
    *
    */
-  from: string;
+  fromId: string;
   /**
    *
    * 消息记录ID
@@ -1054,7 +1054,7 @@ export interface MessageRecord {
    * 去向用户ID
    *
    */
-  to: string;
+  toId: string;
   /**
    *
    * 消息类型

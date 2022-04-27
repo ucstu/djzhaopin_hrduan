@@ -114,7 +114,6 @@ const ruleForm = reactive({
 });
 const postverificationCode = () => {
   getVerificationCode({ phoneNumber: ruleForm.user }).then((res) => {
-    console.log(Number(res.data.body.msg));
     ElMessage.success("发送成功");
   });
   btn.value = true;

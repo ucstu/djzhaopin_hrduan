@@ -117,7 +117,6 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { getRecommendations } from "@/services/services";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { onMounted, ref } from "vue";
@@ -186,18 +185,17 @@ const TalentInfo = ref([
 ]);
 
 onMounted(() => {
-  getRecommendations().then((res) => {
-    res.data.body.map((item) => {
-      console.log(item);
-      TalentInfo.value.splice(0, 0, {
-        ...item.userInformation,
-        ...item.jobExpectation,
-        checked: false,
-      });
-    });
-    TalentInfo.value.pop();
-    console.log(TalentInfo);
-  });
+  // getRecommendations().then((res) => {
+  //   res.data.body.map((item) => {
+  //     console.log(item);
+  //     TalentInfo.value.splice(0, 0, {
+  //       // item,
+  //       checked: false,
+  //     });
+  //   });
+  //   TalentInfo.value.pop();
+  //   console.log(TalentInfo);
+  // });
 });
 
 const inspectionResume = (id: string) => {

@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import {
-  getCityinfos,
+  getCityinformations,
   putCompanyinfosCompanyinfoid,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
@@ -171,12 +171,12 @@ interface cityInfo {
 }
 const cityMap = ref<cityInfo[]>([]);
 onMounted(() => {
-  getCityinfos().then((res) => {
+  getCityinformations().then((res: { data: { body: any[] } }) => {
     cityMap.value = res.data.body.map((item) => {
       return {
         value: item.provinceName,
         label: item.provinceName,
-        children: item.cities.map((city) => {
+        children: item.cities.map((city: any) => {
           return {
             value: city,
             label: city,

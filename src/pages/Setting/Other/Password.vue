@@ -101,7 +101,6 @@ const postverificationCode = () => {
   getVerificationCode({
     phoneNumber: store.state.hrInformation.phoneNumber,
   }).then((res) => {
-    console.log(Number(res.data.body.msg));
     ElMessage.success("发送成功");
   });
   btn.value = true;

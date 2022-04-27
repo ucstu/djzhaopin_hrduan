@@ -8,42 +8,42 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetCompanyinfosPositioninfosQueryParams,
-  GetUserinfosUserinfoidWorkexperiencesQueryParams,
-  GetVerificationCodeQueryParams,
-  GetCompanyinfosQueryParams,
-  GetUserinfosUserinfoidGarnerrecordsQueryParams,
-  GetAreaInformationsQueryParams,
+  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
   GetUserinfosUserinfoidDeliveryrecordsQueryParams,
   GetHrinfosQueryParams,
-  GetUserinfosUserinfoidProjectexperiencesQueryParams,
+  GetDirectiontagsQueryParams,
   GetUserinfosUserinfoidEduexperiencesQueryParams,
   GetUserinfosQueryParams,
-  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
-  GetUserinfosUserinfoidInspectionrecordsQueryParams,
+  GetAreaInformationsQueryParams,
+  GetUserinfosUserinfoidWorkexperiencesQueryParams,
+  GetCompanyinfosQueryParams,
+  GetCompanyinfosPositioninfosQueryParams,
   DeleteAccountsAccountidQueryParams,
-  GetDirectiontagsQueryParams,
-  GetUserinfosUserinfoidAttentionrecordsQueryParams,
-  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
   GetUserinfosUserinfoidJobexpectationsQueryParams,
-  PositionInformation,
-  EducationExperience,
-  AreaInformations,
-  GarnerRecord,
-  WorkExperience,
-  UserInformation,
-  DeliveryRecord,
-  DirectionTags,
-  InspectionRecord,
-  FilterInformation,
-  JobExpectation,
-  MessageRecord,
-  AccountInformation,
-  PositionTypes,
+  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
+  GetUserinfosUserinfoidInspectionrecordsQueryParams,
+  GetUserinfosUserinfoidProjectexperiencesQueryParams,
+  GetUserinfosUserinfoidGarnerrecordsQueryParams,
+  GetUserinfosUserinfoidAttentionrecordsQueryParams,
+  GetVerificationCodeQueryParams,
   HRInformation,
-  AttentionRecord,
+  UserInformation,
   CompanyInformation,
+  DirectionTags,
+  WorkExperience,
+  AccountInformation,
+  MessageRecord,
+  JobExpectation,
+  PositionInformation,
   CityInformations,
+  AreaInformations,
+  EducationExperience,
+  FilterInformation,
+  DeliveryRecord,
+  GarnerRecord,
+  PositionTypes,
+  AttentionRecord,
+  InspectionRecord,
   ProjectExperience,
 } from "./types";
 
@@ -674,7 +674,7 @@ getAreaInformations.key = "/areaInformations";
  *
  * 查询城市信息
  */
-export const getCityinfos = (
+export const getCityinformations = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
@@ -700,7 +700,7 @@ export const getCityinfos = (
   }>
 > => {
   return Http.getRequest(
-    getCityinfos.key,
+    getCityinformations.key,
     undefined,
     undefined,
     undefined,
@@ -709,7 +709,7 @@ export const getCityinfos = (
 };
 
 /** Key is end point string without base url */
-getCityinfos.key = "/cityinfos";
+getCityinformations.key = "/cityinformations";
 
 /**
  *
@@ -1056,7 +1056,7 @@ getDirectiontags.key = "/directiontags";
  *
  * 查询筛选信息
  */
-export const getFilterinfos = (
+export const getFilterinformation = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
@@ -1082,7 +1082,7 @@ export const getFilterinfos = (
   }>
 > => {
   return Http.getRequest(
-    getFilterinfos.key,
+    getFilterinformation.key,
     undefined,
     undefined,
     undefined,
@@ -1091,7 +1091,7 @@ export const getFilterinfos = (
 };
 
 /** Key is end point string without base url */
-getFilterinfos.key = "/filterinfos";
+getFilterinformation.key = "/filterinformation";
 
 /**
  *
@@ -1190,7 +1190,7 @@ getHrinfosHrinfoid.key = "/hrinfos/{hrinfoid}";
  *
  * 查询所有消息
  */
-export const getMessages = (
+export const getMessagerecords = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
@@ -1221,7 +1221,7 @@ export const getMessages = (
   }>
 > => {
   return Http.getRequest(
-    getMessages.key,
+    getMessagerecords.key,
     undefined,
     undefined,
     undefined,
@@ -1230,7 +1230,7 @@ export const getMessages = (
 };
 
 /** Key is end point string without base url */
-getMessages.key = "/messages";
+getMessagerecords.key = "/messagerecords";
 
 /**
  *
@@ -1245,14 +1245,7 @@ export const getNewversion = (
      * 版本信息
      *
      */
-    body: {
-      /**
-       *
-       * 新版本号
-       *
-       */
-      newVersion: string;
-    };
+    body: number;
     /**
      *
      * 状态描述
@@ -1336,13 +1329,10 @@ export const getRecommendations = (
   SwaggerResponse<{
     /**
      *
-     * 人才列表
+     * 用户信息ID
      *
      */
-    body: {
-      jobExpectation: JobExpectation;
-      userInformation: UserInformation;
-    }[];
+    body: string[];
     /**
      *
      * 状态描述
@@ -2341,19 +2331,6 @@ export const getVerificationCode = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
-    /**
-     *
-     * 发送状态
-     *
-     */
-    body: {
-      /**
-       *
-       * 状态内容
-       *
-       */
-      msg: string;
-    };
     /**
      *
      * 状态描述
