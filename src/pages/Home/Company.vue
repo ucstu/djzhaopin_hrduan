@@ -190,6 +190,7 @@
 </template>
 
 <script setup lang="ts">
+import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
@@ -330,20 +331,22 @@ interface cityInfo {
 }
 const cityMap = ref<cityInfo[]>([]);
 onMounted(() => {
-  getCityinformations().then((res) => {
-    cityMap.value = res.data.body.map((item) => {
-      return {
-        value: item.provinceName,
-        label: item.provinceName,
-        children: item.cities.map((city) => {
-          return {
-            value: city,
-            label: city,
-          };
-        }),
-      };
-    });
-  });
+  getCityinformations()
+    .then((res) => {
+      cityMap.value = res.data.body.map((item) => {
+        return {
+          value: item.provinceName,
+          label: item.provinceName,
+          children: item.cities.map((city) => {
+            return {
+              value: city,
+              label: city,
+            };
+          }),
+        };
+      });
+    })
+    .catch(failResponseHandler);
 });
 
 const confirmCompany = (formEl: FormInstance | undefined) => {

@@ -119,6 +119,7 @@ import {
   UserInformation,
 } from "@/services/types";
 import { key } from "@/stores";
+import { failResponseHandler } from "@/utils/handler";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
@@ -137,33 +138,35 @@ onMounted(() => {
   getCompanyinfosCompanyinfoidDeliveryrecords(
     store.state.hrInformation.companyInformationId,
     {}
-  ).then((res) => {
-    store.commit("setDeliveryRecord", res.data.body);
+  )
+    .then((res) => {
+      store.commit("setDeliveryRecord", res.data.body);
 
-    interviewNum.value = res.data.body;
+      interviewNum.value = res.data.body;
 
-    interviewNum.value.forEach((item) => {
-      getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
-        store.state.hrInformation.companyInformationId,
-        item.jobInformationId
-      ).then((response) => {
-        jobInformations.value.set(item.jobInformationId, response.data.body);
+      interviewNum.value.forEach((item) => {
+        getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+          store.state.hrInformation.companyInformationId,
+          item.jobInformationId
+        ).then((response) => {
+          jobInformations.value.set(item.jobInformationId, response.data.body);
+        });
+        getUserinfosUserinfoid(item.userInformationId).then((responseable) => {
+          userInformations.value.set(
+            item.userInformationId,
+            responseable.data.body
+          );
+        });
+        if (item.state == "4") {
+          num.value.count = num.value.count + 1;
+        } else if (item.state == "2") {
+          num.value.countComunication = num.value.countComunication + 1;
+        } else if (item.state == "3") {
+          num.value.countInterviewed = num.value.countInterviewed + 1;
+        }
       });
-      getUserinfosUserinfoid(item.userInformationId).then((responseable) => {
-        userInformations.value.set(
-          item.userInformationId,
-          responseable.data.body
-        );
-      });
-      if (item.state == "4") {
-        num.value.count = num.value.count + 1;
-      } else if (item.state == "2") {
-        num.value.countComunication = num.value.countComunication + 1;
-      } else if (item.state == "3") {
-        num.value.countInterviewed = num.value.countInterviewed + 1;
-      }
-    });
-  });
+    })
+    .catch(failResponseHandler);
 });
 
 const inspectionResume = (id: string) => {
