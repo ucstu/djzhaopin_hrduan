@@ -708,7 +708,7 @@ export interface DeliveryRecord {
    * 职位信息ID
    *
    */
-  jobInformationId: string;
+  positionInformationId: string;
   /**
    *
    * 投递状态
@@ -872,7 +872,7 @@ export interface GarnerRecord {
    * 职位信息ID
    *
    */
-  jobInformationId: string;
+  positionInformationId: string;
   /**
    *
    * 更新时间

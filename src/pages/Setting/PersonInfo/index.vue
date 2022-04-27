@@ -23,7 +23,7 @@
             >
               <img
                 v-if="imageUrl"
-                :src="imageUrl ? imageUrl : formHr.avatar"
+                :src="imageUrl ? imageUrl : formHr.avatarUrl"
                 class="avatar"
                 alt=""
               />
@@ -39,12 +39,12 @@
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input
-            v-model="formHr.name"
+            v-model="formHr.hrName"
             placeholder="请填写你工作中的名字，便于向求职者展示"
           />
         </el-form-item>
         <el-form-item label="职位" prop="post">
-          <el-input v-model="formHr.post" placeholder="请填写职位信息" />
+          <el-input v-model="formHr.postName" placeholder="请填写职位信息" />
         </el-form-item>
         <el-form-item label="公司" prop="fullName">
           <el-input v-model="companyName" placeholder="请填写公司信息" />
@@ -91,11 +91,11 @@
 <script setup lang="ts">
 import router from "@/router/index";
 import {
-  getCompanyinfosCompanyinfoid,
-  getHrinfosHrinfoid,
-  putHrinfosHrinfoid,
+  getCompanyinfosP0,
+  getHrinfosP0,
+  putHrinfosP0,
 } from "@/services/services";
-import { HRInformation } from "@/services/types";
+import { HrInformation } from "@/services/types";
 import { store } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
@@ -103,23 +103,23 @@ import { onMounted, reactive, ref } from "vue";
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrinfosHrinfoid(store.state.hrInformation.hrInformationId).then((res) => {
-    imageUrl.value = res.data.body.avatar;
-    formHr.name = res.data.body.name;
-    formHr.post = res.data.body.post;
+  getHrinfosP0(store.state.hrInformation.hrInformationId).then((res) => {
+    imageUrl.value = res.data.body.avatarUrl;
+    formHr.hrName = res.data.body.hrName;
+    formHr.postName = res.data.body.postName;
     formHr.acceptEmail = res.data.body.acceptEmail;
     formHr.phoneNumber = res.data.body.phoneNumber;
   });
-  getCompanyinfosCompanyinfoid(
-    store.state.companyInformation.companyInformationId
-  ).then((res) => {
-    companyName.value = res.data.body.fullName;
-  });
+  getCompanyinfosP0(store.state.companyInformation.companyInformationId).then(
+    (res) => {
+      companyName.value = res.data.body.fullName;
+    }
+  );
 });
-const formHr = reactive<HRInformation>({
-  avatar: "",
-  name: "",
-  post: "",
+const formHr = reactive<HrInformation>({
+  avatarUrl: "",
+  hrName: "",
+  postName: "",
   acceptEmail: "",
   hrInformationId: "",
   phoneNumber: "",
@@ -185,13 +185,12 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrinfosHrinfoid(
-        store.state.hrInformation.hrInformationId,
-        formHr
-      ).then((res) => {
-        store.commit("setCompanyInformation", res.data.body);
-        ElMessage.success("修改成功");
-      });
+      putHrinfosP0(store.state.hrInformation.hrInformationId, formHr).then(
+        (res) => {
+          store.commit("setCompanyInformation", res.data.body);
+          ElMessage.success("修改成功");
+        }
+      );
     }
   });
 };

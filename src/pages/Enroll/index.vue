@@ -71,7 +71,8 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import { getVerificationCode, postAccounts } from "@/services/services";
+import { getVerificationCode, postAccountinfos } from "@/services/services";
+import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
@@ -154,16 +155,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
   //     return false;
   //   }
   // });
-  postAccounts({
+  postAccountinfos({
     accountType: 2,
     userName: ruleForm.user,
     password: ruleForm.pass,
     verificationCode: ruleForm.verificationCode,
-  }).then((res) => {
-    store.commit("setAccountInformation", res.data.body);
-    ElMessage.success("注册成功");
-    router.push("/login");
-  });
+  })
+    .then((res) => {
+      store.commit("setAccountInformation", res.data.body);
+      ElMessage.success("注册成功");
+      router.push("/login");
+    })
+    .catch(failResponseHandler);
 };
 </script>
 <style scoped lang="scss">

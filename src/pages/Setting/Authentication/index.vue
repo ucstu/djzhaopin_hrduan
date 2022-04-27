@@ -9,7 +9,7 @@
           <div class="comfirm-item">
             <span>{{ companyInfo.fullName }}</span>
             <div class="infos-bottom">
-              <span>{{ companyInfo.comprehension }}</span>
+              <span>{{ companyInfo.comprehensionName }}</span>
               <i>/</i>
               <span>{{ scaleMap[Number(companyInfo.scale)] }}</span>
               <i>/</i>

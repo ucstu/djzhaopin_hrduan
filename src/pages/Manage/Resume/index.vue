@@ -5,47 +5,52 @@
         <div class="total">
           <div class="left">
             <div class="avatar">
-              <img :src="userInfo.avatar ? userInfo.avatar : imgUrl" alt="" />
+              <img
+                :src="userInfo?.avatarUrl ? userInfo.avatarUrl : imgUrl"
+                alt=""
+              />
             </div>
             <div class="info">
               <span class="name">{{
-                userInfo.firstName + userInfo.lastName
+                userInfo ? userInfo.firstName + userInfo.lastName : ""
               }}</span>
               <span class="state">
                 <el-breadcrumb separator="/">
-                  <el-breadcrumb-item>{{ userInfo.sex }}</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{ userInfo?.sex }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    userInfo.age + "岁"
+                    userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo.education]
+                    educationMap[userInfo?.education]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    userInfo.workingYears + "年"
+                    userInfo?.workingYears + "年"
                   }}</el-breadcrumb-item>
                 </el-breadcrumb></span
               >
               <span class="state"
-                >求职状态：{{ JobstatusMap[userInfo.jobStatus] }}</span
+                >求职状态：{{ jobStatusMap[userInfo?.jobStatus] }}</span
               >
-              <span class="state">期望职位：{{ userInfo.jobStatus }}</span>
-              <span class="state">期望地点：{{ userInfo.city }}</span>
+              <span class="state">期望职位：{{ userInfo?.jobStatus }}</span>
+              <span class="state">期望地点：{{ userInfo?.cityName }}</span>
               <span class="state"
                 >期望薪资：{{
-                  positionInfo.startingSalary + "-" + positionInfo.ceilingSalary
+                  positionInfo?.startingSalary +
+                  "-" +
+                  positionInfo?.ceilingSalary
                 }}</span
               >
               <el-button
                 type="primary"
-                @click="toMessage(store.state.deliveryRecord.userInformationId)"
+                @click="toMessage(userInfo?.userInformationId)"
                 >在线沟通</el-button
               >
               <h3>个人优势：</h3>
-              <p>{{ userInfo.personalAdvantage }}</p>
+              <p>{{ userInfo?.personalAdvantage }}</p>
             </div>
             <div class="info2">
               <div class="img-docu">
-                <h3>图片作品：{{ userInfo.pictureWorks }}</h3>
+                <h3>图片作品：{{ userInfo?.pictureWorks }}</h3>
               </div>
               <div class="project-docu">
                 <h3>项目经历:{{}}</h3>
@@ -73,59 +78,47 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
+  getCompanyinfosP0PositioninfosP1,
+  getUserinfosP0,
 } from "@/services/services";
 import { PositionInformation, UserInformation } from "@/services/types";
 import { key } from "@/stores";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
+
 const route = useRoute();
 const store = useStore(key);
-const userInfo = ref<UserInformation>({
-  age: 1,
-  avatar: "",
-  city: "",
-  createdAt: "",
-  dateOfBirth: "",
-  education: 1,
-  email: "",
-  firstName: "",
-  jobStatus: 1,
-  lastName: "",
-  personalAdvantage: "",
-  phoneNumber: "",
-  pictureWorks: [],
-  privacySettings: 1,
-  sex: "",
-  socialHomepage: "",
-  updatedAt: "",
-  userInformationId: "",
-  workingYears: 1,
-});
-const positionInfo = ref<PositionInformation>({} as any);
-const educationMap = reactive({ 1: "大专", 2: "本科", 3: "硕士", 4: "博士" });
-const JobstatusMap = ref({ 1: "随时入职", 2: "2周内入职", 3: "1月内入职" });
-const imgUrl = ref(
-  "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1"
-);
 
-getUserinfosUserinfoid(route.params.userId.toString()).then((res) => {
-  userInfo.value = res.data.body;
-});
-getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+const userInfo = ref<UserInformation>();
+const positionInfo = ref<PositionInformation>();
+const educationMap = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
+const jobStatusMap = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+const imgUrl =
+  "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1";
+
+if (typeof route.params.userId === "string") {
+  getUserinfosP0(route.params.userId).then((res) => {
+    userInfo.value = res.data.body;
+  });
+} else {
+  getUserinfosP0(route.params.userId[0]).then((res) => {
+    userInfo.value = res.data.body;
+  });
+}
+
+getCompanyinfosP0PositioninfosP1(
   store.state.companyInformation.companyInformationId,
-  store.state.deliveryRecord.jobInformationId
+  store.state.deliveryRecord.positionInformationId
 ).then((res) => {
   positionInfo.value = res.data.body;
 });
 
-const toMessage = (id: string) => {
+const toMessage = (userId: string) => {
   router.push({
     name: "message",
     params: {
-      userId: id,
+      userId: userId,
     },
   });
 };

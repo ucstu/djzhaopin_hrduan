@@ -23,7 +23,7 @@
               >
                 <img
                   v-if="imageUrl"
-                  :src="imageUrl ? imageUrl : formLabelAlign.avatar"
+                  :src="imageUrl ? imageUrl : formLabelAlign.avatarUrl"
                   class="avatar"
                 />
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
@@ -38,13 +38,13 @@
           </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input
-              v-model="formLabelAlign.name"
+              v-model="formLabelAlign.hrName"
               placeholder="请填写你工作中的名字，便于向求职者展示"
             />
           </el-form-item>
           <el-form-item label="职位" prop="post">
             <el-input
-              v-model="formLabelAlign.post"
+              v-model="formLabelAlign.postName"
               placeholder="请填写当前公司的任职职位"
             />
           </el-form-item>
@@ -89,8 +89,8 @@
             "
             class="avatar"
           />
-          <span>{{ formLabelAlign.name || "姓名" }}</span>
-          <span>{{ formLabelAlign.post || "职位" }}</span>
+          <span>{{ formLabelAlign.hrName || "姓名" }}</span>
+          <span>{{ formLabelAlign.postName || "职位" }}</span>
         </div>
         <div class="line"></div>
         <div class="bottom">
@@ -103,19 +103,19 @@
 </template>
 
 <script setup lang="ts">
-import { HRInformation } from "@/services/types";
+import router from "@/router";
+import { putHrinfosP0 } from "@/services/services";
+import { HrInformation } from "@/services/types";
+import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
-import router from "../../router";
-import { putHrinfosHrinfoid } from "../../services/services";
-import { key } from "../../stores";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const formLabelAlign = reactive<HRInformation>(store.state.hrInformation);
+const formLabelAlign = reactive<HrInformation>(store.state.hrInformation);
 const company = ref({
   name: "",
 });
@@ -125,7 +125,7 @@ const handleAvatarSuccess: UploadProps["onSuccess"] = (
   // uploadFile
 ) => {
   imageUrl.value = response.url;
-  formLabelAlign.avatar = response.url;
+  formLabelAlign.avatarUrl = response.url;
 };
 const handleAvatarError: UploadProps["onError"] = () =>
   // err,
@@ -160,7 +160,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
-      const res = await putHrinfosHrinfoid(
+      const res = await putHrinfosP0(
         store.state.accountInformation.hrInformationId,
         formLabelAlign
       );

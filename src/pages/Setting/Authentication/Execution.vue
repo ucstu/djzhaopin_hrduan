@@ -92,7 +92,7 @@ import { onMounted, reactive, ref } from "vue";
 
 const comFormRef = ref<FormInstance>();
 const personForm = reactive({
-  name: store.state.hrInformation.name,
+  name: store.state.hrInformation.hrName,
   avatar: "",
   post: "",
   acceptEmail: "",
@@ -104,15 +104,15 @@ const companyForm = reactive<CompanyInformation>({
   address: "",
   about: "",
   benefits: [],
-  city: "",
+  cityName: "",
   companyInformationId: "",
-  comprehension: "",
+  comprehensionName: "",
   establishmentTime: "",
   financingStage: 1,
   fullName: "",
   hrInformationId: "",
-  logo: "",
-  name: "",
+  logoUrl: "",
+  companyName: "",
   legalRepresentative: "",
   organizationType: "",
   recruitmentPosition: 5,
@@ -122,7 +122,7 @@ const companyForm = reactive<CompanyInformation>({
   updatedAt: "",
 });
 onMounted(() => {
-  personForm.name = store.state.hrInformation.name;
+  personForm.name = store.state.hrInformation.hrName;
   companyForm.fullName = store.state.companyInformation.fullName;
   companyForm.legalRepresentative =
     store.state.companyInformation.legalRepresentative;

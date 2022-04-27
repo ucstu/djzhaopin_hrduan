@@ -5,7 +5,7 @@ import {
   AccountInformation,
   CompanyInformation,
   DeliveryRecord,
-  HRInformation,
+  HrInformation,
   PositionInformation
 } from "../services/types";
 
@@ -13,7 +13,7 @@ const vuexPersister = new VuexPersister<State>({});
 
 export interface State {
   token: string;
-  hrInformation: HRInformation;
+  hrInformation: HrInformation;
   accountInformation: AccountInformation;
   companyInformation: CompanyInformation;
   comprise: Array<string>;
@@ -26,7 +26,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: () => ({
     token: "",
-    hrInformation: {} as HRInformation,
+    hrInformation: {} as HrInformation,
     accountInformation: {} as AccountInformation,
     companyInformation: {} as CompanyInformation,
     comprise: [],

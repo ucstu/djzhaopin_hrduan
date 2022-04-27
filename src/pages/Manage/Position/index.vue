@@ -50,8 +50,8 @@
               <div v-if="positionInformationId" class="position-list">
                 <div class="position-item">
                   <div class="item">
-                    <span>{{ "职位:" + position.name }}</span>
-                    <span>{{ "工作地点:" + position.workArea }}</span>
+                    <span>{{ "职位:" + position.positionName }}</span>
+                    <span>{{ "工作地点:" + position.workAreaName }}</span>
                   </div>
                   <div class="item">
                     <span>{{
@@ -112,8 +112,8 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  deleteCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getCompanyinfosCompanyinfoidPositioninfos,
+  deleteCompanyinfosP0PositioninfosP1,
+  getCompanyinfosP0Positioninfos,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -124,7 +124,7 @@ import { useStore } from "vuex";
 const store = useStore(key);
 const jobTypeList = ref<PositionInformation[]>();
 const input2 = ref("");
-getCompanyinfosCompanyinfoidPositioninfos(
+getCompanyinfosP0Positioninfos(
   store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
@@ -144,7 +144,7 @@ const updatePosition = (id: string) => {
   });
 };
 const deletePosition = (id: string) => {
-  deleteCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+  deleteCompanyinfosP0PositioninfosP1(
     store.state.companyInformation.companyInformationId,
     id
   ).then((res) => {

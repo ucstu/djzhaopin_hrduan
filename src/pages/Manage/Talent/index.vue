@@ -75,7 +75,7 @@
                 >
                   <div class="item-header">
                     <el-checkbox v-model="Talent.checked" />
-                    <img :src="Talent.avatar" alt="" />
+                    <img :src="Talent.avatarUrl" alt="" />
                     <div class="header-person">
                       <span>{{ Talent.firstName + Talent.lastName }}</span>
                       <span
@@ -84,7 +84,9 @@
                         }}·{{ slution[Talent.jobStatus] }}</span
                       >
                       <span
-                        >想找：{{ Talent.city }}|{{ Talent.positionName }}|{{
+                        >想找：{{ Talent.cityName }}|{{
+                          Talent.positionName
+                        }}|{{
                           Talent.startingSalary + "-" + Talent.ceilingSalary
                         }}</span
                       >
@@ -147,8 +149,8 @@ const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const userInfo = ref<UserInformation>({
   age: 0,
-  avatar: "",
-  city: "",
+  avatarUrl: "",
+  cityName: "",
   createdAt: "",
   dateOfBirth: "",
   education: 1,
@@ -168,7 +170,7 @@ const userInfo = ref<UserInformation>({
 });
 const JobExpectative = ref<JobExpectation>({
   ceilingSalary: 0,
-  city: "",
+  cityName: "",
   createdAt: "",
   directionTags: [],
   jobExpectationId: "",

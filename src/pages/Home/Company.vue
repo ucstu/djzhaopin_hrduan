@@ -197,11 +197,7 @@ import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import router from "../../router";
-import {
-  getCityinformations,
-  postCompanyinfos,
-  putHrinfosHrinfoid,
-} from "../../services/services";
+import { getCityinformations, postCompanyinfos } from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
@@ -216,10 +212,12 @@ const dialogFormVisible = ref(false);
 
 //表格数据
 
-const formCompany = reactive<CompanyInformation>({} as CompanyInformation);
+const formCompany = ref<CompanyInformation>();
 const cityInfo = ref([]);
 onUpdated(() => {
-  formCompany.city = cityInfo.value.toString();
+  if (formCompany.value) {
+    formCompany.value.cityName = cityInfo.value.toString();
+  }
 });
 const financingStageMap = [
   "",
@@ -252,8 +250,8 @@ interface companyInfo {
 const submitData = (data: {
   data: { checked: any; directionName: string };
 }) => {
-  if (data.data.checked) {
-    formCompany.comprehension = data.data.directionName;
+  if (data.data.checked && formCompany.value?.comprehensionName) {
+    formCompany.value.comprehensionName = data.data.directionName;
   }
 };
 const formInstance = reactive<companyInfo[]>([

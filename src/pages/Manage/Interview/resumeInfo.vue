@@ -10,7 +10,7 @@
           <el-checkbox v-model="checked1" />
           <img
             :src="
-              userInformations.get(deliveryRecord.userInformationId)?.avatar
+              userInformations.get(deliveryRecord.userInformationId)?.avatarUrl
             "
             alt=""
           />
@@ -41,11 +41,13 @@
             <div>
               <span
                 >想找：{{
-                  userInformations.get(deliveryRecord.userInformationId)?.city
+                  userInformations.get(deliveryRecord.userInformationId)
+                    ?.cityName
                 }}</span
               ><span
                 >{{
-                  jobInformations.get(deliveryRecord.jobInformationId)?.name
+                  jobInformations.get(deliveryRecord.jobInformationId)
+                    ?.positionName
                 }}|{{
                   jobInformations.get(deliveryRecord.jobInformationId)
                     ?.startingSalary +
@@ -81,9 +83,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidDeliveryrecords,
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
+  getCompanyinfosP0Deliveryrecords,
+  getCompanyinfosP0PositioninfosP1,
+  getUserinfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -93,6 +95,7 @@ import {
 import { key } from "@/stores";
 import { ref } from "vue";
 import { useStore } from "vuex";
+
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -101,16 +104,16 @@ const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
-getCompanyinfosCompanyinfoidDeliveryrecords(
+getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userInformationId).then((res) => {
+    getUserinfosP0(item.userInformationId).then((res) => {
       userInformations.value.set(item.userInformationId, res.data.body);
     });
-    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+    getCompanyinfosP0PositioninfosP1(
       store.state.companyInformation.companyInformationId,
       item.jobInformationId
     ).then((res) => {

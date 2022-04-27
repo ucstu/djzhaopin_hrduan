@@ -26,11 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  getCompanyinfosCompanyinfoidDeliveryrecords,
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
-} from "@/services/services";
+import {} from "@/services/services";
 import {
   DeliveryRecord,
   PositionInformation,

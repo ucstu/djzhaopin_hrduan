@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+
 const leftBarRouteList: RouteRecordRaw[] = [
   {
     meta: { requiresAuth: true },
@@ -123,6 +124,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     component: () => import("../pages/Manage/index.vue"),
   },
 ];
+
 const unAuthRouterList: RouteRecordRaw[] = [
   {
     path: "/",
@@ -140,12 +142,15 @@ const unAuthRouterList: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
 ];
+
 const routes: Array<RouteRecordRaw> = [
   ...unAuthRouterList,
   ...leftBarRouteList,
 ];
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
+
 export default router;

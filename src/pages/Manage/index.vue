@@ -19,7 +19,7 @@
                   ? '下午好'
                   : '晚上好')
             "
-            >{{ greet }}，{{ store.state.hrInformation.name }}</span
+            >{{ greet }}，{{ store.state.hrInformation.hrName }}</span
           >
           <span>时间和注意力是你最宝贵的财富！~</span>
         </div>
@@ -79,8 +79,9 @@
                           <el-divider direction="vertical" />
                           <p>
                             应聘职位：{{
-                              jobInformations.get(interview.jobInformationId)
-                                ?.name
+                              jobInformations.get(
+                                interview.positionInformationId
+                              )?.positionName
                             }}
                           </p>
                         </div>
@@ -109,9 +110,9 @@
 import SystemHeader from "@/components/System/SystemHeadeer.vue";
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidDeliveryrecords,
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  getUserinfosUserinfoid,
+  getCompanyinfosP0Deliveryrecords,
+  getCompanyinfosP0PositioninfosP1,
+  getUserinfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -136,7 +137,7 @@ const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 onMounted(() => {
-  getCompanyinfosCompanyinfoidDeliveryrecords(
+  getCompanyinfosP0Deliveryrecords(
     store.state.hrInformation.companyInformationId,
     {}
   )
@@ -144,13 +145,16 @@ onMounted(() => {
       store.commit("setDeliveryRecord", res.data.body);
       interviewNum.value = res.data.body;
       interviewNum.value.forEach((item) => {
-        getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+        getCompanyinfosP0PositioninfosP1(
           store.state.hrInformation.companyInformationId,
-          item.jobInformationId
+          item.positionInformationId
         ).then((response) => {
-          jobInformations.value.set(item.jobInformationId, response.data.body);
+          jobInformations.value.set(
+            item.positionInformationId,
+            response.data.body
+          );
         });
-        getUserinfosUserinfoid(item.userInformationId).then((responseable) => {
+        getUserinfosP0(item.userInformationId).then((responseable) => {
           userInformations.value.set(
             item.userInformationId,
             responseable.data.body

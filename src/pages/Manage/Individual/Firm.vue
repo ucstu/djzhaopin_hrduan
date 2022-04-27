@@ -23,7 +23,7 @@
               class="avatar-uploader"
               action="http://127.0.0.1:4523/mock/743652/avatars"
             >
-              <img v-if="ImageUrl" :src="formCompany.logo" class="avatar" />
+              <img v-if="ImageUrl" :src="formCompany.logoUrl" class="avatar" />
               <el-icon v-else class="avatar-uploader-icon" :size="30">
                 <Plus />
               </el-icon>
