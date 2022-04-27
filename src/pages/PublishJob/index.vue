@@ -257,9 +257,7 @@ const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小�
 //   wheel: "1",
 // });
 
-watch(jobTypeList, () => {
-  console.log(jobTypeList.value.workTime);
-});
+watch(jobTypeList, () => {});
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
 const workingYears = reactive([

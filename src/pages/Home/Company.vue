@@ -347,7 +347,6 @@ onMounted(() => {
 });
 
 const confirmCompany = (formEl: FormInstance | undefined) => {
-  console.log(formEl);
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
@@ -359,7 +358,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
           router.replace({ name: "PublishJob" });
         })
         .catch((reject) => {
-          console.error(reject);
+          ElMessage.error(reject.data.message);
         });
     }
   });

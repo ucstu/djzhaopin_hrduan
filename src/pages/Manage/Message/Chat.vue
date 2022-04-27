@@ -18,9 +18,7 @@ import { ref } from "vue";
 
 const chatList = ref([]); // 消息列表
 const chatMsg = ref("");
-const sendMsg = () => {
-  console.log(11);
-};
+const sendMsg = () => {};
 </script>
 
 <style lang="scss" scoped>

@@ -199,7 +199,6 @@ onMounted(() => {
 });
 
 const inspectionResume = (id: string) => {
-  console.log(id);
   router.push({
     name: "Resume",
     params: {

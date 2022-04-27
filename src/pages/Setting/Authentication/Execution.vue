@@ -134,7 +134,6 @@ onMounted(() => {
     store.state.companyInformation.organizationType;
 });
 const confirmCompany = (formEl: FormInstance | undefined) => {
-  console.log(formEl);
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
@@ -143,8 +142,8 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.commit("setCompanyInformation", res.data.body);
         })
-        .catch((reject) => {
-          console.error(reject);
+        .catch((err) => {
+          ElMessage.error(err.message);
         });
     }
   });

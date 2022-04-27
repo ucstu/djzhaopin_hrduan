@@ -123,7 +123,6 @@ const updateForm = (formEl: FormInstance | undefined) => {
         store.state.accountInformation.accountInformationId,
         ruleForm
       ).then((res: { status: number }) => {
-        console.log(res);
         if (res.status === 200) {
           ruleForm.password = "";
           ruleForm.checkPass = "";
@@ -132,7 +131,6 @@ const updateForm = (formEl: FormInstance | undefined) => {
         }
       });
     } else {
-      console.log("error submit!");
       return false;
     }
   });

@@ -99,7 +99,6 @@ getCompanyinfosCompanyinfoidDeliveryrecords(
 });
 const selectPerson = (userInformationId: string) => {
   condition.value = false;
-  console.log(userInformationId);
 };
 </script>
 

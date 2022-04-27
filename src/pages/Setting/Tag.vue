@@ -69,7 +69,6 @@ const checkablePositions = ref<PositionType["directions"][0]["positions"]>([]);
 
 onMounted(() => {
   getPositiontypes().then((res) => {
-    console.log(res.data.body);
     checkableJobTypes.value = res.data.body.map((jobType) => {
       const checkableDirections = jobType.directions.map((direction) => {
         const _checkablePositions = direction.positions.map((position) => {

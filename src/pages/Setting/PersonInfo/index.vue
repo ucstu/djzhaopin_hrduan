@@ -104,7 +104,6 @@ const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
   getHrinfosHrinfoid(store.state.hrInformation.hrInformationId).then((res) => {
-    console.log(res);
     imageUrl.value = res.data.body.avatar;
     formHr.name = res.data.body.name;
     formHr.post = res.data.body.post;
@@ -114,7 +113,6 @@ onMounted(() => {
   getCompanyinfosCompanyinfoid(
     store.state.companyInformation.companyInformationId
   ).then((res) => {
-    console.log(res);
     companyName.value = res.data.body.fullName;
   });
 });

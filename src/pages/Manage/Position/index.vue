@@ -150,7 +150,6 @@ getCompanyinfosCompanyinfoidPositioninfos(
   store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
-  console.log(res.data.body);
   jobTypeList.value = res.data.body;
 });
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -173,7 +172,6 @@ const deletePosition = (id: string) => {
   ).then((res) => {
     store.state.positionInformation = res.data.body;
     positionInformationId.value = "";
-    console.log(store.state.positionInformation);
     ElMessage.success("删除成功");
   });
 };
