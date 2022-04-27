@@ -37,7 +37,7 @@ export const store = createStore<State>({
     setToken(state: State, token: State["token"]) {
       state.token = token;
     },
-    setHRInformation(state: State, hrInformation: State["hrInformation"]) {
+    setHrInformation(state: State, hrInformation: State["hrInformation"]) {
       state.hrInformation = hrInformation;
     },
     setAccountInformation(

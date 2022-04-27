@@ -2482,6 +2482,7 @@ export const postCompanyinfos = (
      *
      * 公司名称
      *
+     * {1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
      */
     companyName: string;
     /**
@@ -2502,6 +2503,7 @@ export const postCompanyinfos = (
      *
      * HR信息ID
      *
+     * {1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
      */
     hrInformationId: string;
     /**
@@ -2736,7 +2738,7 @@ export const postCompanyinfosP0Positioninfos = (
     overTime?: string;
     /**
      *
-     * 周末休息时间
+     * 发布日期
      *
      * {1:周末双休:,2:周末单休,3:大小周}
      * - max: 3

@@ -162,7 +162,7 @@
               <el-col :span="11">
                 <el-form-item prop="weekendReleaseTime">
                   <el-select
-                    v-model="jobTypeList.weekendReleaseTime"
+                    v-model="jobTypeList.weekendReleseTime"
                     placeholder="请选择周末休息时间"
                   >
                     <el-option
@@ -194,20 +194,28 @@
                 </div>
               </el-col>
             </el-form-item>
-            <!-- <el-form-item label="面试信息">
-              <el-select
+            <!-- <el-form-item label="面试信息" prop="interviewInfo">
+              <el-input
                 v-model="jobTypeList.interviewInfo"
-                placeholder="添加面试信息标签"
-                multiple
-              >
-                <el-option
-                  v-for="(item, index) in interviewInfoMap"
-                  :key="item"
-                  :label="item"
-                  :value="index"
-                >
-                </el-option>
-              </el-select>
+                :input-style="{ display: 'none' }"
+              />
+              <div class="select" @click="dialogFormVisible = true">
+                <span>{{ jobTypeList.interviewInfo || "请选择" }}</span>
+                <img src="@/assets/down.png" alt="" />
+              </div>
+              <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
+                <InterviewTag @submit-data="submitData" />
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false"
+                      >取消</el-button
+                    >
+                    <el-button type="primary" @click="dialogFormVisible = false"
+                      >确定</el-button
+                    >
+                  </span>
+                </template>
+              </el-dialog>
             </el-form-item> -->
             <el-form-item>
               <el-button
@@ -239,8 +247,9 @@ import {
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
+import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const store = useStore(key);
@@ -249,15 +258,9 @@ const formRef = ref<FormInstance>();
 const jobTypeList = ref<PositionInformation>({
   workTime: [] as unknown,
 } as PositionInformation);
+// const dialogFormVisible = ref(false);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
-// const interviewInfoMap = reactive({
-//   illustrate: "1",
-//   situation: "1",
-//   time: "1",
-//   wheel: "1",
-// });
 
-watch(jobTypeList, () => {});
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
 const workingYears = reactive([
@@ -316,6 +319,13 @@ const rules = reactive({
     },
   ],
 });
+// const submitData = (data: {
+//   data: { checked: any; directionName: string };
+// }) => {
+//   if (data.data.checked) {
+//     jobTypeList.value.interviewInfo = data.data;
+//   }
+// };
 onMounted(() => {
   if (route.params.PublishJobId) {
     getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
@@ -330,21 +340,27 @@ const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
+      // @ts-ignore
+      jobTypeList.value.highlights = [jobTypeList.value.highlights];
+      jobTypeList.value.workTime = jobTypeList.value.workTime[0];
+      jobTypeList.value.hrInformationId =
+        store.state.accountInformation.hrInformationId;
+      jobTypeList.value.companyInformationId =
+        store.state.hrInformation.companyInformationId;
       postCompanyinfosCompanyinfoidPositioninfos(
         store.state.hrInformation.companyInformationId,
         jobTypeList.value
       )
         .then((res) => {
-          ElMessage.success("恭喜您，公司创建成功");
+          ElMessage.success("恭喜您，职位发布成功");
           store.commit("setPositionInformation", res.data.body);
           router.push("/Manage");
         })
-        .catch((err) => {
-          ElMessage.error(err.message);
-        });
+        .catch(failResponseHandler);
     }
   });
 };
+
 const updatelishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
@@ -421,6 +437,32 @@ a {
 
     .el-form {
       margin-top: 20px;
+
+      .el-form-item {
+        .select {
+          position: relative;
+          width: 211px;
+          height: 30px;
+          line-height: 30px;
+          border: solid 1px #dcdfe6;
+          border-radius: 4px;
+
+          span {
+            position: absolute;
+            left: -5px;
+            font-size: 14px;
+            color: #ababb2;
+          }
+
+          img {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
 
       .text-gray-500 {
         margin: 0 20px;

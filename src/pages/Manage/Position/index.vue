@@ -7,7 +7,7 @@
             <div class="info-left">
               <div class="left-item">
                 <span>招聘中</span>
-                <div class="circle">{{ jobTypeList.length }}</div>
+                <div class="circle">{{ jobTypeList?.length }}</div>
               </div>
               <!-- <div class="left-item">
                 <span>暂停中</span>
@@ -32,7 +32,7 @@
         <div class="state">
           <div class="state-left">
             <span>展示状态</span>
-            <span>全部({{ jobTypeList.length }})</span>
+            <span>全部({{ jobTypeList?.length }})</span>
           </div>
           <div>
             <el-input
@@ -47,24 +47,29 @@
         <div class="position">
           <el-scrollbar height="400px">
             <template v-for="position in jobTypeList" :key="position.companyId">
-              <div v-if="!positionInformationId" class="position-list">
+              <div v-if="positionInformationId" class="position-list">
                 <div class="position-item">
                   <div class="item">
                     <span>{{ "职位:" + position.name }}</span>
                     <span>{{ "工作地点:" + position.workArea }}</span>
                   </div>
                   <div class="item">
-                    <span>{{ "上班时间:" + position.workTime }}</span>
                     <span>{{
-                      "职位类型:" + slution[position.positionType]
+                      "经验和学历:" +
+                      position.workingYears +
+                      "-" +
+                      position.education
                     }}</span>
+                    <span>{{ "招聘类型:" + position.positionType }}</span>
                   </div>
                   <div class="item">
                     <span>{{
                       "薪酬:" +
                       position.startingSalary +
+                      "k" +
                       "-" +
-                      position.ceilingSalary
+                      position.ceilingSalary +
+                      "k"
                     }}</span>
                   </div>
                 </div>
@@ -117,34 +122,7 @@ import { ElMessage } from "element-plus";
 import { ref, toRefs } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
-const jobTypeList = ref<PositionInformation[]>([
-  {
-    startingSalary: 0,
-    ceilingSalary: 0,
-    createdAt: "",
-    department: "",
-    directionTags: [],
-    education: "0",
-    hrInformationId: "",
-    description: "",
-    highlights: [],
-    positionInformationId: "",
-    name: "",
-    positionType: "1",
-    companyInformationId: "",
-    releaseDate: "",
-    updatedAt: "",
-    workArea: "",
-    workingPlace: {
-      latitude: 1,
-      longitude: 1,
-    },
-    workingYears: "0",
-    interviewInfo: { illustrate: "1", situation: "1", time: "1", wheel: "1" },
-    workTime: "",
-    weekendReleaseTime: "1",
-  },
-]);
+const jobTypeList = ref<PositionInformation[]>();
 const input2 = ref("");
 getCompanyinfosCompanyinfoidPositioninfos(
   store.state.companyInformation.companyInformationId,
@@ -302,7 +280,6 @@ const deletePosition = (id: string) => {
 
           .position-item {
             display: flex;
-            justify-content: space-around;
             width: 50%;
 
             .item {

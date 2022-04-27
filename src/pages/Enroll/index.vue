@@ -155,7 +155,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   //   }
   // });
   postAccounts({
-    accountType: "2",
+    accountType: 2,
     userName: ruleForm.user,
     password: ruleForm.pass,
     verificationCode: ruleForm.verificationCode,
