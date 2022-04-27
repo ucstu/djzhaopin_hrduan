@@ -35,7 +35,7 @@ export interface GetCompanyinfosP0DeliveryrecordsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 投递职位ID
@@ -55,7 +55,7 @@ export interface GetCompanyinfosP0DeliveryrecordsQueryParams {
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -108,7 +108,7 @@ export interface GetCompanyinfosP0PositioninfosQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
@@ -128,7 +128,7 @@ export interface GetCompanyinfosP0PositioninfosQueryParams {
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -186,7 +186,7 @@ export interface GetCompanyinfosPositioninfosQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
@@ -206,7 +206,7 @@ export interface GetCompanyinfosPositioninfosQueryParams {
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -234,12 +234,12 @@ export interface GetCompanyinfosQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -260,12 +260,12 @@ export interface GetHrinfosQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -278,12 +278,12 @@ export interface GetUserinfosP0AttentionrecordsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -301,12 +301,12 @@ export interface GetUserinfosP0DeliveryrecordsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -319,12 +319,12 @@ export interface GetUserinfosP0EduexperiencesQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -337,12 +337,12 @@ export interface GetUserinfosP0GarnerrecordsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -355,12 +355,12 @@ export interface GetUserinfosP0InspectionrecordsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -373,12 +373,12 @@ export interface GetUserinfosP0JobexpectationsQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -391,12 +391,12 @@ export interface GetUserinfosP0ProjectexperiencesQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -409,12 +409,12 @@ export interface GetUserinfosP0WorkexperiencesQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
@@ -427,12 +427,12 @@ export interface GetUserinfosQueryParams {
    *
    * 当前页
    */
-  page?: string;
+  page?: number;
   /**
    *
    * 页大小
    */
-  size?: string;
+  size?: number;
   /**
    *
    * 排序方式
