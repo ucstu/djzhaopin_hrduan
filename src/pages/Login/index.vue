@@ -45,6 +45,7 @@
 
 <script lang="ts" setup>
 import { getAxiosInstance } from "@/services/config";
+import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
@@ -91,21 +92,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
           getHrinfosHrinfoid(res.data.body.accountInfo.hrInformationId)
-            .then((res) => {
-              store.commit("setHrInformation", res.data.body);
+            .then((response) => {
+              store.commit("setHrInformation", response.data.body);
               router.replace("/Home");
             })
             .catch((err) => {
               ElMessage.error(err.data.body.message);
             });
         })
-        .catch((err) => {
-          let msg = "";
-          for (const error of err.response.data.errors) {
-            msg += error.msg + "\n";
-          }
-          ElMessage.warning(msg);
-        });
+        .catch(failResponseHandler);
     } else {
       ElMessage.warning("error submit!");
       return false;

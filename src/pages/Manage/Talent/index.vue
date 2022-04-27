@@ -67,40 +67,42 @@
           </div>
           <div class="resume">
             <el-scrollbar height="400px">
-              <div
-                v-for="Talent in TalentInfo"
-                :key="Talent.userInformationId"
-                class="resume-item"
-              >
-                <div class="item-header">
-                  <el-checkbox v-model="Talent.checked" />
-                  <img :src="Talent.avatar" alt="" />
-                  <div class="header-person">
-                    <span>{{ Talent.firstName + Talent.lastName }}</span>
-                    <span
-                      >{{ Talent.sex }}·{{ Talent.age }}岁·{{
-                        Talent.education
-                      }}·{{ slution[Talent.jobStatus] }}</span
+              <template v-if="TalentInfo[0].jobExpectationId">
+                <div
+                  v-for="Talent in TalentInfo"
+                  :key="Talent.userInformationId"
+                  class="resume-item"
+                >
+                  <div class="item-header">
+                    <el-checkbox v-model="Talent.checked" />
+                    <img :src="Talent.avatar" alt="" />
+                    <div class="header-person">
+                      <span>{{ Talent.firstName + Talent.lastName }}</span>
+                      <span
+                        >{{ Talent.sex }}·{{ Talent.age }}岁·{{
+                          Talent.education
+                        }}·{{ slution[Talent.jobStatus] }}</span
+                      >
+                      <span
+                        >想找：{{ Talent.city }}|{{ Talent.positionName }}|{{
+                          Talent.startingSalary + "-" + Talent.ceilingSalary
+                        }}</span
+                      >
+                    </div>
+                  </div>
+                  <div class="resume-label">
+                    {{ " 求高薪 | 求稳定 | 求发展 " }}
+                  </div>
+                  <div>
+                    <el-button
+                      type="primary"
+                      @click="inspectionResume(Talent.userInformationId)"
                     >
-                    <span
-                      >想找：{{ Talent.city }}|{{ Talent.positionName }}|{{
-                        Talent.startingSalary + "-" + Talent.ceilingSalary
-                      }}</span
+                      查看简历</el-button
                     >
                   </div>
                 </div>
-                <div class="resume-label">
-                  {{ " 求高薪 | 求稳定 | 求发展 " }}
-                </div>
-                <div>
-                  <el-button
-                    type="primary"
-                    @click="inspectionResume(Talent.userInformationId)"
-                  >
-                    查看简历</el-button
-                  >
-                </div>
-              </div>
+              </template>
             </el-scrollbar>
           </div>
           <div class="footer">
@@ -119,7 +121,7 @@
 import router from "@/router";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 const valueMap = ref({
   age: "",
 
@@ -149,15 +151,15 @@ const userInfo = ref<UserInformation>({
   city: "",
   createdAt: "",
   dateOfBirth: "",
-  education: "1",
+  education: 1,
   email: "",
   firstName: "",
-  jobStatus: "1",
+  jobStatus: 1,
   lastName: "",
   personalAdvantage: "",
   phoneNumber: "",
   pictureWorks: [],
-  privacySettings: "1",
+  privacySettings: 1,
   sex: "",
   socialHomepage: "",
   updatedAt: "",
@@ -170,7 +172,7 @@ const JobExpectative = ref<JobExpectation>({
   createdAt: "",
   directionTags: [],
   jobExpectationId: "",
-  positionType: "1",
+  positionType: 1,
   positionName: "",
   startingSalary: 0,
   updatedAt: "",
@@ -184,20 +186,6 @@ const TalentInfo = ref([
   },
 ]);
 
-onMounted(() => {
-  // getRecommendations().then((res) => {
-  //   res.data.body.map((item) => {
-  //     console.log(item);
-  //     TalentInfo.value.splice(0, 0, {
-  //       // item,
-  //       checked: false,
-  //     });
-  //   });
-  //   TalentInfo.value.pop();
-  //   console.log(TalentInfo);
-  // });
-});
-
 const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
@@ -206,10 +194,6 @@ const inspectionResume = (id: string) => {
     },
   });
 };
-// const filters = ref<FilterInformation>({
-
-// });
-// getFilterinfos().then((res) => {});
 </script>
 
 <style scoped lang="scss">

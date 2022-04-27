@@ -8,43 +8,9 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams,
-  GetUserinfosUserinfoidDeliveryrecordsQueryParams,
-  GetHrinfosQueryParams,
-  GetDirectiontagsQueryParams,
-  GetUserinfosUserinfoidEduexperiencesQueryParams,
-  GetUserinfosQueryParams,
-  GetAreaInformationsQueryParams,
-  GetUserinfosUserinfoidWorkexperiencesQueryParams,
-  GetCompanyinfosQueryParams,
-  GetCompanyinfosPositioninfosQueryParams,
-  DeleteAccountsAccountidQueryParams,
-  GetUserinfosUserinfoidJobexpectationsQueryParams,
-  GetCompanyinfosCompanyinfoidPositioninfosQueryParams,
-  GetUserinfosUserinfoidInspectionrecordsQueryParams,
-  GetUserinfosUserinfoidProjectexperiencesQueryParams,
+  AccountInformation, AreaInformations, AttentionRecord, CityInformations, CompanyInformation, DeleteAccountsAccountidQueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyinfosCompanyinfoidDeliveryrecordsQueryParams, GetCompanyinfosCompanyinfoidPositioninfosQueryParams, GetCompanyinfosPositioninfosQueryParams, GetCompanyinfosQueryParams, GetDirectiontagsQueryParams, GetHrinfosQueryParams, GetUserinfosQueryParams, GetUserinfosUserinfoidAttentionrecordsQueryParams, GetUserinfosUserinfoidDeliveryrecordsQueryParams, GetUserinfosUserinfoidEduexperiencesQueryParams,
   GetUserinfosUserinfoidGarnerrecordsQueryParams,
-  GetUserinfosUserinfoidAttentionrecordsQueryParams,
-  GetVerificationCodeQueryParams,
-  HRInformation,
-  UserInformation,
-  CompanyInformation,
-  DirectionTags,
-  WorkExperience,
-  AccountInformation,
-  MessageRecord,
-  JobExpectation,
-  PositionInformation,
-  CityInformations,
-  AreaInformations,
-  EducationExperience,
-  FilterInformation,
-  DeliveryRecord,
-  GarnerRecord,
-  PositionTypes,
-  AttentionRecord,
-  InspectionRecord,
-  ProjectExperience,
+  GetUserinfosUserinfoidInspectionrecordsQueryParams, GetUserinfosUserinfoidJobexpectationsQueryParams, GetUserinfosUserinfoidProjectexperiencesQueryParams, GetUserinfosUserinfoidWorkexperiencesQueryParams, GetVerificationCodeQueryParams, HRInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation, PositionTypes, ProjectExperience, UserInformation, WorkExperience
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2375,7 +2341,7 @@ export const postAccounts = (
      *
      * {1:用户,2:HR}
      */
-    accountType: "1" | "2";
+    accountType: 1 | 2;
     /**
      *
      * 密码
@@ -2514,10 +2480,42 @@ export const postCompanyinfos = (
   requestBody: {
     /**
      *
+     * 福利
+     *
+     */
+    benefits: string[];
+    /**
+     *
+     * 领域
+     *
+     */
+    comprehension: string;
+    /**
+     *
+     * 融资阶段
+     *
+     * {1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+     */
+    financingStage: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    /**
+     *
+     * LOGO
+     *
+     */
+    logo: string;
+    /**
+     *
      * 名称
      *
      */
     name: string;
+    /**
+     *
+     * 规模
+     *
+     * {1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
+     */
+    scale: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      *
      * 信息
@@ -2532,22 +2530,10 @@ export const postCompanyinfos = (
     address?: string;
     /**
      *
-     * 福利
-     *
-     */
-    benefits?: string[];
-    /**
-     *
      * 所在城市
      *
      */
     city?: string;
-    /**
-     *
-     * 领域
-     *
-     */
-    comprehension?: string;
     /**
      *
      * 成立时间
@@ -2556,35 +2542,22 @@ export const postCompanyinfos = (
     establishmentTime?: string;
     /**
      *
-     * 融资阶段
-     *
-     * {1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
-     */
-    financingStage?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
-    /**
-     *
      * 全称
      *
      */
     fullName?: string;
     /**
      *
-     * HRID
+     * HR信息ID
      *
      */
-    hrId?: string;
+    hrInformationId?: string;
     /**
      *
      * 法定代表人
      *
      */
     legalRepresentative?: string;
-    /**
-     *
-     * LOGO
-     *
-     */
-    logo?: string;
     /**
      *
      * 机构类型
@@ -2603,13 +2576,6 @@ export const postCompanyinfos = (
      *
      */
     registeredCapital?: string;
-    /**
-     *
-     * 规模
-     *
-     * {1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
-     */
-    scale?: "1" | "2" | "3" | "4" | "5" | "6";
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
@@ -2659,12 +2625,12 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
      *
      * 学历
      *
-     * {0:不要求,1:大专,2:本科,3:硕士,4:博士}
+     * {1:不要求,2:大专,3:本科,4:硕士,5:博士}
      */
-    education: "0" | "1" | "2" | "3" | "4";
+    education: 0 | 1 | 2 | 3 | 4 | 5;
     /**
      *
-     * HRID
+     * HR信息ID
      *
      */
     hrInformationId: string;
@@ -2680,7 +2646,7 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
      *
      * {1:全职,2:兼职,3:实习}
      */
-    positionType: "1" | "2" | "3";
+    positionType: 0 | 1 | 2 | 3;
     /**
      *
      * 起始薪资
@@ -2688,6 +2654,25 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
      * 单位K
      */
     startingSalary: number;
+    /**
+     *
+     * 工作地区
+     *
+     */
+    workArea: string;
+    /**
+     *
+     * 工作城市
+     *
+     */
+    workCity: string;
+    /**
+     *
+     * 工作年限
+     *
+     * {1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
+     */
+    workingYears: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      *
      * 所属部门
@@ -2718,29 +2703,35 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
        *
        * {1:可周末面试,2:包含笔试,3:可下班面试,4:包含面试作业}
        */
-      illustrate: "1" | "2" | "3" | "4";
+      illustrate: 1 | 2 | 3 | 4;
       /**
        *
        * 面试形式
        *
        * {1:现场面试,2:视频面试,3:电话面试}
        */
-      situation: "1" | "2" | "3";
+      situation: 1 | 2 | 3;
       /**
        *
        * 面试时长
        *
        * {1:一天内完成,2:分多次完成}
        */
-      time: "1" | "2";
+      time: 1 | 2;
       /**
        *
        * 面试轮数
        *
        * {1:1-2轮次,2:3-4轮次,3:5-6轮次,4:暂不确定}
        */
-      wheel: "1" | "2" | "3" | "4";
+      wheel: 1 | 2 | 3 | 4;
     };
+    /**
+     *
+     * 下班时间
+     *
+     */
+    overTime?: string;
     /**
      *
      * 发布日期
@@ -2753,13 +2744,7 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
      *
      * {1周末双休:,2:周末单休,3:大小周}
      */
-    weekendReleseTime?: "1" | "2" | "3";
-    /**
-     *
-     * 工作地区
-     *
-     */
-    workArea?: string;
+    weekendReleseTime?: 0 | 1 | 2 | 3;
     /**
      *
      * 上班时间
@@ -2785,13 +2770,6 @@ export const postCompanyinfosCompanyinfoidPositioninfos = (
        */
       longitude: number;
     };
-    /**
-     *
-     * 工作年限
-     *
-     * {0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
-     */
-    workingYears?: "0" | "1" | "2" | "3" | "4" | "5";
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
@@ -2911,7 +2889,7 @@ export const postUserinfosUserinfoidDeliveryrecords = (
      *
      * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
      */
-    state?: "1" | "2" | "3" | "4" | "5";
+    state?: 1 | 2 | 3 | 4 | 5;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
@@ -2951,7 +2929,7 @@ export const postUserinfosUserinfoidEduexperiences = (
      *
      * {1:大专,2:本科,3:硕士,4:博士}
      */
-    education: "1" | "2" | "3" | "4";
+    education: 0 | 1 | 2 | 3 | 4;
     /**
      *
      * 毕业时间
@@ -3061,7 +3039,7 @@ export const postUserinfosUserinfoidJobexpectations = (
      *
      * {1:全职,2:兼职,3:实习}
      */
-    positionType: "1" | "2" | "3";
+    positionType: 0 | 1 | 2 | 3;
     /**
      *
      * 起始薪资
@@ -3213,7 +3191,7 @@ export const postUserinfosUserinfoidWorkexperiences = (
      *
      * {1:全职,2:兼职,3:实习}
      */
-    positionType: "1" | "2" | "3";
+    positionType: 0 | 1 | 2 | 3;
     /**
      *
      * 就职时间

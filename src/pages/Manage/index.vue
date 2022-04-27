@@ -122,6 +122,7 @@ import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
+
 const store = useStore(key);
 const ho = new Date().getHours();
 const greet = "";
@@ -141,9 +142,7 @@ onMounted(() => {
   )
     .then((res) => {
       store.commit("setDeliveryRecord", res.data.body);
-
       interviewNum.value = res.data.body;
-
       interviewNum.value.forEach((item) => {
         getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
           store.state.hrInformation.companyInformationId,
@@ -157,11 +156,11 @@ onMounted(() => {
             responseable.data.body
           );
         });
-        if (item.state == "4") {
+        if (item.state === 4) {
           num.value.count = num.value.count + 1;
-        } else if (item.state == "2") {
+        } else if (item.state === 2) {
           num.value.countComunication = num.value.countComunication + 1;
-        } else if (item.state == "3") {
+        } else if (item.state === 3) {
           num.value.countInterviewed = num.value.countInterviewed + 1;
         }
       });

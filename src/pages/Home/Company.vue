@@ -72,7 +72,7 @@
           </el-form-item>
           <el-form-item label="所在城市">
             <el-cascader
-              v-model="formCompany.city"
+              v-model="cityInfo"
               :options="cityMap"
               placeholder="请选择"
             />
@@ -193,11 +193,15 @@
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import router from "../../router";
-import { getCityinformations, postCompanyinfos } from "../../services/services";
+import {
+  getCityinformations,
+  postCompanyinfos,
+  putHrinfosHrinfoid,
+} from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
@@ -212,26 +216,10 @@ const dialogFormVisible = ref(false);
 
 //表格数据
 
-const formCompany = reactive<CompanyInformation>({
-  address: "",
-  about: "",
-  benefits: [],
-  city: "",
-  companyInformationId: "",
-  comprehension: "",
-  establishmentTime: "",
-  financingStage: "1",
-  fullName: "",
-  hrId: "",
-  logo: "",
-  name: "",
-  legalRepresentative: "",
-  organizationType: "",
-  recruitmentPosition: 5,
-  scale: "1",
-  registeredCapital: "",
-  createdAt: "",
-  updatedAt: "",
+const formCompany = reactive<CompanyInformation>({} as CompanyInformation);
+const cityInfo = ref([]);
+onUpdated(() => {
+  formCompany.city = cityInfo.value.toString();
 });
 const financingStageMap = [
   "",
@@ -330,6 +318,7 @@ interface cityInfo {
   label: string;
 }
 const cityMap = ref<cityInfo[]>([]);
+
 onMounted(() => {
   getCityinformations()
     .then((res) => {
@@ -355,14 +344,20 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
     if (valid) {
       postCompanyinfos(formCompany)
         .then((res) => {
-          ElMessage.success("恭喜您，公司创建成功");
-          dialogFormVisible.value = false;
-          store.commit("setCompanyInformation", res.data.body);
-          router.replace({ name: "PublishJob" });
+          let hrInformation = store.state.hrInformation;
+          hrInformation.companyInformationId =
+            res.data.body.companyInformationId;
+          putHrinfosHrinfoid(hrInformation.hrInformationId, hrInformation)
+            .then((res) => {
+              store.commit("setHrInformation", res.data.body);
+              ElMessage.success("恭喜您，公司创建成功");
+              dialogFormVisible.value = false;
+              store.commit("setCompanyInformation", res.data.body);
+              router.replace({ name: "PublishJob" });
+            })
+            .catch(failResponseHandler);
         })
-        .catch((reject) => {
-          ElMessage.error(reject.data.message);
-        });
+        .catch(failResponseHandler);
     }
   });
 };
@@ -468,15 +463,15 @@ a:hover {
       flex-wrap: nowrap;
       align-items: center;
       justify-content: space-around;
-      width: 20vw;
+      width: 350px;
       height: 120px;
       margin-top: 8px;
       border: solid 1px #dcdfe6;
       border-radius: 4px;
 
       & > img {
-        width: 5vw;
-        height: 9vh;
+        width: 80px;
+        height: 80px;
         object-fit: cover;
         object-position: top;
       }
@@ -519,15 +514,15 @@ a:hover {
               display: flex;
               align-items: center;
               justify-content: space-around;
-              width: 20vw;
+              width: 350px;
               height: 120px;
               background-image: url("https://upfile2.asqql.com/upfile/hdimg/wmtp/wmtp/2017-9/4/102028SKGil0okze.jpg");
               border: solid 1px rgb(0 179 139);
               border-radius: 4px;
 
               img {
-                width: 5vw;
-                height: 9vh;
+                width: 80px;
+                height: 80px;
                 object-fit: cover;
                 object-position: top;
                 border-radius: 5px;
