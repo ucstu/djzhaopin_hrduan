@@ -96,9 +96,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
               store.commit("setHrInformation", response.data.body);
               router.replace("/Home");
             })
-            .catch((err) => {
-              ElMessage.error(err.data.body.message);
-            });
+            .catch(failResponseHandler);
         })
         .catch(failResponseHandler);
     } else {
