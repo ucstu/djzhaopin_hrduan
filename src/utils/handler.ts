@@ -5,7 +5,6 @@ import { ElMessage } from "element-plus";
 const failResponseHandler = (responseError: RequestError) => {
   if (responseError.status === 400) {
     let message = "";
-    console.log(responseError.response?.data);
     if (responseError.response?.data.errors) {
       for (const error of responseError.response.data.errors) {
         message +=
