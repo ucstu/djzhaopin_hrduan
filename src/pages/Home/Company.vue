@@ -64,7 +64,7 @@
               <img src="@/assets/down.png" alt="" />
             </div>
             <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
-              <Tag @submit-data="submitData" />
+              <Tag @submit-data="submitData"></Tag>
               <template #footer>
                 <span class="dialog-footer">
                   <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -293,7 +293,6 @@ const formInstance = reactive<companyInfo[]>([
     size: "2000人以上",
   },
 ]);
-
 const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
   imageUrl.value = response.url;
 };

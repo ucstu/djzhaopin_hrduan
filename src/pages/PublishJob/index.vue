@@ -352,14 +352,12 @@ onMounted(() => {
   }
 });
 const handleWorkTimeChange = (val: Array<string>) => {
+  console.log(1111111);
   jobTypeList.value.workTime = val[0];
   jobTypeList.value.overTime = val[1];
-};
-watch(workTimeing, () => {
   console.log(jobTypeList.value.workTime);
   console.log(jobTypeList.value.overTime);
-  console.log(workTimeing);
-});
+};
 
 const heightLightMap = ["团队和谐"];
 const publishPost = (formEl: FormInstance | undefined) => {

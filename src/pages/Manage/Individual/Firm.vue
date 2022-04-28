@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import Tag from "@/Home/Tag.vue";
+import Tag from "@/pages/Home/Tag.vue";
 import { getCityinformations, putCompanyinfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";

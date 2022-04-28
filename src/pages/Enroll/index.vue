@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import { getVerificationCode, postAccountinfos } from "@/services/services";
+import { getVerificationcode, postAccountinfos } from "@/services/services";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
@@ -114,7 +114,7 @@ const ruleForm = reactive({
   verificationCode: "",
 });
 const postverificationCode = () => {
-  getVerificationCode({ phoneNumber: ruleForm.user }).then((res) => {
+  getVerificationcode({ phoneNumber: ruleForm.user }).then((res) => {
     ElMessage.success("发送成功");
   });
   btn.value = true;
