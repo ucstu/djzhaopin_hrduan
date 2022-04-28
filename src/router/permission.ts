@@ -3,7 +3,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useStore } from "vuex";
 import router from ".";
-import { key } from "../stores";
+import { key } from "@/stores";
 const store = useStore(key);
 NProgress.configure({ showSpinner: false });
 const whitelist = ["/login", "/Enroll"];

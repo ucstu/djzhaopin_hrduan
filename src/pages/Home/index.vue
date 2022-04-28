@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts" setup>
+import { key } from "@/stores";
 import { useStore } from "vuex";
-import { key } from "../../stores";
 const store = useStore(key);
 </script>
 

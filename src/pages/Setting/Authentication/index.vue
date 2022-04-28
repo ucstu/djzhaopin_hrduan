@@ -38,11 +38,11 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { key } from "@/stores";
 import { Check } from "@element-plus/icons-vue";
 import { computed } from "vue";
 import { useStore } from "vuex";
-import router from "../../../router";
 const store = useStore(key);
 const imageUrl = store.state.hrInformation.avatarUrl;
 const companyInfo = computed(() => store.state.companyInformation);

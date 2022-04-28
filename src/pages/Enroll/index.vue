@@ -72,11 +72,11 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { getVerificationCode, postAccountinfos } from "@/services/services";
+import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
-import { key } from "../../stores";
 const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
 const vcode = ref("获取验证码");

@@ -92,6 +92,7 @@
 </template>
 
 <script setup lang="ts">
+import Tag from "@/Home/Tag.vue";
 import { getCityinformations, putCompanyinfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -99,11 +100,10 @@ import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
-import Tag from "../../Home/Tag.vue";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const imageUrl = ref("../../assets/down.png");
+const imageUrl = ref("@/assets/down.png");
 const dialogFormVisible = ref(false);
 const ImageUrl = ref("");
 //表格数据

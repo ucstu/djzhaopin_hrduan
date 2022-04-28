@@ -6,8 +6,8 @@ import {
   CompanyInformation,
   DeliveryRecord,
   HrInformation,
-  PositionInformation
-} from "../services/types";
+  PositionInformation,
+} from "@/services/types";
 
 const vuexPersister = new VuexPersister<State>({});
 

@@ -53,11 +53,11 @@
 
 <script setup lang="ts">
 import { getVerificationCode, putAccountinfosP0 } from "@/services/services";
+import { key } from "@/stores";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
-import { key } from "../../../stores";
 const ruleFormRef = ref<FormInstance>();
 const store = useStore(key);
 const vcode = ref("获取验证码");

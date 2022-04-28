@@ -61,7 +61,7 @@
             />
             <div class="select" @click="dialogFormVisible = true">
               <span>{{ formCompany!.comprehensionName || "请选择" }}</span>
-              <img src="../../assets/down.png" alt="" />
+              <img src="@/assets/down.png" alt="" />
             </div>
             <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
               <Tag @submit-data="submitData" />
@@ -197,26 +197,26 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
+import {
+  getCityinformations,
+  postCompanyinfos,
+  putHrinfosP0,
+} from "@/services/services";
+import { CompanyInformation } from "@/services/types";
+import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import router from "../../router";
-import {
-  getCityinformations,
-  postCompanyinfos,
-  putHrinfosP0,
-} from "../../services/services";
-import { CompanyInformation } from "../../services/types";
-import { key } from "../../stores";
 import State from "./State.vue";
 import Tag from "./Tag.vue";
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);
-const imageUrl = ref("../../assets/down.png");
+const imageUrl = ref("@/assets/down.png");
 const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);

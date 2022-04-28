@@ -49,8 +49,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { getPositiontypes } from "@/services/services";
 import { onMounted, reactive, ref } from "vue";
-import { getPositiontypes } from "../../services/services";
 
 interface PositionType {
   directions: {
