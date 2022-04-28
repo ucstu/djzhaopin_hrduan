@@ -3,7 +3,7 @@
     <div class="header">
       <span>东江人才招聘 HR端</span>
       <div class="dropdown">
-        <span class="user">{{ store.state.hrInformation.name || "HR" }}</span>
+        <span class="user">{{ store.state.hrInformation.hrName || "HR" }}</span>
         <ul class="dropdown-content">
           <li>
             <router-link to="/Setting/PersonInfo">账号设置</router-link>

@@ -30,7 +30,7 @@
 import { key } from "@/stores";
 import { useStore } from "vuex";
 const store = useStore(key);
-const avatar = store.state.hrInformation.avatar;
+const avatar = store.state.hrInformation.avatarUrl;
 </script>
 
 <style scoped lang="scss">

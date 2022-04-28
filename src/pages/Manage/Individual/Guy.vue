@@ -8,8 +8,8 @@
             alt=""
           />
           <div class="person">
-            <span>姓名:{{ formLabelAlign.name }}</span>
-            <span>职位:{{ formLabelAlign.post }}</span>
+            <span>姓名:{{ formLabelAlign.hrName }}</span>
+            <span>职位:{{ formLabelAlign.postName }}</span>
             <span>
               <img
                 src="@/assets/phone.png"

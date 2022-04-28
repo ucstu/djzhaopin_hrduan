@@ -21,7 +21,7 @@
                     userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo?.education]
+                    educationMap[userInfo!.education]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
                     userInfo?.workingYears + "年"
@@ -29,7 +29,7 @@
                 </el-breadcrumb></span
               >
               <span class="state"
-                >求职状态：{{ jobStatusMap[userInfo?.jobStatus] }}</span
+                >求职状态：{{ jobStatusMap[userInfo!.jobStatus] }}</span
               >
               <span class="state">期望职位：{{ userInfo?.jobStatus }}</span>
               <span class="state">期望地点：{{ userInfo?.cityName }}</span>
@@ -42,7 +42,7 @@
               >
               <el-button
                 type="primary"
-                @click="toMessage(userInfo?.userInformationId)"
+                @click="toMessage(userInfo!.userInformationId)"
                 >在线沟通</el-button
               >
               <h3>个人优势：</h3>

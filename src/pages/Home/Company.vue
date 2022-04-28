@@ -24,7 +24,7 @@
               },
             ]"
           >
-            <el-input v-model="formCompany.name" />
+            <el-input v-model="formCompany" />
             <span
               >公司简称让牛人快速找到你，可以是全称简写/知名产品/知名品牌关键字，提交后不能修改</span
             >
@@ -41,7 +41,12 @@
                 class="avatar-uploader"
                 action="http://127.0.0.1:4523/mock/743652/avatars"
               >
-                <img v-if="ImageUrl" :src="formCompany.logo" class="avatar" />
+                <img
+                  v-if="ImageUrl"
+                  :src="formCompany?.logoUrl"
+                  class="avatar"
+                  alt=""
+                />
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
                   <Plus />
                 </el-icon>
@@ -51,11 +56,11 @@
           </el-form-item>
           <el-form-item label="公司行业" prop="comprehension">
             <el-input
-              v-model="formCompany.comprehension"
+              v-model="formCompany!.comprehensionName"
               :input-style="{ display: 'none' }"
             />
             <div class="select" @click="dialogFormVisible = true">
-              <span>{{ formCompany.comprehension || "请选择" }}</span>
+              <span>{{ formCompany!.comprehensionName || "请选择" }}</span>
               <img src="../../assets/down.png" alt="" />
             </div>
             <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
@@ -78,7 +83,7 @@
             />
           </el-form-item>
           <el-form-item label="公司规模" prop="scale">
-            <el-select v-model="formCompany.scale" placeholder="请选择">
+            <el-select v-model="formCompany!.scale" placeholder="请选择">
               <el-option label="少于15人" value="1" />
               <el-option label="15-50人" value="2" />
               <el-option label="50-150人" value="3" />
@@ -89,7 +94,7 @@
           </el-form-item>
           <el-form-item label="发展阶段" prop="financingStage">
             <el-select
-              v-model="formCompany.financingStage"
+              v-model="formCompany!.financingStage"
               placeholder="请选择"
             >
               <el-option label="未融资" value="1" />
@@ -104,7 +109,7 @@
           </el-form-item>
           <el-form-item label="公司福利">
             <el-select
-              v-model="formCompany.benefits"
+              v-model="formCompany!.benefits"
               multiple
               filterable
               allow-create
@@ -139,16 +144,18 @@
             alt=""
           />
           <div class="infos">
-            <span class="infos-top">{{ formCompany.name || "公司简称" }}</span>
+            <span class="infos-top">{{
+              formCompany?.companyName || "公司简称"
+            }}</span>
             <div class="infos-bottom">
-              <span>{{ formCompany.comprehension || "公司行业" }}</span>
+              <span>{{ formCompany?.comprehensionName || "公司行业" }}</span>
               <i>/</i>
               <span>{{
-                scaleMap[Number(formCompany.scale)] || "公司规模"
+                scaleMap[Number(formCompany?.scale)] || "公司规模"
               }}</span>
               <i>/</i>
               <span>{{
-                financingStageMap[Number(formCompany.financingStage)] ||
+                financingStageMap[Number(formCompany?.financingStage)] ||
                 "发展阶段"
               }}</span>
             </div>
@@ -197,7 +204,11 @@ import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import router from "../../router";
-import { getCityinformations, postCompanyinfos } from "../../services/services";
+import {
+  getCityinformations,
+  postCompanyinfos,
+  putHrinfosP0,
+} from "../../services/services";
 import { CompanyInformation } from "../../services/types";
 import { key } from "../../stores";
 import State from "./State.vue";
@@ -209,10 +220,8 @@ const imageUrl = ref("../../assets/down.png");
 const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
-
 //表格数据
-
-const formCompany = ref<CompanyInformation>();
+const formCompany = ref<CompanyInformation>({} as CompanyInformation);
 const cityInfo = ref([]);
 onUpdated(() => {
   if (formCompany.value) {
@@ -340,17 +349,17 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postCompanyinfos(formCompany)
+      postCompanyinfos(formCompany.value)
         .then((res) => {
           let hrInformation = store.state.hrInformation;
           hrInformation.companyInformationId =
             res.data.body.companyInformationId;
-          putHrinfosHrinfoid(hrInformation.hrInformationId, hrInformation)
-            .then((res) => {
-              store.commit("setHrInformation", res.data.body);
+          putHrinfosP0(hrInformation.hrInformationId, hrInformation)
+            .then((response) => {
+              store.commit("setHrInformation", response.data.body);
               ElMessage.success("恭喜您，公司创建成功");
               dialogFormVisible.value = false;
-              store.commit("setCompanyInformation", res.data.body);
+              store.commit("setCompanyInformation", response.data.body);
               router.replace({ name: "PublishJob" });
             })
             .catch(failResponseHandler);
