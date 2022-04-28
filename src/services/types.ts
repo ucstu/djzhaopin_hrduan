@@ -440,7 +440,7 @@ export interface GetUserinfosQueryParams {
   sort?: string;
 }
 
-export interface GetVerificationCodeQueryParams {
+export interface GetVerificationcodeQueryParams {
   /**
    *
    * 手机号码

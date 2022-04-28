@@ -46,9 +46,6 @@
                 placeholder="职位名称建议包括工作内容和职位等级"
               />
             </el-form-item>
-            <!-- <el-form-item label="职位类别" prop="name">
-                            <el-input v-model="jobTypeList.name" placeholder="请选择职位类别" />
-                        </el-form-item> -->
             <el-form-item label="经验和学历" prop="name">
               <el-col :span="11">
                 <el-select
@@ -133,13 +130,29 @@
               />
             </el-form-item>
             <el-form-item label="职位亮点" prop="highlights">
-              <el-input
+              <!-- <el-input
                 v-model="jobTypeList.highlights"
                 placeholder="请填写职位吸引力，如发展前景、团队实力等"
                 :autosize="{ minRows: 2, maxRows: 4 }"
                 maxlength="20"
                 show-word-limit
-              />
+              /> -->
+              <el-select
+                v-model="jobTypeList.highlights"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                :reserve-keyword="false"
+                placeholder="请输入或选择亮点"
+              >
+                <el-option
+                  v-for="item in heightLightMap"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="工作地点" prop="workArea">
               <el-input
@@ -182,13 +195,14 @@
                 <div class="demo-range">
                   <el-form-item prop="workTime">
                     <el-time-picker
-                      v-model="jobTypeList.workTime"
+                      v-model="workTimeing"
                       :clearable="false"
                       is-range
                       range-separator="到"
                       start-placeholder="上班时间"
                       end-placeholder="下班时间"
                       format="HH:mm"
+                      @change="handleWorkTimeChange(workTimeing)"
                     />
                   </el-form-item>
                 </div>
@@ -249,7 +263,7 @@ import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const store = useStore(key);
@@ -319,6 +333,7 @@ const rules = reactive({
     },
   ],
 });
+const workTimeing = ref([]);
 // const submitData = (data: {
 //   data: { checked: any; directionName: string };
 // }) => {
@@ -336,12 +351,21 @@ onMounted(() => {
     });
   }
 });
+const handleWorkTimeChange = (val: Array<string>) => {
+  jobTypeList.value.workTime = val[0];
+  jobTypeList.value.overTime = val[1];
+};
+watch(workTimeing, () => {
+  console.log(jobTypeList.value.workTime);
+  console.log(jobTypeList.value.overTime);
+  console.log(workTimeing);
+});
+
+const heightLightMap = ["团队和谐"];
 const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      // @ts-ignore
-      jobTypeList.value.highlights = [jobTypeList.value.highlights];
       jobTypeList.value.workTime = jobTypeList.value.workTime[0];
       jobTypeList.value.hrInformationId =
         store.state.accountInformation.hrInformationId;
