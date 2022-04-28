@@ -20,7 +20,7 @@
     </div>
     <div class="right">
       <router-link to="/Setting/">
-        <img :src="avatar" />
+        <img :src="VITE_CDN_URL + avatarUrl" />
       </router-link>
     </div>
   </div>
@@ -30,7 +30,8 @@
 import { key } from "@/stores";
 import { useStore } from "vuex";
 const store = useStore(key);
-const avatar = store.state.hrInformation.avatarUrl;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const avatarUrl = store.state.hrInformation.avatarUrl;
 </script>
 
 <style scoped lang="scss">

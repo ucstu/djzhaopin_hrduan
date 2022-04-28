@@ -4,7 +4,7 @@
       招聘者企业认定
       <div class="line"></div>
       <div class="information">
-        <img :src="imageUrl" alt="加载失败" />
+        <img :src="VITE_CDN_URL + imageUrl" alt="加载失败" />
         <div v-if="companyInfo.legalRepresentative" class="comfirm">
           <div class="comfirm-item">
             <span>{{ companyInfo.fullName }}</span>
@@ -43,6 +43,8 @@ import { key } from "@/stores";
 import { Check } from "@element-plus/icons-vue";
 import { computed } from "vue";
 import { useStore } from "vuex";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useStore(key);
 const imageUrl = store.state.hrInformation.avatarUrl;
 const companyInfo = computed(() => store.state.companyInformation);

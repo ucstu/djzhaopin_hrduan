@@ -75,7 +75,7 @@
                 >
                   <div class="item-header">
                     <el-checkbox v-model="Talent.checked" />
-                    <img :src="Talent.avatarUrl" alt="" />
+                    <img :src="VITE_CDN_URL + Talent.avatarUrl" alt="avatar" />
                     <div class="header-person">
                       <span>{{ Talent.firstName + Talent.lastName }}</span>
                       <span
@@ -124,6 +124,8 @@ import router from "@/router";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const valueMap = ref({
   age: "",
 

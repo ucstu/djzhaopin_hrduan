@@ -6,8 +6,12 @@
           <div class="left">
             <div class="avatar">
               <img
-                :src="userInfo?.avatarUrl ? userInfo.avatarUrl : imgUrl"
-                alt=""
+                :src="
+                  userInfo?.avatarUrl
+                    ? VITE_CDN_URL + userInfo.avatarUrl
+                    : VITE_CDN_URL + imgUrl
+                "
+                alt="avatar"
               />
             </div>
             <div class="info">
@@ -87,6 +91,7 @@ import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const route = useRoute();
 const store = useStore(key);
 

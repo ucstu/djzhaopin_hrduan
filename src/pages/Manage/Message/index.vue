@@ -16,6 +16,7 @@
             <div class="hunter">
               <img
                 :src="
+                  VITE_CDN_URL +
                   userInformations.get(deliveryRecord.userInformationId)
                     ?.avatarUrl
                 "
@@ -78,6 +79,8 @@ import { key } from "@/stores";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import Chat from "./Chat.vue";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const condition = ref(true);
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);

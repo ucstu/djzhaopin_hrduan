@@ -50,6 +50,7 @@
                   <el-checkbox v-model="checked1" />
                   <img
                     :src="
+                      VITE_CDN_URL +
                       userInformations.get(deliveryRecord.userInformationId)
                         ?.avatarUrl
                     "
@@ -152,6 +153,8 @@ import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
 import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());

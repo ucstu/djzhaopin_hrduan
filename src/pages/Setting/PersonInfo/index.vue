@@ -23,7 +23,11 @@
             >
               <img
                 v-if="imageUrl"
-                :src="imageUrl ? imageUrl : formHr.avatarUrl"
+                :src="
+                  imageUrl
+                    ? VITE_CDN_URL + imageUrl
+                    : VITE_CDN_URL + formHr.avatarUrl
+                "
                 class="avatar"
                 alt=""
               />
@@ -100,6 +104,8 @@ import { store } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {

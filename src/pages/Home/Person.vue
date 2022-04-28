@@ -23,8 +23,13 @@
               >
                 <img
                   v-if="imageUrl"
-                  :src="imageUrl ? imageUrl : formLabelAlign.avatarUrl"
+                  :src="
+                    imageUrl
+                      ? VITE_CDN_URL + imageUrl
+                      : VITE_CDN_URL + formLabelAlign.avatarUrl
+                  "
                   class="avatar"
+                  alt="avatar"
                 />
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
                   <Plus />
@@ -84,10 +89,11 @@
         <div class="top">
           <img
             :src="
-              imageUrl ||
+              VITE_CDN_URL + imageUrl ||
               'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             class="avatar"
+            alt="avatar"
           />
           <span>{{ formLabelAlign.hrName || "姓名" }}</span>
           <span>{{ formLabelAlign.postName || "职位" }}</span>
@@ -112,6 +118,8 @@ import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);

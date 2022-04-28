@@ -23,7 +23,12 @@
               class="avatar-uploader"
               action="http://127.0.0.1:4523/mock/743652/avatars"
             >
-              <img v-if="ImageUrl" :src="formCompany.logoUrl" class="avatar" />
+              <img
+                v-if="ImageUrl"
+                :src="VITE_CDN_URL + formCompany.logoUrl"
+                class="avatar"
+                alt="avatar"
+              />
               <el-icon v-else class="avatar-uploader-icon" :size="30">
                 <Plus />
               </el-icon>
@@ -100,6 +105,8 @@ import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);

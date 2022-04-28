@@ -43,7 +43,7 @@
               >
                 <img
                   v-if="ImageUrl"
-                  :src="formCompany?.logoUrl"
+                  :src="VITE_CDN_URL + formCompany?.logoUrl"
                   class="avatar"
                   alt=""
                 />
@@ -138,7 +138,7 @@
         <div class="my-company">
           <img
             :src="
-              ImageUrl ||
+              VITE_CDN_URL + ImageUrl ||
               'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             alt=""
@@ -213,6 +213,8 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import State from "./State.vue";
 import Tag from "./Tag.vue";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useStore(key);

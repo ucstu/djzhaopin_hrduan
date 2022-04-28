@@ -10,6 +10,7 @@
           <el-checkbox v-model="checked1" />
           <img
             :src="
+              VITE_CDN_URL +
               userInformations.get(deliveryRecord.userInformationId)?.avatarUrl
             "
             alt=""
@@ -96,6 +97,7 @@ import { key } from "@/stores";
 import { ref } from "vue";
 import { useStore } from "vuex";
 
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };

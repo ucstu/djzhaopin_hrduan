@@ -11,7 +11,7 @@
       <router-link to="/PublishJob">
         <img src="@/assets/pub.png" />
       </router-link>
-      <img :src="avatarUrl" />
+      <img :src="VITE_CDN_URL + avatarUrl" />
       <div class="dropdown">
         <div class="user">
           <span>{{ hrName || "HR" }}</span>
@@ -33,6 +33,7 @@
 import { key } from "@/stores";
 import { useStore } from "vuex";
 const store = useStore(key);
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const { hrName, avatarUrl } = store.state.hrInformation;
 </script>
 
