@@ -41,13 +41,13 @@
               </span>
             </div>
           </el-form-item>
-          <el-form-item label="姓名" prop="name">
+          <el-form-item label="姓名" prop="hrName">
             <el-input
               v-model="formLabelAlign.hrName"
               placeholder="请填写你工作中的名字，便于向求职者展示"
             />
           </el-form-item>
-          <el-form-item label="职位" prop="post">
+          <el-form-item label="职位" prop="postName">
             <el-input
               v-model="formLabelAlign.postName"
               placeholder="请填写当前公司的任职职位"
@@ -89,8 +89,9 @@
         <div class="top">
           <img
             :src="
-              VITE_CDN_URL + imageUrl ||
-              'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
+              imageUrl
+                ? VITE_CDN_URL + imageUrl
+                : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             class="avatar"
             alt="avatar"
@@ -154,7 +155,7 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   return true;
 };
 const rule = reactive({
-  name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  hrName: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   avatar: [
     {
       required: true,
@@ -162,7 +163,7 @@ const rule = reactive({
       trigger: "blur",
     },
   ],
-  post: [{ required: true, message: "此项填入职位", trigger: "blur" }],
+  postName: [{ required: true, message: "此项填入职位", trigger: "blur" }],
 });
 const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;

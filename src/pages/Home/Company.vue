@@ -24,7 +24,7 @@
               },
             ]"
           >
-            <el-input v-model="formCompany" />
+            <el-input v-model="formCompany.companyName" />
             <span
               >公司简称让牛人快速找到你，可以是全称简写/知名产品/知名品牌关键字，提交后不能修改</span
             >
@@ -56,15 +56,15 @@
           </el-form-item>
           <el-form-item label="公司行业" prop="comprehension">
             <el-input
-              v-model="formCompany!.comprehensionName"
+              v-model="formCompany.comprehensionName"
               :input-style="{ display: 'none' }"
             />
             <div class="select" @click="dialogFormVisible = true">
-              <span>{{ formCompany!.comprehensionName || "请选择" }}</span>
+              <span>{{ formCompany.comprehensionName || "请选择" }}</span>
               <img src="@/assets/down.png" alt="" />
             </div>
             <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
-              <Tag @submit-data="submitData"></Tag>
+              <tag @submit-data="submitData" />
               <template #footer>
                 <span class="dialog-footer">
                   <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -138,8 +138,9 @@
         <div class="my-company">
           <img
             :src="
-              VITE_CDN_URL + ImageUrl ||
-              'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
+              ImageUrl
+                ? VITE_CDN_URL + ImageUrl
+                : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             alt=""
           />
@@ -212,8 +213,7 @@ import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import State from "./State.vue";
-import Tag from "./Tag.vue";
-
+import tag from "./Tag.vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
