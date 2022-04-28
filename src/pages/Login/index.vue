@@ -44,14 +44,14 @@
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
 import { getAxiosInstance } from "@/services/config";
+import { getHrinfosP0, postAccountinfosLogin } from "@/services/services";
+import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
-import router from "../../router";
-import { getHrinfosHrinfoid, postAccountsLogin } from "../../services/services";
-import { key } from "../../stores";
 const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
 const validatePass = (rule: any, value: any, callback: any) => {
@@ -85,13 +85,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postAccountsLogin(ruleForm)
+      postAccountinfosLogin(ruleForm)
         .then((res) => {
           store.commit("setToken", res.data.body.token);
           store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
-          getHrinfosHrinfoid(res.data.body.accountInfo.hrInformationId)
+          getHrinfosP0(res.data.body.accountInfo.hrInformationId)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
               router.replace("/Home");

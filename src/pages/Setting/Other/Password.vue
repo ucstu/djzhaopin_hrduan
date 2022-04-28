@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { getVerificationCode, putAccountsAccountid } from "@/services/services";
+import { getVerificationCode, putAccountinfosP0 } from "@/services/services";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -119,7 +119,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAccountsAccountid(
+      putAccountinfosP0(
         store.state.accountInformation.accountInformationId,
         ruleForm
       ).then((res: { status: number }) => {

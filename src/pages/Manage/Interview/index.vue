@@ -26,7 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import {} from "@/services/services";
+import {
+  getCompanyinfosP0Deliveryrecords,
+  getCompanyinfosP0PositioninfosP1,
+  getUserinfosP0,
+} from "@/services/services";
 import {
   DeliveryRecord,
   PositionInformation,
@@ -42,20 +46,20 @@ const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
-getCompanyinfosCompanyinfoidDeliveryrecords(
+getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosUserinfoid(item.userInformationId).then((res) => {
+    getUserinfosP0(item.userInformationId).then((res) => {
       userInformations.value.set(item.userInformationId, res.data.body);
     });
-    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+    getCompanyinfosP0PositioninfosP1(
       store.state.companyInformation.companyInformationId,
-      item.jobInformationId
+      item.positionInformationId
     ).then((res) => {
-      jobInformations.value.set(item.jobInformationId, res.data.body);
+      jobInformations.value.set(item.positionInformationId, res.data.body);
     });
   });
 });

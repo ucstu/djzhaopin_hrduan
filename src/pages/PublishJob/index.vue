@@ -42,7 +42,7 @@
             </el-form-item>
             <el-form-item label="职位名称" prop="name">
               <el-input
-                v-model="jobTypeList.name"
+                v-model="jobTypeList.positionName"
                 placeholder="职位名称建议包括工作内容和职位等级"
               />
             </el-form-item>
@@ -143,13 +143,13 @@
             </el-form-item>
             <el-form-item label="工作地点" prop="workArea">
               <el-input
-                v-model="jobTypeList.workArea"
+                v-model="jobTypeList.workAreaName"
                 placeholder="请输入工作地址"
               />
             </el-form-item>
             <el-form-item label="所属部门">
               <el-input
-                v-model="jobTypeList.department"
+                v-model="jobTypeList.departmentName"
                 placeholder="选填，例如：基础研发平台"
                 maxlength="20"
                 show-word-limit
@@ -241,9 +241,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
-  postCompanyinfosCompanyinfoidPositioninfos,
-  putCompanyinfosCompanyinfoidPositioninfosPositioninfoid,
+  getCompanyinfosP0PositioninfosP1,
+  postCompanyinfosP0Positioninfos,
+  putCompanyinfosP0PositioninfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -328,7 +328,7 @@ const rules = reactive({
 // };
 onMounted(() => {
   if (route.params.PublishJobId) {
-    getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+    getCompanyinfosP0PositioninfosP1(
       store.state.companyInformation.companyInformationId,
       route.params.PublishJobId.toString()
     ).then((res) => {
@@ -347,7 +347,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
         store.state.accountInformation.hrInformationId;
       jobTypeList.value.companyInformationId =
         store.state.hrInformation.companyInformationId;
-      postCompanyinfosCompanyinfoidPositioninfos(
+      postCompanyinfosP0Positioninfos(
         store.state.hrInformation.companyInformationId,
         jobTypeList.value
       )
@@ -365,7 +365,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      putCompanyinfosP0PositioninfosP1(
         store.state.companyInformation.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value

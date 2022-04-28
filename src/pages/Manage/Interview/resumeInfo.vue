@@ -46,13 +46,13 @@
                 }}</span
               ><span
                 >{{
-                  jobInformations.get(deliveryRecord.jobInformationId)
+                  jobInformations.get(deliveryRecord.positionInformationId)
                     ?.positionName
                 }}|{{
-                  jobInformations.get(deliveryRecord.jobInformationId)
+                  jobInformations.get(deliveryRecord.positionInformationId)
                     ?.startingSalary +
                   "K-" +
-                  jobInformations.get(deliveryRecord.jobInformationId)
+                  jobInformations.get(deliveryRecord.positionInformationId)
                     ?.ceilingSalary +
                   "K"
                 }}</span
@@ -115,9 +115,9 @@ getCompanyinfosP0Deliveryrecords(
     });
     getCompanyinfosP0PositioninfosP1(
       store.state.companyInformation.companyInformationId,
-      item.jobInformationId
+      item.positionInformationId
     ).then((res) => {
-      jobInformations.value.set(item.jobInformationId, res.data.body);
+      jobInformations.value.set(item.positionInformationId, res.data.body);
     });
   });
 });

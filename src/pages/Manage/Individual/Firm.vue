@@ -32,11 +32,11 @@
         </el-form-item>
         <el-form-item label="公司行业" prop="comprehension">
           <el-input
-            v-model="formCompany.comprehension"
+            v-model="formCompany.comprehensionName"
             :input-style="{ display: 'none' }"
           />
           <div class="select" @click="dialogFormVisible = true">
-            <span>{{ formCompany.comprehension || "请选择" }}</span>
+            <span>{{ formCompany.comprehensionName || "请选择" }}</span>
             <img src="@/assets/down.png" alt="" />
           </div>
           <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
@@ -53,7 +53,7 @@
         </el-form-item>
         <el-form-item label="所在城市" style="width: auto">
           <el-cascader
-            v-model="formCompany.city"
+            v-model="formCompany.cityName"
             :options="cityMap"
             placeholder="请选择"
             style="width: 411px"
@@ -92,10 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  getCityinformations,
-  putCompanyinfosCompanyinfoid,
-} from "@/services/services";
+import { getCityinformations, putCompanyinfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
@@ -115,15 +112,15 @@ const formCompany = reactive<CompanyInformation>({
   address: "",
   about: "",
   benefits: [],
-  city: "",
+  cityName: "",
   companyInformationId: "",
-  comprehension: "",
+  comprehensionName: "",
   establishmentTime: "",
   financingStage: 1,
   fullName: "",
   hrInformationId: "",
-  logo: "",
-  name: "",
+  logoUrl: "",
+  companyName: "",
   legalRepresentative: "",
   organizationType: "",
   recruitmentPosition: 5,
@@ -137,7 +134,7 @@ const submitData = (data: {
   data: { checked: boolean; directionName: string };
 }) => {
   if (data.data.checked) {
-    formCompany.comprehension = data.data.directionName;
+    formCompany.comprehensionName = data.data.directionName;
   }
 };
 
@@ -186,7 +183,7 @@ onMounted(() => {
     });
   });
   formCompany.fullName = store.state.companyInformation.fullName;
-  formCompany.logo = store.state.companyInformation.logo;
+  formCompany.logoUrl = store.state.companyInformation.logoUrl;
   formCompany.about = store.state.companyInformation.about;
   formCompany.address = store.state.companyInformation.address;
   formCompany.scale = store.state.companyInformation.scale;
@@ -196,7 +193,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyinfosCompanyinfoid(
+      putCompanyinfosP0(
         store.state.companyInformation.companyInformationId,
         formCompany
       )

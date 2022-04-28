@@ -4,7 +4,7 @@
       <div class="resume-item">
         <div class="header-person">
           <img
-            :src="formLabelAlign.avatar ? formLabelAlign.avatar : imgUrl"
+            :src="formLabelAlign.avatarUrl ? formLabelAlign.avatarUrl : imgUrl"
             alt=""
           />
           <div class="person">
@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { getHrinfosHrinfoid } from "@/services/services";
-import { HRInformation } from "@/services/types";
+import { getHrinfosP0 } from "@/services/services";
+import { HrInformation } from "@/services/types";
 import { key } from "@/stores";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
@@ -44,10 +44,10 @@ const store = useStore(key);
 const imgUrl = ref(
   "https://tse1-mm.cn.bing.net/th/id/R-C.b4504d02c6b9a71453c61fef88578b77?rik=rBhjlBcXKOZkiw&riu=http%3a%2f%2fimg.jj20.com%2fup%2fallimg%2ftx25%2f380412030426662.jpg&ehk=MrcDJRR%2fT3NWdla%2fkub6nInyr7M3eZF72Kzo%2brbcCVI%3d&risl=&pid=ImgRaw&r=0"
 );
-const formLabelAlign = ref<HRInformation>({
-  avatar: "",
-  name: "",
-  post: "",
+const formLabelAlign = ref<HrInformation>({
+  avatarUrl: "",
+  hrName: "",
+  postName: "",
   acceptEmail: "",
   hrInformationId: "",
   phoneNumber: "",
@@ -56,7 +56,7 @@ const formLabelAlign = ref<HRInformation>({
   companyInformationId: "",
 });
 onMounted(() => {
-  getHrinfosHrinfoid(store.state.hrInformation.hrInformationId).then((res) => {
+  getHrinfosP0(store.state.hrInformation.hrInformationId).then((res) => {
     formLabelAlign.value = res.data.body;
   });
 });

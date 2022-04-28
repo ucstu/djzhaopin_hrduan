@@ -44,7 +44,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import router from "../../../router";
 const store = useStore(key);
-const imageUrl = store.state.hrInformation.avatar;
+const imageUrl = store.state.hrInformation.avatarUrl;
 const companyInfo = computed(() => store.state.companyInformation);
 const financingStageMap = [
   "",

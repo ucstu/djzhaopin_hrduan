@@ -138,7 +138,11 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { getCompanyinfosP0Deliveryrecords, getUserinfosP0 } from "@/services/services";
+import {
+  getCompanyinfosP0Deliveryrecords,
+  getCompanyinfosP0PositioninfosP1,
+  getUserinfosP0,
+} from "@/services/services";
 import {
   DeliveryRecord,
   PositionInformation,
@@ -209,16 +213,16 @@ const feedbackMap = ["已通过", "已拒绝", "待审核"];
 
 const checked1 = ref(false);
 onUpdated(() => {
-  getCompanyinfosCompanyinfoidDeliveryrecords(
+  getCompanyinfosP0Deliveryrecords(
     store.state.companyInformation.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserinfosUserinfoid(item.userInformationId).then((res) => {
+      getUserinfosP0(item.userInformationId).then((res) => {
         userInformations.value.set(item.userInformationId, res.data.body);
       });
-      getCompanyinfosCompanyinfoidPositioninfosPositioninfoid(
+      getCompanyinfosP0PositioninfosP1(
         store.state.companyInformation.companyInformationId,
         item.positionInformationId
       ).then((res) => {
