@@ -20,7 +20,14 @@
     </div>
     <div class="right">
       <router-link to="/Setting/">
-        <img :src="VITE_CDN_URL + avatarUrl" />
+        <img
+          :src="
+            VITE_CDN_URL + avatarUrl
+              ? VITE_CDN_URL + avatarUrl
+              : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
+          "
+          alt=""
+        />
       </router-link>
     </div>
   </div>

@@ -1,13 +1,14 @@
-import { InjectionKey } from "vue";
-import { createStore, Store } from "vuex";
-import VuexPersister from "vuex-persister";
 import {
   AccountInformation,
   CompanyInformation,
   DeliveryRecord,
   HrInformation,
-  PositionInformation,
+  PositionInformation
 } from "@/services/types";
+import { ElMessage } from "element-plus";
+import { InjectionKey } from "vue";
+import { createStore, Store } from "vuex";
+import VuexPersister from "vuex-persister";
 
 const vuexPersister = new VuexPersister<State>({});
 
@@ -33,6 +34,15 @@ export const store = createStore<State>({
     positionInformation: {} as PositionInformation,
     deliveryRecord: {} as DeliveryRecord,
   }),
+  actions: {
+    AddCompanyRerecruit(context, add: number) {
+      if (context.state.companyInformation.recruitmentPosition <= 20) {
+        context.commit("addCompanyRerecruit", add);
+      } else {
+        ElMessage.warning("招聘人数已达上限");
+      }
+    },
+  },
   mutations: {
     setToken(state: State, token: State["token"]) {
       state.token = token;
@@ -51,6 +61,9 @@ export const store = createStore<State>({
       companyInformation: State["companyInformation"]
     ) {
       state.companyInformation = companyInformation;
+    },
+    addCompanyRerecruit(state: State, add: number) {
+      state.companyInformation.recruitmentPosition += add;
     },
     setComprise(state: State, comprise: State["comprise"]) {
       state.comprise = comprise;

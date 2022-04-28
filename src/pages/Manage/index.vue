@@ -107,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import SystemHeader from "@/components/System/SystemHeadeer.vue";
+import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
   getCompanyinfosP0Deliveryrecords,
@@ -139,7 +139,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 onMounted(() => {
   getCompanyinfosP0Deliveryrecords(
     store.state.hrInformation.companyInformationId,
-    {}
+    { status: "1" }
   )
     .then((res) => {
       store.commit("setDeliveryRecord", res.data.body);

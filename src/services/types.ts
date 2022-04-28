@@ -65,7 +65,7 @@ export interface GetCompanyinfosP0DeliveryrecordsQueryParams {
    *
    * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  state?: string;
+  status: string;
   /**
    *
    * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}

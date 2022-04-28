@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div>
-          <system-headeer />
+          <system-header />
         </div>
       </el-header>
       <el-container>
@@ -86,7 +86,7 @@ import {
   Search,
   User,
 } from "@element-plus/icons-vue";
-import SystemHeadeer from "./SystemHeadeer.vue";
+import SystemHeader from "./SystemHeader.vue";
 </script>
 
 <style scoped lang="scss">

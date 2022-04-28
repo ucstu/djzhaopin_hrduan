@@ -40,7 +40,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="职位名称" prop="name">
+            <el-form-item label="职位名称" prop="positionName">
               <el-input
                 v-model="jobTypeList.positionName"
                 placeholder="职位名称建议包括工作内容和职位等级"
@@ -56,7 +56,7 @@
                     v-for="(item, index) in workingYears"
                     :key="item"
                     :label="item"
-                    :value="index"
+                    :value="index + 1"
                   >
                   </el-option>
                 </el-select>
@@ -143,6 +143,7 @@
                 filterable
                 allow-create
                 default-first-option
+                class="light-select"
                 :reserve-keyword="false"
                 placeholder="请输入或选择亮点"
               >
@@ -154,7 +155,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="工作地点" prop="workArea">
+            <el-form-item label="工作地点" prop="workAreaName">
               <el-input
                 v-model="jobTypeList.workAreaName"
                 placeholder="请输入工作地址"
@@ -201,7 +202,7 @@
                       range-separator="到"
                       start-placeholder="上班时间"
                       end-placeholder="下班时间"
-                      format="HH:mm"
+                      format="HH:mm:ss"
                       @change="handleWorkTimeChange(workTimeing)"
                     />
                   </el-form-item>
@@ -253,6 +254,7 @@
 </template>
 
 <script setup lang="ts">
+import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
   getCompanyinfosP0PositioninfosP1,
@@ -263,7 +265,7 @@ import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const store = useStore(key);
@@ -274,7 +276,6 @@ const jobTypeList = ref<PositionInformation>({
 } as PositionInformation);
 // const dialogFormVisible = ref(false);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
-
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
 const workingYears = reactive([
@@ -287,8 +288,10 @@ const workingYears = reactive([
   "10年以上",
 ]);
 const rules = reactive({
-  name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-  workArea: [{ required: true, message: "请选择工作地址", trigger: "blur" }],
+  positionName: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  workAreaName: [
+    { required: true, message: "请选择工作地址", trigger: "blur" },
+  ],
   positionType: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   highlights: [
     {
@@ -352,11 +355,10 @@ onMounted(() => {
   }
 });
 const handleWorkTimeChange = (val: Array<string>) => {
-  console.log(1111111);
-  jobTypeList.value.workTime = val[0];
-  jobTypeList.value.overTime = val[1];
-  console.log(jobTypeList.value.workTime);
-  console.log(jobTypeList.value.overTime);
+  let startTime = useTime(val[0]);
+  let endTime = useTime(val[1]);
+  jobTypeList.value.workTime = startTime;
+  jobTypeList.value.overTime = endTime;
 };
 
 const heightLightMap = ["团队和谐"];
@@ -364,7 +366,6 @@ const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.workTime = jobTypeList.value.workTime[0];
       jobTypeList.value.hrInformationId =
         store.state.accountInformation.hrInformationId;
       jobTypeList.value.companyInformationId =
@@ -376,7 +377,8 @@ const publishPost = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，职位发布成功");
           store.commit("setPositionInformation", res.data.body);
-          router.push("/Manage");
+          store.dispatch("AddCompanyRerecruit", 1);
+          router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);
     }
@@ -461,6 +463,10 @@ a {
       margin-top: 20px;
 
       .el-form-item {
+        .light-select {
+          width: 600px;
+        }
+
         .select {
           position: relative;
           width: 211px;

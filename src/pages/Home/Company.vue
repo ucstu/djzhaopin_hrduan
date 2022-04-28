@@ -15,7 +15,7 @@
           </el-form-item>
           <el-form-item
             label="公司简称"
-            prop="name"
+            prop="companyName"
             :rules="[
               {
                 required: true,
@@ -54,7 +54,7 @@
               <span> logo要求：不能为二维码、营业执照、公司门头等 </span>
             </div>
           </el-form-item>
-          <el-form-item label="公司行业" prop="comprehension">
+          <el-form-item label="公司行业" prop="comprehensionName">
             <el-input
               v-model="formCompany.comprehensionName"
               :input-style="{ display: 'none' }"
@@ -261,10 +261,11 @@ interface companyInfo {
 const submitData = (data: {
   data: { checked: any; directionName: string };
 }) => {
-  if (data.data.checked && formCompany.value?.comprehensionName) {
+  if (data.data.checked) {
     formCompany.value.comprehensionName = data.data.directionName;
   }
 };
+
 const formInstance = reactive<companyInfo[]>([
   {
     logo: "https://tse1-mm.cn.bing.net/th/id/R-C.f6ea7adbf0fd0e4b2f3299308aa92471?rik=YzXBT59%2bWCTZBQ&riu=http%3a%2f%2fwww.gaoruiad.com%2fuploads%2fimage%2f20190621%2f20190621181458_89994.jpg&ehk=vb99sP9BQF%2fKTXBJ6pul4F95H53QX22GJ36iRya2OQs%3d&risl=&pid=ImgRaw&r=0",
@@ -302,8 +303,10 @@ const handleAvatarError: UploadProps["onError"] = () => {
   ElMessage.error("对不起，上传失败，请重试");
 };
 const rule = reactive({
-  comprehension: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-  name: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  comprehensionName: [
+    { required: true, message: "此项不能为空", trigger: "blur" },
+  ],
+  companyName: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   scale: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   financingStage: [
     { required: true, message: "此项不能为空", trigger: "blur" },
@@ -350,6 +353,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
+      formCompany.value.recruitmentPosition = 0;
       postCompanyinfos(formCompany.value)
         .then((res) => {
           let hrInformation = store.state.hrInformation;
@@ -358,9 +362,9 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
           putHrinfosP0(hrInformation.hrInformationId, hrInformation)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
+              store.commit("setCompanyInformation", res.data.body);
               ElMessage.success("恭喜您，公司创建成功");
               dialogFormVisible.value = false;
-              store.commit("setCompanyInformation", response.data.body);
               router.replace({ name: "PublishJob" });
             })
             .catch(failResponseHandler);
@@ -416,7 +420,7 @@ a:hover {
             position: absolute;
             left: -5px;
             font-size: 14px;
-            color: #ababb2;
+            color: rgb(0 0 0 / 70%);
           }
 
           img {

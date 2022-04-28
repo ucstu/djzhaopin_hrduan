@@ -118,7 +118,6 @@ const leftBarRouteList: RouteRecordRaw[] = [
     ],
   },
   {
-    meta: { requiresAuth: true },
     name: "Manage",
     path: "/Manage",
     component: () => import("../pages/Manage/index.vue"),
