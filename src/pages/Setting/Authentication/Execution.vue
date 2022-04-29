@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { postCompanyinfos } from "@/services/services";
+import { postCompanyInfos } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { store } from "@/stores";
 import { ElMessage, FormInstance } from "element-plus";
@@ -137,7 +137,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postCompanyinfos(companyForm)
+      postCompanyInfos(companyForm)
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.commit("setCompanyInformation", res.data.body);

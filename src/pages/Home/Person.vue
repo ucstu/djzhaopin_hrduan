@@ -111,7 +111,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { putHrinfosP0 } from "@/services/services";
+import { putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
@@ -169,7 +169,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
-      const res = await putHrinfosP0(
+      const res = await putHrInfosP0(
         store.state.accountInformation.hrInformationId,
         formLabelAlign
       );

@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { getHrinfosP0 } from "@/services/services";
+import { getHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { key } from "@/stores";
 import { onMounted, ref } from "vue";
@@ -62,7 +62,7 @@ const formLabelAlign = ref<HrInformation>({
   companyInformationId: "",
 });
 onMounted(() => {
-  getHrinfosP0(store.state.hrInformation.hrInformationId).then((res) => {
+  getHrInfosP0(store.state.hrInformation.hrInformationId).then((res) => {
     formLabelAlign.value = res.data.body;
   });
 });

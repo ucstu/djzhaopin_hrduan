@@ -138,11 +138,12 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import router from "@/router";
 import {
-  getCompanyinfosP0Deliveryrecords,
-  getCompanyinfosP0PositioninfosP1,
-  getUserinfosP0,
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -164,16 +165,16 @@ const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const valueMap = ref<DeliveryRecord>({
   status: 1,
 });
-getCompanyinfosP0Deliveryrecords(
+getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
   { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosP0(item.userInformationId).then((res) => {
+    getUserInfosP0(item.userInformationId).then((res) => {
       userInformations.value.set(item.userInformationId, res.data.body);
     });
-    getCompanyinfosP0PositioninfosP1(
+    getCompanyInfosP0PositionInfosP1(
       store.state.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((res) => {
@@ -186,16 +187,16 @@ const feedbackMap = ["已通过", "已拒绝", "待审核"];
 
 const checked1 = ref(false);
 onUpdated(() => {
-  getCompanyinfosP0Deliveryrecords(
+  getCompanyInfosP0DeliveryRecords(
     store.state.companyInformation.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserinfosP0(item.userInformationId).then((res) => {
+      getUserInfosP0(item.userInformationId).then((res) => {
         userInformations.value.set(item.userInformationId, res.data.body);
       });
-      getCompanyinfosP0PositioninfosP1(
+      getCompanyInfosP0PositionInfosP1(
         store.state.companyInformation.companyInformationId,
         item.positionInformationId
       ).then((res) => {

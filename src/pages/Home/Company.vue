@@ -200,9 +200,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCityinformations,
-  postCompanyinfos,
-  putHrinfosP0,
+  getCityInformations,
+  postCompanyInfos,
+  putHrInfosP0,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -331,7 +331,7 @@ interface cityInfo {
 const cityMap = ref<cityInfo[]>([]);
 
 onMounted(() => {
-  getCityinformations()
+  getCityInformations()
     .then((res) => {
       cityMap.value = res.data.body.map((item) => {
         return {
@@ -355,12 +355,12 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
     if (valid) {
       formCompany.value.recruitmentPosition = 0;
       formCompany.value.fullName = route.params.companyName.toString();
-      postCompanyinfos(formCompany.value)
+      postCompanyInfos(formCompany.value)
         .then((res) => {
           let hrInformation = store.state.hrInformation;
           hrInformation.companyInformationId =
             res.data.body.companyInformationId;
-          putHrinfosP0(hrInformation.hrInformationId, hrInformation)
+          putHrInfosP0(hrInformation.hrInformationId, hrInformation)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
               store.commit("setCompanyInformation", res.data.body);

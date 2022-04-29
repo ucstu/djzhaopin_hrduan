@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 import Tag from "@/pages/Home/Tag.vue";
-import { getCityinformations, putCompanyinfosP0 } from "@/services/services";
+import { getCityInformations, putCompanyInfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
@@ -160,7 +160,7 @@ interface cityInfo {
 }
 const cityMap = ref<cityInfo[]>([]);
 onMounted(() => {
-  getCityinformations()
+  getCityInformations()
     .then((res) => {
       cityMap.value = res.data.body.map((item) => {
         return {
@@ -182,7 +182,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyinfosP0(
+      putCompanyInfosP0(
         store.state.companyInformation.companyInformationId,
         formCompany
       )

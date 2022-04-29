@@ -114,8 +114,8 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  deleteCompanyinfosP0PositioninfosP1,
-  getCompanyinfosP0Positioninfos,
+  deleteCompanyInfosP0PositionInfosP1,
+  getCompanyInfosP0PositionInfos,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -136,7 +136,7 @@ const workingYears = reactive([
   "5-10年",
   "10年以上",
 ]);
-getCompanyinfosP0Positioninfos(
+getCompanyInfosP0PositionInfos(
   store.state.companyInformation.companyInformationId,
   {}
 ).then((res) => {
@@ -157,7 +157,7 @@ const updatePosition = (id: string) => {
 };
 
 const deletePosition = (id: string) => {
-  deleteCompanyinfosP0PositioninfosP1(
+  deleteCompanyInfosP0PositionInfosP1(
     store.state.companyInformation.companyInformationId,
     id
   ).then((res) => {

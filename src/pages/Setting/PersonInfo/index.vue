@@ -95,9 +95,9 @@
 <script setup lang="ts">
 import router from "@/router/index";
 import {
-  getCompanyinfosP0,
-  getHrinfosP0,
-  putHrinfosP0,
+  getCompanyInfosP0,
+  getHrInfosP0,
+  putHrInfosP0,
 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { store } from "@/stores";
@@ -109,14 +109,14 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrinfosP0(store.state.hrInformation.hrInformationId).then((res) => {
+  getHrInfosP0(store.state.hrInformation.hrInformationId).then((res) => {
     imageUrl.value = res.data.body.avatarUrl;
     formHr.hrName = res.data.body.hrName;
     formHr.postName = res.data.body.postName;
     formHr.acceptEmail = res.data.body.acceptEmail;
     formHr.phoneNumber = res.data.body.phoneNumber;
   });
-  getCompanyinfosP0(store.state.companyInformation.companyInformationId).then(
+  getCompanyInfosP0(store.state.companyInformation.companyInformationId).then(
     (res) => {
       companyName.value = res.data.body.fullName;
     }
@@ -191,7 +191,7 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrinfosP0(store.state.hrInformation.hrInformationId, formHr).then(
+      putHrInfosP0(store.state.hrInformation.hrInformationId, formHr).then(
         (res) => {
           store.commit("setCompanyInformation", res.data.body);
           ElMessage.success("修改成功");

@@ -169,7 +169,7 @@
               <el-col :span="11">
                 <el-form-item prop="weekendReleaseTime">
                   <el-select
-                    v-model="jobTypeList.weekendReleseTime"
+                    v-model="jobTypeList.weekendReleaseTime"
                     placeholder="请选择周末休息时间"
                   >
                     <el-option
@@ -250,9 +250,9 @@
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-  getCompanyinfosP0PositioninfosP1,
-  postCompanyinfosP0Positioninfos,
-  putCompanyinfosP0PositioninfosP1,
+  getCompanyInfosP0PositionInfosP1,
+  postCompanyInfosP0PositionInfos,
+  putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
@@ -338,7 +338,7 @@ const workTimeing = ref([]);
 // };
 onMounted(() => {
   if (route.params.PublishJobId) {
-    getCompanyinfosP0PositioninfosP1(
+    getCompanyInfosP0PositionInfosP1(
       store.state.companyInformation.companyInformationId,
       route.params.PublishJobId.toString()
     ).then((res) => {
@@ -362,7 +362,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
         store.state.accountInformation.hrInformationId;
       jobTypeList.value.companyInformationId =
         store.state.hrInformation.companyInformationId;
-      postCompanyinfosP0Positioninfos(
+      postCompanyInfosP0PositionInfos(
         store.state.hrInformation.companyInformationId,
         jobTypeList.value
       )
@@ -381,7 +381,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyinfosP0PositioninfosP1(
+      putCompanyInfosP0PositionInfosP1(
         store.state.companyInformation.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value
