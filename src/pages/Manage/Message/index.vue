@@ -80,7 +80,7 @@ import { ref } from "vue";
 import { useStore } from "vuex";
 import Chat from "./Chat.vue";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const condition = ref(true);
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -88,7 +88,7 @@ const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  { status: "2" }
+  { status: 2 }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {

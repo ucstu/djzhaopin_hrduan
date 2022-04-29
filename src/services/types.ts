@@ -23,6 +23,11 @@ export interface GetAreaInformationsQueryParams {
 export interface GetCompanyinfosP0DeliveryrecordsQueryParams {
   /**
    *
+   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  status: number;
+  /**
+   *
    * 年龄限制{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
    */
   age?: string;
@@ -61,11 +66,6 @@ export interface GetCompanyinfosP0DeliveryrecordsQueryParams {
    * 排序方式
    */
   sort?: string;
-  /**
-   *
-   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-   */
-  status: string;
   /**
    *
    * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
@@ -296,7 +296,7 @@ export interface GetUserinfosP0DeliveryrecordsQueryParams {
    *
    * 投递记录状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: string;
+  status: number;
   /**
    *
    * 当前页
@@ -717,7 +717,7 @@ export interface DeliveryRecord {
    * - minimum: 1
    * - max: 5
    */
-  state: 1 | 2 | 3 | 4 | 5;
+  status: 1 | 2 | 3 | 4 | 5;
   /**
    *
    * 更新时间

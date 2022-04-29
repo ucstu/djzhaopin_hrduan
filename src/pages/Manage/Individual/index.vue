@@ -87,7 +87,7 @@ const turnDown = () => {
           align-items: center;
           justify-content: center;
           width: 50%;
-          height: 100%;
+          height: 80px;
           color: rgb(0 179 139);
           text-align: center;
         }

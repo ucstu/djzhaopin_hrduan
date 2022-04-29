@@ -4,6 +4,7 @@
       <img
         src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/62345e1d5a7e3f0310ddcb3c/623446ec62a7d9001102351f/16484562558205956397.png"
         class="image"
+        alt=""
       />
     </div>
     <div class="alin">
@@ -94,13 +95,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
           getHrinfosP0(res.data.body.accountInfo.hrInformationId)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
-              router.replace("/Home");
+              if (store.state.companyInformation.companyName) {
+                router.push("/Manage");
+              } else {
+                router.replace("/Home");
+              }
             })
             .catch(failResponseHandler);
         })
         .catch(failResponseHandler);
     } else {
-      ElMessage.warning("error submit!");
+      ElMessage.warning("登录失败!");
       return false;
     }
   });

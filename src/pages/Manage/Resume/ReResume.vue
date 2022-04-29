@@ -6,7 +6,7 @@
           <div class="top">
             <div class="first-line">
               <el-select
-                v-model="valueMap.state"
+                v-model="valueMap.status"
                 class="m-2"
                 placeholder="按反馈"
               >
@@ -180,7 +180,7 @@ import { Search } from "@element-plus/icons-vue";
 import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -190,7 +190,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  {}
+  { status: 1 }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
@@ -231,7 +231,7 @@ const valueMap = ref({
    *
    * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  state: "",
+  status: 1,
   /**
    *
    * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}

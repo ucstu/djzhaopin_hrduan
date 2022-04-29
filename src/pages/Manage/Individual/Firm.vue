@@ -35,7 +35,7 @@
             </el-upload>
           </div>
         </el-form-item>
-        <el-form-item label="公司行业" prop="comprehension">
+        <el-form-item label="公司行业" prop="comprehensionName">
           <el-input
             v-model="formCompany.comprehensionName"
             :input-style="{ display: 'none' }"
@@ -101,6 +101,7 @@ import Tag from "@/pages/Home/Tag.vue";
 import { getCityinformations, putCompanyinfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { key } from "@/stores";
+import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
@@ -115,27 +116,9 @@ const dialogFormVisible = ref(false);
 const ImageUrl = ref("");
 //表格数据
 
-const formCompany = reactive<CompanyInformation>({
-  address: "",
-  about: "",
-  benefits: [],
-  cityName: "",
-  companyInformationId: "",
-  comprehensionName: "",
-  establishmentTime: "",
-  financingStage: 1,
-  fullName: "",
-  hrInformationId: "",
-  logoUrl: "",
-  companyName: "",
-  legalRepresentative: "",
-  organizationType: "",
-  recruitmentPosition: 5,
-  scale: 1,
-  registeredCapital: "",
-  createdAt: "",
-  updatedAt: "",
-});
+const formCompany = reactive<CompanyInformation>(
+  store.state.companyInformation
+);
 
 const submitData = (data: {
   data: { checked: boolean; directionName: string };
@@ -152,7 +135,9 @@ const handleAvatarError: UploadProps["onError"] = () => {
   ElMessage.error("对不起，上传失败，请重试");
 };
 const rule = reactive({
-  comprehension: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+  comprehensionName: [
+    { required: true, message: "此项不能为空", trigger: "blur" },
+  ],
   fullName: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   address: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   scale: [{ required: true, message: "此项不能为空", trigger: "blur" }],
@@ -175,25 +160,22 @@ interface cityInfo {
 }
 const cityMap = ref<cityInfo[]>([]);
 onMounted(() => {
-  getCityinformations().then((res: { data: { body: any[] } }) => {
-    cityMap.value = res.data.body.map((item) => {
-      return {
-        value: item.provinceName,
-        label: item.provinceName,
-        children: item.cities.map((city: any) => {
-          return {
-            value: city,
-            label: city,
-          };
-        }),
-      };
-    });
-  });
-  formCompany.fullName = store.state.companyInformation.fullName;
-  formCompany.logoUrl = store.state.companyInformation.logoUrl;
-  formCompany.about = store.state.companyInformation.about;
-  formCompany.address = store.state.companyInformation.address;
-  formCompany.scale = store.state.companyInformation.scale;
+  getCityinformations()
+    .then((res) => {
+      cityMap.value = res.data.body.map((item) => {
+        return {
+          value: item.provinceName,
+          label: item.provinceName,
+          children: item.cities.map((city) => {
+            return {
+              value: city,
+              label: city,
+            };
+          }),
+        };
+      });
+    })
+    .catch(failResponseHandler);
 });
 
 const updateCompany = (formEl: FormInstance | undefined) => {
@@ -229,7 +211,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
 
   .center {
     width: 90%;
-    height: 90%;
+    height: 80%;
 
     .el-form {
       display: flex;

@@ -1,10 +1,6 @@
 <template>
   <div class="content">
-    <v-chart
-      class="chart"
-      :option="option"
-      style="width: 600px; height: 400px"
-    />
+    <v-chart class="chart" :option="option" />
   </div>
 </template>
 
@@ -66,8 +62,8 @@ const option = ref({
   height: 100%;
 
   .chart {
-    width: 750px;
-    height: 300px;
+    width: 1000px;
+    height: 350px;
   }
 }
 </style>

@@ -1,5 +1,9 @@
+import { key } from "@/stores";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-
+import { useStore } from "vuex";
+const store = useStore(key);
 const leftBarRouteList: RouteRecordRaw[] = [
   {
     meta: { requiresAuth: true },
@@ -127,7 +131,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
 const unAuthRouterList: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/Login",
     meta: { requiresAuth: false },
   },
   {
@@ -146,10 +150,42 @@ const routes: Array<RouteRecordRaw> = [
   ...unAuthRouterList,
   ...leftBarRouteList,
 ];
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+NProgress.configure({ showSpinner: false });
+const whitelist = ["/Login", "/Enroll"];
+// router.beforeEach(async (to, _, next) => {
+//   NProgress.start();
+//   if (store.state.token) {
+//     console.log(1111);
+
+//     if (to.path === "/Login") {
+//       next("/Login");
+//       NProgress.done();
+//     } else {
+//       const hasGetUserInfo = store.getters.userName;
+//       if (hasGetUserInfo) {
+//         next();
+//       } else {
+//         NProgress.done();
+//         next("/Login");
+//         ElMessage.error("请先登录");
+//       }
+//     }
+//   } else {
+//     if (whitelist.indexOf(to.path)) {
+//       next();
+//     } else {
+//       next("/login");
+//       NProgress.done();
+//     }
+//   }
+// });
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;

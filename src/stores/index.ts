@@ -65,6 +65,10 @@ export const store = createStore<State>({
     addCompanyRerecruit(state: State, add: number) {
       state.companyInformation.recruitmentPosition += add;
     },
+    decreaseCompanyRerecruit(state: State, decrease: number) {
+      state.companyInformation.recruitmentPosition -= decrease;
+    },
+
     setComprise(state: State, comprise: State["comprise"]) {
       state.comprise = comprise;
     },

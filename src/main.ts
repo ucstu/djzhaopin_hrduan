@@ -6,9 +6,9 @@ import App from "./App.vue";
 import router from "./router";
 import { key, store } from "./stores";
 createApp(App)
+  .use(store, key)
   .use(router)
   .component("v-chart", ECharts)
-  .use(store, key)
   .use(ElementPlus, {
     locale: zhCn,
   })

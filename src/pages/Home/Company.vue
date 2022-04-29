@@ -223,7 +223,7 @@ const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
 //表格数据
-const formCompany = ref<CompanyInformation>({} as CompanyInformation);
+const formCompany = ref<CompanyInformation>(store.state.companyInformation);
 const cityInfo = ref([]);
 onUpdated(() => {
   if (formCompany.value) {
@@ -354,6 +354,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       formCompany.value.recruitmentPosition = 0;
+      formCompany.value.fullName = route.params.companyName.toString();
       postCompanyinfos(formCompany.value)
         .then((res) => {
           let hrInformation = store.state.hrInformation;

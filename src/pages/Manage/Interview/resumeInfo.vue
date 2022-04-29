@@ -97,7 +97,7 @@ import { key } from "@/stores";
 import { ref } from "vue";
 import { useStore } from "vuex";
 
-const VITE_CDN_URL: string | undefined | boolean = import.meta.env.VITE_CDN_URL;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -108,12 +108,12 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  {}
+  { status: 4 }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosP0(item.userInformationId).then((res) => {
-      userInformations.value.set(item.userInformationId, res.data.body);
+    getUserinfosP0(item.userInformationId).then((response) => {
+      userInformations.value.set(item.userInformationId, response.data.body);
     });
     getCompanyinfosP0PositioninfosP1(
       store.state.companyInformation.companyInformationId,

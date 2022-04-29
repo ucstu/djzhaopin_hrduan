@@ -130,13 +130,6 @@
               />
             </el-form-item>
             <el-form-item label="职位亮点" prop="highlights">
-              <!-- <el-input
-                v-model="jobTypeList.highlights"
-                placeholder="请填写职位吸引力，如发展前景、团队实力等"
-                :autosize="{ minRows: 2, maxRows: 4 }"
-                maxlength="20"
-                show-word-limit
-              /> -->
               <el-select
                 v-model="jobTypeList.highlights"
                 multiple
@@ -234,16 +227,16 @@
             </el-form-item> -->
             <el-form-item>
               <el-button
-                v-if="!route.params.positionInfoId"
+                v-if="!route.params.PublishJobId"
                 type="primary"
                 @click="publishPost(formRef)"
                 >发布职位</el-button
               >
               <el-button
-                v-if="route.params.positionInfoId"
+                v-if="route.params.PublishJobId"
                 type="primary"
                 @click="updatelishPost(formRef)"
-                >编辑职位</el-button
+                >修改职位</el-button
               >
             </el-form-item>
           </el-form>
@@ -281,7 +274,6 @@ const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]
 const workingYears = reactive([
   "不限",
   "应届毕业生",
-  "1年以下",
   "1-3年",
   "3-5年",
   "5-10年",
@@ -396,7 +388,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
       ).then((res) => {
         ElMessage.success("恭喜您，职位信息修改成功");
         store.commit("setPositionInformation", res.data.body);
-        router.replace("/Manage");
+        router.go(-1);
       });
     }
   });

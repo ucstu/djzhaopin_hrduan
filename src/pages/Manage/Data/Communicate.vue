@@ -62,8 +62,8 @@ const option = ref({
   height: 100%;
 
   .chart {
-    width: 750px;
-    height: 300px;
+    width: 1000px;
+    height: 350px;
   }
 }
 </style>

@@ -6,7 +6,7 @@
           <div class="top">
             <div class="second-line abcdefg">
               <el-select
-                v-model="valueMap.state"
+                v-model="valueMap.status"
                 class="m-2"
                 placeholder="按反馈"
               >
@@ -154,7 +154,7 @@ import { Search } from "@element-plus/icons-vue";
 import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
@@ -187,7 +187,7 @@ const valueMap = ref({
    *
    * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  state: "",
+  status: 1,
   /**
    *
    * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
@@ -196,7 +196,7 @@ const valueMap = ref({
 });
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  {}
+  { status: 2 }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {

@@ -47,7 +47,7 @@
         <div class="position">
           <el-scrollbar height="400px">
             <template v-for="position in jobTypeList" :key="position.companyId">
-              <div v-if="positionInformationId" class="position-list">
+              <div v-if="position.positionInformationId" class="position-list">
                 <div class="position-item">
                   <div class="item">
                     <span>{{ "职位:" + position.positionName }}</span>
@@ -56,11 +56,13 @@
                   <div class="item">
                     <span>{{
                       "经验和学历:" +
-                      position.workingYears +
+                      workingYears[position.workingYears] +
                       "-" +
-                      position.education
+                      educationMap[position.education]
                     }}</span>
-                    <span>{{ "招聘类型:" + position.positionType }}</span>
+                    <span>{{
+                      "招聘类型:" + slution[position.positionType]
+                    }}</span>
                   </div>
                   <div class="item">
                     <span>{{
@@ -119,11 +121,21 @@ import { PositionInformation } from "@/services/types";
 import { key } from "@/stores";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { ref, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const jobTypeList = ref<PositionInformation[]>();
 const input2 = ref("");
+const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
+const workingYears = reactive([
+  "不限",
+  "应届毕业生",
+  "1年以下",
+  "1-3年",
+  "3-5年",
+  "5-10年",
+  "10年以上",
+]);
 getCompanyinfosP0Positioninfos(
   store.state.companyInformation.companyInformationId,
   {}
@@ -143,13 +155,14 @@ const updatePosition = (id: string) => {
     params: { PublishJobId: id },
   });
 };
+
 const deletePosition = (id: string) => {
   deleteCompanyinfosP0PositioninfosP1(
     store.state.companyInformation.companyInformationId,
     id
   ).then((res) => {
     store.state.positionInformation = res.data.body;
-    positionInformationId.value = "";
+    store.commit("decreaseCompanyRerecruit", 1);
     ElMessage.success("删除成功");
   });
 };

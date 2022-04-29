@@ -173,6 +173,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
         store.state.accountInformation.hrInformationId,
         formLabelAlign
       );
+
       store.commit("setHrInformation", res.data.body);
       router.replace({
         name: "Company",

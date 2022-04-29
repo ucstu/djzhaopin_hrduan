@@ -8,9 +8,10 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  AccountInformation, AreaInformations, AttentionRecord, CityInformations, CompanyInformation, DeleteAccountinfosP0QueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyinfosP0DeliveryrecordsQueryParams, GetCompanyinfosP0PositioninfosQueryParams, GetCompanyinfosPositioninfosQueryParams, GetCompanyinfosQueryParams, GetDirectiontagsQueryParams,
-  GetHrinfosQueryParams, GetUserinfosP0AttentionrecordsQueryParams, GetUserinfosP0DeliveryrecordsQueryParams, GetUserinfosP0EduexperiencesQueryParams, GetUserinfosP0GarnerrecordsQueryParams, GetUserinfosP0InspectionrecordsQueryParams, GetUserinfosP0JobexpectationsQueryParams, GetUserinfosP0ProjectexperiencesQueryParams, GetUserinfosP0WorkexperiencesQueryParams, GetUserinfosQueryParams, GetVerificationcodeQueryParams, HrInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation,
-  PositionTypes, ProjectExperience, UserInformation, WorkExperience
+  AccountInformation, AreaInformations,
+  AttentionRecord, CityInformations, CompanyInformation, DeleteAccountinfosP0QueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyinfosP0DeliveryrecordsQueryParams, GetCompanyinfosP0PositioninfosQueryParams, GetCompanyinfosPositioninfosQueryParams, GetCompanyinfosQueryParams, GetDirectiontagsQueryParams, GetHrinfosQueryParams,
+  GetUserinfosP0AttentionrecordsQueryParams, GetUserinfosP0DeliveryrecordsQueryParams, GetUserinfosP0EduexperiencesQueryParams, GetUserinfosP0GarnerrecordsQueryParams, GetUserinfosP0InspectionrecordsQueryParams,
+  GetUserinfosP0JobexpectationsQueryParams, GetUserinfosP0ProjectexperiencesQueryParams, GetUserinfosP0WorkexperiencesQueryParams, GetUserinfosQueryParams, GetVerificationcodeQueryParams, HrInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation, PositionTypes, ProjectExperience, UserInformation, WorkExperience
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2889,7 +2890,7 @@ export const postUserinfosP0Deliveryrecords = (
      * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
      * - max: 5
      */
-    state?: 0 | 1 | 2 | 3 | 4 | 5;
+    status?: 0 | 1 | 2 | 3 | 4 | 5;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
