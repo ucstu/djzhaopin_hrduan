@@ -8,10 +8,43 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  AccountInformation, AreaInformations,
-  AttentionRecord, CityInformations, CompanyInformation, DeleteAccountinfosP0QueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyinfosP0DeliveryrecordsQueryParams, GetCompanyinfosP0PositioninfosQueryParams, GetCompanyinfosPositioninfosQueryParams, GetCompanyinfosQueryParams, GetDirectiontagsQueryParams, GetHrinfosQueryParams,
-  GetUserinfosP0AttentionrecordsQueryParams, GetUserinfosP0DeliveryrecordsQueryParams, GetUserinfosP0EduexperiencesQueryParams, GetUserinfosP0GarnerrecordsQueryParams, GetUserinfosP0InspectionrecordsQueryParams,
-  GetUserinfosP0JobexpectationsQueryParams, GetUserinfosP0ProjectexperiencesQueryParams, GetUserinfosP0WorkexperiencesQueryParams, GetUserinfosQueryParams, GetVerificationcodeQueryParams, HrInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation, PositionTypes, ProjectExperience, UserInformation, WorkExperience
+  GetUserinfosP0GarnerrecordsQueryParams,
+  GetCompanyinfosQueryParams,
+  GetUserinfosP0WorkexperiencesQueryParams,
+  GetDirectiontagsQueryParams,
+  GetUserinfosP0DeliveryrecordsQueryParams,
+  GetUserinfosP0JobexpectationsQueryParams,
+  GetUserinfosP0EduexperiencesQueryParams,
+  GetCompanyinfosP0PositioninfosQueryParams,
+  GetUserinfosQueryParams,
+  GetUserinfosP0AttentionrecordsQueryParams,
+  GetHrinfosQueryParams,
+  GetUserinfosP0ProjectexperiencesQueryParams,
+  GetUserinfosP0InspectionrecordsQueryParams,
+  DeleteAccountinfosP0QueryParams,
+  GetCompanyinfosP0DeliveryrecordsQueryParams,
+  GetVerificationcodeQueryParams,
+  GetCompanyinfosPositioninfosQueryParams,
+  GetAreaInformationsQueryParams,
+  DeliveryRecord,
+  GarnerRecord,
+  InspectionRecord,
+  CityInformations,
+  AttentionRecord,
+  PositionInformation,
+  UserInformation,
+  HrInformation,
+  FilterInformation,
+  AreaInformations,
+  CompanyInformation,
+  AccountInformation,
+  MessageRecord,
+  PositionTypes,
+  EducationExperience,
+  WorkExperience,
+  JobExpectation,
+  ProjectExperience,
+  DirectionTags,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -3107,12 +3140,6 @@ export const postUserinfosP0Projectexperiences = (
      * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
      */
     startTime: string;
-    /**
-     *
-     * 工作经历ID
-     *
-     */
-    workExperienceId: string;
     /**
      *
      * 我的成就

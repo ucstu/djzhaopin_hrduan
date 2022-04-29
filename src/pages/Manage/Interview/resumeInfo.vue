@@ -108,7 +108,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  { status: 4 }
+  { status: [4] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {

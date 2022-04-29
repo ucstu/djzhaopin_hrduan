@@ -139,7 +139,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 onMounted(() => {
   getCompanyinfosP0Deliveryrecords(
     store.state.hrInformation.companyInformationId,
-    { status: 1 }
+    { status: [1] }
   )
     .then((res) => {
       store.commit("setDeliveryRecord", res.data.body);

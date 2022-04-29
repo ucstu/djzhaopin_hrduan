@@ -161,42 +161,12 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const store = useStore(key);
 
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const valueMap = ref({
-  age: "",
-  /**
-   *
-   * 投递日期
-   */
-  deliveryDate: "",
-  /**
-   *
-   * 投递职位
-   */
-  jobId: "",
-  /**
-   *
-   * 搜索内容
-   */
-  search: "",
-  /**
-   *
-   * 性别
-   */
-  sex: "",
-  /**
-   *
-   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-   */
+const valueMap = ref<DeliveryRecord>({
   status: 1,
-  /**
-   *
-   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
-   */
-  workingYears: "",
 });
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
-  { status: 2 }
+  { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
