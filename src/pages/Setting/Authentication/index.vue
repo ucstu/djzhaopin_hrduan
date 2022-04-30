@@ -46,7 +46,7 @@ import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useStore(key);
-const imageUrl = store.state.hrInformation.avatarUrl;
+const imageUrl = store.state.companyInformation.logoUrl;
 const companyInfo = computed(() => store.state.companyInformation);
 const financingStageMap = [
   "",

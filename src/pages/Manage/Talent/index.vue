@@ -77,11 +77,13 @@
                     <el-checkbox v-model="Talent.checked" />
                     <img :src="VITE_CDN_URL + Talent.avatarUrl" alt="avatar" />
                     <div class="header-person">
-                      <span>{{ Talent.firstName + Talent.lastName }}</span>
+                      <span
+                        >{{ Talent.firstName as string + Talent.lastName }}</span
+                      >
                       <span
                         >{{ Talent.sex }}·{{ Talent.age }}岁·{{
                           Talent.education
-                        }}·{{ slution[Talent.jobStatus] }}</span
+                        }}·{{ slution[Talent.jobStatus as number +1] }}</span
                       >
                       <span
                         >想找：{{ Talent.cityName }}|{{
@@ -98,7 +100,7 @@
                   <div>
                     <el-button
                       type="primary"
-                      @click="inspectionResume(Talent.userInformationId)"
+                      @click="inspectionResume(Talent.userInformationId as string)"
                     >
                       查看简历</el-button
                     >
@@ -125,20 +127,14 @@ import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const valueMap = ref({
   age: "",
-
   deliveryDate: "",
-
   jobId: "",
-
   search: "",
-
   sex: "",
-
   state: "",
-
   workingYears: "",
 });
 const checkeds = ref(false);
@@ -148,39 +144,9 @@ const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
-const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const userInfo = ref<UserInformation>({
-  age: 0,
-  avatarUrl: "",
-  cityName: "",
-  createdAt: "",
-  dateOfBirth: "",
-  education: 1,
-  email: "",
-  firstName: "",
-  jobStatus: 1,
-  lastName: "",
-  personalAdvantage: "",
-  phoneNumber: "",
-  pictureWorks: [],
-  privacySettings: 1,
-  sex: "",
-  socialHomepage: "",
-  updatedAt: "",
-  userInformationId: "",
-  workingYears: 0,
-});
-const JobExpectative = ref<JobExpectation>({
-  ceilingSalary: 0,
-  cityName: "",
-  createdAt: "",
-  directionTags: [],
-  jobExpectationId: "",
-  positionType: 1,
-  positionName: "",
-  startingSalary: 0,
-  updatedAt: "",
-});
+const slution = ["随时入职", "2周内入职", "1月内入职"];
+const userInfo = ref<UserInformation>();
+const JobExpectative = ref<JobExpectation>();
 
 const TalentInfo = ref([
   {

@@ -88,7 +88,7 @@ import { postCompanyinfos } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { store } from "@/stores";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
 const comFormRef = ref<FormInstance>();
 const personForm = reactive({
@@ -100,39 +100,10 @@ const personForm = reactive({
   phoneNumber: "",
 });
 
-const companyForm = reactive<CompanyInformation>({
-  address: "",
-  about: "",
-  benefits: [],
-  cityName: "",
-  companyInformationId: "",
-  comprehensionName: "",
-  establishmentTime: "",
-  financingStage: 1,
-  fullName: "",
-  hrInformationId: "",
-  logoUrl: "",
-  companyName: "",
-  legalRepresentative: "",
-  organizationType: "",
-  recruitmentPosition: 5,
-  scale: 1,
-  registeredCapital: "",
-  createdAt: "",
-  updatedAt: "",
-});
-onMounted(() => {
-  personForm.name = store.state.hrInformation.hrName;
-  companyForm.fullName = store.state.companyInformation.fullName;
-  companyForm.legalRepresentative =
-    store.state.companyInformation.legalRepresentative;
-  companyForm.establishmentTime =
-    store.state.companyInformation.establishmentTime;
-  companyForm.registeredCapital =
-    store.state.companyInformation.registeredCapital;
-  companyForm.organizationType =
-    store.state.companyInformation.organizationType;
-});
+const companyForm = reactive<CompanyInformation>(
+  store.state.companyInformation
+);
+
 const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {

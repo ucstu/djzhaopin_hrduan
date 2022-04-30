@@ -9,7 +9,7 @@
         <el-tab-pane :key="Password" label="设置密码" name="Password">
           <Password />
         </el-tab-pane>
-        <el-tab-pane :key="Privary" label="隐私设置" name="Privary">
+        <el-tab-pane :key="Privary" label="注销账号" name="Privary">
           <Privary />
         </el-tab-pane>
       </el-tabs>

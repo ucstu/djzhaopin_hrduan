@@ -161,6 +161,7 @@ const deletePosition = (id: string) => {
     store.state.companyInformation.companyInformationId,
     id
   ).then((res) => {
+    console.log(res.data.body);
     store.state.positionInformation = res.data.body;
     store.commit("decreaseCompanyRerecruit", 1);
     ElMessage.success("删除成功");

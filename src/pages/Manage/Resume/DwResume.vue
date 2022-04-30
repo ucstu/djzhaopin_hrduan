@@ -18,7 +18,7 @@
                 />
               </el-select>
               <el-select
-                v-model="valueMap.jobId"
+                v-model="valueMap.positionInfoIds"
                 class="m-2"
                 placeholder="投递职位"
               >
@@ -159,11 +159,22 @@ const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const store = useStore(key);
-
-const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const valueMap = ref<DeliveryRecord>({
-  status: 1,
+interface Record {
+  status: number[];
+  ages?: string;
+  deliveryDates?: string;
+  page?: string;
+  positionInfoIds?: string;
+  search?: string;
+  sexs?: string;
+  size?: string;
+  sort?: string;
+  workingYears?: string;
+}
+const valueMap = ref<Record>({
+  status: [1],
 });
+const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
   { status: [2] }

@@ -40,12 +40,7 @@ const store = useStore(key);
 const inputVisible = ref(false);
 const InputRef = ref<InstanceType<typeof ElInput>>();
 const inputValue = ref("");
-const prise = reactive([
-  "在职位open中，请投简历",
-  "感兴趣请随时投递",
-  "我在急招，请随时投递",
-  "现在投递，我们还在求人",
-]);
+const prise = reactive(store.state.comprise);
 const addPrise = () => {
   inputVisible.value = true;
   nextTick(() => {
@@ -64,6 +59,7 @@ const handleInputConfirm = () => {
 };
 const deletePrise = (index: number) => {
   prise.splice(index, 1);
+  store.commit("setComprise", prise);
 };
 </script>
 

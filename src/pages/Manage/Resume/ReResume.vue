@@ -31,7 +31,7 @@
               </el-select>
 
               <el-date-picker
-                v-model="valueMap.deliveryDate"
+                v-model="valueMap.deliveryDates"
                 type="date"
                 placeholder="选择日期"
                 class="data-picker"
@@ -39,7 +39,7 @@
               />
             </div>
             <div class="second-line">
-              <el-select v-model="valueMap.sex" class="m-2" placeholder="性别">
+              <el-select v-model="valueMap.sexs" class="m-2" placeholder="性别">
                 <el-option
                   v-for="(item, index) in gander"
                   :key="item"
@@ -47,7 +47,7 @@
                   :value="index - 1"
                 />
               </el-select>
-              <el-select v-model="valueMap.age" class="m-2" placeholder="年龄">
+              <el-select v-model="valueMap.ages" class="m-2" placeholder="年龄">
                 <el-option
                   v-for="(item, index) in age"
                   :key="item"
@@ -187,7 +187,21 @@ const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-
+interface Record {
+  status: number[];
+  ages?: string;
+  deliveryDates?: string;
+  page?: string;
+  positionInfoIds?: string;
+  search?: string;
+  sexs?: string;
+  size?: string;
+  sort?: string;
+  workingYears?: string;
+}
+const valueMap = ref<Record>({
+  status: [1],
+});
 getCompanyinfosP0Deliveryrecords(
   store.state.companyInformation.companyInformationId,
   { status: [1] }
@@ -205,39 +219,7 @@ getCompanyinfosP0Deliveryrecords(
     });
   });
 });
-const valueMap = ref<DeliveryRecord>({
-  age: "",
-  /**
-   *
-   * 投递日期
-   */
-  deliveryDate: "",
-  /**
-   *
-   * 投递职位
-   */
-  jobId: "",
-  /**
-   *
-   * 搜索内容
-   */
-  search: "",
-  /**
-   *
-   * 性别
-   */
-  sex: "",
-  /**
-   *
-   * 状态{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-   */
-  status: 1,
-  /**
-   *
-   * 工作经验{0:经验不限,1:在校/应届,2:3年及以下,3:3-5年,4:5-10年,5:10年以上}
-   */
-  workingYears: "",
-});
+
 const inspectionResume = (id: string) => {
   router.push({
     name: "Resume",
