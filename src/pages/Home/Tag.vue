@@ -45,7 +45,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getPositiontypes } from "@/services/services";
+import { getPositionTypes } from "@/services/services";
 import { onMounted, reactive, ref } from "vue";
 const emit = defineEmits(["submit-data"]);
 interface PositionType {
@@ -65,7 +65,7 @@ const changeDirection = (direction: { checked: boolean }) => {
 const checkableJobTypes = ref<PositionType[]>([]);
 const checkableDirections = ref<PositionType["directions"]>([]);
 onMounted(() => {
-  getPositiontypes().then((res) => {
+  getPositionTypes().then((res) => {
     checkableJobTypes.value = res.data.body.map(
       (jobType: { directions: any[]; fieldName: any }) => {
         const _checkableDirections = jobType.directions.map(

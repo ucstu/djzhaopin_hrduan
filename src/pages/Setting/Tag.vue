@@ -49,7 +49,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getPositiontypes } from "@/services/services";
+import { getPositionTypes } from "@/services/services";
 import { onMounted, reactive, ref } from "vue";
 
 interface PositionType {
@@ -68,7 +68,7 @@ const checkableJobTypes = ref<PositionType[]>([]);
 const checkablePositions = ref<PositionType["directions"][0]["positions"]>([]);
 
 onMounted(() => {
-  getPositiontypes().then((res) => {
+  getPositionTypes().then((res) => {
     checkableJobTypes.value = res.data.body.map((jobType) => {
       const checkableDirections = jobType.directions.map((direction) => {
         const _checkablePositions = direction.positions.map((position) => {

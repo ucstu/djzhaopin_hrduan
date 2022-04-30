@@ -166,9 +166,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCompanyinfosP0Deliveryrecords,
-  getCompanyinfosP0PositioninfosP1,
-  getUserinfosP0,
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -187,31 +187,17 @@ const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-interface Record {
-  status: number[];
-  ages?: string;
-  deliveryDates?: string;
-  page?: string;
-  positionInfoIds?: string;
-  search?: string;
-  sexs?: string;
-  size?: string;
-  sort?: string;
-  workingYears?: string;
-}
-const valueMap = ref<Record>({
-  status: [1],
-});
-getCompanyinfosP0Deliveryrecords(
+
+getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
   { status: [1] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosP0(item.userInformationId).then((response) => {
+    getUserInfosP0(item.userInformationId).then((response) => {
       userInformations.value.set(item.userInformationId, response.data.body);
     });
-    getCompanyinfosP0PositioninfosP1(
+    getCompanyInfosP0PositionInfosP1(
       store.state.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((respones) => {
@@ -229,16 +215,16 @@ const inspectionResume = (id: string) => {
   });
 };
 onUpdated(() => {
-  getCompanyinfosP0Deliveryrecords(
+  getCompanyInfosP0DeliveryRecords(
     store.state.companyInformation.companyInformationId,
     valueMap.value
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserinfosP0(item.userInformationId).then((response) => {
+      getUserInfosP0(item.userInformationId).then((response) => {
         userInformations.value.set(item.userInformationId, response.data.body);
       });
-      getCompanyinfosP0PositioninfosP1(
+      getCompanyInfosP0PositionInfosP1(
         store.state.companyInformation.companyInformationId,
         item.positionInformationId
       ).then((resposable) => {

@@ -110,9 +110,9 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
-  getCompanyinfosP0Deliveryrecords,
-  getCompanyinfosP0PositioninfosP1,
-  getUserinfosP0,
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -151,7 +151,7 @@ const valueMap = ref<Record>({
   status: [1],
 });
 onMounted(() => {
-  getCompanyinfosP0Deliveryrecords(
+  getCompanyInfosP0DeliveryRecords(
     store.state.hrInformation.companyInformationId,
     valueMap.value
   )
@@ -159,7 +159,7 @@ onMounted(() => {
       store.commit("setDeliveryRecord", res.data.body);
       interviewNum.value = res.data.body;
       interviewNum.value.forEach((item) => {
-        getCompanyinfosP0PositioninfosP1(
+        getCompanyInfosP0PositionInfosP1(
           store.state.hrInformation.companyInformationId,
           item.positionInformationId
         ).then((response) => {
@@ -168,7 +168,7 @@ onMounted(() => {
             response.data.body
           );
         });
-        getUserinfosP0(item.userInformationId).then((responseable) => {
+        getUserInfosP0(item.userInformationId).then((responseable) => {
           userInformations.value.set(
             item.userInformationId,
             responseable.data.body

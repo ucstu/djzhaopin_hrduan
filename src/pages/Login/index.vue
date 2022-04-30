@@ -47,7 +47,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { getAxiosInstance } from "@/services/config";
-import { getHrinfosP0, postAccountinfosLogin } from "@/services/services";
+import { getHrInfosP0, postAccountInfosLogin } from "@/services/services";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
@@ -86,13 +86,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postAccountinfosLogin(ruleForm)
+      postAccountInfosLogin(ruleForm)
         .then((res) => {
           store.commit("setToken", res.data.body.token);
           store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
-          getHrinfosP0(res.data.body.accountInfo.hrInformationId)
+          getHrInfosP0(res.data.body.accountInfo.hrInformationId)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
               if (store.state.companyInformation.companyName) {

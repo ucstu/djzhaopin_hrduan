@@ -66,9 +66,9 @@
 
 <script setup lang="ts">
 import {
-  getCompanyinfosP0Deliveryrecords,
-  getCompanyinfosP0PositioninfosP1,
-  getUserinfosP0,
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -86,16 +86,16 @@ const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-getCompanyinfosP0Deliveryrecords(
+getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
   { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
-    getUserinfosP0(item.userInformationId).then((res) => {
+    getUserInfosP0(item.userInformationId).then((res) => {
       userInformations.value.set(item.userInformationId, res.data.body);
     });
-    getCompanyinfosP0PositioninfosP1(
+    getCompanyInfosP0PositionInfosP1(
       store.state.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((res) => {

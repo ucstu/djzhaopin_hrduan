@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { getVerificationcode, putAccountinfosP0 } from "@/services/services";
+import { getVerificationCode, putAccountInfosP0 } from "@/services/services";
 import { key } from "@/stores";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
@@ -98,7 +98,7 @@ const ruleForm = reactive<rlueAccount>({
 });
 
 const postverificationCode = () => {
-  getVerificationcode({
+  getVerificationCode({
     phoneNumber: store.state.hrInformation.phoneNumber,
   }).then((res) => {
     ElMessage.success("发送成功");
@@ -119,7 +119,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAccountinfosP0(
+      putAccountInfosP0(
         store.state.accountInformation.accountInformationId,
         ruleForm
       ).then((res: { status: number }) => {
