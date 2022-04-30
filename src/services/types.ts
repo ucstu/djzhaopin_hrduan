@@ -244,6 +244,12 @@ export interface DeleteAccountInfosP0QueryParams {
 export interface DeliveryRecord {
   /**
    *
+   * 公司信息ID
+   *
+   */
+  companyInformationId: string;
+  /**
+   *
    * 创建时间
    *
    */
@@ -494,7 +500,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof DeliveryRecord},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   /**
    *
    * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
@@ -557,12 +563,12 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof PositionInformation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof PositionInformation},${"asc" | "desc"}`>;
   /**
    *
    * 工作区县名数组，eg：[合川,永川]
    */
-  workareas?: Array<string>;
+  workAreas?: Array<string>;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -630,12 +636,12 @@ export interface GetCompanyInfosPositionInfosQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof PositionInformation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof PositionInformation},${"asc" | "desc"}`>;
   /**
    *
    * 工作区县名数组，eg：[合川,永川]
    */
-  workareas?: Array<string>;
+  workAreas?: Array<string>;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -663,7 +669,7 @@ export interface GetCompanyInfosQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof CompanyInformation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof CompanyInformation},${"asc" | "desc"}`>;
 }
 
 export interface GetDirectionTagsQueryParams {
@@ -689,7 +695,7 @@ export interface GetHrInfosQueryParams {
    *
    * 排序方式
    */
-  sort?: Array<`${keyof HrInformation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof HrInformation},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0AttentionRecordsQueryParams {
@@ -707,7 +713,7 @@ export interface GetUserInfosP0AttentionRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof AttentionRecord},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof AttentionRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0DeliveryRecordsQueryParams {
@@ -730,7 +736,7 @@ export interface GetUserInfosP0DeliveryRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof DeliveryRecord},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0EduExperiencesQueryParams {
@@ -748,7 +754,7 @@ export interface GetUserInfosP0EduExperiencesQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof EducationExperience},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof EducationExperience},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0GarnerRecordsQueryParams {
@@ -766,7 +772,7 @@ export interface GetUserInfosP0GarnerRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof GarnerRecord},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof GarnerRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0InspectionRecordsQueryParams {
@@ -784,7 +790,7 @@ export interface GetUserInfosP0InspectionRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof InspectionRecord},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof InspectionRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0JobExpectationsQueryParams {
@@ -802,7 +808,7 @@ export interface GetUserInfosP0JobExpectationsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof JobExpectation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof JobExpectation},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0ProjectExperiencesQueryParams {
@@ -820,7 +826,7 @@ export interface GetUserInfosP0ProjectExperiencesQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof ProjectExperience},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof ProjectExperience},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0WorkExperiencesQueryParams {
@@ -838,7 +844,7 @@ export interface GetUserInfosP0WorkExperiencesQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof WorkExperience},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof WorkExperience},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosQueryParams {
@@ -856,7 +862,7 @@ export interface GetUserInfosQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof UserInformation},${"desc" | "asc"}`>;
+  sort?: Array<`${keyof UserInformation},${"asc" | "desc"}`>;
 }
 
 export interface GetVerificationCodeQueryParams {

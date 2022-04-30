@@ -8,43 +8,43 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  AccountInformation,
-  AreaInformations,
-  AttentionRecord,
-  CityInformations,
-  CompanyInformation,
-  DeleteAccountInfosP0QueryParams,
-  DeliveryRecord,
-  DirectionTags,
-  EducationExperience,
-  FilterInformation,
-  GarnerRecord,
-  GetAreaInformationsQueryParams,
-  GetCompanyInfosP0DeliveryRecordsQueryParams,
-  GetCompanyInfosP0PositionInfosQueryParams,
-  GetCompanyInfosPositionInfosQueryParams,
-  GetCompanyInfosQueryParams,
-  GetDirectionTagsQueryParams,
-  GetHrInfosQueryParams,
-  GetUserInfosP0AttentionRecordsQueryParams,
-  GetUserInfosP0DeliveryRecordsQueryParams,
-  GetUserInfosP0EduExperiencesQueryParams,
+  GetUserInfosP0ProjectExperiencesQueryParams,
   GetUserInfosP0GarnerRecordsQueryParams,
   GetUserInfosP0InspectionRecordsQueryParams,
+  DeleteAccountInfosP0QueryParams,
+  GetCompanyInfosQueryParams,
+  GetUserInfosP0DeliveryRecordsQueryParams,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
   GetUserInfosP0JobExpectationsQueryParams,
-  GetUserInfosP0ProjectExperiencesQueryParams,
+  GetDirectionTagsQueryParams,
+  GetUserInfosP0AttentionRecordsQueryParams,
   GetUserInfosP0WorkExperiencesQueryParams,
-  GetUserInfosQueryParams,
+  GetCompanyInfosP0PositionInfosQueryParams,
+  GetAreaInformationsQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  GetHrInfosQueryParams,
   GetVerificationCodeQueryParams,
-  HrInformation,
+  GetCompanyInfosPositionInfosQueryParams,
+  GetUserInfosQueryParams,
+  AttentionRecord,
   InspectionRecord,
   JobExpectation,
-  MessageRecord,
   PositionInformation,
-  PositionTypes,
-  ProjectExperience,
+  EducationExperience,
+  DeliveryRecord,
+  HrInformation,
+  CompanyInformation,
   UserInformation,
+  AreaInformations,
+  ProjectExperience,
   WorkExperience,
+  PositionTypes,
+  AccountInformation,
+  FilterInformation,
+  MessageRecord,
+  GarnerRecord,
+  CityInformations,
+  DirectionTags,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2883,6 +2883,12 @@ export const postUserInfosP0DeliveryRecords = (
    */
   userInfoId: string,
   requestBody: {
+    /**
+     *
+     * 公司信息ID
+     *
+     */
+    companyInformationId: string;
     /**
      *
      * 职位信息ID
