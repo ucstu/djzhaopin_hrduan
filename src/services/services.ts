@@ -8,9 +8,43 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  AccountInformation, AreaInformations, AttentionRecord, CityInformations, CompanyInformation, DeleteAccountInfosP0QueryParams, DeliveryRecord, DirectionTags, EducationExperience, FilterInformation, GarnerRecord, GetAreaInformationsQueryParams, GetCompanyInfosP0DeliveryRecordsQueryParams, GetCompanyInfosP0PositionInfosQueryParams, GetCompanyInfosPositionInfosQueryParams, GetCompanyInfosQueryParams, GetDirectionTagsQueryParams, GetHrInfosQueryParams, GetUserInfosP0AttentionRecordsQueryParams, GetUserInfosP0DeliveryRecordsQueryParams, GetUserInfosP0EduExperiencesQueryParams,
-  GetUserInfosP0GarnerRecordsQueryParams, GetUserInfosP0InspectionRecordsQueryParams, GetUserInfosP0JobExpectationsQueryParams, GetUserInfosP0ProjectExperiencesQueryParams, GetUserInfosP0WorkExperiencesQueryParams, GetUserInfosQueryParams, GetVerificationCodeQueryParams, HrInformation, InspectionRecord, JobExpectation, MessageRecord, PositionInformation, PositionTypes, ProjectExperience,
-  UserInformation, WorkExperience
+  AccountInformation,
+  AreaInformations,
+  AttentionRecord,
+  CityInformations,
+  CompanyInformation,
+  DeleteAccountInfosP0QueryParams,
+  DeliveryRecord,
+  DirectionTags,
+  EducationExperience,
+  FilterInformation,
+  GarnerRecord,
+  GetAreaInformationsQueryParams,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
+  GetCompanyInfosP0PositionInfosQueryParams,
+  GetCompanyInfosPositionInfosQueryParams,
+  GetCompanyInfosQueryParams,
+  GetDirectionTagsQueryParams,
+  GetHrInfosQueryParams,
+  GetUserInfosP0AttentionRecordsQueryParams,
+  GetUserInfosP0DeliveryRecordsQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  GetUserInfosP0GarnerRecordsQueryParams,
+  GetUserInfosP0InspectionRecordsQueryParams,
+  GetUserInfosP0JobExpectationsQueryParams,
+  GetUserInfosP0ProjectExperiencesQueryParams,
+  GetUserInfosP0WorkExperiencesQueryParams,
+  GetUserInfosQueryParams,
+  GetVerificationCodeQueryParams,
+  HrInformation,
+  InspectionRecord,
+  JobExpectation,
+  MessageRecord,
+  PositionInformation,
+  PositionTypes,
+  ProjectExperience,
+  UserInformation,
+  WorkExperience
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2849,6 +2883,12 @@ export const postUserInfosP0DeliveryRecords = (
    */
   userInfoId: string,
   requestBody: {
+    /**
+     *
+     * 公司信息ID
+     *
+     */
+    companyInformationId: string;
     /**
      *
      * 职位信息ID
