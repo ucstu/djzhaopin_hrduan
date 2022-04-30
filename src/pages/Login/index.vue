@@ -47,12 +47,17 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { getAxiosInstance } from "@/services/config";
-import { getHrInfosP0, postAccountInfosLogin } from "@/services/services";
+import {
+  getCompanyInfosP0,
+  getHrInfosP0,
+  postAccountInfosLogin,
+} from "@/services/services";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { useStore } from "vuex";
+
 const store = useStore(key);
 const ruleFormRef = ref<FormInstance>();
 const validatePass = (rule: any, value: any, callback: any) => {
@@ -91,20 +96,26 @@ const submitForm = (formEl: FormInstance | undefined) => {
           store.commit("setToken", res.data.body.token);
           store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-            "Bearer " + res.data.body.token;
-          getHrInfosP0(res.data.body.accountInfo.hrInformationId)
-            .then((response) => {
-              store.commit("setHrInformation", response.data.body);
-              if (
-                store.state.hrInformation.hrName &&
-                store.state.companyInformation.benefits
-              ) {
-                router.push("/Manage");
+            "Bearer " + store.state.token;
+          getHrInfosP0(store.state.accountInformation.hrInformationId).then(
+            (res) => {
+              if (res.data.body.hrName != null) {
+                if (res.data.body.companyInformationId != null) {
+                  getCompanyInfosP0(res.data.body.companyInformationId).then(
+                    (res) => {
+                      store.commit("setCompanyInformation", res.data.body);
+                      router.replace("/Manage");
+                    }
+                  );
+                } else {
+                  store.commit("setHrInformation", res.data.body);
+                  router.replace("/Home/Company");
+                }
               } else {
                 router.replace("/Home");
               }
-            })
-            .catch(failResponseHandler);
+            }
+          );
         })
         .catch(failResponseHandler);
     } else {

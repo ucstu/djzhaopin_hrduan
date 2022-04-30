@@ -12,7 +12,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     children: [
       {
         name: "Company",
-        path: "Company/:companyName",
+        path: "Company/:companyName?",
         component: () => import("../pages/Home/Company.vue"),
       },
       {

@@ -387,7 +387,6 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
         jobTypeList.value
       ).then((res) => {
         ElMessage.success("恭喜您，职位信息修改成功");
-        store.commit("setPositionInformation", res.data.body);
         router.go(-1);
       });
     }

@@ -9,7 +9,7 @@
         class="demo-ruleForm"
         style="max-width: 500px"
       >
-        <el-form-item label="头像" prop="name">
+        <el-form-item label="头像">
           <div class="avatar">
             <el-upload
               ref="uploadRef"
@@ -41,17 +41,14 @@
             </span>
           </div>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="姓名" prop="hrName">
           <el-input
             v-model="formHr.hrName"
             placeholder="请填写你工作中的名字，便于向求职者展示"
           />
         </el-form-item>
-        <el-form-item label="职位" prop="post">
+        <el-form-item label="职位" prop="postName">
           <el-input v-model="formHr.postName" placeholder="请填写职位信息" />
-        </el-form-item>
-        <el-form-item label="公司" prop="fullName">
-          <el-input v-model="companyName" placeholder="请填写公司信息" />
         </el-form-item>
         <el-form-item label="手机" prop="phoneNumber">
           <el-input
@@ -94,13 +91,10 @@
 </template>
 <script setup lang="ts">
 import router from "@/router/index";
-import {
-  getCompanyInfosP0,
-  getHrInfosP0,
-  putHrInfosP0,
-} from "@/services/services";
+import { getHrInfosP0, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { store } from "@/stores";
+import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
@@ -116,11 +110,6 @@ onMounted(() => {
     formHr.acceptEmail = res.data.body.acceptEmail;
     formHr.phoneNumber = res.data.body.phoneNumber;
   });
-  getCompanyInfosP0(store.state.companyInformation.companyInformationId).then(
-    (res) => {
-      companyName.value = res.data.body.fullName;
-    }
-  );
 });
 const formHr = reactive<HrInformation>({
   avatarUrl: "",
@@ -133,9 +122,9 @@ const formHr = reactive<HrInformation>({
   updatedAt: "",
   companyInformationId: "",
 });
-const companyName = ref("");
+
 const rules = reactive({
-  name: [
+  hrName: [
     {
       required: true,
       message: "此项不能为空",
@@ -150,7 +139,7 @@ const rules = reactive({
       trigger: "blur",
     },
   ],
-  post: [
+  postName: [
     {
       required: true,
       message: "请输入职位",
@@ -191,12 +180,12 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrInfosP0(store.state.hrInformation.hrInformationId, formHr).then(
-        (res) => {
+      putHrInfosP0(store.state.hrInformation.hrInformationId, formHr)
+        .then((res) => {
           store.commit("setCompanyInformation", res.data.body);
           ElMessage.success("修改成功");
-        }
-      );
+        })
+        .catch(failResponseHandler);
     }
   });
 };

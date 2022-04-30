@@ -58,7 +58,7 @@
         </el-form-item>
         <el-form-item label="所在城市" style="width: auto">
           <el-cascader
-            v-model="formCompany.cityName"
+            v-model="cityInfo"
             :options="cityMap"
             placeholder="请选择"
             style="width: 411px"
@@ -104,7 +104,7 @@ import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -119,7 +119,12 @@ const ImageUrl = ref("");
 const formCompany = reactive<CompanyInformation>(
   store.state.companyInformation
 );
-
+const cityInfo = ref([]);
+onUpdated(() => {
+  if (formCompany) {
+    formCompany.cityName = cityInfo.value.toString();
+  }
+});
 const submitData = (data: {
   data: { checked: boolean; directionName: string };
 }) => {
@@ -190,9 +195,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
           ElMessage.success("修改成功");
           store.commit("setCompanyInformation", res.data.body);
         })
-        .catch((reject) => {
-          ElMessage.error(reject.response.data.message);
-        });
+        .catch(failResponseHandler);
     }
   });
 };

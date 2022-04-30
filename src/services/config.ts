@@ -3,14 +3,45 @@
  *
  * @version 5
  */
+
+// @ts-nocheck
+
 import Axios, {
   AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse,
+  AxiosResponse
 } from "axios";
+import httpAdapter from "axios/lib/adapters/http";
+import settle from "axios/lib/core/settle";
+import { ElLoading } from "element-plus";
 //@ts-ignore
 import qs from "qs";
+
+Axios.defaults.adapter = function (config) {
+  return new Promise((resolve, reject) => {
+    let loading;
+    const timer = setTimeout(() => {
+      loading = ElLoading.service({
+        lock: true,
+        text: "Loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+    }, 500);
+    return httpAdapter(config)
+      .then((result) => {
+        // We would have more logic here in the production code
+        clearTimeout(timer);
+        loading?.close();
+        settle(resolve, reject, result);
+      })
+      .catch((error) => {
+        clearTimeout(timer);
+        loading?.close();
+        reject(error);
+      });
+  });
+};
 
 const baseConfig: AxiosRequestConfig = {
   baseURL: (import.meta.env.VITE_BASE_URL as string) || "", // <--- Add your base url

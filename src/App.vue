@@ -1,22 +1,7 @@
 <template>
   <router-view />
 </template>
-<script setup lang="ts">
-import { key } from "@/stores";
-import { onMounted } from "vue";
-import { useStore } from "vuex";
-import router from "./router";
-import { getAxiosInstance } from "./services/config";
-const store = useStore(key);
-onMounted(() => {
-  if (store.state.token === "") {
-    router.push("/login");
-    return;
-  }
-  getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-    "Bearer " + store.state.token;
-});
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss">
 /************************************************************
