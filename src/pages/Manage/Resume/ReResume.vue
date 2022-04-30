@@ -14,7 +14,7 @@
                   v-for="(item, index) in feedbackMap"
                   :key="item"
                   :label="item"
-                  :value="index - 1"
+                  :value="[index + 1]"
                 />
               </el-select>
               <el-select
@@ -26,7 +26,7 @@
                   v-for="(item, index) in workExperience"
                   :key="item"
                   :label="item"
-                  :value="index - 1"
+                  :value="index + 1"
                 />
               </el-select>
 
@@ -179,7 +179,19 @@ import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
 import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
-
+interface Record {
+  status: number[];
+  ages?: string;
+  deliveryDates?: string;
+  page?: string;
+  positionInfoIds?: string;
+  search?: string;
+  sexs?: string;
+  size?: string;
+  sort?: string;
+  workingYears?: string;
+}
+const valueMap = ref<Record>({ status: [2] } as Record);
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -190,7 +202,7 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 
 getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
-  { status: [1] }
+  { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
@@ -217,7 +229,7 @@ const inspectionResume = (id: string) => {
 onUpdated(() => {
   getCompanyInfosP0DeliveryRecords(
     store.state.companyInformation.companyInformationId,
-    valueMap.value
+    { status: [1] }
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {

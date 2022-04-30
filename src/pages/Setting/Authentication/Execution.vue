@@ -84,9 +84,10 @@
 </template>
 
 <script setup lang="ts">
-import { postCompanyInfos } from "@/services/services";
+import { putCompanyInfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { store } from "@/stores";
+import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 
@@ -108,14 +109,15 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postCompanyInfos(companyForm)
+      putCompanyInfosP0(
+        store.state.companyInformation.companyInformationId,
+        companyForm
+      )
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.commit("setCompanyInformation", res.data.body);
         })
-        .catch((err) => {
-          ElMessage.error(err.message);
-        });
+        .catch(failResponseHandler);
     }
   });
 };

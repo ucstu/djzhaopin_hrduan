@@ -136,24 +136,24 @@ const num = ref({
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 interface Record {
-  status: number[];
-  ages?: string;
-  deliveryDates?: string;
-  page?: string;
-  positionInfoIds?: string;
+  status: Array<1 | 2 | 3 | 4 | 5>;
+  ages?: Array<1 | 2 | 3 | 4 | 5>;
+  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  page?: number;
+  positionInfoIds?: Array<string>;
   search?: string;
-  sexs?: string;
-  size?: string;
-  sort?: string;
-  workingYears?: string;
+  sexs?: Array<"男" | "女" | "未知">;
+  size?: number;
+  sort?: Array<`${keyof DeliveryRecord},${"desc" | "asc"}`>;
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
 const valueMap = ref<Record>({
   status: [1],
-});
+} as Record);
 onMounted(() => {
   getCompanyInfosP0DeliveryRecords(
     store.state.hrInformation.companyInformationId,
-    valueMap.value
+    { status: [1] }
   )
     .then((res) => {
       store.commit("setDeliveryRecord", res.data.body);

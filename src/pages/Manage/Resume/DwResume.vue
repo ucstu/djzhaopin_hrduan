@@ -199,7 +199,7 @@ const checked1 = ref(false);
 onUpdated(() => {
   getCompanyInfosP0DeliveryRecords(
     store.state.companyInformation.companyInformationId,
-    valueMap.value
+    { status: [1] }
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {

@@ -86,7 +86,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
       },
       {
         name: "Resume",
-        path: "Resume/:userId?",
+        path: "Resume/:userId",
         component: () => import("../pages/Manage/Resume/index.vue"),
       },
       {
@@ -130,7 +130,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
 const unAuthRouterList: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/Login",
+    redirect: "/login",
     meta: { requiresAuth: false },
   },
   {
@@ -158,7 +158,7 @@ NProgress.configure({ showSpinner: false });
 const whitelist = ["/Login", "/Enroll"];
 router.beforeEach(async (to, _, next) => {
   NProgress.start();
-  if (store.state.token) {
+  if (to.meta.requiresAuth && store.state.token) {
     if (to.path === "/Login") {
       next("/Login");
       NProgress.done();

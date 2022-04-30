@@ -7,7 +7,7 @@
             <div class="info-left">
               <div class="left-item">
                 <span>招聘中</span>
-                <div class="circle">{{ jobTypeList?.length }}</div>
+                <div class="circle">{{ jobTypeList?.length || "0" }}</div>
               </div>
               <!-- <div class="left-item">
                 <span>暂停中</span>
@@ -32,7 +32,7 @@
         <div class="state">
           <div class="state-left">
             <span>展示状态</span>
-            <span>全部({{ jobTypeList?.length }})</span>
+            <span>全部({{ jobTypeList?.length || "0" }})</span>
           </div>
           <div>
             <el-input
@@ -161,7 +161,6 @@ const deletePosition = (id: string) => {
     store.state.companyInformation.companyInformationId,
     id
   ).then((res) => {
-    console.log(res.data.body);
     store.state.positionInformation = res.data.body;
     store.commit("decreaseCompanyRerecruit", 1);
     ElMessage.success("删除成功");

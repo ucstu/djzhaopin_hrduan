@@ -114,7 +114,7 @@ if (typeof route.params.userId === "string") {
 
 getCompanyInfosP0PositionInfosP1(
   store.state.companyInformation.companyInformationId,
-  store.state.deliveryRecord.positionInformationId
+  store.state.positionInformation.positionInformationId
 ).then((res) => {
   positionInfo.value = res.data.body;
 });

@@ -34,12 +34,16 @@
 import { key } from "@/stores";
 import { Plus } from "@element-plus/icons-vue";
 import { ElInput, ElMessage } from "element-plus";
-import { nextTick, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const inputVisible = ref(false);
 const InputRef = ref<InstanceType<typeof ElInput>>();
 const inputValue = ref("");
+const chang = reactive([
+  "收到简历后我们会尽快评估",
+  "方便发一份你的简历过来吗？",
+]);
 const prise = reactive(store.state.comprise);
 const addPrise = () => {
   inputVisible.value = true;
@@ -47,6 +51,12 @@ const addPrise = () => {
     InputRef.value!.input!.focus();
   });
 };
+onMounted(() => {
+  if (!store.state.comprise[0]) {
+    prise.push(...chang);
+  }
+});
+
 const handleInputConfirm = () => {
   if (inputValue.value && prise.length < 16) {
     prise.unshift(inputValue.value);

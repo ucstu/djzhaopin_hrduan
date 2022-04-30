@@ -95,7 +95,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
           getHrInfosP0(res.data.body.accountInfo.hrInformationId)
             .then((response) => {
               store.commit("setHrInformation", response.data.body);
-              if (store.state.companyInformation.companyName) {
+              if (
+                store.state.hrInformation.hrName &&
+                store.state.companyInformation.benefits
+              ) {
                 router.push("/Manage");
               } else {
                 router.replace("/Home");
