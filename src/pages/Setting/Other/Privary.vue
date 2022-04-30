@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { deleteAccountinfosP0, getVerificationcode } from "@/services/services";
+import { deleteAccountInfosP0, getVerificationCode } from "@/services/services";
 import { key } from "@/stores";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
@@ -52,7 +52,7 @@ const ruleForm = reactive({
 });
 
 const postverificationCode = () => {
-  getVerificationcode({
+  getVerificationCode({
     phoneNumber: store.state.hrInformation.phoneNumber,
   }).then((res) => {
     ElMessage.success("发送成功");
@@ -73,7 +73,7 @@ const deleteForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      deleteAccountinfosP0(
+      deleteAccountInfosP0(
         store.state.accountInformation.accountInformationId,
         { verificationCode: ruleForm.verificationCode }
       ).then((response) => {
