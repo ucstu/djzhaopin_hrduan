@@ -100,7 +100,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
           getHrInfosP0(store.state.accountInformation.hrInformationId).then(
             (res) => {
               if (res.data.body.hrName != null) {
-                if (res.data.body.companyInformationId != null) {
+                if (res.data.body.companyInformationId) {
                   getCompanyInfosP0(res.data.body.companyInformationId).then(
                     (res) => {
                       store.commit("setCompanyInformation", res.data.body);

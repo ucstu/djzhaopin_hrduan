@@ -109,12 +109,7 @@
               </template>
             </el-scrollbar>
           </div>
-          <div class="footer">
-            <el-checkbox :checked="checkeds" label="全选" size="large" />
-            <el-button type="primary">面试邀请</el-button>
-            <el-button type="primary" plain>删除简历</el-button>
-            <el-button type="primary" plain>导出简历</el-button>
-          </div>
+          <ResumeFooter />
         </div>
       </div>
     </div>
@@ -126,6 +121,7 @@ import router from "@/router";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
+import ResumeFooter from "../Resume/ResumeFooter.vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const valueMap = ref({
@@ -283,13 +279,6 @@ const inspectionResume = (id: string) => {
               margin-right: 20px;
             }
           }
-        }
-
-        .footer {
-          display: flex;
-          justify-content: space-between;
-          width: 40%;
-          margin-top: 80px;
         }
       }
     }

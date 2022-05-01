@@ -470,7 +470,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 投递日期数组，eg：["2007-02-22","2007-02-23"]
    */
-  deliveryDates?: string;
+  deliveryDates?: string[];
   /**
    *
    * 当前页，eg：0

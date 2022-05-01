@@ -31,10 +31,11 @@
 
 <script setup lang="ts">
 import { key } from "@/stores";
+import { toRefs } from "vue";
 import { useStore } from "vuex";
 const store = useStore(key);
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const { hrName, avatarUrl } = store.state.hrInformation;
+const { hrName, avatarUrl } = toRefs(store.state.hrInformation);
 </script>
 
 <style scoped lang="scss">

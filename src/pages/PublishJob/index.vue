@@ -328,7 +328,6 @@ const rules = reactive({
     },
   ],
 });
-const workTimeing = ref([]);
 // const submitData = (data: {
 //   data: { checked: any; directionName: string };
 // }) => {
@@ -346,6 +345,7 @@ onMounted(() => {
     });
   }
 });
+const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useTime(val[0]);
   let endTime = useTime(val[1]);

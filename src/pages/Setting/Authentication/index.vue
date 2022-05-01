@@ -5,7 +5,7 @@
       <div class="line"></div>
       <div class="information">
         <img :src="VITE_CDN_URL + imageUrl" alt="加载失败" />
-        <div v-if="companyInfo.legalRepresentative" class="comfirm">
+        <div v-if="companyInfo.establishmentTime" class="comfirm">
           <div class="comfirm-item">
             <span>{{ companyInfo.fullName }}</span>
             <div class="infos-bottom">

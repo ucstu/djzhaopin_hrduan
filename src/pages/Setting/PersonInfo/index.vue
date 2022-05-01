@@ -182,7 +182,7 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
     if (valid) {
       putHrInfosP0(store.state.hrInformation.hrInformationId, formHr)
         .then((res) => {
-          store.commit("setCompanyInformation", res.data.body);
+          store.commit("setHrInformation", res.data.body);
           ElMessage.success("修改成功");
         })
         .catch(failResponseHandler);

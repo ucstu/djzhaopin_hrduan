@@ -7,17 +7,35 @@
             <div class="first-line">
               <h1>面试时间：</h1>
               <el-date-picker
+                v-model="workTimeing"
                 type="daterange"
-                range-separator="To"
+                range-separator="到"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
+                @change="handleWorkTimeChange(workTimeing)"
               />
             </div>
           </div>
-          <ResumeInfo />
+          <div class="resume">
+            <el-scrollbar height="400px">
+              <ResumeInfo
+                :user-informations="userInformations"
+                :job-informations="jobInformations"
+                :delivery-records="deliveryRecords"
+                :checked1="checked1"
+              />
+            </el-scrollbar>
+          </div>
           <div class="footer">
-            <el-checkbox v-model="checked1" label="全选" size="large" />
-            <el-button type="primary">邀请面试</el-button>
+            <div>
+              <el-checkbox v-model="checked1" label="全选" size="large" />
+              <el-button type="primary">邀请面试</el-button>
+            </div>
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :total="total"
+            />
           </div>
         </div>
       </div>
@@ -26,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+import useDate from "@/hooks/useDate";
 import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
@@ -37,6 +56,7 @@ import {
   UserInformation,
 } from "@/services/types";
 import { key } from "@/stores";
+import { computed } from "@vue/reactivity";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import ResumeInfo from "./resumeInfo.vue";
@@ -45,10 +65,22 @@ const deliveryRecords = ref<DeliveryRecord[]>([]);
 const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const workTimeing = ref([]);
+const deliveryDates = ref(["", ""]);
+const handleWorkTimeChange = (val: Array<string>) => {
+  let startTime = useDate(val[0]);
+  let endTime = useDate(val[1]);
+  deliveryDates.value[0] = startTime;
+  deliveryDates.value[1] = endTime;
+};
+const total = computed(() => {
+  let num = (deliveryRecords.value.length / 7) * 10;
+  return Math.ceil(num);
+});
 
 getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
-  { status: [3] }
+  { status: [4], deliveryDates: deliveryDates.value }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
@@ -108,11 +140,35 @@ getCompanyInfosP0DeliveryRecords(
           }
         }
 
+        .resume {
+          height: 490px;
+          margin-top: 30px;
+          overflow-y: hidden;
+          border: solid 1px #d5d6d7;
+
+          .scrollbar-demo-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 50px;
+            margin: 10px;
+            color: var(--el-color-primary);
+            text-align: center;
+            background: var(--el-color-primary-light-9);
+            border-radius: 4px;
+          }
+        }
+
         .footer {
           display: flex;
           justify-content: space-between;
-          width: 20%;
-          margin-top: 80px;
+          width: 100%;
+          margin-top: 10px;
+
+          .el-checkbox {
+            margin-right: 20px;
+          }
         }
       }
     }
