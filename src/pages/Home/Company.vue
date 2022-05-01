@@ -331,6 +331,8 @@ interface cityInfo {
 const cityMap = ref<cityInfo[]>([]);
 
 onMounted(() => {
+  console.log(route.params);
+
   getCityInformations()
     .then((res) => {
       cityMap.value = res.data.body.map((item) => {

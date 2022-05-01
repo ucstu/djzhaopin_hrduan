@@ -170,7 +170,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       const res = await putHrInfosP0(
-        store.state.accountInformation.hrInformationId,
+        store.state.accountInformation.fullInformationId,
         formLabelAlign
       );
       store.commit("setHrInformation", res.data.body);

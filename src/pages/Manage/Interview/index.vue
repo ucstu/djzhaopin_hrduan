@@ -22,7 +22,7 @@
                 :user-informations="userInformations"
                 :job-informations="jobInformations"
                 :delivery-records="deliveryRecords"
-                :checked1="checked1"
+                :checked="checked1"
               />
             </el-scrollbar>
           </div>
@@ -57,7 +57,7 @@ import {
 } from "@/services/types";
 import { key } from "@/stores";
 import { computed } from "@vue/reactivity";
-import { ref } from "vue";
+import { onUpdated, ref } from "vue";
 import { useStore } from "vuex";
 import ResumeInfo from "./resumeInfo.vue";
 const store = useStore(key);
@@ -66,7 +66,7 @@ const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const workTimeing = ref([]);
-const deliveryDates = ref(["", ""]);
+const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useDate(val[0]);
   let endTime = useDate(val[1]);
@@ -77,21 +77,22 @@ const total = computed(() => {
   let num = (deliveryRecords.value.length / 7) * 10;
   return Math.ceil(num);
 });
-
-getCompanyInfosP0DeliveryRecords(
-  store.state.companyInformation.companyInformationId,
-  { status: [4], deliveryDates: deliveryDates.value }
-).then((res) => {
-  deliveryRecords.value = res.data.body;
-  deliveryRecords.value.forEach((item) => {
-    getUserInfosP0(item.userInformationId).then((res) => {
-      userInformations.value.set(item.userInformationId, res.data.body);
-    });
-    getCompanyInfosP0PositionInfosP1(
-      store.state.companyInformation.companyInformationId,
-      item.positionInformationId
-    ).then((res) => {
-      jobInformations.value.set(item.positionInformationId, res.data.body);
+onUpdated(() => {
+  getCompanyInfosP0DeliveryRecords(
+    store.state.companyInformation.companyInformationId,
+    { status: [4], deliveryDates: deliveryDates.value }
+  ).then((res) => {
+    deliveryRecords.value = res.data.body;
+    deliveryRecords.value.forEach((item) => {
+      getUserInfosP0(item.userInformationId).then((res) => {
+        userInformations.value.set(item.userInformationId, res.data.body);
+      });
+      getCompanyInfosP0PositionInfosP1(
+        store.state.companyInformation.companyInformationId,
+        item.positionInformationId
+      ).then((res) => {
+        jobInformations.value.set(item.positionInformationId, res.data.body);
+      });
     });
   });
 });

@@ -14,7 +14,7 @@
                   v-for="(item, index) in feedbackMap"
                   :key="item"
                   :label="item"
-                  :value="[index + 1]"
+                  :value="index + 1"
                 />
               </el-select>
               <el-select
@@ -31,11 +31,12 @@
               </el-select>
 
               <el-date-picker
-                v-model="valueMap.deliveryDates"
-                type="date"
-                placeholder="选择日期"
-                class="data-picker"
-                :default-value="new Date(2010, 9, 1)"
+                v-model="workTimeing"
+                type="daterange"
+                range-separator="到"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                @change="handleWorkTimeChange(valueMap.deliveryDates)"
               />
             </div>
             <div class="second-line">
@@ -44,7 +45,7 @@
                   v-for="(item, index) in gander"
                   :key="item"
                   :label="item"
-                  :value="index - 1"
+                  :value="index + 1"
                 />
               </el-select>
               <el-select v-model="valueMap.ages" class="m-2" placeholder="年龄">
@@ -52,21 +53,21 @@
                   v-for="(item, index) in age"
                   :key="item"
                   :label="item"
-                  :value="index - 1"
+                  :value="index + 1"
                 />
               </el-select>
 
               <el-input
                 v-model="valueMap.search"
                 class="w-50 m-2"
-                input-style="max-width: 220px;"
+                input-style="max-width: 350px;"
                 placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
             </div>
           </div>
           <div class="resume">
-            <el-scrollbar height="400px">
+            <el-scrollbar height="490px">
               <ResumeInfo />
             </el-scrollbar>
           </div>
@@ -78,6 +79,7 @@
 </template>
 
 <script setup lang="ts">
+import useDate from "@/hooks/useDate";
 import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
@@ -95,25 +97,36 @@ import { useStore } from "vuex";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
-  status: number[];
-  ages?: string;
-  deliveryDates?: string;
-  page?: string;
-  positionInfoIds?: string;
+  status: Array<1 | 2 | 3 | 4 | 5>;
+  ages?: Array<1 | 2 | 3 | 4 | 5>;
+  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  page?: number;
+  positionInfoIds?: Array<string>;
   search?: string;
-  sexs?: string;
-  size?: string;
-  sort?: string;
-  workingYears?: string;
+  sexs?: Array<"男" | "女" | "未知">;
+  size?: number;
+  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
-const valueMap = ref<Record>({ status: [2] } as Record);
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const workTimeing = ref([]);
+const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
+const handleWorkTimeChange = (val: Array<string>) => {
+  let startTime = useDate(val[0]);
+  let endTime = useDate(val[1]);
+  deliveryDates.value[0] = startTime;
+  deliveryDates.value[1] = endTime;
+};
+const valueMap = ref<Record>({
+  status: [2],
+  deliveryDates: deliveryDates.value,
+});
 getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
-  { status: [2] }
+  valueMap.value
 ).then((res) => {
   deliveryRecords.value = res.data.body;
   deliveryRecords.value.forEach((item) => {
@@ -155,8 +168,7 @@ onUpdated(() => {
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
-const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
-const education = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
+const age = ["18-25岁", "25-35岁", "35-45岁", "45-55岁", "55-65岁"];
 </script>
 
 <style scoped lang="scss">
@@ -215,7 +227,7 @@ const education = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
         }
 
         .resume {
-          height: 400px;
+          height: 490px;
           margin-top: 30px;
           overflow-y: hidden;
           border: solid 1px #d5d6d7;

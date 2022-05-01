@@ -359,7 +359,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       jobTypeList.value.hrInformationId =
-        store.state.accountInformation.hrInformationId;
+        store.state.accountInformation.fullInformationId;
       jobTypeList.value.companyInformationId =
         store.state.hrInformation.companyInformationId;
       postCompanyInfosP0PositionInfos(

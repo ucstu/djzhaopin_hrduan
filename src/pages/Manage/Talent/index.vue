@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="resume">
-            <el-scrollbar height="400px">
+            <el-scrollbar height="490px">
               <template v-if="TalentInfo[0].jobExpectationId">
                 <div
                   v-for="Talent in TalentInfo"
@@ -218,7 +218,7 @@ const inspectionResume = (id: string) => {
         }
 
         .resume {
-          height: 400px;
+          height: 490px;
           margin-top: 30px;
           overflow-y: hidden;
           border: solid 1px #d5d6d7;

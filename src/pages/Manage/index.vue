@@ -91,7 +91,12 @@
                     <div class="right">
                       <el-button
                         type="primary"
-                        @click="inspectionResume(interview.userInformationId)"
+                        @click="
+                          inspectionResume(
+                            interview.userInformationId,
+                            interview.positionInformationId
+                          )
+                        "
                         >查看简历</el-button
                       >
                     </div>
@@ -121,7 +126,7 @@ import {
 } from "@/services/types";
 import { key } from "@/stores";
 import { failResponseHandler } from "@/utils/handler";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore(key);
@@ -148,51 +153,50 @@ interface Record {
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
 const valueMap = ref<Record>({
-  status: [1],
-} as Record);
-onMounted(() => {
-  getCompanyInfosP0DeliveryRecords(
-    store.state.hrInformation.companyInformationId,
-    { status: [1] }
-  )
-    .then((res) => {
-      store.commit("setDeliveryRecord", res.data.body);
-      interviewNum.value = res.data.body;
-      interviewNum.value.forEach((item) => {
-        getCompanyInfosP0PositionInfosP1(
-          store.state.hrInformation.companyInformationId,
-          item.positionInformationId
-        ).then((response) => {
-          jobInformations.value.set(
-            item.positionInformationId,
-            response.data.body
-          );
-        });
-        getUserInfosP0(item.userInformationId).then((responseable) => {
-          userInformations.value.set(
-            item.userInformationId,
-            responseable.data.body
-          );
-        });
-        if (item.status == 4) {
-          num.value.count = num.value.count + 1;
-        } else if (item.status == 2) {
-          num.value.countComunication = num.value.countComunication + 1;
-        } else if (item.status == 3) {
-          num.value.countInterviewed = num.value.countInterviewed + 1;
-        }
-      });
-    })
-    .catch(failResponseHandler);
+  status: [1, 2, 3, 4, 5],
 });
+
+getCompanyInfosP0DeliveryRecords(
+  store.state.hrInformation.companyInformationId,
+  valueMap.value
+)
+  .then((res) => {
+    interviewNum.value = res.data.body;
+    interviewNum.value.forEach((item) => {
+      getCompanyInfosP0PositionInfosP1(
+        store.state.hrInformation.companyInformationId,
+        item.positionInformationId
+      ).then((response) => {
+        jobInformations.value.set(
+          item.positionInformationId,
+          response.data.body
+        );
+      });
+      getUserInfosP0(item.userInformationId).then((responseable) => {
+        userInformations.value.set(
+          item.userInformationId,
+          responseable.data.body
+        );
+      });
+      if (item.status == 4) {
+        num.value.count = num.value.count + 1;
+      } else if (item.status == 2) {
+        num.value.countComunication = num.value.countComunication + 1;
+      } else if (item.status == 3) {
+        num.value.countInterviewed = num.value.countInterviewed + 1;
+      }
+    });
+  })
+  .catch(failResponseHandler);
 const goPosition = () => {
   router.push("/System/Position");
 };
-const inspectionResume = (id: string) => {
+const inspectionResume = (userid: string, postid: string) => {
   router.push({
     name: "Resume",
     params: {
-      userId: id,
+      userId: userid,
+      postId: postid,
     },
   });
 };

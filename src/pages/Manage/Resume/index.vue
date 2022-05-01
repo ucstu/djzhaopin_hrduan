@@ -15,9 +15,7 @@
               />
             </div>
             <div class="info">
-              <span class="name">{{
-                userInfo ? userInfo.firstName + userInfo.lastName : ""
-              }}</span>
+              <span class="name">{{ userInfo ? userName : "" }}</span>
               <span class="state">
                 <el-breadcrumb separator="/">
                   <el-breadcrumb-item>{{ userInfo?.sex }}</el-breadcrumb-item>
@@ -87,15 +85,17 @@ import {
 } from "@/services/services";
 import { PositionInformation, UserInformation } from "@/services/types";
 import { key } from "@/stores";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const route = useRoute();
 const store = useStore(key);
-
-const userInfo = ref<UserInformation>();
+const userInfo = ref<UserInformation>({} as UserInformation);
+const userName = computed(() => {
+  return userInfo.value.firstName + userInfo.value.lastName;
+});
 const positionInfo = ref<PositionInformation>();
 const educationMap = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
 const jobStatusMap = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
@@ -111,14 +111,21 @@ if (typeof route.params.userId === "string") {
     userInfo.value = res.data.body;
   });
 }
-
-getCompanyInfosP0PositionInfosP1(
-  store.state.companyInformation.companyInformationId,
-  store.state.positionInformation.positionInformationId
-).then((res) => {
-  positionInfo.value = res.data.body;
-});
-
+if (typeof route.params.postId === "string") {
+  getCompanyInfosP0PositionInfosP1(
+    store.state.companyInformation.companyInformationId,
+    route.params.postId
+  ).then((res) => {
+    positionInfo.value = res.data.body;
+  });
+} else {
+  getCompanyInfosP0PositionInfosP1(
+    store.state.companyInformation.companyInformationId,
+    route.params.postId[1]
+  ).then((res) => {
+    positionInfo.value = res.data.body;
+  });
+}
 const toMessage = (userId: string) => {
   router.push({
     name: "message",

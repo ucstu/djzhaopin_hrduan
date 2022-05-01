@@ -97,16 +97,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
           store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + store.state.token;
-          getHrInfosP0(store.state.accountInformation.hrInformationId).then(
+          getHrInfosP0(store.state.accountInformation.fullInformationId).then(
             (res) => {
-              if (res.data.body.hrName != null) {
-                if (res.data.body.companyInformationId) {
+              if (res.data.body.hrName !== null) {
+                if (res.data.body.companyInformationId !== null) {
                   getCompanyInfosP0(res.data.body.companyInformationId).then(
                     (res) => {
                       store.commit("setCompanyInformation", res.data.body);
                       router.replace("/Manage");
                     }
                   );
+                  store.commit("setHrInformation", res.data.body);
                 } else {
                   store.commit("setHrInformation", res.data.body);
                   router.replace("/Home/Company");

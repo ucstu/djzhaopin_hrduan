@@ -715,7 +715,7 @@ export interface GetUserInfosP0DeliveryRecordsQueryParams {
    *
    * 投递记录状态，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: 1 | 2 | 3 | 4 | 5;
+  status: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
    * 当前页，eg：0

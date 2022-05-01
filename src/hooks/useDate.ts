@@ -1,4 +1,4 @@
-const useDate = (timestamp: any) => {
+const useDate = (timestamp: any): `${number}-${number}-${number}` => {
   const chinaStandard = timestamp;
   const date = new Date(chinaStandard);
   const Y = date.getFullYear();
@@ -7,7 +7,7 @@ const useDate = (timestamp: any) => {
       ? "0" + (date.getMonth() + 1)
       : date.getMonth() + 1;
   const D = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-  const DateTime = Y + "-" + M + "-" + D;
-  return DateTime;
+  const DateTime = `${Y}-${M}-${D}`;
+  return DateTime as `${number}-${number}-${number}`;
 };
 export default useDate;
