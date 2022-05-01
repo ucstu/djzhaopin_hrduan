@@ -674,6 +674,24 @@ export interface GetDirectionTagsQueryParams {
   positionName: string;
 }
 
+export interface GetHrInfosP0InspectionRecordsQueryParams {
+  /**
+   *
+   * 当前页，eg：0
+   */
+  page?: number;
+  /**
+   *
+   * 页大小，eg：5
+   */
+  size?: number;
+  /**
+   *
+   * 排序方式，eg：[createdAt,desc]
+   */
+  sort?: Array<`${keyof HrInspectionRecord},${"asc" | "desc"}`>;
+}
+
 export interface GetHrInfosQueryParams {
   /**
    *
@@ -715,7 +733,7 @@ export interface GetUserInfosP0DeliveryRecordsQueryParams {
    *
    * 投递记录状态，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: Array<1 | 2 | 3 | 4 | 5>;
+  status: 1 | 2 | 3 | 4 | 5;
   /**
    *
    * 当前页，eg：0
@@ -784,7 +802,7 @@ export interface GetUserInfosP0InspectionRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof InspectionRecord},${"asc" | "desc"}`>;
+  sort?: Array<`${keyof UserInspectionRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0JobExpectationsQueryParams {
@@ -924,7 +942,7 @@ export interface HrInformation {
   updatedAt: string;
 }
 
-export interface InspectionRecord {
+export interface HrInspectionRecord {
   /**
    *
    * 创建时间
@@ -933,16 +951,16 @@ export interface InspectionRecord {
   createdAt: string;
   /**
    *
+   * HR信息ID
+   *
+   */
+  hrInformationId: string;
+  /**
+   *
    * 查看记录ID
    *
    */
-  inspectionRecordId: string;
-  /**
-   *
-   * 职位信息ID
-   *
-   */
-  positionInformationId: string;
+  hrInspectionRecordId: string;
   /**
    *
    * 更新时间
@@ -1452,6 +1470,39 @@ export interface UserInformation {
    *
    */
   workingYears: number;
+}
+
+export interface UserInspectionRecord {
+  /**
+   *
+   * 创建时间
+   *
+   */
+  createdAt: string;
+  /**
+   *
+   * 职位信息ID
+   *
+   */
+  positionInformationId: string;
+  /**
+   *
+   * 更新时间
+   *
+   */
+  updatedAt: string;
+  /**
+   *
+   * 用户信息ID
+   *
+   */
+  userInformationId: string;
+  /**
+   *
+   * 查看记录ID
+   *
+   */
+  userInspectionRecordId: string;
 }
 
 export interface WorkExperience {

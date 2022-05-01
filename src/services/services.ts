@@ -8,43 +8,45 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetVerificationCodeQueryParams,
+  DeleteAccountInfosP0QueryParams,
+  GetCompanyInfosQueryParams,
+  GetHrInfosQueryParams,
   GetUserInfosP0AttentionRecordsQueryParams,
   GetUserInfosP0WorkExperiencesQueryParams,
-  GetUserInfosP0InspectionRecordsQueryParams,
-  GetCompanyInfosP0PositionInfosQueryParams,
-  GetUserInfosP0GarnerRecordsQueryParams,
-  GetCompanyInfosQueryParams,
-  GetDirectionTagsQueryParams,
   GetCompanyInfosPositionInfosQueryParams,
   GetUserInfosP0ProjectExperiencesQueryParams,
-  GetUserInfosP0EduExperiencesQueryParams,
-  GetUserInfosP0JobExpectationsQueryParams,
+  GetUserInfosQueryParams,
   GetUserInfosP0DeliveryRecordsQueryParams,
   GetCompanyInfosP0DeliveryRecordsQueryParams,
-  DeleteAccountInfosP0QueryParams,
-  GetUserInfosQueryParams,
   GetAreaInformationsQueryParams,
-  GetHrInfosQueryParams,
-  CityInformations,
-  CompanyInformation,
-  DirectionTags,
-  AreaInformations,
-  WorkExperience,
-  PositionTypes,
-  ProjectExperience,
-  JobExpectation,
-  EducationExperience,
-  FilterInformation,
-  PositionInformation,
-  DeliveryRecord,
-  MessageRecord,
-  AccountInformation,
-  InspectionRecord,
-  HrInformation,
-  GarnerRecord,
+  GetHrInfosP0InspectionRecordsQueryParams,
+  GetUserInfosP0JobExpectationsQueryParams,
+  GetUserInfosP0GarnerRecordsQueryParams,
+  GetUserInfosP0InspectionRecordsQueryParams,
+  GetDirectionTagsQueryParams,
+  GetVerificationCodeQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  GetCompanyInfosP0PositionInfosQueryParams,
   AttentionRecord,
+  MessageRecord,
+  WorkExperience,
+  DeliveryRecord,
+  DirectionTags,
+  HrInspectionRecord,
+  JobExpectation,
+  UserInspectionRecord,
+  GarnerRecord,
+  ProjectExperience,
+  FilterInformation,
+  CompanyInformation,
+  HrInformation,
+  AreaInformations,
+  AccountInformation,
+  EducationExperience,
+  PositionInformation,
+  CityInformations,
   UserInformation,
+  PositionTypes,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -187,6 +189,61 @@ export const deleteCompanyInfosP0PositionInfosP1 = (
 /** Key is end point string without base url */
 deleteCompanyInfosP0PositionInfosP1.key =
   "/companyInfos/{companyInfoId}/positionInfos/{positionInfoId}";
+
+/**
+ *
+ * 删除查看记录
+ */
+export const deleteHrInfosP0InspectionRecordsP1 = (
+  /**
+   *
+   * 用户信息ID
+   */
+  hrInfoId: string,
+  /**
+   *
+   * 查看记录ID
+   */
+  inspectionRecordId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    body: HrInspectionRecord;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.deleteRequest(
+    template(deleteHrInfosP0InspectionRecordsP1.key, {
+      hrInfoId,
+      inspectionRecordId,
+    }),
+    undefined,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+deleteHrInfosP0InspectionRecordsP1.key =
+  "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}";
 
 /**
  *
@@ -426,7 +483,7 @@ export const deleteUserInfosP0InspectionRecordsP1 = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
-    body: InspectionRecord;
+    body: UserInspectionRecord;
     /**
      *
      * 状态描述
@@ -1186,6 +1243,113 @@ getHrInfosP0.key = "/hrInfos/{hrInfoId}";
 
 /**
  *
+ * 查询所有查看记录
+ */
+export const getHrInfosP0InspectionRecords = (
+  /**
+   *
+   * 用户信息ID
+   */
+  hrInfoId: string,
+  queryParams: GetHrInfosP0InspectionRecordsQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 查看记录列表
+     *
+     */
+    body: HrInspectionRecord[];
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getHrInfosP0InspectionRecords.key, { hrInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getHrInfosP0InspectionRecords.key = "/hrInfos/{hrInfoId}/inspectionRecords";
+
+/**
+ *
+ * 查询查看记录
+ */
+export const getHrInfosP0InspectionRecordsP1 = (
+  /**
+   *
+   * 用户信息ID
+   */
+  hrInfoId: string,
+  /**
+   *
+   * 查看记录ID
+   */
+  inspectionRecordId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    body: HrInspectionRecord;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getHrInfosP0InspectionRecordsP1.key, {
+      hrInfoId,
+      inspectionRecordId,
+    }),
+    undefined,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getHrInfosP0InspectionRecordsP1.key =
+  "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}";
+
+/**
+ *
  * 查询所有消息
  */
 export const getMessageRecords = (
@@ -1900,7 +2064,7 @@ export const getUserInfosP0InspectionRecords = (
      * 查看记录列表
      *
      */
-    body: InspectionRecord[];
+    body: UserInspectionRecord[];
     /**
      *
      * 状态描述
@@ -1952,7 +2116,7 @@ export const getUserInfosP0InspectionRecordsP1 = (
   configOverride?: AxiosRequestConfig
 ): Promise<
   SwaggerResponse<{
-    body: InspectionRecord;
+    body: UserInspectionRecord;
     /**
      *
      * 状态描述

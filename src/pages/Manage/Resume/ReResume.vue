@@ -99,7 +99,7 @@ import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
   status: Array<1 | 2 | 3 | 4 | 5>;
   ages?: Array<1 | 2 | 3 | 4 | 5>;
-  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  deliveryDates: Array<`${number}-${number}-${number}`>;
   page?: number;
   positionInfoIds?: Array<string>;
   search?: string;
