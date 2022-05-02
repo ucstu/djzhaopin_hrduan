@@ -411,6 +411,12 @@ export interface FilterInformation {
 export interface GarnerRecord {
   /**
    *
+   * 公司信息ID
+   *
+   */
+  companyInformationId: string;
+  /**
+   *
    * 创建时间
    *
    */
@@ -454,17 +460,17 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: Array<1 | 2 | 3 | 4 | 5>;
+  status: string;
   /**
    *
    * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
    */
-  ages?: Array<1 | 2 | 3 | 4 | 5>;
+  ages?: string;
   /**
    *
    * 投递日期数组，eg：[2007-02-22,2007-02-23]
    */
-  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  deliveryDates?: string;
   /**
    *
    * 当前页，eg：0
@@ -474,7 +480,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 职位信息ID数组
    */
-  positionInfoIds?: Array<string>;
+  positionInfoIds?: string;
   /**
    *
    * 搜索内容，eg：张三
@@ -484,7 +490,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 性别数组，eg：[男,女]
    */
-  sexs?: Array<"男" | "女" | "未知">;
+  sexs?: string;
   /**
    *
    * 页大小，eg：5
@@ -494,12 +500,12 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+  sort?: string;
   /**
    *
    * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
    */
-  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+  workingYears?: string;
 }
 
 export interface GetCompanyInfosP0PositionInfosQueryParams {
@@ -520,7 +526,7 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
   educations?: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
-   * 融资阶段枚举，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+   * 融资阶段枚举数组，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
    */
   financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
   /**
@@ -1473,6 +1479,12 @@ export interface UserInformation {
 }
 
 export interface UserInspectionRecord {
+  /**
+   *
+   * 公司信息ID
+   *
+   */
+  companyInformationId: string;
   /**
    *
    * 创建时间
