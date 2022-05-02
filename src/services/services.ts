@@ -2643,7 +2643,7 @@ export const postAvatars = (
      * @example
      *   file://C:\Users\19790\Pictures\Default.jpg
      */
-    avatar: string;
+    avatar: File;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
@@ -2981,7 +2981,7 @@ export const postFiles = (
      * @example
      *   file://C:\Users\19790\Downloads\东江人才招聘.md
      */
-    file: string;
+    file: File;
   },
   configOverride?: AxiosRequestConfig
 ): Promise<SwaggerResponse<any>> => {
