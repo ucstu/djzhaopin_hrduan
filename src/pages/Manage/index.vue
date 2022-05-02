@@ -37,10 +37,8 @@
             <span> 今日已面试</span>
           </div>
           <div @click="goPosition">
-            <span>{{
-              store.state.companyInformation.recruitmentPosition
-            }}</span>
-            <span>在招职位试</span>
+            <span>{{ recruitmentPosition }}</span>
+            <span>在招职位数</span>
           </div>
         </div>
         <div class="bottom">
@@ -85,7 +83,9 @@
                             }}
                           </p>
                         </div>
-                        <p>面试时间：{{ interview.interviewTime }}</p>
+                        <p>
+                          面试时间：{{ interview.interviewTime || "未邀请" }}
+                        </p>
                       </div>
                     </div>
                     <div class="right">
@@ -115,6 +115,7 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
+  getCompanyInfosP0,
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
   getUserInfosP0,
@@ -155,6 +156,12 @@ interface Record {
 const valueMap = ref<Record>({
   status: [1, 2, 3, 4, 5],
 });
+const recruitmentPosition = ref(0);
+getCompanyInfosP0(store.state.companyInformation.companyInformationId).then(
+  (res) => {
+    recruitmentPosition.value = res.data.body.recruitmentPosition;
+  }
+);
 
 getCompanyInfosP0DeliveryRecords(
   store.state.hrInformation.companyInformationId,

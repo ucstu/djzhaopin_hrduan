@@ -41,7 +41,12 @@
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
-              <ResumeInfo />
+              <ResumeInfo
+                :user-informations="userInformations"
+                :job-informations="jobInformations"
+                :delivery-records="deliveryRecords"
+                :checked1="checked1"
+              />
             </el-scrollbar>
           </div>
           <ResumeFooter :checked="checked1" />
@@ -52,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
 import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
@@ -130,14 +134,6 @@ onUpdated(() => {
   });
 });
 const education = ["大专", "本科", "硕士", "博士"];
-const inspectionResume = (id: string) => {
-  router.push({
-    name: "Resume",
-    params: {
-      userInformationId: id,
-    },
-  });
-};
 </script>
 
 <style scoped lang="scss">

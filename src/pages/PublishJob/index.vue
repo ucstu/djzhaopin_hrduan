@@ -369,7 +369,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，职位发布成功");
           store.commit("setPositionInformation", res.data.body);
-          store.dispatch("AddCompanyRerecruit", 1);
+
           router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);

@@ -86,17 +86,17 @@ a:hover {
     .dropdown {
       position: relative;
       display: inline-block;
-      width: 85px;
+      width: 90px;
       cursor: pointer;
 
       .user {
-        padding-left: 18px;
+        width: 100%;
+        padding-left: 10px;
         text-align: center;
 
         span {
           display: block;
-          width: 60px;
-          height: 60px;
+          width: 80px;
         }
       }
     }

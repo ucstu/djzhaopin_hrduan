@@ -97,8 +97,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
           store.commit("setAccountInformation", res.data.body.accountInfo);
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + store.state.token;
-          getHrInfosP0(store.state.accountInformation.fullInformationId).then(
-            (res) => {
+          getHrInfosP0(store.state.accountInformation.fullInformationId)
+            .then((res) => {
               if (res.data.body.hrName !== null) {
                 if (res.data.body.companyInformationId !== null) {
                   getCompanyInfosP0(res.data.body.companyInformationId).then(
@@ -110,17 +110,22 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   store.commit("setHrInformation", res.data.body);
                 } else {
                   store.commit("setHrInformation", res.data.body);
+                  store.commit("setCompanyInformation", {});
                   router.replace("/Home/Company");
                 }
               } else {
-                router.replace("/Home");
+                store.commit("setCompanyInformation", {});
+                store.commit("setHrInformation", {});
+                router.replace("/Home/Person");
               }
-            }
-          );
+            })
+            .catch(failResponseHandler);
+          // @ts-ignore
+          hasLogin = true;
         })
         .catch(failResponseHandler);
     } else {
-      ElMessage.warning("登录失败!");
+      ElMessage.warning("校验不通过!");
       return false;
     }
   });

@@ -72,9 +72,9 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { defineProps, PropType, ref } from "vue";
+import { computed, defineProps, PropType, ref } from "vue";
 
-defineProps({
+const props = defineProps({
   deliveryRecords: {
     type: Array as PropType<DeliveryRecord[]>,
     default: () => [],
@@ -87,11 +87,29 @@ defineProps({
     type: Map as PropType<Map<string, PositionInformation>>,
     default: () => new Map(),
   },
-  checked: {
+  checked1: {
     type: Boolean,
     default: false,
   },
 });
+// const deliveryRecordsCheckeds = reactive<any>([]);
+// onMounted(() => {
+//   props.deliveryRecords.map((deliveryRecord) => {
+//     deliveryRecordsCheckeds.push(
+//       Object.assign(deliveryRecord, { checked: false })
+//     );
+//   });
+// });
+// console.log(props.deliveryRecords);
+const deliveryRecordsCheckeds = computed<any[]>(() => {
+  return props.deliveryRecords.map((deliveryRecord) => {
+    deliveryRecordsCheckeds.value.push({
+      ...deliveryRecord,
+      checked: false,
+    });
+  });
+});
+console.log(deliveryRecordsCheckeds);
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const educations = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };

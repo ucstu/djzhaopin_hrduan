@@ -75,7 +75,7 @@
                     }}</span>
                   </div>
                 </div>
-                <div>
+                <div class="position-button">
                   <el-button
                     type="primary"
                     @click="updatePosition(positionInformationId)"
@@ -89,7 +89,6 @@
                 </div>
               </div>
             </template>
-            <el-divider />
           </el-scrollbar>
         </div>
         <div class="alert">
@@ -287,13 +286,15 @@ const deletePosition = (id: string) => {
 
         .position-list {
           display: flex;
-          justify-content: space-around;
-          margin-top: 15px;
+          align-items: center;
+          justify-content: space-between;
           border-bottom: 1px solid #d5d6d7;
 
           .position-item {
             display: flex;
-            width: 50%;
+            width: 70%;
+            height: 53px;
+            margin: 10px 0;
 
             .item {
               display: flex;
@@ -302,11 +303,10 @@ const deletePosition = (id: string) => {
               text-align: center;
             }
           }
-        }
 
-        .el-divider {
-          width: 80%;
-          margin: 0 auto;
+          .position-button {
+            margin-right: 10px;
+          }
         }
       }
 

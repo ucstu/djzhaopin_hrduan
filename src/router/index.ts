@@ -1,5 +1,3 @@
-import { store } from "@/stores";
-import { ElMessage } from "element-plus";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
@@ -69,7 +67,8 @@ const leftBarRouteList: RouteRecordRaw[] = [
     component: () => import("../components/System/System.vue"),
     children: [
       {
-        path: "Message",
+        name: "Message",
+        path: "Message/:userId?",
         component: () => import("../pages/Manage/Message/index.vue"),
       },
       {
@@ -158,25 +157,15 @@ NProgress.configure({ showSpinner: false });
 const whitelist = ["/Login", "/Enroll"];
 router.beforeEach(async (to, _, next) => {
   NProgress.start();
-  if (to.meta.requiresAuth && store.state.token) {
-    if (to.path === "/Login") {
-      next("/Login");
-      NProgress.done();
-    } else {
-      const hasGetUserInfo = store.getters.userName;
-      if (hasGetUserInfo) {
-        next();
-      } else {
-        NProgress.done();
-        next("/Login");
-        ElMessage.error("请先登录");
-      }
-    }
+  // @ts-ignore
+  if (hasLogin) {
+    NProgress.done();
+    next();
   } else {
     if (whitelist.indexOf(to.path)) {
       next();
     } else {
-      next("/login");
+      next("/Login");
       NProgress.done();
     }
   }

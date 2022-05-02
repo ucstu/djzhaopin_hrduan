@@ -36,7 +36,7 @@
                 range-separator="到"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                @change="handleWorkTimeChange(valueMap.deliveryDates)"
+                @change="handleWorkTimeChange(workTimeing)"
               />
             </div>
             <div class="second-line">
@@ -68,7 +68,12 @@
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
-              <ResumeInfo />
+              <ResumeInfo
+                :user-informations="userInformations"
+                :job-informations="jobInformations"
+                :delivery-records="deliveryRecords"
+                :checked1="checked1"
+              />
             </el-scrollbar>
           </div>
           <ResumeFooter :delivery-records="deliveryRecords" />
@@ -92,14 +97,14 @@ import {
 } from "@/services/types";
 import { key } from "@/stores";
 import { Search } from "@element-plus/icons-vue";
-import { onUpdated, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
   status: Array<1 | 2 | 3 | 4 | 5>;
   ages?: Array<1 | 2 | 3 | 4 | 5>;
-  deliveryDates: Array<`${number}-${number}-${number}`>;
+  deliveryDates?: Array<`${number}-${number}-${number}`>;
   page?: number;
   positionInfoIds?: Array<string>;
   search?: string;
@@ -108,6 +113,7 @@ interface Record {
   sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
+const checked1 = ref(false);
 const store = useStore(key);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -124,11 +130,13 @@ const valueMap = ref<Record>({
   status: [2],
   deliveryDates: deliveryDates.value,
 });
+
 getCompanyInfosP0DeliveryRecords(
   store.state.companyInformation.companyInformationId,
-  valueMap.value
+  { status: [1, 2, 3, 4, 5] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
+
   deliveryRecords.value.forEach((item) => {
     getUserInfosP0(item.userInformationId).then((response) => {
       userInformations.value.set(item.userInformationId, response.data.body);
@@ -142,28 +150,28 @@ getCompanyInfosP0DeliveryRecords(
   });
 });
 
-onUpdated(() => {
-  getCompanyInfosP0DeliveryRecords(
-    store.state.companyInformation.companyInformationId,
-    { status: [1] }
-  ).then((res) => {
-    deliveryRecords.value = res.data.body;
-    deliveryRecords.value.forEach((item) => {
-      getUserInfosP0(item.userInformationId).then((response) => {
-        userInformations.value.set(item.userInformationId, response.data.body);
-      });
-      getCompanyInfosP0PositionInfosP1(
-        store.state.companyInformation.companyInformationId,
-        item.positionInformationId
-      ).then((resposable) => {
-        jobInformations.value.set(
-          item.positionInformationId,
-          resposable.data.body
-        );
-      });
-    });
-  });
-});
+// onUpdated(() => {
+//   getCompanyInfosP0DeliveryRecords(
+//     store.state.companyInformation.companyInformationId,
+//     valueMap.value
+//   ).then((res) => {
+//     deliveryRecords.value = res.data.body;
+//     deliveryRecords.value.forEach((item) => {
+//       getUserInfosP0(item.userInformationId).then((response) => {
+//         userInformations.value.set(item.userInformationId, response.data.body);
+//       });
+//       getCompanyInfosP0PositionInfosP1(
+//         store.state.companyInformation.companyInformationId,
+//         item.positionInformationId
+//       ).then((resposable) => {
+//         jobInformations.value.set(
+//           item.positionInformationId,
+//           resposable.data.body
+//         );
+//       });
+//     });
+//   });
+// });
 
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
