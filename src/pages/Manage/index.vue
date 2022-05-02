@@ -19,7 +19,7 @@
                   ? '下午好'
                   : '晚上好')
             "
-            >{{ greet }}，{{ store.state.hrInformation.hrName }}</span
+            >{{ greet }}，{{ store.hrInformation.hrName }}</span
           >
           <span>时间和注意力是你最宝贵的财富！~</span>
         </div>
@@ -125,12 +125,11 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ref } from "vue";
-import { useStore } from "vuex";
 
-const store = useStore(key);
+const store = useMainStore();
 const ho = new Date().getHours();
 const greet = "";
 const interviewNum = ref<DeliveryRecord[]>([]);
@@ -157,21 +156,19 @@ const valueMap = ref<Record>({
   status: [1, 2, 3, 4, 5],
 });
 const recruitmentPosition = ref(0);
-getCompanyInfosP0(store.state.companyInformation.companyInformationId).then(
-  (res) => {
-    recruitmentPosition.value = res.data.body.recruitmentPosition;
-  }
-);
+getCompanyInfosP0(store.companyInformation.companyInformationId).then((res) => {
+  recruitmentPosition.value = res.data.body.recruitmentPosition;
+});
 
 getCompanyInfosP0DeliveryRecords(
-  store.state.hrInformation.companyInformationId,
+  store.hrInformation.companyInformationId,
   valueMap.value
 )
   .then((res) => {
     interviewNum.value = res.data.body;
     interviewNum.value.forEach((item) => {
       getCompanyInfosP0PositionInfosP1(
-        store.state.hrInformation.companyInformationId,
+        store.hrInformation.companyInformationId,
         item.positionInformationId
       ).then((response) => {
         jobInformations.value.set(

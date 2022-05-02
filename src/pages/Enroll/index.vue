@@ -72,12 +72,11 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { getVerificationCode, postAccountInfos } from "@/services/services";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
-import { useStore } from "vuex";
-const store = useStore(key);
+const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
 const vcode = ref("获取验证码");
 const btn = ref(false);
@@ -166,7 +165,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     verificationCode: ruleForm.verificationCode,
   })
     .then((res) => {
-      store.commit("setAccountInformation", res.data.body);
+      store.accountInformation = res.data.body;
       ElMessage.success("注册成功");
       router.push("/login");
     })

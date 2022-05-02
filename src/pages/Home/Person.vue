@@ -113,18 +113,17 @@
 import router from "@/router";
 import { putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
-import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
-const store = useStore(key);
-const formLabelAlign = reactive<HrInformation>(store.state.hrInformation);
+const store = useMainStore();
+const formLabelAlign = reactive<HrInformation>(store.hrInformation);
 const company = ref({
   name: "",
 });
@@ -170,10 +169,10 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       const res = await putHrInfosP0(
-        store.state.accountInformation.fullInformationId,
+        store.accountInformation.fullInformationId,
         formLabelAlign
       );
-      store.commit("setHrInformation", res.data.body);
+      store.hrInformation = res.data.body;
 
       router.replace({
         name: "Company",

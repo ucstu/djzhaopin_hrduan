@@ -67,16 +67,15 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { Search } from "@element-plus/icons-vue";
 import { onUpdated, ref } from "vue";
-import { useStore } from "vuex";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-const store = useStore(key);
+const store = useMainStore();
 interface Record {
   status: number[];
   ages?: string;
@@ -94,7 +93,7 @@ const valueMap = ref<Record>({
 });
 
 getCompanyInfosP0DeliveryRecords(
-  store.state.companyInformation.companyInformationId,
+  store.companyInformation.companyInformationId,
   { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -103,7 +102,7 @@ getCompanyInfosP0DeliveryRecords(
       userInformations.value.set(item.userInformationId, res.data.body);
     });
     getCompanyInfosP0PositionInfosP1(
-      store.state.companyInformation.companyInformationId,
+      store.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((res) => {
       jobInformations.value.set(item.positionInformationId, res.data.body);
@@ -116,7 +115,7 @@ const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不
 const checked1 = ref(false);
 onUpdated(() => {
   getCompanyInfosP0DeliveryRecords(
-    store.state.companyInformation.companyInformationId,
+    store.companyInformation.companyInformationId,
     { status: [1] }
   ).then((res) => {
     deliveryRecords.value = res.data.body;
@@ -125,7 +124,7 @@ onUpdated(() => {
         userInformations.value.set(item.userInformationId, res.data.body);
       });
       getCompanyInfosP0PositionInfosP1(
-        store.state.companyInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         item.positionInformationId
       ).then((res) => {
         jobInformations.value.set(item.positionInformationId, res.data.body);

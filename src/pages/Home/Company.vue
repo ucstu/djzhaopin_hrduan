@@ -205,25 +205,24 @@ import {
   putHrInfosP0,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, onUpdated, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
 import State from "./State.vue";
 import tag from "./Tag.vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
-const store = useStore(key);
+const store = useMainStore();
 const imageUrl = ref("@/assets/down.png");
 const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
 //表格数据
-const formCompany = ref<CompanyInformation>(store.state.companyInformation);
+const formCompany = ref<CompanyInformation>(store.companyInformation);
 const cityInfo = ref([]);
 onUpdated(() => {
   if (formCompany.value) {
@@ -357,13 +356,13 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
       formCompany.value.fullName = route.params.companyName.toString();
       postCompanyInfos(formCompany.value)
         .then((res) => {
-          let hrInformation = store.state.hrInformation;
+          let hrInformation = store.hrInformation;
           hrInformation.companyInformationId =
             res.data.body.companyInformationId;
           putHrInfosP0(hrInformation.hrInformationId, hrInformation)
             .then((response) => {
-              store.commit("setHrInformation", response.data.body);
-              store.commit("setCompanyInformation", res.data.body);
+              store.hrInformation = response.data.body;
+              store.companyInformation = res.data.body;
               ElMessage.success("恭喜您，公司创建成功");
               dialogFormVisible.value = false;
               router.replace({ name: "PublishJob" });

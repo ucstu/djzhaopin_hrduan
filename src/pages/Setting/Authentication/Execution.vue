@@ -86,36 +86,28 @@
 <script setup lang="ts">
 import { putCompanyInfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
-import { store } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 
-const comFormRef = ref<FormInstance>();
-const personForm = reactive({
-  name: store.state.hrInformation.hrName,
-  avatar: "",
-  post: "",
-  acceptEmail: "",
-  hrId: "",
-  phoneNumber: "",
-});
+const store = useMainStore();
 
-const companyForm = reactive<CompanyInformation>(
-  store.state.companyInformation
-);
+const comFormRef = ref<FormInstance>();
+
+const companyForm = reactive<CompanyInformation>(store.companyInformation);
 
 const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
       putCompanyInfosP0(
-        store.state.companyInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         companyForm
       )
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
-          store.commit("setCompanyInformation", res.data.body);
+          store.companyInformation = res.data.body;
         })
         .catch(failResponseHandler);
     }

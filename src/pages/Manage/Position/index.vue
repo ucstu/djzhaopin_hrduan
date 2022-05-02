@@ -117,12 +117,11 @@ import {
   getCompanyInfosP0PositionInfos,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { reactive, ref, toRefs } from "vue";
-import { useStore } from "vuex";
-const store = useStore(key);
+const store = useMainStore();
 const jobTypeList = ref<PositionInformation[]>();
 const input2 = ref("");
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
@@ -136,13 +135,13 @@ const workingYears = reactive([
   "10年以上",
 ]);
 getCompanyInfosP0PositionInfos(
-  store.state.companyInformation.companyInformationId,
+  store.companyInformation.companyInformationId,
   {}
 ).then((res) => {
   jobTypeList.value = res.data.body;
 });
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const { positionInformationId } = toRefs(store.state.positionInformation);
+const { positionInformationId } = toRefs(store.positionInformation);
 
 const toPublish = () => {
   router.push("/PublishJob");
@@ -157,11 +156,11 @@ const updatePosition = (id: string) => {
 
 const deletePosition = (id: string) => {
   deleteCompanyInfosP0PositionInfosP1(
-    store.state.companyInformation.companyInformationId,
+    store.companyInformation.companyInformationId,
     id
   ).then((res) => {
-    store.state.positionInformation = res.data.body;
-    store.commit("decreaseCompanyRerecruit", 1);
+    store.positionInformation = res.data.body;
+    // store.commit("decreaseCompanyRerecruit", 1);
     ElMessage.success("删除成功");
   });
 };

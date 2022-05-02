@@ -1,6 +1,16 @@
 import router from "@/router";
 import { RequestError } from "@/services/config";
+import {
+  AccountInformation,
+  CompanyInformation,
+  DeliveryRecord,
+  HrInformation,
+  PositionInformation,
+} from "@/services/types";
+import { useMainStore } from "@/stores/main";
 import { ElMessage } from "element-plus";
+
+const store = useMainStore();
 
 const failResponseHandler = (responseError: RequestError) => {
   if (responseError.status === 400) {
@@ -23,6 +33,12 @@ const failResponseHandler = (responseError: RequestError) => {
     ElMessage.error(message);
   } else if (responseError.status === 401) {
     ElMessage.error("登录失效，请重新登录");
+    store.jsonWebToken = null as unknown as string;
+    store.hrInformation = null as unknown as HrInformation;
+    store.deliveryRecord = null as unknown as DeliveryRecord;
+    store.accountInformation = null as unknown as AccountInformation;
+    store.companyInformation = null as unknown as CompanyInformation;
+    store.positionInformation = null as unknown as PositionInformation;
     router.replace("/Login");
   } else if (responseError.status === 403) {
     ElMessage.error("您没有权限访问该资源");

@@ -16,7 +16,11 @@
       <div class="line"></div>
       <div class="prise-content">
         <el-scrollbar height="559px">
-          <div v-for="(item, index) in prise" :key="item" class="prise-item">
+          <div
+            v-for="(item, index) in store.comprise"
+            :key="item"
+            class="prise-item"
+          >
             <div class="prise-info">
               <span>{{ item }}</span>
               <el-divider border-style="dashed" />
@@ -31,45 +35,32 @@
   </div>
 </template>
 <script setup lang="ts">
-import { key } from "@/stores";
+import { useCompriseStore } from "@/stores/main";
 import { Plus } from "@element-plus/icons-vue";
 import { ElInput, ElMessage } from "element-plus";
-import { nextTick, onMounted, reactive, ref } from "vue";
-import { useStore } from "vuex";
-const store = useStore(key);
+import { nextTick, ref } from "vue";
+const store = useCompriseStore();
 const inputVisible = ref(false);
 const InputRef = ref<InstanceType<typeof ElInput>>();
 const inputValue = ref("");
-const chang = reactive([
-  "收到简历后我们会尽快评估",
-  "方便发一份你的简历过来吗？",
-]);
-const prise = reactive(store.state.comprise);
 const addPrise = () => {
   inputVisible.value = true;
   nextTick(() => {
     InputRef.value!.input!.focus();
   });
 };
-onMounted(() => {
-  if (!store.state.comprise[0]) {
-    prise.push(...chang);
-  }
-});
 
 const handleInputConfirm = () => {
-  if (inputValue.value && prise.length < 16) {
-    prise.unshift(inputValue.value);
-    store.commit("setComprise", prise);
-  } else if (prise.length >= 16) {
+  if (inputValue.value && store.comprise.length < 16) {
+    store.comprise.unshift(inputValue.value);
+  } else if (store.comprise.length >= 16) {
     ElMessage.error("超出可设置常用语的最大值");
   }
   inputVisible.value = false;
   inputValue.value = "";
 };
 const deletePrise = (index: number) => {
-  prise.splice(index, 1);
-  store.commit("setComprise", prise);
+  store.comprise.splice(index, 1);
 };
 </script>
 

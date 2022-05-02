@@ -4,7 +4,7 @@
       <div class="left-we">
         <span>We</span>
         <span class="red">❤</span>
-        <span>{{ store.state.companyInformation.fullName || "You" }}</span>
+        <span>{{ fullName || "You" }}</span>
       </div>
       <div class="left-route">
         <router-link to="/Manage">
@@ -22,7 +22,7 @@
       <router-link to="/Setting/">
         <img
           :src="
-            VITE_CDN_URL + avatarUrl
+            avatarUrl
               ? VITE_CDN_URL + avatarUrl
               : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
           "
@@ -34,11 +34,15 @@
 </template>
 
 <script setup lang="ts">
-import { key } from "@/stores";
-import { useStore } from "vuex";
-const store = useStore(key);
+import { useMainStore } from "@/stores/main";
+import { toRefs } from "vue";
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const avatarUrl = store.state.hrInformation.avatarUrl;
+const store = useMainStore();
+
+const { avatarUrl } = toRefs(store.hrInformation);
+
+const { fullName } = toRefs(store.companyInformation);
 </script>
 
 <style scoped lang="scss">

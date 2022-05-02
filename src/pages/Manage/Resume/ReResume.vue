@@ -86,19 +86,18 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
-import { useStore } from "vuex";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
@@ -114,7 +113,7 @@ interface Record {
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
 const checked1 = ref(false);
-const store = useStore(key);
+const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
@@ -132,7 +131,7 @@ const valueMap = ref<Record>({
 });
 
 getCompanyInfosP0DeliveryRecords(
-  store.state.companyInformation.companyInformationId,
+  store.companyInformation.companyInformationId,
   { status: [1, 2, 3, 4, 5] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -142,7 +141,7 @@ getCompanyInfosP0DeliveryRecords(
       userInformations.value.set(item.userInformationId, response.data.body);
     });
     getCompanyInfosP0PositionInfosP1(
-      store.state.companyInformation.companyInformationId,
+      store.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((respones) => {
       jobInformations.value.set(item.positionInformationId, respones.data.body);

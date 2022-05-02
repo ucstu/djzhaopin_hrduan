@@ -4,7 +4,7 @@
       <div class="left">
         <span>We</span>
         <span class="red">❤</span>
-        <span>{{ store.state.companyInformation.fullName || "You" }}</span>
+        <span>{{ fullName || "You" }}</span>
       </div>
     </router-link>
     <div class="right">
@@ -30,12 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { toRefs } from "vue";
-import { useStore } from "vuex";
-const store = useStore(key);
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const { hrName, avatarUrl } = toRefs(store.state.hrInformation);
+const store = useMainStore();
+
+const { hrName, avatarUrl } = toRefs(store.hrInformation);
+const { fullName } = toRefs(store.companyInformation);
 </script>
 
 <style scoped lang="scss">

@@ -3,7 +3,7 @@
     <div class="header">
       <span>东江人才招聘 HR端</span>
       <div class="dropdown">
-        <span class="user">{{ store.state.hrInformation.hrName || "HR" }}</span>
+        <span class="user">{{ hrName || "HR" }}</span>
         <ul class="dropdown-content">
           <li>
             <router-link to="/Setting/PersonInfo">账号设置</router-link>
@@ -34,9 +34,12 @@
 </template>
 
 <script lang="ts" setup>
-import { key } from "@/stores";
-import { useStore } from "vuex";
-const store = useStore(key);
+import { useMainStore } from "@/stores/main";
+import { toRefs } from "vue";
+
+const store = useMainStore();
+
+const { hrName } = toRefs(store.hrInformation);
 </script>
 
 <style lang="scss" scoped>

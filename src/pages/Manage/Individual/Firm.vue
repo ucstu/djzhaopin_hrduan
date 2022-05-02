@@ -100,25 +100,22 @@
 import Tag from "@/pages/Home/Tag.vue";
 import { getCityInformations, putCompanyInfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, onUpdated, reactive, ref } from "vue";
-import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
-const store = useStore(key);
+const store = useMainStore();
 const imageUrl = ref("@/assets/down.png");
 const dialogFormVisible = ref(false);
 const ImageUrl = ref("");
 //表格数据
 
-const formCompany = reactive<CompanyInformation>(
-  store.state.companyInformation
-);
+const formCompany = reactive<CompanyInformation>(store.companyInformation);
 const cityInfo = ref([]);
 onUpdated(() => {
   if (formCompany) {
@@ -188,12 +185,12 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyInfosP0(
-        store.state.companyInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         formCompany
       )
         .then((res) => {
           ElMessage.success("修改成功");
-          store.commit("setCompanyInformation", res.data.body);
+          store.companyInformation = res.data.body;
         })
         .catch(failResponseHandler);
     }

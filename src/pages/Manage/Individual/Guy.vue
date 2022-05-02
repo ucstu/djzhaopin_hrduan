@@ -39,32 +39,17 @@
 </template>
 
 <script setup lang="ts">
-import { getHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
-import { key } from "@/stores";
-import { onMounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useMainStore } from "@/stores/main";
+import { ref } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useStore(key);
+const store = useMainStore();
+
 const imgUrl = ref(
   "https://tse1-mm.cn.bing.net/th/id/R-C.b4504d02c6b9a71453c61fef88578b77?rik=rBhjlBcXKOZkiw&riu=http%3a%2f%2fimg.jj20.com%2fup%2fallimg%2ftx25%2f380412030426662.jpg&ehk=MrcDJRR%2fT3NWdla%2fkub6nInyr7M3eZF72Kzo%2brbcCVI%3d&risl=&pid=ImgRaw&r=0"
 );
-const formLabelAlign = ref<HrInformation>({
-  avatarUrl: "",
-  hrName: "",
-  postName: "",
-  acceptEmail: "",
-  hrInformationId: "",
-  createdAt: "",
-  updatedAt: "",
-  companyInformationId: "",
-});
-onMounted(() => {
-  getHrInfosP0(store.state.hrInformation.hrInformationId).then((res) => {
-    formLabelAlign.value = res.data.body;
-  });
-});
+const formLabelAlign = ref<HrInformation>(store.hrInformation);
 </script>
 
 <style scoped lang="scss">

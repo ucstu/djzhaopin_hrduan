@@ -52,13 +52,13 @@ import {
   getHrInfosP0,
   postAccountInfosLogin,
 } from "@/services/services";
-import { key } from "@/stores";
+import { CompanyInformation, HrInformation } from "@/services/types";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
-import { useStore } from "vuex";
 
-const store = useStore(key);
+const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
@@ -99,35 +99,35 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       postAccountInfosLogin(ruleForm)
         .then((res) => {
-          store.commit("setToken", res.data.body.token);
-          store.commit("setAccountInformation", res.data.body.accountInfo);
+          store.jsonWebToken = res.data.body.token;
+          store.accountInformation = res.data.body.accountInfo;
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-            "Bearer " + store.state.token;
-          getHrInfosP0(store.state.accountInformation.fullInformationId)
+            "Bearer " + res.data.body.token;
+          getHrInfosP0(store.accountInformation.fullInformationId)
             .then((res) => {
               if (res.data.body.hrName !== null) {
                 if (res.data.body.companyInformationId !== null) {
                   getCompanyInfosP0(res.data.body.companyInformationId).then(
                     (res) => {
-                      store.commit("setCompanyInformation", res.data.body);
+                      store.companyInformation = res.data.body;
                       router.replace("/Manage");
                     }
                   );
-                  store.commit("setHrInformation", res.data.body);
+                  store.hrInformation = res.data.body;
                 } else {
-                  store.commit("setHrInformation", res.data.body);
-                  store.commit("setCompanyInformation", {});
+                  store.hrInformation = res.data.body;
+                  store.companyInformation =
+                    null as unknown as CompanyInformation;
                   router.replace("/Home/Company");
                 }
               } else {
-                store.commit("setCompanyInformation", {});
-                store.commit("setHrInformation", {});
+                store.hrInformation = null as unknown as HrInformation;
+                store.companyInformation =
+                  null as unknown as CompanyInformation;
                 router.replace("/Home/Person");
               }
             })
             .catch(failResponseHandler);
-          // @ts-ignore
-          hasLogin = true;
         })
         .catch(failResponseHandler);
     } else {

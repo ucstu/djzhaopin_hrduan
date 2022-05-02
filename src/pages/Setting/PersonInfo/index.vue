@@ -87,17 +87,19 @@
 import router from "@/router/index";
 import { getHrInfosP0, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
-import { store } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
+const store = useMainStore();
+
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrInfosP0(store.state.hrInformation.hrInformationId).then((res) => {
+  getHrInfosP0(store.hrInformation.hrInformationId).then((res) => {
     imageUrl.value = res.data.body.avatarUrl;
     formHr.hrName = res.data.body.hrName;
     formHr.postName = res.data.body.postName;
@@ -172,9 +174,9 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrInfosP0(store.state.hrInformation.hrInformationId, formHr)
+      putHrInfosP0(store.hrInformation.hrInformationId, formHr)
         .then((res) => {
-          store.commit("setHrInformation", res.data.body);
+          store.hrInformation = res.data.body;
           ElMessage.success("修改成功");
         })
         .catch(failResponseHandler);

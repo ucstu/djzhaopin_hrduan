@@ -1,6 +1,6 @@
 <template>
   <div class="password">
-    <span>登录账号：{{ store.state.accountInformation.userName }}</span>
+    <span>登录账号：{{ store.accountInformation.userName }}</span>
     <div>
       <el-form
         ref="ruleFormRef"
@@ -53,13 +53,12 @@
 
 <script setup lang="ts">
 import { getVerificationCode, putAccountInfosP0 } from "@/services/services";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
-import { useStore } from "vuex";
 const ruleFormRef = ref<FormInstance>();
-const store = useStore(key);
+const store = useMainStore();
 const vcode = ref("获取验证码");
 const btn = ref(false);
 const validatePass = (rule: any, value: any, callback: any) => {
@@ -99,7 +98,7 @@ const ruleForm = reactive<rlueAccount>({
 
 const postverificationCode = () => {
   getVerificationCode({
-    email: store.state.hrInformation.acceptEmail,
+    email: store.hrInformation.acceptEmail,
   }).then((res) => {
     ElMessage.success("发送成功");
   });
@@ -120,7 +119,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putAccountInfosP0(
-        store.state.accountInformation.accountInformationId,
+        store.accountInformation.accountInformationId,
         ruleForm
       ).then((res: { status: number }) => {
         if (res.status === 200) {

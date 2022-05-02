@@ -14,13 +14,13 @@
     "element-plus": "^2.1.8",
     "nanoid": "^3.3.2",
     "nprogress": "^0.2.0",
+    "pinia": "^2.0.13",
+    "pinia-plugin-persist": "^1.0.0",
     "qs": "^6.10.3",
     "sass": "^1.49.11",
     "vue": "^3.2.25",
     "vue-echarts": "^6.0.2",
-    "vue-router": "^4.0.13",
-    "vuex": "^4.0.2",
-    "vuex-persister": "^1.0.0-beta.2"
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@types/node": "^17.0.24",

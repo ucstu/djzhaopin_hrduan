@@ -1,13 +1,18 @@
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { createPinia } from "pinia";
+import piniaPluginPersist from "pinia-plugin-persist";
 import { createApp } from "vue";
 import ECharts from "vue-echarts";
 import App from "./App.vue";
 import router from "./router";
-import { key, store } from "./stores";
+
+const pinia = createPinia();
+pinia.use(piniaPluginPersist);
+
 createApp(App)
-  .use(store, key)
   .use(router)
+  .use(pinia)
   .component("v-chart", ECharts)
   .use(ElementPlus, {
     locale: zhCn,

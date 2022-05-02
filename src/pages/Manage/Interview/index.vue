@@ -55,12 +55,11 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { computed } from "@vue/reactivity";
 import { onUpdated, ref } from "vue";
-import { useStore } from "vuex";
 import ResumeInfo from "./resumeInfo.vue";
-const store = useStore(key);
+const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -79,7 +78,7 @@ const total = computed(() => {
 });
 onUpdated(() => {
   getCompanyInfosP0DeliveryRecords(
-    store.state.companyInformation.companyInformationId,
+    store.companyInformation.companyInformationId,
     { status: [4], deliveryDates: deliveryDates.value }
   ).then((res) => {
     deliveryRecords.value = res.data.body;
@@ -88,7 +87,7 @@ onUpdated(() => {
         userInformations.value.set(item.userInformationId, res.data.body);
       });
       getCompanyInfosP0PositionInfosP1(
-        store.state.companyInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         item.positionInformationId
       ).then((res) => {
         jobInformations.value.set(item.positionInformationId, res.data.body);

@@ -75,19 +75,18 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { ref } from "vue";
-import { useStore } from "vuex";
 import Chat from "./Chat.vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const condition = ref(true);
-const store = useStore(key);
+const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyInfosP0DeliveryRecords(
-  store.state.companyInformation.companyInformationId,
+  store.companyInformation.companyInformationId,
   { status: [2] }
 ).then((res) => {
   deliveryRecords.value = res.data.body;
@@ -96,7 +95,7 @@ getCompanyInfosP0DeliveryRecords(
       userInformations.value.set(item.userInformationId, res.data.body);
     });
     getCompanyInfosP0PositionInfosP1(
-      store.state.companyInformation.companyInformationId,
+      store.companyInformation.companyInformationId,
       item.positionInformationId
     ).then((res) => {
       jobInformations.value.set(item.positionInformationId, res.data.body);

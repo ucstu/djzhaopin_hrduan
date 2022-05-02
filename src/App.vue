@@ -2,14 +2,13 @@
   <router-view />
 </template>
 <script setup lang="ts">
-import { useStore } from "vuex";
-import { getAxiosInstance } from "./services/config";
-import { key } from "./stores";
+import { getAxiosInstance } from "@/services/config";
+import { useMainStore } from "@/stores/main";
 
-const store = useStore(key);
+const store = useMainStore();
 
 getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-  "Bearer " + store.state.token;
+  "Bearer " + store.jsonWebToken;
 </script>
 
 <style lang="scss">

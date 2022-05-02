@@ -255,13 +255,12 @@ import {
   putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-const store = useStore(key);
+const store = useMainStore();
 const route = useRoute();
 const formRef = ref<FormInstance>();
 const jobTypeList = ref<PositionInformation>({
@@ -338,7 +337,7 @@ const rules = reactive({
 onMounted(() => {
   if (route.params.PublishJobId) {
     getCompanyInfosP0PositionInfosP1(
-      store.state.companyInformation.companyInformationId,
+      store.companyInformation.companyInformationId,
       route.params.PublishJobId.toString()
     ).then((res) => {
       jobTypeList.value = res.data.body;
@@ -359,17 +358,16 @@ const publishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       jobTypeList.value.hrInformationId =
-        store.state.accountInformation.fullInformationId;
+        store.accountInformation.fullInformationId;
       jobTypeList.value.companyInformationId =
-        store.state.hrInformation.companyInformationId;
+        store.hrInformation.companyInformationId;
       postCompanyInfosP0PositionInfos(
-        store.state.hrInformation.companyInformationId,
+        store.hrInformation.companyInformationId,
         jobTypeList.value
       )
         .then((res) => {
           ElMessage.success("恭喜您，职位发布成功");
-          store.commit("setPositionInformation", res.data.body);
-
+          store.positionInformation = res.data.body;
           router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);
@@ -382,7 +380,7 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       putCompanyInfosP0PositionInfosP1(
-        store.state.companyInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value
       ).then((res) => {

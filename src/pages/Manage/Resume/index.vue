@@ -86,14 +86,13 @@ import {
   getUserInfosP0,
 } from "@/services/services";
 import { PositionInformation, UserInformation } from "@/services/types";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const route = useRoute();
-const store = useStore(key);
+const store = useMainStore();
 const userInfo = ref<UserInformation>({} as UserInformation);
 const userName = computed(() => {
   return userInfo.value.firstName + userInfo.value.lastName;
@@ -115,14 +114,14 @@ if (typeof route.params.userId === "string") {
 }
 if (typeof route.params.postId === "string") {
   getCompanyInfosP0PositionInfosP1(
-    store.state.companyInformation.companyInformationId,
+    store.companyInformation.companyInformationId,
     route.params.postId
   ).then((res) => {
     positionInfo.value = res.data.body;
   });
 } else {
   getCompanyInfosP0PositionInfosP1(
-    store.state.companyInformation.companyInformationId,
+    store.companyInformation.companyInformationId,
     route.params.postId[1]
   ).then((res) => {
     positionInfo.value = res.data.body;

@@ -39,15 +39,15 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { key } from "@/stores";
+import { useMainStore } from "@/stores/main";
 import { Check } from "@element-plus/icons-vue";
 import { computed } from "vue";
-import { useStore } from "vuex";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useStore(key);
-const imageUrl = store.state.companyInformation.logoUrl;
-const companyInfo = computed(() => store.state.companyInformation);
+const store = useMainStore();
+
+const imageUrl = store.companyInformation.logoUrl;
+const companyInfo = computed(() => store.companyInformation);
 const financingStageMap = [
   "",
   "未融资",

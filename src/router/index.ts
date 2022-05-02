@@ -1,6 +1,10 @@
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { useMainStore } from "@/stores/main";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+
+const store = useMainStore();
+
 const leftBarRouteList: RouteRecordRaw[] = [
   {
     meta: { requiresAuth: true },
@@ -157,8 +161,7 @@ NProgress.configure({ showSpinner: false });
 const whitelist = ["/Login", "/Enroll"];
 router.beforeEach(async (to, _, next) => {
   NProgress.start();
-  // @ts-ignore
-  if (hasLogin) {
+  if (store.jsonWebToken != null && store.accountInformation != null) {
     NProgress.done();
     next();
   } else {
