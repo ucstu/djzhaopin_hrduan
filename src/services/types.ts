@@ -460,17 +460,17 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: string;
+  status: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
    * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
    */
-  ages?: string;
+  ages?: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
    * 投递日期数组，eg：[2007-02-22,2007-02-23]
    */
-  deliveryDates?: string;
+  deliveryDates?: Array<`${number}-${number}-${number}`>;
   /**
    *
    * 当前页，eg：0
@@ -480,7 +480,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 职位信息ID数组
    */
-  positionInfoIds?: string;
+  positionInfoIds?: Array<string>;
   /**
    *
    * 搜索内容，eg：张三
@@ -490,7 +490,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 性别数组，eg：[男,女]
    */
-  sexs?: string;
+  sexs?: Array<"男" | "女" | "未知">;
   /**
    *
    * 页大小，eg：5
@@ -500,12 +500,12 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 排序方式，eg：[createdAt,desc]
    */
-  sort?: string;
+  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   /**
    *
    * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
    */
-  workingYears?: string;
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
 
 export interface GetCompanyInfosP0PositionInfosQueryParams {
@@ -531,14 +531,14 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
   financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
   /**
    *
-   * 职位名，eg：前端开发
-   */
-  name?: string;
-  /**
-   *
    * 当前页，eg：0
    */
   page?: number;
+  /**
+   *
+   * 职位名，eg：前端开发
+   */
+  positionName?: string;
   /**
    *
    * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
@@ -599,19 +599,19 @@ export interface GetCompanyInfosPositionInfosQueryParams {
   educations?: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
-   * 融资阶段枚举，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+   * 融资阶段枚举数组，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
    */
   financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
-  /**
-   *
-   * 职位名，eg：前端开发
-   */
-  name?: string;
   /**
    *
    * 当前页，eg：0
    */
   page?: number;
+  /**
+   *
+   * 职位名称，eg：前端开发
+   */
+  positionName?: string;
   /**
    *
    * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
@@ -655,6 +655,11 @@ export interface GetCompanyInfosPositionInfosQueryParams {
 }
 
 export interface GetCompanyInfosQueryParams {
+  /**
+   *
+   * 公司名称
+   */
+  companyName?: string;
   /**
    *
    * 当前页，eg：0
