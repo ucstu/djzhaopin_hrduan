@@ -891,9 +891,9 @@ export interface GetUserInfosQueryParams {
 export interface GetVerificationCodeQueryParams {
   /**
    *
-   * 手机号码
+   * 电子邮箱
    */
-  phoneNumber: string;
+  email: string;
 }
 
 export interface HrInformation {
@@ -933,12 +933,6 @@ export interface HrInformation {
    *
    */
   hrName: string;
-  /**
-   *
-   * 手机号码
-   *
-   */
-  phoneNumber: string;
   /**
    *
    * 职位名称
@@ -1434,12 +1428,6 @@ export interface UserInformation {
   personalAdvantage: string;
   /**
    *
-   * 电话号码
-   *
-   */
-  phoneNumber: string;
-  /**
-   *
    * 图片作品
    *
    */
@@ -1484,12 +1472,6 @@ export interface UserInformation {
 }
 
 export interface UserInspectionRecord {
-  /**
-   *
-   * 公司信息ID
-   *
-   */
-  companyInformationId: string;
   /**
    *
    * 创建时间
