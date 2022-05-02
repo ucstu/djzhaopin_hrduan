@@ -99,7 +99,7 @@ const ruleForm = reactive<rlueAccount>({
 
 const postverificationCode = () => {
   getVerificationCode({
-    phoneNumber: store.state.hrInformation.phoneNumber,
+    email: store.state.hrInformation.acceptEmail,
   }).then((res) => {
     ElMessage.success("发送成功");
   });

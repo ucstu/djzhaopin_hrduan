@@ -50,12 +50,6 @@
         <el-form-item label="职位" prop="postName">
           <el-input v-model="formHr.postName" placeholder="请填写职位信息" />
         </el-form-item>
-        <el-form-item label="手机" prop="phoneNumber">
-          <el-input
-            v-model="formHr.phoneNumber"
-            placeholder="请填写工作手机号"
-          />
-        </el-form-item>
         <el-form-item
           label="邮箱"
           prop="acceptEmail"
@@ -108,7 +102,6 @@ onMounted(() => {
     formHr.hrName = res.data.body.hrName;
     formHr.postName = res.data.body.postName;
     formHr.acceptEmail = res.data.body.acceptEmail;
-    formHr.phoneNumber = res.data.body.phoneNumber;
   });
 });
 const formHr = reactive<HrInformation>({
@@ -117,7 +110,6 @@ const formHr = reactive<HrInformation>({
   postName: "",
   acceptEmail: "",
   hrInformationId: "",
-  phoneNumber: "",
   createdAt: "",
   updatedAt: "",
   companyInformationId: "",

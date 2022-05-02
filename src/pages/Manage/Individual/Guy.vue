@@ -19,7 +19,7 @@
                 src="@/assets/phone.png"
                 alt=""
                 style="width: 25px; height: 25px"
-              />:{{ formLabelAlign.phoneNumber }}
+              />:{{ formLabelAlign.acceptEmail }}
             </span>
             <span
               ><img
@@ -56,7 +56,6 @@ const formLabelAlign = ref<HrInformation>({
   postName: "",
   acceptEmail: "",
   hrInformationId: "",
-  phoneNumber: "",
   createdAt: "",
   updatedAt: "",
   companyInformationId: "",

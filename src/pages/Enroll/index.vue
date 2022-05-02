@@ -83,17 +83,21 @@ const vcode = ref("获取验证码");
 const btn = ref(false);
 const validateUser = (rule: any, value: any, callback: any) => {
   if (value === "") {
-    callback(new Error("请输入用户名"));
+    callback(new Error("请输入密码"));
+  } else if (value.length < 6) {
+    callback(new Error("密码长度不小于6位"));
+  } else if (value.length > 16) {
+    callback(new Error("密码长度不大于20位"));
+  } else {
+    callback();
   }
 };
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
-    callback(new Error("请输入密码"));
+    callback(new Error("请输入用户名"));
+  } else if (/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+    callback(new Error("错误的用户名"));
   } else {
-    if (ruleForm.checkPass !== "") {
-      if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("checkPass", () => null);
-    }
     callback();
   }
 };
@@ -114,7 +118,7 @@ const ruleForm = reactive({
   verificationCode: "",
 });
 const postverificationCode = () => {
-  getVerificationCode({ phoneNumber: ruleForm.user }).then((res) => {
+  getVerificationCode({ email: ruleForm.user }).then((res) => {
     ElMessage.success("发送成功");
   });
   btn.value = true;
