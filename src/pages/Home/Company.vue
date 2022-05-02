@@ -222,7 +222,7 @@ const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
 //表格数据
-const formCompany = ref<CompanyInformation>(store.companyInformation);
+const formCompany = ref<CompanyInformation>({ ...store.companyInformation });
 const cityInfo = ref([]);
 onUpdated(() => {
   if (formCompany.value) {

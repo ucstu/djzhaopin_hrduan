@@ -123,7 +123,7 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
 const store = useMainStore();
-const formLabelAlign = reactive<HrInformation>(store.hrInformation);
+const formLabelAlign = reactive<HrInformation>({ ...store.hrInformation });
 const company = ref({
   name: "",
 });
@@ -173,7 +173,6 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
         formLabelAlign
       );
       store.hrInformation = res.data.body;
-
       router.replace({
         name: "Company",
         params: { companyName: company.value.name },
