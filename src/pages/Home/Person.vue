@@ -117,8 +117,9 @@ import { useMainStore } from "@/stores/main";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
-import { reactive, ref } from "vue";
-
+import { onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const uploadRef = ref<UploadProps>();
@@ -126,6 +127,9 @@ const store = useMainStore();
 const formLabelAlign = reactive<HrInformation>({ ...store.hrInformation });
 const company = ref({
   name: "",
+});
+onMounted(() => {
+  formLabelAlign.acceptEmail = route.params.PersonEmail as string;
 });
 const imageUrl = ref("");
 const handleAvatarSuccess: UploadProps["onSuccess"] = (
@@ -141,7 +145,6 @@ const handleAvatarError: UploadProps["onError"] = () =>
   {
     ElMessage.error("对不起，上传失败，请重试");
   };
-
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!imgTypes.includes(rawFile.type)) {

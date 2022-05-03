@@ -126,7 +126,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 store.hrInformation = null as unknown as HrInformation;
                 store.companyInformation =
                   null as unknown as CompanyInformation;
-                router.replace("/Home/Person");
+                router.replace({
+                  name: "Person",
+                  params: { PersonEmail: ruleForm.userName },
+                });
               }
             })
             .catch(failResponseHandler);

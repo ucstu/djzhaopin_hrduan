@@ -80,7 +80,7 @@ const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
 const vcode = ref("获取验证码");
 const btn = ref(false);
-const validateUser = (rule: any, value: any, callback: any) => {
+const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
   } else if (value.length < 6) {
@@ -91,10 +91,12 @@ const validateUser = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-const validatePass = (rule: any, value: any, callback: any) => {
+const validateUser = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入用户名"));
-  } else if (/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+  } else if (
+    !/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)
+  ) {
     callback(new Error("错误的用户名"));
   } else {
     callback();

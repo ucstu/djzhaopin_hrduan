@@ -47,7 +47,7 @@
         <div class="position">
           <el-scrollbar height="400px">
             <template v-for="position in jobTypeList" :key="position.companyId">
-              <div v-if="position.positionInformationId" class="position-list">
+              <div class="position-list">
                 <div class="position-item">
                   <div class="item">
                     <span>{{ "职位:" + position.positionName }}</span>
@@ -156,6 +156,10 @@ const deletePosition = (id: string) => {
     store.companyInformation.companyInformationId,
     id
   ).then((res) => {
+    jobTypeList.value = jobTypeList.value?.filter(
+      (item) =>
+        item.positionInformationId !== res.data.body.positionInformationId
+    );
     ElMessage.success("删除成功");
   });
 };
@@ -287,7 +291,7 @@ const deletePosition = (id: string) => {
           .position-item {
             display: flex;
             width: 70%;
-            height: 53px;
+            height: auto;
             margin: 10px 0;
 
             .item {

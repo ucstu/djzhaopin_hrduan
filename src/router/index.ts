@@ -17,7 +17,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
       },
       {
         name: "Person",
-        path: "Person",
+        path: "Person/:PersonEmail?",
         component: () => import("../pages/Home/Person.vue"),
       },
     ],
@@ -164,7 +164,7 @@ router.beforeEach(async (to, from, next) => {
     NProgress.done();
     next();
   } else {
-    if (whitelist.includes(to.path)) {
+    if (!to.meta.requiresAuth) {
       NProgress.done();
       next();
     } else {

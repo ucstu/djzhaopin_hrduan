@@ -149,10 +149,30 @@
               </el-select>
             </el-form-item>
             <el-form-item label="工作地点" prop="workAreaName">
-              <el-input
-                v-model="jobTypeList.workAreaName"
-                placeholder="请输入工作地址"
-              />
+              <div class="search">
+                <el-input
+                  v-model="jobTypeList.workAreaName"
+                  disabled
+                  placeholder="请在右方搜索点击选择"
+                />
+                <input id="input" type="text" />
+              </div>
+            </el-form-item>
+            <el-form-item prop="workPlace">
+              <div class="map">
+                <div id="container"></div>
+                <el-scrollbar>
+                  <ul>
+                    <li
+                      v-for="address in aboutAddress"
+                      :key="address.id"
+                      @click="handleArea(address)"
+                    >
+                      {{ address.name }}
+                    </li>
+                  </ul>
+                </el-scrollbar>
+              </div>
             </el-form-item>
             <el-form-item label="所属部门">
               <el-input
@@ -225,6 +245,7 @@
                 </template>
               </el-dialog>
             </el-form-item> -->
+
             <el-form-item>
               <el-button
                 v-if="!route.params.PublishJobId"
@@ -232,7 +253,10 @@
                 @click="publishPost(formRef)"
                 >发布职位</el-button
               >
-              <el-button v-if="route.params.PublishJobId" type="primary"
+              <el-button
+                v-if="route.params.PublishJobId"
+                type="primary"
+                @click="updatePost(formRef)"
                 >修改职位</el-button
               >
             </el-form-item>
@@ -241,7 +265,6 @@
       </div>
     </div>
   </div>
-  <div id="container"></div>
 </template>
 
 <script setup lang="ts">
@@ -250,6 +273,7 @@ import router from "@/router";
 import {
   getCompanyInfosP0PositionInfosP1,
   postCompanyInfosP0PositionInfos,
+  putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -260,11 +284,11 @@ import { useRoute } from "vue-router";
 const store = useMainStore();
 const route = useRoute();
 const map = shallowRef<AMap.Map>();
+const placeSearch = shallowRef();
 const formRef = ref<FormInstance>();
 const jobTypeList = ref<PositionInformation>({
   workTime: [] as unknown,
 } as PositionInformation);
-// const dialogFormVisible = ref(false);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
@@ -325,14 +349,58 @@ const rules = reactive({
     },
   ],
 });
-// const submitData = (data: {
-//   data: { checked: any; directionName: string };
-// }) => {
-//   if (data.data.checked) {
-//     jobTypeList.value.interviewInfo = data.data;
-//   }
-// };
+
+const longitude = ref(0);
+const latitude = ref(0);
+const aboutAddress = ref<any>([]);
 onMounted(() => {
+  map.value = new AMap.Map("container", {
+    zoom: 13,
+    center: [116.397428, 39.90923],
+  });
+  AMap.plugin(
+    [
+      "AMap.Geolocation",
+      "AMap.CitySearch",
+      "AMap.AutoComplete",
+      "AMap.PlaceSearch",
+    ],
+    function () {
+      let geolocation = new AMap.Geolocation({
+        zoomToAccuracy: true,
+      });
+      // @ts-ignore
+      geolocation.getCurrentPosition((status: any, result: any) => {
+        map.value?.setCenter(result.position);
+      });
+      let citySearch = new AMap.CitySearch();
+      citySearch.getLocalCity(function (status, result) {
+        if (typeof result != "string") {
+          if (status === "complete") {
+            // @ts-ignore
+            let autocomplete = new AMap.AutoComplete({
+              city: result.city,
+              input: "input",
+            });
+            placeSearch.value = new AMap.PlaceSearch({
+              city: result.city,
+              map: map.value,
+            });
+            autocomplete.on("select", (e: { poi: { name: any } }) => {
+              placeSearch.value.search(
+                e.poi.name,
+                (status: any, result: any) => {
+                  if (status === "complete") {
+                    aboutAddress.value = result.poiList.pois;
+                  }
+                }
+              );
+            });
+          }
+        }
+      });
+    }
+  );
   if (route.params.PublishJobId) {
     getCompanyInfosP0PositionInfosP1(
       store.companyInformation.companyInformationId,
@@ -342,6 +410,7 @@ onMounted(() => {
     });
   }
 });
+
 const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useTime(val[0]);
@@ -349,7 +418,14 @@ const handleWorkTimeChange = (val: Array<string>) => {
   jobTypeList.value.workTime = startTime;
   jobTypeList.value.overTime = endTime;
 };
-
+const handleArea = (address: any) => {
+  jobTypeList.value.workAreaName = address.address;
+  let lnglat = {
+    longitude: address.location.lng,
+    latitude: address.location.lat,
+  };
+  jobTypeList.value.workingPlace = lnglat;
+};
 const heightLightMap = ["团队和谐"];
 const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -371,18 +447,27 @@ const publishPost = (formEl: FormInstance | undefined) => {
     }
   });
 };
-
-onMounted(() => {
-  map.value = new AMap.Map("container", {
-    zoom: 13,
-    center: [116.397428, 39.90923],
+const updatePost = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      jobTypeList.value.hrInformationId =
+        store.accountInformation.fullInformationId;
+      jobTypeList.value.companyInformationId =
+        store.hrInformation.companyInformationId;
+      putCompanyInfosP0PositionInfosP1(
+        store.hrInformation.companyInformationId,
+        route.params.PublishJobId.toString(),
+        jobTypeList.value
+      )
+        .then(() => {
+          ElMessage.success("恭喜您，职位修改成功");
+          router.go(-1);
+        })
+        .catch(failResponseHandler);
+    }
   });
-  var marker = new AMap.Marker({
-    position: new AMap.LngLat(116.39, 39.9),
-    title: "北京",
-  });
-  map.value.add(marker);
-});
+};
 </script>
 
 <style lang="scss" scoped>
@@ -418,11 +503,6 @@ a {
   font-weight: 700;
 }
 
-#container {
-  width: 300px;
-  height: 180px;
-}
-
 .explain {
   margin-left: 40px;
   font-size: 12px;
@@ -454,6 +534,16 @@ a {
           width: 600px;
         }
 
+        .search {
+          display: flex;
+          justify-content: flex-end;
+          width: 100%;
+
+          input {
+            margin-left: 20px;
+          }
+        }
+
         .select {
           position: relative;
           width: 211px;
@@ -475,6 +565,34 @@ a {
             right: 10px;
             width: 16px;
             height: 16px;
+          }
+        }
+
+        .map {
+          display: flex;
+          width: 100%;
+          height: 180px;
+
+          #container {
+            width: 390px;
+            height: 180px;
+            border-radius: 5px;
+          }
+
+          .el-scrollbar {
+            width: 35%;
+
+            ul {
+              margin-top: -8px;
+              margin-left: -10px;
+              list-style-type: none;
+
+              li {
+                word-break: keep-all;
+                white-space: nowrap;
+                cursor: pointer;
+              }
+            }
           }
         }
       }
