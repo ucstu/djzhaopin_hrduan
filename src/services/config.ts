@@ -10,7 +10,7 @@ import Axios, {
   AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse
+  AxiosResponse,
 } from "axios";
 import httpAdapter from "axios/lib/adapters/http";
 import settle from "axios/lib/core/settle";

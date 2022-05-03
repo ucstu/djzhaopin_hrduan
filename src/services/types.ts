@@ -190,6 +190,25 @@ export interface CompanyInformation {
   legalRepresentative: string;
   /**
    *
+   * 公司地点
+   *
+   */
+  location: {
+    /**
+     *
+     * 纬度
+     *
+     */
+    latitude: number;
+    /**
+     *
+     * 经度
+     *
+     */
+    longitude: number;
+  };
+  /**
+   *
    * LOGO地址
    *
    */
@@ -1403,7 +1422,7 @@ export interface PositionInformation {
   workTime: string;
   /**
    *
-   * 工作地点
+   * 公司地点
    *
    */
   workingPlace: {
