@@ -8,45 +8,50 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetCompanyInfosQueryParams,
-  GetUserInfosP0EduExperiencesQueryParams,
-  GetCompanyInfosP0DeliveryRecordsQueryParams,
-  GetUserInfosP0ProjectExperiencesQueryParams,
-  GetUserInfosP0AttentionRecordsQueryParams,
-  GetCompanyInfosP0PositionInfosQueryParams,
-  DeleteAccountInfosP0QueryParams,
   GetUserInfosP0WorkExperiencesQueryParams,
-  GetVerificationCodeQueryParams,
-  GetUserInfosP0InspectionRecordsQueryParams,
-  GetUserInfosP0DeliveryRecordsQueryParams,
-  GetDirectionTagsQueryParams,
-  GetUserInfosP0GarnerRecordsQueryParams,
-  GetUserInfosQueryParams,
-  GetHrInfosQueryParams,
-  GetHrInfosP0InspectionRecordsQueryParams,
-  GetUserInfosP0JobExpectationsQueryParams,
+  GetCompanyInfosQueryParams,
   GetAreaInformationsQueryParams,
+  GetUserInfosP0JobExpectationsQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  DeleteAccountInfosP0QueryParams,
+  GetCompanyInfosP0BigDataQueryParams,
+  GetUserInfosQueryParams,
+  GetUserInfosP0DeliveryRecordsQueryParams,
+  GetCompanyInfosP0PositionInfosQueryParams,
+  GetCompanyInfosP0DeliveryRecordCountQueryParams,
+  GetUserInfosP0AttentionRecordsQueryParams,
   GetCompanyInfosPositionInfosQueryParams,
-  HrInformation,
+  GetUserInfosP0InspectionRecordsQueryParams,
+  GetUserInfosP0GarnerRecordsQueryParams,
+  GetHrInfosQueryParams,
+  GetUserInfosP0SawMeRecordQueryParams,
+  GetUserInfosP0ProjectExperiencesQueryParams,
+  GetVerificationCodeQueryParams,
+  GetDirectionTagsQueryParams,
+  GetHrInfosP0InspectionRecordsQueryParams,
+  GetUserInfosP0DeliveryRecordCountQueryParams,
+  GetCompanyInfosP0PositionInfoCountQueryParams,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
   AreaInformations,
-  WorkExperience,
-  DirectionTags,
-  UserInspectionRecord,
-  UserInformation,
-  MessageRecord,
   DeliveryRecord,
-  GarnerRecord,
-  PositionTypes,
-  CityInformations,
-  PositionInformation,
+  AccountInformation,
+  DirectionTags,
+  HrInspectionRecord,
   ProjectExperience,
   EducationExperience,
+  FilterInformation,
+  CityInformations,
+  MessageRecord,
+  AttentionRecord,
+  PositionInformation,
   CompanyInformation,
   JobExpectation,
-  AttentionRecord,
-  FilterInformation,
-  HrInspectionRecord,
-  AccountInformation,
+  WorkExperience,
+  UserInformation,
+  GarnerRecord,
+  PositionTypes,
+  UserInspectionRecord,
+  HrInformation,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -863,6 +868,132 @@ getCompanyInfosP0.key = "/companyInfos/{companyInfoId}";
 
 /**
  *
+ * 查询历史大数据
+ */
+export const getCompanyInfosP0BigData = (
+  /**
+   *
+   * 公司信息ID
+   */
+  companyInfoId: string,
+  queryParams: GetCompanyInfosP0BigDataQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 历史大数据列表
+     *
+     */
+    body: {
+      /**
+       *
+       * 记录日期
+       *
+       */
+      date: string;
+      /**
+       *
+       * 投递记录数量
+       *
+       */
+      deliveryRecordCount: number;
+      /**
+       *
+       * 浏览记录数量
+       *
+       */
+      inspectionRecordCount: number;
+      /**
+       *
+       * 在线沟通数量
+       *
+       */
+      onlineCommunicateCount: number;
+    }[];
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getCompanyInfosP0BigData.key, { companyInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getCompanyInfosP0BigData.key = "/companyInfos/{companyInfoId}/bigData";
+
+/**
+ *
+ * 查询所有投递数量
+ */
+export const getCompanyInfosP0DeliveryRecordCount = (
+  companyInfoId: string,
+  queryParams: GetCompanyInfosP0DeliveryRecordCountQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 投递记录数量
+     *
+     */
+    body: number;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getCompanyInfosP0DeliveryRecordCount.key, { companyInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getCompanyInfosP0DeliveryRecordCount.key =
+  "/companyInfos/{companyInfoId}/deliveryRecordCount";
+
+/**
+ *
  * 查询所有投递记录
  */
 export const getCompanyInfosP0DeliveryRecords = (
@@ -909,6 +1040,59 @@ export const getCompanyInfosP0DeliveryRecords = (
 /** Key is end point string without base url */
 getCompanyInfosP0DeliveryRecords.key =
   "/companyInfos/{companyInfoId}/deliveryRecords";
+
+/**
+ *
+ * 查询所有职位数量
+ */
+export const getCompanyInfosP0PositionInfoCount = (
+  /**
+   *
+   * 公司信息ID
+   */
+  companyInfoId: string,
+  queryParams: GetCompanyInfosP0PositionInfoCountQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 职位信息数量
+     *
+     */
+    body: number;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getCompanyInfosP0PositionInfoCount.key, { companyInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getCompanyInfosP0PositionInfoCount.key =
+  "/companyInfos/{companyInfoId}/positionInfoCount";
 
 /**
  *
@@ -1622,6 +1806,58 @@ getUserInfosP0.key = "/userInfos/{userInfoId}";
 
 /**
  *
+ * 查询所有关注数量
+ */
+export const getUserInfosP0AttentionRecordCount = (
+  /**
+   *
+   * 用户信息ID
+   */
+  userInfoId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 关注记录数量
+     *
+     */
+    body: number;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getUserInfosP0AttentionRecordCount.key, { userInfoId }),
+    undefined,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getUserInfosP0AttentionRecordCount.key =
+  "/userInfos/{userInfoId}/attentionRecordCount";
+
+/**
+ *
  * 查询所有关注记录
  */
 export const getUserInfosP0AttentionRecords = (
@@ -1726,6 +1962,59 @@ export const getUserInfosP0AttentionRecordsP1 = (
 /** Key is end point string without base url */
 getUserInfosP0AttentionRecordsP1.key =
   "/userInfos/{userInfoId}/attentionRecords/{attentionRecordId}";
+
+/**
+ *
+ * 查询所有投递数量
+ */
+export const getUserInfosP0DeliveryRecordCount = (
+  /**
+   *
+   * 用户信息ID
+   */
+  userInfoId: string,
+  queryParams: GetUserInfosP0DeliveryRecordCountQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 投递记录数量
+     *
+     */
+    body: number;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getUserInfosP0DeliveryRecordCount.key, { userInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getUserInfosP0DeliveryRecordCount.key =
+  "/userInfos/{userInfoId}/deliveryRecordCount";
 
 /**
  *
@@ -1940,6 +2229,58 @@ export const getUserInfosP0EduExperiencesP1 = (
 /** Key is end point string without base url */
 getUserInfosP0EduExperiencesP1.key =
   "/userInfos/{userInfoId}/eduExperiences/{eduExperienceId}";
+
+/**
+ *
+ * 查询所有收藏数量
+ */
+export const getUserInfosP0GarnerRecordCount = (
+  /**
+   *
+   * 用户信息ID
+   */
+  userInfoId: string,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * 收藏记录数量
+     *
+     */
+    body: number;
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getUserInfosP0GarnerRecordCount.key, { userInfoId }),
+    undefined,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getUserInfosP0GarnerRecordCount.key =
+  "/userInfos/{userInfoId}/garnerRecordCount";
 
 /**
  *
@@ -2370,6 +2711,58 @@ getUserInfosP0ProjectExperiencesP1.key =
 
 /**
  *
+ * 查询谁看过我记录
+ */
+export const getUserInfosP0SawMeRecord = (
+  /**
+   *
+   * 用户信息ID
+   */
+  userInfoId: string,
+  queryParams: GetUserInfosP0SawMeRecordQueryParams,
+  configOverride?: AxiosRequestConfig
+): Promise<
+  SwaggerResponse<{
+    /**
+     *
+     * HR查看记录列表
+     *
+     */
+    body: HrInspectionRecord[];
+    /**
+     *
+     * 状态描述
+     *
+     */
+    message: string;
+    /**
+     *
+     * 响应状态
+     *
+     */
+    status: number;
+    /**
+     *
+     * 处理时间
+     *
+     */
+    timestamp: string;
+  }>
+> => {
+  return Http.getRequest(
+    template(getUserInfosP0SawMeRecord.key, { userInfoId }),
+    queryParams,
+    undefined,
+    undefined,
+    overrideConfig(_CONSTANT0, configOverride)
+  );
+};
+
+/** Key is end point string without base url */
+getUserInfosP0SawMeRecord.key = "/userInfos/{userInfoId}/sawMeRecord";
+
+/**
+ *
  * 查询所有工作经历
  */
 export const getUserInfosP0WorkExperiences = (
@@ -2590,7 +2983,7 @@ export const postAccountInfosLogin = (
      *
      */
     body: {
-      accountInfo: AccountInformation;
+      accountInformation: AccountInformation;
       /**
        *
        * TOKEN

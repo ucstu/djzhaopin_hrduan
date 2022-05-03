@@ -455,7 +455,35 @@ export interface GetAreaInformationsQueryParams {
   cityName: string;
 }
 
-export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
+export interface GetCompanyInfosP0BigDataQueryParams {
+  /**
+   *
+   * 结束时间，eg：2022-02-04
+   */
+  endDate: string;
+  /**
+   *
+   * 起始时间，eg：2022-02-01
+   */
+  startDate: string;
+  /**
+   *
+   * 当前页，eg：0
+   */
+  page?: number;
+  /**
+   *
+   * 页大小，eg：5
+   */
+  size?: number;
+  /**
+   *
+   * 排序方式，eg：[date,desc]
+   */
+  sort?: Array<"date,asc" | "date,desc">;
+}
+
+export interface GetCompanyInfosP0DeliveryRecordCountQueryParams {
   /**
    *
    * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
@@ -473,12 +501,55 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
   deliveryDates?: Array<`${number}-${number}-${number}`>;
   /**
    *
+   * 职位信息ID数组，eg：[3d32dbEE-bbf8-A1Fc-f9Ad-F96f96dA5e8b]
+   */
+  positionInfoIds?: Array<string>;
+  /**
+   *
+   * 搜索内容，eg：张三
+   */
+  search?: string;
+  /**
+   *
+   * 性别数组，eg：[男,女]
+   */
+  sexs?: Array<"男" | "女" | "未知">;
+  /**
+   *
+   * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
+   */
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+}
+
+export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
+  /**
+   *
+   * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  status: Array<1 | 2 | 3 | 4 | 5>;
+  /**
+   *
+   * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
+   */
+  ages?: Array<1 | 2 | 3 | 4 | 5>;
+  /**
+   *
+   * 投递时间，eg：2022-04-02
+   */
+  createdAt?: string;
+  /**
+   *
+   * 投递日期数组，eg：[2007-02-22,2007-02-23]
+   */
+  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  /**
+   *
    * 当前页，eg：0
    */
   page?: number;
   /**
    *
-   * 职位信息ID数组
+   * 职位信息ID数组，eg：[3d32dbEE-bbf8-A1Fc-f9Ad-F96f96dA5e8b]
    */
   positionInfoIds?: Array<string>;
   /**
@@ -503,7 +574,70 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
   sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   /**
    *
+   * 修改时间，eg：2022-04-06
+   */
+  updatedAt?: string;
+  /**
+   *
    * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
+   */
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+}
+
+export interface GetCompanyInfosP0PositionInfoCountQueryParams {
+  /**
+   *
+   * 领域名数组，eg：[电商平台,游戏]
+   */
+  comprehensions?: Array<string>;
+  /**
+   *
+   * 细分标签名数组，eg：[Vue,React]
+   */
+  directionTags?: Array<string>;
+  /**
+   *
+   * 学历要求枚举数组，{1:不要求,2:大专,3:本科,4:硕士,5:博士}
+   */
+  educations?: Array<1 | 2 | 3 | 4 | 5>;
+  /**
+   *
+   * 融资阶段枚举数组，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+   */
+  financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
+  /**
+   *
+   * 职位名，eg：前端开发
+   */
+  positionName?: string;
+  /**
+   *
+   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   */
+  positionTypes?: Array<1 | 2 | 3>;
+  /**
+   *
+   * 薪资范围，(start,end) ，单位K，eg：1,4
+   */
+  salary?: `${number},${number}`;
+  /**
+   *
+   * 公司规模枚举数组，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
+   */
+  scales?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+  /**
+   *
+   * 工作区县名数组，eg：[合川,永川]
+   */
+  workAreas?: Array<string>;
+  /**
+   *
+   * 经纬度坐标，eg：99.748,74.391846196586
+   */
+  workingPlace?: `${number},${number}`;
+  /**
+   *
+   * 工作年限枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
    */
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
@@ -657,7 +791,7 @@ export interface GetCompanyInfosPositionInfosQueryParams {
 export interface GetCompanyInfosQueryParams {
   /**
    *
-   * 公司名称
+   * 公司名称，eg：东江招聘
    */
   companyName?: string;
   /**
@@ -706,17 +840,17 @@ export interface GetHrInfosP0InspectionRecordsQueryParams {
 export interface GetHrInfosQueryParams {
   /**
    *
-   * 当前页
+   * 当前页，eg：0
    */
   page?: number;
   /**
    *
-   * 页大小
+   * 页大小，eg：5
    */
   size?: number;
   /**
    *
-   * 排序方式
+   * 排序方式，eg：[createdAt,desc]
    */
   sort?: Array<`${keyof HrInformation},${"asc" | "desc"}`>;
 }
@@ -739,12 +873,20 @@ export interface GetUserInfosP0AttentionRecordsQueryParams {
   sort?: Array<`${keyof AttentionRecord},${"asc" | "desc"}`>;
 }
 
+export interface GetUserInfosP0DeliveryRecordCountQueryParams {
+  /**
+   *
+   * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  status: Array<1 | 2 | 3 | 4 | 5>;
+}
+
 export interface GetUserInfosP0DeliveryRecordsQueryParams {
   /**
    *
-   * 投递记录状态，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  status: 1 | 2 | 3 | 4 | 5;
+  status: Array<1 | 2 | 3 | 4 | 5>;
   /**
    *
    * 当前页，eg：0
@@ -850,6 +992,24 @@ export interface GetUserInfosP0ProjectExperiencesQueryParams {
    * 排序方式，eg：[createdAt,desc]
    */
   sort?: Array<`${keyof ProjectExperience},${"asc" | "desc"}`>;
+}
+
+export interface GetUserInfosP0SawMeRecordQueryParams {
+  /**
+   *
+   * 当前页，eg：0
+   */
+  page?: number;
+  /**
+   *
+   * 页大小，eg：5
+   */
+  size?: number;
+  /**
+   *
+   * 排序方式，eg：[createdAt,desc]
+   */
+  sort?: Array<`${keyof HrInspectionRecord},${"asc" | "desc"}`>;
 }
 
 export interface GetUserInfosP0WorkExperiencesQueryParams {
@@ -1472,6 +1632,12 @@ export interface UserInformation {
 }
 
 export interface UserInspectionRecord {
+  /**
+   *
+   * 公司信息ID
+   *
+   */
+  companyInformationId: string;
   /**
    *
    * 创建时间
