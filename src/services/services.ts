@@ -8,50 +8,49 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetUserInfosP0ProjectExperiencesQueryParams,
-  GetUserInfosP0JobExpectationsQueryParams,
-  GetCompanyInfosPositionInfosQueryParams,
-  GetUserInfosP0AttentionRecordsQueryParams,
-  GetHrInfosQueryParams,
-  GetUserInfosP0DeliveryRecordsQueryParams,
-  GetUserInfosP0GarnerRecordsQueryParams,
-  GetUserInfosQueryParams,
-  GetUserInfosP0WorkExperiencesQueryParams,
-  GetCompanyInfosP0PositionInfoCountQueryParams,
-  GetUserInfosP0InspectionRecordsQueryParams,
-  DeleteAccountInfosP0QueryParams,
-  GetCompanyInfosQueryParams,
   GetCompanyInfosP0PositionInfosQueryParams,
-  GetHrInfosP0InspectionRecordsQueryParams,
-  GetCompanyInfosP0DeliveryRecordCountQueryParams,
-  GetAreaInformationsQueryParams,
-  GetUserInfosP0SawMeRecordQueryParams,
-  GetCompanyInfosP0DeliveryRecordsQueryParams,
-  GetUserInfosP0EduExperiencesQueryParams,
+  GetUserInfosP0AttentionRecordsQueryParams,
   GetUserInfosP0DeliveryRecordCountQueryParams,
-  GetCompanyInfosP0BigDataQueryParams,
+  GetCompanyInfosPositionInfosQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  DeleteAccountInfosP0QueryParams,
+  GetUserInfosP0JobExpectationsQueryParams,
+  GetHrInfosQueryParams,
+  GetUserInfosP0SawMeRecordQueryParams,
+  GetUserInfosP0DeliveryRecordsQueryParams,
+  GetCompanyInfosQueryParams,
   GetDirectionTagsQueryParams,
+  GetCompanyInfosP0DeliveryRecordCountQueryParams,
+  GetHrInfosP0InspectionRecordsQueryParams,
+  GetUserInfosP0ProjectExperiencesQueryParams,
+  GetUserInfosP0GarnerRecordsQueryParams,
+  GetAreaInformationsQueryParams,
+  GetUserInfosP0WorkExperiencesQueryParams,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
+  GetUserInfosP0InspectionRecordsQueryParams,
   GetVerificationCodeQueryParams,
-  MessageRecord,
-  HrInspectionRecord,
-  HrInformation,
-  DeliveryRecord,
-  DirectionTags,
-  GarnerRecord,
-  WorkExperience,
-  EducationExperience,
-  UserInspectionRecord,
-  UserInformation,
+  GetCompanyInfosP0BigDataQueryParams,
+  GetCompanyInfosP0PositionInfoCountQueryParams,
+  GetUserInfosQueryParams,
+  CompanyInformation,
+  JobExpectation,
   PositionInformation,
   CityInformations,
-  AttentionRecord,
   PositionTypes,
   AreaInformations,
-  JobExpectation,
-  CompanyInformation,
-  AccountInformation,
-  ProjectExperience,
+  UserInspectionRecord,
+  DirectionTags,
+  AttentionRecord,
+  UserInformation,
+  EducationExperience,
   FilterInformation,
+  DeliveryRecord,
+  HrInspectionRecord,
+  WorkExperience,
+  HrInformation,
+  AccountInformation,
+  GarnerRecord,
+  ProjectExperience,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1531,52 +1530,6 @@ export const getHrInfosP0InspectionRecordsP1 = (
 /** Key is end point string without base url */
 getHrInfosP0InspectionRecordsP1.key =
   "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}";
-
-/**
- *
- * 查询所有消息
- */
-export const getMessageRecords = (
-  configOverride?: AxiosRequestConfig
-): Promise<
-  SwaggerResponse<{
-    /**
-     *
-     * 消息列表
-     *
-     */
-    body: MessageRecord[];
-    /**
-     *
-     * 状态描述
-     *
-     */
-    message: string;
-    /**
-     *
-     * 响应状态
-     *
-     */
-    status: number;
-    /**
-     *
-     * 处理时间
-     *
-     */
-    timestamp: string;
-  }>
-> => {
-  return Http.getRequest(
-    getMessageRecords.key,
-    undefined,
-    undefined,
-    undefined,
-    overrideConfig(_CONSTANT0, configOverride)
-  );
-};
-
-/** Key is end point string without base url */
-getMessageRecords.key = "/messageRecords";
 
 /**
  *
@@ -3143,7 +3096,7 @@ export const postCompanyInfos = (
      *
      * 成立时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     establishmentTime?: string;
     /**
@@ -3515,7 +3468,7 @@ export const postUserInfosP0EduExperiences = (
      *
      * 入学时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     admissionTime: string;
     /**
@@ -3529,7 +3482,7 @@ export const postUserInfosP0EduExperiences = (
      *
      * 毕业时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     graduationTime: string;
     /**
@@ -3683,7 +3636,7 @@ export const postUserInfosP0ProjectExperiences = (
      *
      * 结束时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     endTime: string;
     /**
@@ -3702,7 +3655,7 @@ export const postUserInfosP0ProjectExperiences = (
      *
      * 开始时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     startTime: string;
     /**
@@ -3766,7 +3719,7 @@ export const postUserInfosP0WorkExperiences = (
      *
      * 离职时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     endTime: string;
     /**
@@ -3792,7 +3745,7 @@ export const postUserInfosP0WorkExperiences = (
      *
      * 就职时间
      *
-     * - pattern: /^(\d{4})-(\d{2})-(\d{2})/
+     * - pattern: ^((((19|20)\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-(0?[13578]|1[02])-31)|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$
      */
     startTime: string;
   },
