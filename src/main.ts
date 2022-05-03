@@ -6,7 +6,6 @@ import { createApp } from "vue";
 import ECharts from "vue-echarts";
 import App from "./App.vue";
 import router from "./router";
-
 const pinia = createPinia();
 pinia.use(piniaPluginPersist);
 

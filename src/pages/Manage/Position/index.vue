@@ -78,12 +78,12 @@
                 <div class="position-button">
                   <el-button
                     type="primary"
-                    @click="updatePosition(positionInformationId)"
+                    @click="updatePosition(position.positionInformationId)"
                     >编辑职位</el-button
                   >
                   <el-button
                     type="danger"
-                    @click="deletePosition(positionInformationId)"
+                    @click="deletePosition(position.positionInformationId)"
                     >删除职位</el-button
                   >
                 </div>
@@ -120,7 +120,7 @@ import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { reactive, ref, toRefs } from "vue";
+import { reactive, ref } from "vue";
 const store = useMainStore();
 const jobTypeList = ref<PositionInformation[]>();
 const input2 = ref("");
@@ -141,12 +141,9 @@ getCompanyInfosP0PositionInfos(
   jobTypeList.value = res.data.body;
 });
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
-const { positionInformationId } = toRefs(store.positionInformation);
-
 const toPublish = () => {
   router.push("/PublishJob");
 };
-
 const updatePosition = (id: string) => {
   router.push({
     name: "PublishJob",
@@ -159,8 +156,6 @@ const deletePosition = (id: string) => {
     store.companyInformation.companyInformationId,
     id
   ).then((res) => {
-    store.positionInformation = res.data.body;
-    // store.commit("decreaseCompanyRerecruit", 1);
     ElMessage.success("删除成功");
   });
 };

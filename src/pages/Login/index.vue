@@ -102,7 +102,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       postAccountInfosLogin(ruleForm)
         .then((res) => {
           store.jsonWebToken = res.data.body.token;
-          store.accountInformation = res.data.body.accountInfo;
+          store.accountInformation = res.data.body.accountInformation;
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
           getHrInfosP0(store.accountInformation.fullInformationId)

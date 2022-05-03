@@ -95,7 +95,9 @@ const store = useMainStore();
 
 const comFormRef = ref<FormInstance>();
 
-const companyForm = reactive<CompanyInformation>(store.companyInformation);
+const companyForm = reactive<CompanyInformation>({
+  ...store.companyInformation,
+});
 
 const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;

@@ -235,7 +235,7 @@
               <el-button
                 v-if="route.params.PublishJobId"
                 type="primary"
-                @click="updatelishPost(formRef)"
+                @click="updatePost(formRef)"
                 >修改职位</el-button
               >
             </el-form-item>
@@ -365,9 +365,8 @@ const publishPost = (formEl: FormInstance | undefined) => {
         store.hrInformation.companyInformationId,
         jobTypeList.value
       )
-        .then((res) => {
+        .then(() => {
           ElMessage.success("恭喜您，职位发布成功");
-          store.positionInformation = res.data.body;
           router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);
@@ -375,7 +374,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
   });
 };
 
-const updatelishPost = (formEl: FormInstance | undefined) => {
+const updatePost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
@@ -383,10 +382,12 @@ const updatelishPost = (formEl: FormInstance | undefined) => {
         store.companyInformation.companyInformationId,
         route.params.positionInfoId.toString(),
         jobTypeList.value
-      ).then((res) => {
-        ElMessage.success("恭喜您，职位信息修改成功");
-        router.go(-1);
-      });
+      )
+        .then(() => {
+          ElMessage.success("恭喜您，职位信息修改成功");
+          router.go(-1);
+        })
+        .catch(failResponseHandler);
     }
   });
 };
