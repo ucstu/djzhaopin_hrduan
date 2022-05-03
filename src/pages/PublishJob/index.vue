@@ -232,10 +232,7 @@
                 @click="publishPost(formRef)"
                 >发布职位</el-button
               >
-              <el-button
-                v-if="route.params.PublishJobId"
-                type="primary"
-                @click="updatePost(formRef)"
+              <el-button v-if="route.params.PublishJobId" type="primary"
                 >修改职位</el-button
               >
             </el-form-item>
@@ -244,6 +241,7 @@
       </div>
     </div>
   </div>
+  <div id="container"></div>
 </template>
 
 <script setup lang="ts">
@@ -252,16 +250,16 @@ import router from "@/router";
 import {
   getCompanyInfosP0PositionInfosP1,
   postCompanyInfosP0PositionInfos,
-  putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
 const store = useMainStore();
 const route = useRoute();
+const map = shallowRef<AMap.Map>();
 const formRef = ref<FormInstance>();
 const jobTypeList = ref<PositionInformation>({
   workTime: [] as unknown,
@@ -374,23 +372,17 @@ const publishPost = (formEl: FormInstance | undefined) => {
   });
 };
 
-const updatePost = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.validate((valid) => {
-    if (valid) {
-      putCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
-        route.params.positionInfoId.toString(),
-        jobTypeList.value
-      )
-        .then(() => {
-          ElMessage.success("恭喜您，职位信息修改成功");
-          router.go(-1);
-        })
-        .catch(failResponseHandler);
-    }
+onMounted(() => {
+  map.value = new AMap.Map("container", {
+    zoom: 13,
+    center: [116.397428, 39.90923],
   });
-};
+  var marker = new AMap.Marker({
+    position: new AMap.LngLat(116.39, 39.9),
+    title: "北京",
+  });
+  map.value.add(marker);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -424,6 +416,11 @@ a {
 .title {
   font-size: 18px;
   font-weight: 700;
+}
+
+#container {
+  width: 300px;
+  height: 180px;
 }
 
 .explain {

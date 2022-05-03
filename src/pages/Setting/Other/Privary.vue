@@ -40,9 +40,7 @@ import { deleteAccountInfosP0, getVerificationCode } from "@/services/services";
 import {
   AccountInformation,
   CompanyInformation,
-  DeliveryRecord,
   HrInformation,
-  PositionInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import type { FormInstance } from "element-plus";
@@ -84,10 +82,8 @@ const deleteForm = (formEl: FormInstance | undefined) => {
       }).then(() => {
         store.jsonWebToken = null as unknown as string;
         store.hrInformation = null as unknown as HrInformation;
-        store.deliveryRecord = null as unknown as DeliveryRecord;
         store.accountInformation = null as unknown as AccountInformation;
         store.companyInformation = null as unknown as CompanyInformation;
-        store.positionInformation = null as unknown as PositionInformation;
         ElMessage.success("注销成功");
         router.push("/");
       });

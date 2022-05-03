@@ -10,7 +10,6 @@
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
     "axios": "^0.26.1",
-    "baidu-map-vue3": "^0.4.9",
     "echarts": "^5.3.2",
     "element-plus": "^2.1.8",
     "nanoid": "^3.3.2",
@@ -24,6 +23,7 @@
     "vue-router": "^4.0.13"
   },
   "devDependencies": {
+    "@types/amap-js-api": "^1.4.10",
     "@types/node": "^17.0.24",
     "@types/nprogress": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5.19.0",

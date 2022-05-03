@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" />
     <title>东江人才招聘</title>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=363e353dbef827649271581eda055da7"></script>
     <!-- <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
     <script>
       // VConsole 默认会挂载到 `window.VConsole` 上
@@ -16,7 +17,9 @@
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
     <script>
-      var hasLogin = false;
+      window._AMapSecurityConfig = {
+        securityJsCode: "ccd9314c5d836469310b48374b86d6b6",
+      };
     </script>
   </body>
 </html>
