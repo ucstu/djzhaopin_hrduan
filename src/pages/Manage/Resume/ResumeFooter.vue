@@ -6,28 +6,38 @@
       <el-button type="primary" plain>删除简历</el-button>
       <el-button type="primary" plain>导出简历</el-button>
     </div>
-    <el-pagination background layout="prev, pager, next" :total="total" />
+    <el-pagination
+      v-model="currentPage"
+      background
+      layout="prev, pager, next"
+      :total="total"
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { DeliveryRecord } from "@/services/types";
-import { computed, defineProps, PropType, ref } from "vue";
+import { defineProps, ref } from "vue";
 const props = defineProps({
   checked1: {
     type: Boolean,
     default: false,
   },
-  deliveryRecords: {
-    type: Array as PropType<DeliveryRecord[]>,
-    default: () => [],
+  total: {
+    type: Number,
+    default: 0,
   },
 });
 
-const total = computed(() => {
-  let num = (props.deliveryRecords.length / 7) * 10;
-  return Math.ceil(num);
-});
+const emit = defineEmits(["submit-page"]);
+const handleCurrentChange = (val: number) => {
+  emit("submit-page", {
+    type: "page",
+    data: val,
+  });
+};
+const currentPage = ref(1);
+
 const checked1 = ref(false);
 </script>
 

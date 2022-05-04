@@ -9,6 +9,7 @@
                 v-model="valueMap.status"
                 class="m-2"
                 placeholder="按反馈"
+                @change="handleChange"
               >
                 <el-option
                   v-for="(item, index) in feedbackMap"
@@ -21,6 +22,7 @@
                 v-model="valueMap.workingYears"
                 class="m-2"
                 placeholder="工作经验"
+                @change="handleChange"
               >
                 <el-option
                   v-for="(item, index) in workExperience"
@@ -40,7 +42,12 @@
               />
             </div>
             <div class="second-line">
-              <el-select v-model="valueMap.sexs" class="m-2" placeholder="性别">
+              <el-select
+                v-model="valueMap.sexs"
+                class="m-2"
+                placeholder="性别"
+                @change="handleChange"
+              >
                 <el-option
                   v-for="(item, index) in gander"
                   :key="item"
@@ -68,15 +75,22 @@
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
-              <ResumeInfo
-                :user-informations="userInformations"
-                :job-informations="jobInformations"
-                :delivery-records="deliveryRecords"
-                :checked1="checked1"
-              />
+              <template
+                v-for="(
+                  deliveryRecordsChecked, index
+                ) in deliveryRecordsCheckeds"
+                :key="index"
+              >
+                <ResumeInfo
+                  :user-informations="userInformations"
+                  :job-informations="jobInformations"
+                  :delivery-records-checked="deliveryRecordsChecked"
+                  :checked1="checked1"
+                ></ResumeInfo>
+              </template>
             </el-scrollbar>
           </div>
-          <ResumeFooter :delivery-records="deliveryRecords" />
+          <ResumeFooter :total="total" @submit-page="submitPage" />
         </div>
       </div>
     </div>
@@ -86,19 +100,19 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Search } from "@element-plus/icons-vue";
-import { ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
@@ -125,19 +139,30 @@ const handleWorkTimeChange = (val: Array<string>) => {
   let endTime = useDate(val[1]);
   deliveryDates.value[0] = startTime;
   deliveryDates.value[1] = endTime;
+  handleChange();
+};
+const total = computed(() => {
+  let num = (deliveryRecords.value.length / 7) * 10;
+  return Math.ceil(num);
+});
+const submitPage = (data: { type: string; data: number }) => {
+  valueMap.value.page = data.data;
 };
 const valueMap = ref<Record>({
   status: [2],
   deliveryDates: deliveryDates.value,
 });
+const deliveryRecordsCheckeds = reactive<any>([]);
 
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
-  { status: [1, 2, 3, 4, 5] }
+  valueMap.value
 )
   .then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
+      deliveryRecordsCheckeds.push(Object.assign(item, { checked: false }));
+
       getUserInfosP0(item.userInformationId)
         .then((response) => {
           userInformations.value.set(
@@ -161,29 +186,37 @@ getCompanyInfosP0DeliveryRecords(
   })
   .catch(failResponseHandler);
 
-// onUpdated(() => {
-//   getCompanyInfosP0DeliveryRecords(
-//     store.state.companyInformation.companyInformationId,
-//     valueMap.value
-//   ).then((res) => {
-//     deliveryRecords.value = res.data.body;
-//     deliveryRecords.value.forEach((item) => {
-//       getUserInfosP0(item.userInformationId).then((response) => {
-//         userInformations.value.set(item.userInformationId, response.data.body);
-//       });
-//       getCompanyInfosP0PositionInfosP1(
-//         store.state.companyInformation.companyInformationId,
-//         item.positionInformationId
-//       ).then((resposable) => {
-//         jobInformations.value.set(
-//           item.positionInformationId,
-//           resposable.data.body
-//         );
-//       });
-//     });
-//   });
-// });
-
+const handleChange = () => {
+  getCompanyInfosP0DeliveryRecords(
+    store.companyInformation.companyInformationId,
+    valueMap.value
+  )
+    .then((res) => {
+      deliveryRecords.value = res.data.body;
+      deliveryRecords.value.forEach((item) => {
+        getUserInfosP0(item.userInformationId)
+          .then((response) => {
+            userInformations.value.set(
+              item.userInformationId,
+              response.data.body
+            );
+          })
+          .catch(failResponseHandler);
+        getCompanyInfosP0PositionInfosP1(
+          store.companyInformation.companyInformationId,
+          item.positionInformationId
+        )
+          .then((respones) => {
+            jobInformations.value.set(
+              item.positionInformationId,
+              respones.data.body
+            );
+          })
+          .catch(failResponseHandler);
+      });
+    })
+    .catch(failResponseHandler);
+};
 const feedbackMap = ["已通过", "已拒绝", "待审核"];
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];

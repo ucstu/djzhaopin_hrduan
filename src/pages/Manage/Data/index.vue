@@ -25,11 +25,12 @@
       >
         <div class="map-info">
           <el-date-picker
-            v-model="value1"
+            v-model="workTimeing"
             type="daterange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-value="[new Date(2010, 9, 1), new Date(2010, 10, 1)]"
+            :default-value="[new Date(2022, 4, 1), new Date(2022, 5, 5)]"
+            @change="handleWorkTimeChange(workTimeing)"
           />
         </div>
         <el-tab-pane :key="Scan" label="获得浏览量" name="Scan">
@@ -47,16 +48,44 @@
 </template>
 
 <script setup lang="ts">
+import useDate from "@/hooks/useDate";
+import { getCompanyInfosP0BigData } from "@/services/services";
+import { useMainStore } from "@/stores/main";
 import { reactive, ref } from "vue";
 import Communicate from "./Communicate.vue";
 import Scan from "./Scan.vue";
 import Vita from "./Vita.vue";
-const value1 = ref("");
+const store = useMainStore();
+const workTimeing = ref([]);
+const startTime = ref("");
+const endTime = ref("");
 const tabPosition = ref("top");
 const state = reactive({
   userID: "",
   // 默认组件，显示第一个组件
   currentView: "Scan",
+});
+interface bigDate {
+  endDate: string;
+  startDate: string;
+  page?: number;
+  size?: number;
+  sort?: Array<`date,${"asc" | "desc"}`>;
+}
+const Date = ref<bigDate>({
+  endDate: "2022-05-05",
+  startDate: "2022-05-01",
+});
+const handleWorkTimeChange = (val: Array<string>) => {
+  startTime.value = useDate(val[0]);
+  endTime.value = useDate(val[1]);
+};
+
+getCompanyInfosP0BigData(
+  store.companyInformation.companyInformationId,
+  Date.value
+).then((res) => {
+  console.log(res);
 });
 </script>
 

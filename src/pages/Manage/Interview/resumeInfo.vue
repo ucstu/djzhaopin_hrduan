@@ -1,49 +1,50 @@
 <template>
-  <div
-    v-for="deliveryRecord in deliveryRecords"
-    :key="deliveryRecord.deliveryRecordId"
-    class="resume-item"
-  >
+  <div class="resume-item">
     <div class="item-header">
-      <el-checkbox v-model="checked" />
+      <el-checkbox :checked="deliveryRecordsChecked.checked" />
       <img
         :src="
           VITE_CDN_URL +
-          userInformations.get(deliveryRecord.userInformationId)?.avatarUrl
+          userInformations.get(deliveryRecordsChecked.userInformationId)
+            ?.avatarUrl
         "
         alt=""
       />
       <div class="header-person">
         <div>
           <span>{{
-            userInformations.get(deliveryRecord.userInformationId)?.firstName +
+            userInformations.get(deliveryRecordsChecked.userInformationId)
+              ?.firstName +
             "" +
-            userInformations.get(deliveryRecord.userInformationId)?.lastName
+            userInformations.get(deliveryRecordsChecked.userInformationId)
+              ?.lastName
           }}</span>
           <span
             >·男·<span>{{
-              userInformations.get(deliveryRecord.userInformationId)?.age
+              userInformations.get(deliveryRecordsChecked.userInformationId)
+                ?.age
             }}</span
             >岁·<span
-              >{{educations[userInformations.get(deliveryRecord.userInformationId)!.education]}}</span
-            >·{{slution[userInformations.get(deliveryRecord.userInformationId)!.jobStatus]
+              >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education]}}</span
+            >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus]
             }}</span
           >
         </div>
         <div>
           <span
             >想找：{{
-              userInformations.get(deliveryRecord.userInformationId)?.cityName
+              userInformations.get(deliveryRecordsChecked.userInformationId)
+                ?.cityName
             }}</span
           ><span
             >{{
-              jobInformations.get(deliveryRecord.positionInformationId)
+              jobInformations.get(deliveryRecordsChecked.positionInformationId)
                 ?.positionName
             }}|{{
-              jobInformations.get(deliveryRecord.positionInformationId)
+              jobInformations.get(deliveryRecordsChecked.positionInformationId)
                 ?.startingSalary +
               "K-" +
-              jobInformations.get(deliveryRecord.positionInformationId)
+              jobInformations.get(deliveryRecordsChecked.positionInformationId)
                 ?.ceilingSalary +
               "K"
             }}</span
@@ -55,10 +56,10 @@
     <div class="resume-label">
       {{ " 求高薪 | 求稳定 | 求发展 " }}
     </div>
-    <div>
+    <div class="right">
       <el-button
         type="primary"
-        @click="inspectionResume(userInformations.get(deliveryRecord.userInformationId)!.userInformationId)"
+        @click="inspectionResume(userInformations.get(deliveryRecordsChecked.userInformationId)!.userInformationId,jobInformations.get(deliveryRecordsChecked.positionInformationId)!.positionInformationId)"
         >查看简历</el-button
       >
     </div>
@@ -67,17 +68,13 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
-} from "@/services/types";
-import { computed, defineProps, PropType, ref } from "vue";
+import { PositionInformation, UserInformation } from "@/services/types";
+import { defineProps, PropType } from "vue";
 
-const props = defineProps({
-  deliveryRecords: {
-    type: Array as PropType<DeliveryRecord[]>,
-    default: () => [],
+defineProps({
+  deliveryRecordsChecked: {
+    type: Object,
+    default: () => ({}),
   },
   userInformations: {
     type: Map as PropType<Map<string, UserInformation>>,
@@ -86,10 +83,6 @@ const props = defineProps({
   jobInformations: {
     type: Map as PropType<Map<string, PositionInformation>>,
     default: () => new Map(),
-  },
-  checked1: {
-    type: Boolean,
-    default: false,
   },
 });
 // const deliveryRecordsCheckeds = reactive<any>([]);
@@ -100,25 +93,16 @@ const props = defineProps({
 //     );
 //   });
 // });
-// console.log(props.deliveryRecords);
-const deliveryRecordsCheckeds = computed<any[]>(() => {
-  return props.deliveryRecords.map((deliveryRecord) => {
-    deliveryRecordsCheckeds.value.push({
-      ...deliveryRecord,
-      checked: false,
-    });
-  });
-});
-console.log(deliveryRecordsCheckeds);
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const educations = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
-const checked = ref(false);
-const inspectionResume = (id: string) => {
+const inspectionResume = (userid: string, postid: string) => {
   router.push({
     name: "Resume",
     params: {
-      userInformationId: id,
+      userId: userid,
+      postId: postid,
     },
   });
 };
@@ -169,6 +153,10 @@ const inspectionResume = (id: string) => {
   .resume-label {
     position: absolute;
     left: 45%;
+  }
+
+  .right {
+    margin-right: 10px;
   }
 }
 </style>

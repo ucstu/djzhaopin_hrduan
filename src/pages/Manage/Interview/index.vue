@@ -65,8 +65,8 @@ const deliveryRecords = ref<DeliveryRecord[]>([]);
 const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-const workTimeing = ref([]);
 const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
+const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useDate(val[0]);
   let endTime = useDate(val[1]);
