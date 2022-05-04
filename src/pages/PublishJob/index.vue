@@ -207,7 +207,7 @@
               </el-col>
               <el-col :span="11">
                 <div class="demo-range">
-                  <el-form-item prop="workTime">
+                  <el-form-item>
                     <el-time-picker
                       v-model="workTimeing"
                       :clearable="false"
@@ -271,9 +271,9 @@
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-  getCompanyInfosP0PositionInfosP1,
-  postCompanyInfosP0PositionInfos,
-  putCompanyInfosP0PositionInfosP1,
+getCompanyInfosP0PositionInfosP1,
+postCompanyInfosP0PositionInfos,
+putCompanyInfosP0PositionInfosP1
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -384,7 +384,6 @@ onMounted(() => {
             });
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
-              map: map.value,
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -405,9 +404,11 @@ onMounted(() => {
     getCompanyInfosP0PositionInfosP1(
       store.companyInformation.companyInformationId,
       route.params.PublishJobId.toString()
-    ).then((res) => {
-      jobTypeList.value = res.data.body;
-    });
+    )
+      .then((res) => {
+        jobTypeList.value = res.data.body;
+      })
+      .catch(failResponseHandler);
   }
 });
 

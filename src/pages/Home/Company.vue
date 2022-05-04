@@ -200,9 +200,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  getCityInformations,
-  postCompanyInfos,
-  putHrInfosP0,
+getCityInformations,
+postCompanyInfos,
+putHrInfosP0
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";

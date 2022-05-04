@@ -170,18 +170,22 @@ getCompanyInfosP0DeliveryRecords(
       getCompanyInfosP0PositionInfosP1(
         store.hrInformation.companyInformationId,
         item.positionInformationId
-      ).then((response) => {
-        jobInformations.value.set(
-          item.positionInformationId,
-          response.data.body
-        );
-      });
-      getUserInfosP0(item.userInformationId).then((responseable) => {
-        userInformations.value.set(
-          item.userInformationId,
-          responseable.data.body
-        );
-      });
+      )
+        .then((response) => {
+          jobInformations.value.set(
+            item.positionInformationId,
+            response.data.body
+          );
+        })
+        .catch(failResponseHandler);
+      getUserInfosP0(item.userInformationId)
+        .then((responseable) => {
+          userInformations.value.set(
+            item.userInformationId,
+            responseable.data.body
+          );
+        })
+        .catch(failResponseHandler);
       if (item.status == 4) {
         num.value.count = num.value.count + 1;
       } else if (item.status == 2) {

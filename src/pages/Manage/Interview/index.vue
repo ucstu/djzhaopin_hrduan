@@ -56,6 +56,7 @@ import {
   UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { computed } from "@vue/reactivity";
 import { onUpdated, ref } from "vue";
 import ResumeInfo from "./resumeInfo.vue";
@@ -83,15 +84,19 @@ onUpdated(() => {
   ).then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      getUserInfosP0(item.userInformationId).then((res) => {
-        userInformations.value.set(item.userInformationId, res.data.body);
-      });
+      getUserInfosP0(item.userInformationId)
+        .then((res) => {
+          userInformations.value.set(item.userInformationId, res.data.body);
+        })
+        .catch(failResponseHandler);
       getCompanyInfosP0PositionInfosP1(
         store.companyInformation.companyInformationId,
         item.positionInformationId
-      ).then((res) => {
-        jobInformations.value.set(item.positionInformationId, res.data.body);
-      });
+      )
+        .then((res) => {
+          jobInformations.value.set(item.positionInformationId, res.data.body);
+        })
+        .catch(failResponseHandler);
     });
   });
 });

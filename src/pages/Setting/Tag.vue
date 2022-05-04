@@ -50,6 +50,7 @@
 </template>
 <script lang="ts" setup>
 import { getPositionTypes } from "@/services/services";
+import { failResponseHandler } from "@/utils/handler";
 import { onMounted, reactive, ref } from "vue";
 
 interface PositionType {
@@ -68,28 +69,30 @@ const checkableJobTypes = ref<PositionType[]>([]);
 const checkablePositions = ref<PositionType["directions"][0]["positions"]>([]);
 
 onMounted(() => {
-  getPositionTypes().then((res) => {
-    checkableJobTypes.value = res.data.body.map((jobType) => {
-      const checkableDirections = jobType.directions.map((direction) => {
-        const _checkablePositions = direction.positions.map((position) => {
-          let checkablePosition = reactive({
-            positionName: position,
-            checked: false,
+  getPositionTypes()
+    .then((res) => {
+      checkableJobTypes.value = res.data.body.map((jobType) => {
+        const checkableDirections = jobType.directions.map((direction) => {
+          const _checkablePositions = direction.positions.map((position) => {
+            let checkablePosition = reactive({
+              positionName: position,
+              checked: false,
+            });
+            checkablePositions.value.push(checkablePosition);
+            return checkablePosition;
           });
-          checkablePositions.value.push(checkablePosition);
-          return checkablePosition;
+          return {
+            directionName: direction.directionName,
+            positions: _checkablePositions,
+          };
         });
         return {
-          directionName: direction.directionName,
-          positions: _checkablePositions,
+          fieldName: jobType.fieldName,
+          directions: checkableDirections,
         };
       });
-      return {
-        fieldName: jobType.fieldName,
-        directions: checkableDirections,
-      };
-    });
-  });
+    })
+    .catch(failResponseHandler);
 });
 </script>
 <style scoped lang="scss">
