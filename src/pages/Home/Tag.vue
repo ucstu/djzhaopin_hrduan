@@ -46,6 +46,7 @@
 </template>
 <script lang="ts" setup>
 import { getPositionTypes } from "@/services/services";
+import { failResponseHandler } from "@/utils/handler";
 import { onMounted, reactive, ref } from "vue";
 const emit = defineEmits(["submit-data"]);
 interface PositionType {
@@ -65,26 +66,28 @@ const changeDirection = (direction: { checked: boolean }) => {
 const checkableJobTypes = ref<PositionType[]>([]);
 const checkableDirections = ref<PositionType["directions"]>([]);
 onMounted(() => {
-  getPositionTypes().then((res) => {
-    checkableJobTypes.value = res.data.body.map(
-      (jobType: { directions: any[]; fieldName: any }) => {
-        const _checkableDirections = jobType.directions.map(
-          (direction: { directionName: any }) => {
-            let checkableDirection = reactive({
-              directionName: direction.directionName,
-              checked: false,
-            });
-            checkableDirections.value.push(checkableDirection);
-            return checkableDirection;
-          }
-        );
-        return {
-          fieldName: jobType.fieldName,
-          directions: _checkableDirections,
-        };
-      }
-    );
-  });
+  getPositionTypes()
+    .then((res) => {
+      checkableJobTypes.value = res.data.body.map(
+        (jobType: { directions: any[]; fieldName: any }) => {
+          const _checkableDirections = jobType.directions.map(
+            (direction: { directionName: any }) => {
+              let checkableDirection = reactive({
+                directionName: direction.directionName,
+                checked: false,
+              });
+              checkableDirections.value.push(checkableDirection);
+              return checkableDirection;
+            }
+          );
+          return {
+            fieldName: jobType.fieldName,
+            directions: _checkableDirections,
+          };
+        }
+      );
+    })
+    .catch(failResponseHandler);
 });
 </script>
 <style scoped lang="scss">

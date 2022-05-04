@@ -99,12 +99,14 @@ const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
 const imageUrl = ref("");
 onMounted(() => {
-  getHrInfosP0(store.hrInformation.hrInformationId).then((res) => {
-    imageUrl.value = res.data.body.avatarUrl;
-    formHr.hrName = res.data.body.hrName;
-    formHr.postName = res.data.body.postName;
-    formHr.acceptEmail = res.data.body.acceptEmail;
-  });
+  getHrInfosP0(store.hrInformation.hrInformationId)
+    .then((res) => {
+      imageUrl.value = res.data.body.avatarUrl;
+      formHr.hrName = res.data.body.hrName;
+      formHr.postName = res.data.body.postName;
+      formHr.acceptEmail = res.data.body.acceptEmail;
+    })
+    .catch(failResponseHandler);
 });
 const formHr = reactive<HrInformation>({
   avatarUrl: "",

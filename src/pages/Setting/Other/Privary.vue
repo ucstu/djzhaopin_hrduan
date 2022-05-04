@@ -43,6 +43,7 @@ import {
   HrInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -58,9 +59,11 @@ const ruleForm = reactive({
 const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,
-  }).then((res) => {
-    ElMessage.success("发送成功");
-  });
+  })
+    .then((res) => {
+      ElMessage.success("发送成功");
+    })
+    .catch(failResponseHandler);
   btn.value = true;
   let time = 60;
   const timer = setInterval(() => {
@@ -79,14 +82,16 @@ const deleteForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       deleteAccountInfosP0(store.accountInformation.accountInformationId, {
         verificationCode: ruleForm.verificationCode,
-      }).then(() => {
-        store.jsonWebToken = null as unknown as string;
-        store.hrInformation = null as unknown as HrInformation;
-        store.accountInformation = null as unknown as AccountInformation;
-        store.companyInformation = null as unknown as CompanyInformation;
-        ElMessage.success("注销成功");
-        router.push("/");
-      });
+      })
+        .then(() => {
+          store.jsonWebToken = null as unknown as string;
+          store.hrInformation = null as unknown as HrInformation;
+          store.accountInformation = null as unknown as AccountInformation;
+          store.companyInformation = null as unknown as CompanyInformation;
+          ElMessage.success("注销成功");
+          router.push("/");
+        })
+        .catch(failResponseHandler);
     } else {
       return false;
     }

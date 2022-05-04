@@ -119,9 +119,11 @@ const ruleForm = reactive({
   verificationCode: "",
 });
 const postverificationCode = () => {
-  getVerificationCode({ email: ruleForm.user }).then((res) => {
-    ElMessage.success("发送成功");
-  });
+  getVerificationCode({ email: ruleForm.user })
+    .then((res) => {
+      ElMessage.success("发送成功");
+    })
+    .catch(failResponseHandler);
   btn.value = true;
   let time = 60;
   const timer = setInterval(() => {

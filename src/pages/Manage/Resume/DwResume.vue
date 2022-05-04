@@ -96,29 +96,8 @@ const valueMap = ref<Record>({
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   { status: [2] }
-).then((res) => {
-  deliveryRecords.value = res.data.body;
-  deliveryRecords.value.forEach((item) => {
-    getUserInfosP0(item.userInformationId).then((res) => {
-      userInformations.value.set(item.userInformationId, res.data.body);
-    });
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      item.positionInformationId
-    ).then((res) => {
-      jobInformations.value.set(item.positionInformationId, res.data.body);
-    });
-  });
-});
-
-const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
-
-const checked1 = ref(false);
-onUpdated(() => {
-  getCompanyInfosP0DeliveryRecords(
-    store.companyInformation.companyInformationId,
-    { status: [1] }
-  ).then((res) => {
+)
+  .then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
       getUserInfosP0(item.userInformationId)
@@ -135,7 +114,39 @@ onUpdated(() => {
         })
         .catch(failResponseHandler);
     });
-  });
+  })
+  .catch(failResponseHandler);
+
+const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
+
+const checked1 = ref(false);
+onUpdated(() => {
+  getCompanyInfosP0DeliveryRecords(
+    store.companyInformation.companyInformationId,
+    { status: [1] }
+  )
+    .then((res) => {
+      deliveryRecords.value = res.data.body;
+      deliveryRecords.value.forEach((item) => {
+        getUserInfosP0(item.userInformationId)
+          .then((res) => {
+            userInformations.value.set(item.userInformationId, res.data.body);
+          })
+          .catch(failResponseHandler);
+        getCompanyInfosP0PositionInfosP1(
+          store.companyInformation.companyInformationId,
+          item.positionInformationId
+        )
+          .then((res) => {
+            jobInformations.value.set(
+              item.positionInformationId,
+              res.data.body
+            );
+          })
+          .catch(failResponseHandler);
+      });
+    })
+    .catch(failResponseHandler);
 });
 const education = ["大专", "本科", "硕士", "博士"];
 </script>

@@ -87,6 +87,7 @@ import {
 } from "@/services/services";
 import { PositionInformation, UserInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -104,28 +105,36 @@ const imgUrl =
   "https://tse1-mm.cn.bing.net/th/id/R-C.7b9f3020f3c91e5f76b4df2e7ea25de1?rik=deUQMVk41dSjNQ&riu=http%3a%2f%2fscimg.jianbihuadq.com%2f202007%2f2020071213324342.jpg&ehk=2kp7%2fRJpUGhKSaZH2j2g8lKPBohMH9veb%2f4AuNFaemc%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1";
 
 if (typeof route.params.userId === "string") {
-  getUserInfosP0(route.params.userId).then((res) => {
-    userInfo.value = res.data.body;
-  });
+  getUserInfosP0(route.params.userId)
+    .then((res) => {
+      userInfo.value = res.data.body;
+    })
+    .catch(failResponseHandler);
 } else {
-  getUserInfosP0(route.params.userId[0]).then((res) => {
-    userInfo.value = res.data.body;
-  });
+  getUserInfosP0(route.params.userId[0])
+    .then((res) => {
+      userInfo.value = res.data.body;
+    })
+    .catch(failResponseHandler);
 }
 if (typeof route.params.postId === "string") {
   getCompanyInfosP0PositionInfosP1(
     store.companyInformation.companyInformationId,
     route.params.postId
-  ).then((res) => {
-    positionInfo.value = res.data.body;
-  });
+  )
+    .then((res) => {
+      positionInfo.value = res.data.body;
+    })
+    .catch(failResponseHandler);
 } else {
   getCompanyInfosP0PositionInfosP1(
     store.companyInformation.companyInformationId,
     route.params.postId[1]
-  ).then((res) => {
-    positionInfo.value = res.data.body;
-  });
+  )
+    .then((res) => {
+      positionInfo.value = res.data.body;
+    })
+    .catch(failResponseHandler);
 }
 const toMessage = (userId: string) => {
   router.push({

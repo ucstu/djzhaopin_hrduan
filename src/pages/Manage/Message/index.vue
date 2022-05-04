@@ -76,6 +76,7 @@ import {
   UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { ref } from "vue";
 import Chat from "./Chat.vue";
 
@@ -88,20 +89,26 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   { status: [2] }
-).then((res) => {
-  deliveryRecords.value = res.data.body;
-  deliveryRecords.value.forEach((item) => {
-    getUserInfosP0(item.userInformationId).then((res) => {
-      userInformations.value.set(item.userInformationId, res.data.body);
+)
+  .then((res) => {
+    deliveryRecords.value = res.data.body;
+    deliveryRecords.value.forEach((item) => {
+      getUserInfosP0(item.userInformationId)
+        .then((res) => {
+          userInformations.value.set(item.userInformationId, res.data.body);
+        })
+        .catch(failResponseHandler);
+      getCompanyInfosP0PositionInfosP1(
+        store.companyInformation.companyInformationId,
+        item.positionInformationId
+      )
+        .then((res) => {
+          jobInformations.value.set(item.positionInformationId, res.data.body);
+        })
+        .catch(failResponseHandler);
     });
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      item.positionInformationId
-    ).then((res) => {
-      jobInformations.value.set(item.positionInformationId, res.data.body);
-    });
-  });
-});
+  })
+  .catch(failResponseHandler);
 const selectPerson = (userInformationId: string) => {
   condition.value = false;
 };

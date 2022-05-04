@@ -118,6 +118,7 @@ import {
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -137,9 +138,11 @@ const workingYears = reactive([
 getCompanyInfosP0PositionInfos(
   store.companyInformation.companyInformationId,
   {}
-).then((res) => {
-  jobTypeList.value = res.data.body;
-});
+)
+  .then((res) => {
+    jobTypeList.value = res.data.body;
+  })
+  .catch(failResponseHandler);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const toPublish = () => {
   router.push("/PublishJob");
@@ -155,13 +158,15 @@ const deletePosition = (id: string) => {
   deleteCompanyInfosP0PositionInfosP1(
     store.companyInformation.companyInformationId,
     id
-  ).then((res) => {
-    jobTypeList.value = jobTypeList.value?.filter(
-      (item) =>
-        item.positionInformationId !== res.data.body.positionInformationId
-    );
-    ElMessage.success("删除成功");
-  });
+  )
+    .then((res) => {
+      jobTypeList.value = jobTypeList.value?.filter(
+        (item) =>
+          item.positionInformationId !== res.data.body.positionInformationId
+      );
+      ElMessage.success("删除成功");
+    })
+    .catch(failResponseHandler);
 };
 </script>
 

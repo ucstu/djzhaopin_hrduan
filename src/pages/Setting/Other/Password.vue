@@ -54,6 +54,7 @@
 <script setup lang="ts">
 import { getVerificationCode, putAccountInfosP0 } from "@/services/services";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
@@ -99,9 +100,11 @@ const ruleForm = reactive<rlueAccount>({
 const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,
-  }).then((res) => {
-    ElMessage.success("发送成功");
-  });
+  })
+    .then((res) => {
+      ElMessage.success("发送成功");
+    })
+    .catch(failResponseHandler);
   btn.value = true;
   let time = 60;
   const timer = setInterval(() => {
@@ -118,17 +121,16 @@ const updateForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putAccountInfosP0(
-        store.accountInformation.accountInformationId,
-        ruleForm
-      ).then((res: { status: number }) => {
-        if (res.status === 200) {
-          ruleForm.password = "";
-          ruleForm.checkPass = "";
-          ruleForm.verificationCode = "";
-          ElMessage.success("修改成功");
-        }
-      });
+      putAccountInfosP0(store.accountInformation.accountInformationId, ruleForm)
+        .then((res: { status: number }) => {
+          if (res.status === 200) {
+            ruleForm.password = "";
+            ruleForm.checkPass = "";
+            ruleForm.verificationCode = "";
+            ElMessage.success("修改成功");
+          }
+        })
+        .catch(failResponseHandler);
     } else {
       return false;
     }

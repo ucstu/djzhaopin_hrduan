@@ -86,16 +86,17 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
@@ -133,21 +134,32 @@ const valueMap = ref<Record>({
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   { status: [1, 2, 3, 4, 5] }
-).then((res) => {
-  deliveryRecords.value = res.data.body;
-
-  deliveryRecords.value.forEach((item) => {
-    getUserInfosP0(item.userInformationId).then((response) => {
-      userInformations.value.set(item.userInformationId, response.data.body);
+)
+  .then((res) => {
+    deliveryRecords.value = res.data.body;
+    deliveryRecords.value.forEach((item) => {
+      getUserInfosP0(item.userInformationId)
+        .then((response) => {
+          userInformations.value.set(
+            item.userInformationId,
+            response.data.body
+          );
+        })
+        .catch(failResponseHandler);
+      getCompanyInfosP0PositionInfosP1(
+        store.companyInformation.companyInformationId,
+        item.positionInformationId
+      )
+        .then((respones) => {
+          jobInformations.value.set(
+            item.positionInformationId,
+            respones.data.body
+          );
+        })
+        .catch(failResponseHandler);
     });
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      item.positionInformationId
-    ).then((respones) => {
-      jobInformations.value.set(item.positionInformationId, respones.data.body);
-    });
-  });
-});
+  })
+  .catch(failResponseHandler);
 
 // onUpdated(() => {
 //   getCompanyInfosP0DeliveryRecords(

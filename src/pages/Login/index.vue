@@ -109,12 +109,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
             .then((res) => {
               if (res.data.body.hrName !== null) {
                 if (res.data.body.companyInformationId !== null) {
-                  getCompanyInfosP0(res.data.body.companyInformationId).then(
-                    (res) => {
+                  getCompanyInfosP0(res.data.body.companyInformationId)
+                    .then((res) => {
                       store.companyInformation = res.data.body;
                       router.replace("/Manage");
-                    }
-                  );
+                    })
+                    .catch((err) => {
+                      failResponseHandler(err);
+                    });
                   store.hrInformation = res.data.body;
                 } else {
                   store.hrInformation = res.data.body;

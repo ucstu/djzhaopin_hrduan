@@ -81,24 +81,29 @@ onUpdated(() => {
   getCompanyInfosP0DeliveryRecords(
     store.companyInformation.companyInformationId,
     { status: [4], deliveryDates: deliveryDates.value }
-  ).then((res) => {
-    deliveryRecords.value = res.data.body;
-    deliveryRecords.value.forEach((item) => {
-      getUserInfosP0(item.userInformationId)
-        .then((res) => {
-          userInformations.value.set(item.userInformationId, res.data.body);
-        })
-        .catch(failResponseHandler);
-      getCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
-        item.positionInformationId
-      )
-        .then((res) => {
-          jobInformations.value.set(item.positionInformationId, res.data.body);
-        })
-        .catch(failResponseHandler);
-    });
-  });
+  )
+    .then((res) => {
+      deliveryRecords.value = res.data.body;
+      deliveryRecords.value.forEach((item) => {
+        getUserInfosP0(item.userInformationId)
+          .then((res) => {
+            userInformations.value.set(item.userInformationId, res.data.body);
+          })
+          .catch(failResponseHandler);
+        getCompanyInfosP0PositionInfosP1(
+          store.companyInformation.companyInformationId,
+          item.positionInformationId
+        )
+          .then((res) => {
+            jobInformations.value.set(
+              item.positionInformationId,
+              res.data.body
+            );
+          })
+          .catch(failResponseHandler);
+      });
+    })
+    .catch(failResponseHandler);
 });
 </script>
 

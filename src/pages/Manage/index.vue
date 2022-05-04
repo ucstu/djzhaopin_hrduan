@@ -156,9 +156,11 @@ const valueMap = ref<Record>({
   status: [1, 2, 3, 4, 5],
 });
 const recruitmentPosition = ref(0);
-getCompanyInfosP0(store.companyInformation.companyInformationId).then((res) => {
-  recruitmentPosition.value = res.data.body.recruitmentPosition;
-});
+getCompanyInfosP0(store.companyInformation.companyInformationId)
+  .then((res) => {
+    recruitmentPosition.value = res.data.body.recruitmentPosition;
+  })
+  .catch(failResponseHandler);
 
 getCompanyInfosP0DeliveryRecords(
   store.hrInformation.companyInformationId,

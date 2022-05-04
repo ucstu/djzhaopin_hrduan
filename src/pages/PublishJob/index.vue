@@ -271,9 +271,9 @@
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-getCompanyInfosP0PositionInfosP1,
-postCompanyInfosP0PositionInfos,
-putCompanyInfosP0PositionInfosP1
+  getCompanyInfosP0PositionInfosP1,
+  postCompanyInfosP0PositionInfos,
+  putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";

@@ -114,6 +114,7 @@ import router from "@/router";
 import { putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance, UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
@@ -171,15 +172,15 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
-      const res = await putHrInfosP0(
-        store.accountInformation.fullInformationId,
-        formLabelAlign
-      );
-      store.hrInformation = res.data.body;
-      router.replace({
-        name: "Company",
-        params: { companyName: company.value.name },
-      });
+      putHrInfosP0(store.accountInformation.fullInformationId, formLabelAlign)
+        .then((res) => {
+          store.hrInformation = res.data.body;
+          router.replace({
+            name: "Company",
+            params: { companyName: company.value.name },
+          });
+        })
+        .catch(failResponseHandler);
     } else {
       ElMessage.error("请填写完整信息");
     }
