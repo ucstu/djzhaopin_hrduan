@@ -1,9 +1,16 @@
 <template>
   <div class="footer">
     <div class="left">
-      <el-checkbox v-model="checked1" label="全选" size="large" />
-      <el-button type="primary">面试邀请</el-button>
-      <el-button type="primary" plain>删除简历</el-button>
+      <el-checkbox
+        v-model="checked1"
+        label="全选"
+        size="large"
+        @change="handleChecked"
+      />
+      <el-button type="primary" @click="requireInterview">面试邀请</el-button>
+      <el-button type="primary" plain @click="deleteInterview"
+        >删除简历</el-button
+      >
       <el-button type="primary" plain>导出简历</el-button>
     </div>
     <el-pagination
@@ -18,18 +25,29 @@
 
 <script setup lang="ts">
 import { defineProps, ref } from "vue";
-const props = defineProps({
-  checked1: {
-    type: Boolean,
-    default: false,
-  },
+defineProps({
   total: {
     type: Number,
     default: 0,
   },
 });
 
-const emit = defineEmits(["submit-page"]);
+const emit = defineEmits(["submit-page", "submit-checked", "change-state"]);
+const handleChecked = () => {
+  emit("submit-checked", {
+    checked: checked1,
+  });
+};
+const requireInterview = () => {
+  emit("change-state", {
+    state: [4],
+  });
+};
+const deleteInterview = () => {
+  emit("change-state", {
+    state: [5],
+  });
+};
 const handleCurrentChange = (val: number) => {
   emit("submit-page", {
     type: "page",

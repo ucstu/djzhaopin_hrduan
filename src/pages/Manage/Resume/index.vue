@@ -23,10 +23,12 @@
                     userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo!.education]
+                    educationMap[userInfo.education]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    userInfo?.workingYears + "年" || "无经验"
+                    userInfo?.workingYears
+                      ? userInfo.workingYears + "年"
+                      : "无经验"
                   }}</el-breadcrumb-item>
                 </el-breadcrumb></span
               >
@@ -40,8 +42,10 @@
               <span class="state"
                 >期望薪资：{{
                   positionInfo?.startingSalary +
+                  "k" +
                   "-" +
-                  positionInfo?.ceilingSalary
+                  positionInfo?.ceilingSalary +
+                  "k"
                 }}</span
               >
               <el-button
@@ -49,8 +53,8 @@
                 @click="toMessage(userInfo!.userInformationId)"
                 >在线沟通</el-button
               >
-              <h3>个人优势：</h3>
-              <p>{{ userInfo?.personalAdvantage }}</p>
+              <h3>工作经历：</h3>
+              <p></p>
             </div>
             <div class="info2">
               <div class="img-docu">
@@ -69,8 +73,8 @@
               style="height: 80%"
             />
             <div class="comment">
-              <h4>工作经历</h4>
-              <div class="font">{{}}</div>
+              <h4>个人优势</h4>
+              <div class="font">{{ userInfo?.personalAdvantage }}</div>
             </div>
           </div>
         </div>
@@ -199,7 +203,7 @@ const toMessage = (userId: string) => {
           .info {
             display: flex;
             flex-direction: column;
-            width: 30%;
+            width: 40%;
             height: 100%;
             padding-top: 30px;
 
@@ -223,18 +227,18 @@ const toMessage = (userId: string) => {
           .info2 {
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
             width: 40%;
             height: 100%;
+            padding-top: 30px;
 
             .img-docu {
               width: 100%;
-              height: 50px;
+              height: 50%;
             }
 
             .project-docu {
               width: 100%;
-              height: 50px;
+              height: 50%;
             }
           }
         }
@@ -250,7 +254,7 @@ const toMessage = (userId: string) => {
             text-align: center;
 
             .font {
-              font-size: 18px;
+              font-size: 14px;
               font-weight: 400;
               letter-spacing: 2px;
               word-wrap: break-word;

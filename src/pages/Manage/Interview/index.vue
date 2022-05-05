@@ -29,7 +29,7 @@
           <div class="footer">
             <div>
               <el-checkbox v-model="checked1" label="全选" size="large" />
-              <el-button type="primary">邀请面试</el-button>
+              <el-button type="primary">发出offer</el-button>
             </div>
             <el-pagination
               background

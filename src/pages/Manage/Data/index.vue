@@ -29,7 +29,6 @@
             type="daterange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-value="[new Date(2022, 4, 1), new Date(2022, 5, 5)]"
             @change="handleWorkTimeChange(workTimeing)"
           />
         </div>

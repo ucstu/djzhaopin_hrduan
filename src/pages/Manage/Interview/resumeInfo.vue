@@ -1,67 +1,78 @@
 <template>
-  <div class="resume-item">
-    <div class="item-header">
-      <el-checkbox :checked="deliveryRecordsChecked.checked" />
-      <img
-        :src="
-          VITE_CDN_URL +
-          userInformations.get(deliveryRecordsChecked.userInformationId)
-            ?.avatarUrl
-        "
-        alt=""
-      />
-      <div class="header-person">
-        <div>
-          <span>{{
+  <div
+    v-for="deliveryRecordsChecked in delivers"
+    :key="deliveryRecordsChecked.deliveryRecordId"
+    class="resume-item"
+  >
+    <div class="resume-item">
+      <div class="item-header">
+        <el-checkbox
+          :checked="deliveryRecordsChecked.checked"
+          @change="handleChecked(deliveryRecordsChecked.deliveryRecordId)"
+        />
+        <img
+          :src="
+            VITE_CDN_URL +
             userInformations.get(deliveryRecordsChecked.userInformationId)
-              ?.firstName +
-            "" +
-            userInformations.get(deliveryRecordsChecked.userInformationId)
-              ?.lastName
-          }}</span>
-          <span
-            >·男·<span>{{
+              ?.avatarUrl
+          "
+          alt=""
+        />
+        <div class="header-person">
+          <div>
+            <span>{{
               userInformations.get(deliveryRecordsChecked.userInformationId)
-                ?.age
-            }}</span
-            >岁·<span
-              >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education]}}</span
-            >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus]
-            }}</span
-          >
-        </div>
-        <div>
-          <span
-            >想找：{{
+                ?.firstName +
+              "" +
               userInformations.get(deliveryRecordsChecked.userInformationId)
-                ?.cityName
-            }}</span
-          ><span
-            >{{
-              jobInformations.get(deliveryRecordsChecked.positionInformationId)
-                ?.positionName
-            }}|{{
-              jobInformations.get(deliveryRecordsChecked.positionInformationId)
-                ?.startingSalary +
-              "K-" +
-              jobInformations.get(deliveryRecordsChecked.positionInformationId)
-                ?.ceilingSalary +
-              "K"
-            }}</span
-          >
+                ?.lastName
+            }}</span>
+            <span
+              >·男·<span>{{
+                userInformations.get(deliveryRecordsChecked.userInformationId)
+                  ?.age
+              }}</span
+              >岁·<span
+                >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education]}}</span
+              >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus]
+              }}</span
+            >
+          </div>
+          <div>
+            <span
+              >想找：{{
+                userInformations.get(deliveryRecordsChecked.userInformationId)
+                  ?.cityName
+              }}</span
+            ><span
+              >{{
+                jobInformations.get(
+                  deliveryRecordsChecked.positionInformationId
+                )?.positionName
+              }}|{{
+                jobInformations.get(
+                  deliveryRecordsChecked.positionInformationId
+                )?.startingSalary +
+                "K-" +
+                jobInformations.get(
+                  deliveryRecordsChecked.positionInformationId
+                )?.ceilingSalary +
+                "K"
+              }}</span
+            >
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="resume-label">
-      {{ " 求高薪 | 求稳定 | 求发展 " }}
-    </div>
-    <div class="right">
-      <el-button
-        type="primary"
-        @click="inspectionResume(userInformations.get(deliveryRecordsChecked.userInformationId)!.userInformationId,jobInformations.get(deliveryRecordsChecked.positionInformationId)!.positionInformationId)"
-        >查看简历</el-button
-      >
+      <div class="resume-label">
+        {{ " 求高薪 | 求稳定 | 求发展 " }}
+      </div>
+      <div class="right">
+        <el-button
+          type="primary"
+          @click="inspectionResume(userInformations.get(deliveryRecordsChecked.userInformationId)!.userInformationId,jobInformations.get(deliveryRecordsChecked.positionInformationId)!.positionInformationId)"
+          >查看简历</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -69,12 +80,12 @@
 <script setup lang="ts">
 import router from "@/router";
 import { PositionInformation, UserInformation } from "@/services/types";
-import { defineProps, PropType } from "vue";
+import { defineProps, PropType, ref, watch } from "vue";
 
-defineProps({
-  deliveryRecordsChecked: {
-    type: Object,
-    default: () => ({}),
+let props = defineProps({
+  deliveryRecordsCheckeds: {
+    type: Array as PropType<any>,
+    default: () => [],
   },
   userInformations: {
     type: Map as PropType<Map<string, UserInformation>>,
@@ -85,6 +96,18 @@ defineProps({
     default: () => new Map(),
   },
 });
+const delivers = ref({ ...props.deliveryRecordsCheckeds });
+watch(props.deliveryRecordsCheckeds, (oldval: any) => {
+  delivers.value = oldval;
+  console.log(delivers.value);
+});
+const handleChecked = (deliveryRecordId: string) => {
+  delivers.value.forEach((deliver: any) => {
+    if (deliver.deliveryRecordId === deliveryRecordId) {
+      deliver.checked = !deliver.checked;
+    }
+  });
+};
 // const deliveryRecordsCheckeds = reactive<any>([]);
 // onMounted(() => {
 //   props.deliveryRecords.map((deliveryRecord) => {

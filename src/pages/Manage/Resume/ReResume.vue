@@ -31,7 +31,6 @@
                   :value="index + 1"
                 />
               </el-select>
-
               <el-date-picker
                 v-model="workTimeing"
                 type="daterange"
@@ -55,7 +54,12 @@
                   :value="index + 1"
                 />
               </el-select>
-              <el-select v-model="valueMap.ages" class="m-2" placeholder="年龄">
+              <el-select
+                v-model="valueMap.ages"
+                class="m-2"
+                placeholder="年龄"
+                @change="handleChange"
+              >
                 <el-option
                   v-for="(item, index) in age"
                   :key="item"
@@ -70,27 +74,25 @@
                 input-style="max-width: 350px;"
                 placeholder="输入搜索内容"
                 :prefix-icon="Search"
+                @change="handleChange"
               />
             </div>
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
-              <template
-                v-for="(
-                  deliveryRecordsChecked, index
-                ) in deliveryRecordsCheckeds"
-                :key="index"
-              >
-                <ResumeInfo
-                  :user-informations="userInformations"
-                  :job-informations="jobInformations"
-                  :delivery-records-checked="deliveryRecordsChecked"
-                  :checked1="checked1"
-                ></ResumeInfo>
-              </template>
+              <ResumeInfo
+                :user-informations="userInformations"
+                :job-informations="jobInformations"
+                :delivery-records-checkeds="deliveryRecordsCheckeds"
+              ></ResumeInfo>
             </el-scrollbar>
           </div>
-          <ResumeFooter :total="total" @submit-page="submitPage" />
+          <ResumeFooter
+            :total="total"
+            @change-state="changState"
+            @submit-page="submitPage"
+            @submit-checked="submitChecked"
+          />
         </div>
       </div>
     </div>
@@ -100,19 +102,19 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Search } from "@element-plus/icons-vue";
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface Record {
@@ -127,7 +129,6 @@ interface Record {
   sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
-const checked1 = ref(false);
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -145,15 +146,35 @@ const total = computed(() => {
   let num = (deliveryRecords.value.length / 7) * 10;
   return Math.ceil(num);
 });
+const deliveryRecordsCheckeds = ref<Array<any>>([]);
+const checked = ref(false);
+const submitChecked = (data: { checked: boolean }) => {
+  checked.value = data.checked;
+  deliveryRecordsCheckeds.value.map((deliveryRecordsChecked: any) => {
+    deliveryRecordsChecked.checked = !deliveryRecordsChecked.checked;
+  });
+};
 const submitPage = (data: { type: string; data: number }) => {
   valueMap.value.page = data.data;
 };
+const changState = (val: any) => {
+  if (deliveryRecordsCheckeds.value) {
+    //变更状态函数，将选中的简历信息的状态进行变更
+    const newDeliver = deliveryRecordsCheckeds.value.filter(
+      (deliveryRecordsChecked: any) => {
+        return deliveryRecordsChecked.checked === true;
+      }
+    );
+    newDeliver.map((delivery: any) => {
+      delivery.status = val;
+    });
+    deliveryRecordsCheckeds.value = newDeliver;
+  }
+};
 const valueMap = ref<Record>({
-  status: [2],
+  status: [1, 2, 3, 4],
   deliveryDates: deliveryDates.value,
 });
-const deliveryRecordsCheckeds = reactive<any>([]);
-
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   valueMap.value
@@ -161,8 +182,9 @@ getCompanyInfosP0DeliveryRecords(
   .then((res) => {
     deliveryRecords.value = res.data.body;
     deliveryRecords.value.forEach((item) => {
-      deliveryRecordsCheckeds.push(Object.assign(item, { checked: false }));
-
+      deliveryRecordsCheckeds.value.push(
+        Object.assign(item, { checked: false })
+      );
       getUserInfosP0(item.userInformationId)
         .then((response) => {
           userInformations.value.set(
