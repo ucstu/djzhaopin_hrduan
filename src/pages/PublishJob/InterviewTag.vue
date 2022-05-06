@@ -29,7 +29,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { watch } from "fs";
 import { ref } from "vue";
 const emit = defineEmits(["submit-data"]);
 
@@ -83,29 +82,30 @@ const interviewInfo = ref<InterviewInfo>({
   time: 1,
   wheel: 1,
 });
-const handleillustrate = (data: { name: string; checked: boolean }, index) => {
+const handleillustrate = (
+  data: { name: string; checked: boolean },
+  index: number
+) => {
   if (data.checked) {
-    interviewInfo.value.illustrate = index + 1;
+    interviewInfo.value.illustrate = (index + 1) as 1 | 2 | 3 | 4;
   }
 };
-const handlesituation = (data, index) => {
+const handlesituation = (data: { checked: any }, index: number) => {
   if (data.checked) {
-    interviewInfo.value.situation = index + 1;
+    interviewInfo.value.situation = (index + 1) as 1 | 2 | 3;
   }
 };
-const handletime = (data, index) => {
+const handletime = (data: { checked: any }, index: number) => {
   if (data.checked) {
-    interviewInfo.value.time = index + 1;
+    interviewInfo.value.time = (index + 1) as 1 | 2;
   }
 };
-const handlewheel = (data, index) => {
+const handlewheel = (data: { checked: any }, index: number) => {
   if (data.checked) {
-    interviewInfo.value.wheel = index + 1;
+    interviewInfo.value.wheel = (index + 1) as 1 | 2 | 3 | 4;
   }
 };
-watch(interviewInfo.value, () => {
-  emit("submit-data", interviewInfo.value);
-});
+
 // const changeOnly = (
 //   interviewInfo: { checked: boolean; name: string },
 //   interviewInfoIndex: number,

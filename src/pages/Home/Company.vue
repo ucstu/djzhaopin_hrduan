@@ -355,8 +355,8 @@ const dealfilechange = (e: Event) => {
     if (beforeAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[0] })
         .then((res) => {
-          imageUrl.value = res.d;
-          formCompany.value.logoUrl = res.body;
+          imageUrl.value = res.data;
+          formCompany.value.logoUrl = res.data;
         })
         .catch(failResponseHandler);
     }

@@ -33,7 +33,7 @@
                 </el-breadcrumb></span
               >
               <span class="state"
-                >求职状态：{{ jobStatusMap[userInfo!.jobStatus] }}</span
+                >求职状态：{{ jobStatusMap[userInfo!.jobStatus as 1 | 2 | 3 ] }}</span
               >
               <span class="state"
                 >期望职位：{{ positionInfo?.positionName }}</span

@@ -109,6 +109,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
+import { SwaggerResponse } from "@/services/config";
 import { postAvatars, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -131,11 +132,11 @@ onMounted(() => {
   formLabelAlign.acceptEmail = route.params.PersonEmail as string;
 });
 const imageUrl = ref("");
-const handleAvatarSuccess = (response) => {
-  imageUrl.value = response.body;
-  formLabelAlign.avatarUrl = response.body;
+const handleAvatarSuccess = (response: SwaggerResponse<any>) => {
+  imageUrl.value = response.data;
+  formLabelAlign.avatarUrl = response.data;
 };
-const beforeAvatarUpload = (rawFile) => {
+const beforeAvatarUpload = (rawFile: File) => {
   const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!imgTypes.includes(rawFile.type)) {
     ElMessage.error("对不起，暂不支持上传该类型文件");

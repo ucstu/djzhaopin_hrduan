@@ -56,8 +56,8 @@ import Scan from "./Scan.vue";
 import Vita from "./Vita.vue";
 const store = useMainStore();
 const workTimeing = ref([]);
-const startTime = ref("");
-const endTime = ref("");
+const startTime = ref<`${number}-${number}-${number}`>();
+const endTime = ref<`${number}-${number}-${number}`>();
 const tabPosition = ref("top");
 const state = reactive({
   userID: "",
@@ -80,10 +80,11 @@ const handleWorkTimeChange = (val: Array<string>) => {
   endTime.value = useDate(val[1]);
 };
 
-getCompanyInfosP0BigData(
-  store.companyInformation.companyInformationId,
-  Date.value
-).then((res) => {
+getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
+  startDate: startTime.value!,
+  endDate: endTime.value!,
+  hrInformationId: store.hrInformation.hrInformationId,
+}).then((res) => {
   console.log(res);
 });
 </script>

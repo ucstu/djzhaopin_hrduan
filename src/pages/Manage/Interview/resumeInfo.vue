@@ -33,8 +33,8 @@
                   ?.age
               }}</span
               >岁·<span
-                >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education]}}</span
-              >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus]
+                >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education as 1 | 2 | 3 | 4]}}</span
+              >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus as 1 | 2 | 3 ]
               }}</span
             >
           </div>
