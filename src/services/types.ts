@@ -473,7 +473,7 @@ export interface GetCompanyInfosP0BigDataQueryParams {
    *
    * 结束时间，eg：2022-02-04
    */
-  endDate: `${number}-${number}-${number}`;
+  endDate: string;
   /**
    *
    * HR信息ID
@@ -483,7 +483,7 @@ export interface GetCompanyInfosP0BigDataQueryParams {
    *
    * 起始时间，eg：2022-02-01
    */
-  startDate: `${number}-${number}-${number}`;
+  startDate: string;
   /**
    *
    * 当前页，eg：0
@@ -516,17 +516,17 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 投递时间，eg：2022-04-02
    */
-  createdAt?: `${number}-${number}-${number}`;
+  createdAt?: string;
   /**
    *
    * 投递日期数组，eg：[2007-02-22,2007-02-23]
    */
-  deliveryDates?: Array<`${number}-${number}-${number}`>;
+  deliveryDates?: Array<string>;
   /**
    *
    * 面试时间，eg：2022-02-03
    */
-  interviewTime?: `${number}-${number}-${number}`;
+  interviewTime?: string;
   /**
    *
    * 当前页，eg：0
@@ -556,7 +556,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 修改时间，eg：2022-04-06
    */
-  updatedAt?: `${number}-${number}-${number}`;
+  updatedAt?: string;
   /**
    *
    * 用户名，eg：张三
@@ -597,7 +597,7 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
   page?: number;
   /**
    *
-   * 职位名，eg：前端开发
+   * 职位名称，eg：前端开发
    */
   positionName?: string;
   /**
@@ -627,9 +627,19 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
   sort?: Array<`${keyof PositionInformation},${"asc" | "desc"}`>;
   /**
    *
-   * 工作区县名数组，eg：[合川,永川]
+   * 工作区县名数组，eg：[合川区,永川区]
    */
-  workAreas?: Array<string>;
+  workAreaNames?: Array<string>;
+  /**
+   *
+   * 工作城市，eg：成都市
+   */
+  workCityName?: string;
+  /**
+   *
+   * 工作省份，eg：四川省
+   */
+  workProvinceName?: string;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -647,12 +657,12 @@ export interface GetCompanyInfosP0SawMeRecordsQueryParams {
    *
    * 结束时间，eg：2020-02-07
    */
-  endDate: `${number}-${number}-${number}`;
+  endDate: string;
   /**
    *
    * 开始时间，eg：2020-02-03
    */
-  startDate: `${number}-${number}-${number}`;
+  startDate: string;
   /**
    *
    * 当前页，eg：0
@@ -728,9 +738,19 @@ export interface GetCompanyInfosPositionInfosQueryParams {
   sort?: Array<`${keyof PositionInformation},${"asc" | "desc"}`>;
   /**
    *
-   * 工作区县名数组，eg：[合川,永川]
+   * 工作区县名数组，eg：[合川区,永川区]
    */
-  workAreas?: Array<string>;
+  workAreaNames?: Array<string>;
+  /**
+   *
+   * 工作城市，eg：成都市
+   */
+  workCityName?: string;
+  /**
+   *
+   * 工作省份，eg：四川省
+   */
+  workProvinceName?: string;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -751,9 +771,29 @@ export interface GetCompanyInfosQueryParams {
   companyName?: string;
   /**
    *
+   * 领域名数组，eg：[电商平台,游戏]
+   */
+  comprehensions?: Array<string>;
+  /**
+   *
+   * 融资阶段枚举数组，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
+   */
+  financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
+  /**
+   *
+   * 经纬度坐标，eg：99.748,74.391846196586
+   */
+  location?: `${number},${number}`;
+  /**
+   *
    * 当前页，eg：0
    */
   page?: number;
+  /**
+   *
+   * 公司规模枚举数组，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
+   */
+  scales?: Array<1 | 2 | 3 | 4 | 5 | 6>;
   /**
    *
    * 页大小，eg：5
@@ -838,7 +878,7 @@ export interface GetUserInfosP0DeliveryRecordsQueryParams {
    *
    * 面试时间，eg：2022-02-03
    */
-  interviewTime?: `${number}-${number}-${number}`;
+  interviewTime?: string;
   /**
    *
    * 当前页，eg：0
@@ -951,12 +991,12 @@ export interface GetUserInfosP0SawMeRecordsQueryParams {
    *
    * 结束时间，eg：2020-02-07
    */
-  endDate: `${number}-${number}-${number}`;
+  endDate: string;
   /**
    *
    * 开始时间，eg：2020-02-03
    */
-  startDate: `${number}-${number}-${number}`;
+  startDate: string;
   /**
    *
    * 当前页，eg：0
@@ -1373,6 +1413,12 @@ export interface PositionInformation {
   workCityName: string;
   /**
    *
+   * 工作省份
+   *
+   */
+  workProvinceName: string;
+  /**
+   *
    * 上班时间
    *
    */
@@ -1483,13 +1529,13 @@ export interface ProjectExperience {
    * 创建时间
    *
    */
-  createdAt?: `${number}-${number}-${number}`;
+  createdAt?: string;
   /**
    *
    * 更新时间
    *
    */
-  updatedAt?: `${number}-${number}-${number}`;
+  updatedAt?: string;
 }
 
 export interface UserInformation {

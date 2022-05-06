@@ -8,47 +8,47 @@ import { AxiosRequestConfig } from "axios";
 import { SwaggerResponse } from "./config";
 import { Http } from "./httpRequest";
 import {
-  GetUserInfosP0EduExperiencesQueryParams,
   GetUserInfosP0GarnerRecordsQueryParams,
-  GetDirectionTagsQueryParams,
-  GetUserInfosP0DeliveryRecordsQueryParams,
-  GetCompanyInfosP0SawMeRecordsQueryParams,
-  GetCompanyInfosP0BigDataQueryParams,
-  GetCompanyInfosQueryParams,
-  GetUserInfosP0AttentionRecordsQueryParams,
-  GetUserInfosQueryParams,
-  DeleteAccountInfosP0QueryParams,
-  GetUserInfosP0InspectionRecordsQueryParams,
-  GetAreaInformationsQueryParams,
   GetUserInfosP0WorkExperiencesQueryParams,
   GetCompanyInfosP0PositionInfosQueryParams,
   GetUserInfosP0ProjectExperiencesQueryParams,
-  GetUserInfosP0SawMeRecordsQueryParams,
+  GetCompanyInfosQueryParams,
+  GetAreaInformationsQueryParams,
+  GetDirectionTagsQueryParams,
+  DeleteAccountInfosP0QueryParams,
   GetCompanyInfosP0DeliveryRecordsQueryParams,
-  GetHrInfosP0InspectionRecordsQueryParams,
   GetCompanyInfosPositionInfosQueryParams,
-  GetVerificationCodeQueryParams,
+  GetHrInfosP0InspectionRecordsQueryParams,
+  GetUserInfosQueryParams,
+  GetUserInfosP0DeliveryRecordsQueryParams,
+  GetUserInfosP0SawMeRecordsQueryParams,
   GetUserInfosP0JobExpectationsQueryParams,
+  GetCompanyInfosP0SawMeRecordsQueryParams,
+  GetUserInfosP0AttentionRecordsQueryParams,
+  GetVerificationCodeQueryParams,
   GetHrInfosQueryParams,
+  GetUserInfosP0EduExperiencesQueryParams,
+  GetCompanyInfosP0BigDataQueryParams,
+  GetUserInfosP0InspectionRecordsQueryParams,
+  HrInformation,
+  GarnerRecord,
+  FilterInformation,
   UserInformation,
   PositionTypes,
-  EducationExperience,
-  DeliveryRecord,
-  HrInspectionRecord,
-  CityInformations,
-  AttentionRecord,
-  PositionInformation,
-  CompanyInformation,
-  ProjectExperience,
   AccountInformation,
-  GarnerRecord,
-  DirectionTags,
-  WorkExperience,
-  FilterInformation,
-  HrInformation,
-  JobExpectation,
-  UserInspectionRecord,
+  PositionInformation,
+  HrInspectionRecord,
   AreaInformations,
+  AttentionRecord,
+  DirectionTags,
+  DeliveryRecord,
+  JobExpectation,
+  CompanyInformation,
+  CityInformations,
+  ProjectExperience,
+  EducationExperience,
+  UserInspectionRecord,
+  WorkExperience,
 } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -3267,6 +3267,12 @@ export const postCompanyInfosP0PositionInfos = (
      *
      */
     workCityName: string;
+    /**
+     *
+     * 工作省份
+     *
+     */
+    workProvinceName: string;
     /**
      *
      * 上班时间
