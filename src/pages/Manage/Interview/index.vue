@@ -83,7 +83,7 @@ onUpdated(() => {
     { status: [4], deliveryDates: deliveryDates.value }
   )
     .then((res) => {
-      deliveryRecords.value = res.data.body;
+      deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
         getUserInfosP0(item.userInformationId)
           .then((res) => {

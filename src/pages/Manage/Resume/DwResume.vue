@@ -58,14 +58,14 @@
 
 <script setup lang="ts">
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -98,7 +98,7 @@ getCompanyInfosP0DeliveryRecords(
   { status: [2] }
 )
   .then((res) => {
-    deliveryRecords.value = res.data.body;
+    deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       getUserInfosP0(item.userInformationId)
         .then((res) => {
@@ -126,7 +126,7 @@ onUpdated(() => {
     { status: [1] }
   )
     .then((res) => {
-      deliveryRecords.value = res.data.body;
+      deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
         getUserInfosP0(item.userInformationId)
           .then((res) => {

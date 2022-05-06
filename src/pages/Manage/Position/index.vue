@@ -140,7 +140,7 @@ getCompanyInfosP0PositionInfos(
   {}
 )
   .then((res) => {
-    jobTypeList.value = res.data.body;
+    jobTypeList.value = res.data.body.positionInformations;
   })
   .catch(failResponseHandler);
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };

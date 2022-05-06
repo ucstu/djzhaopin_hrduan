@@ -91,7 +91,7 @@ getCompanyInfosP0DeliveryRecords(
   { status: [2] }
 )
   .then((res) => {
-    deliveryRecords.value = res.data.body;
+    deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       getUserInfosP0(item.userInformationId)
         .then((res) => {

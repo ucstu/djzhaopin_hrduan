@@ -222,7 +222,7 @@
                 </div>
               </el-col>
             </el-form-item>
-            <!-- <el-form-item label="面试信息" prop="interviewInfo">
+            <el-form-item label="面试信息" prop="interviewInfo">
               <el-input
                 v-model="jobTypeList.interviewInfo"
                 :input-style="{ display: 'none' }"
@@ -244,7 +244,7 @@
                   </span>
                 </template>
               </el-dialog>
-            </el-form-item> -->
+            </el-form-item>
 
             <el-form-item>
               <el-button
@@ -281,14 +281,13 @@ import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { onMounted, reactive, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
+import InterviewTag from "./InterviewTag.vue";
 const store = useMainStore();
 const route = useRoute();
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const formRef = ref<FormInstance>();
-const jobTypeList = ref<PositionInformation>({
-  workTime: [] as unknown,
-} as PositionInformation);
+const jobTypeList = ref<PositionInformation>({} as PositionInformation);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
@@ -349,9 +348,26 @@ const rules = reactive({
     },
   ],
 });
+const dialogFormVisible = ref(false);
+interface InterviewInfo {
+  illustrate: 1 | 2 | 3 | 4;
 
-const longitude = ref(0);
-const latitude = ref(0);
+  situation: 1 | 2 | 3;
+
+  time: 1 | 2;
+
+  wheel: 1 | 2 | 3 | 4;
+}
+const interviewInfo = ref<InterviewInfo>({
+  illustrate: 1,
+  situation: 1,
+  time: 1,
+  wheel: 1,
+});
+const submitData = (data: any) => {
+  console.log(data);
+  jobTypeList.value.interviewInfo = interviewInfo.value;
+};
 const aboutAddress = ref<any>([]);
 onMounted(() => {
   map.value = new AMap.Map("container", {
@@ -384,6 +400,9 @@ onMounted(() => {
             });
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
+            });
+            let mark = new AMap.Marker({
+              map: map.value,
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -547,23 +566,24 @@ a {
 
         .select {
           position: relative;
-          width: 211px;
-          height: 30px;
+          width: 600px;
+          height: 40px;
           line-height: 30px;
           border: solid 1px #dcdfe6;
           border-radius: 4px;
 
           span {
             position: absolute;
-            left: -5px;
+            top: 4px;
+            left: 12px;
             font-size: 14px;
             color: #ababb2;
           }
 
           img {
             position: absolute;
-            top: 6px;
-            right: 10px;
+            top: 10px;
+            right: 12px;
             width: 16px;
             height: 16px;
           }

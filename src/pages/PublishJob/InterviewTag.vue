@@ -10,71 +10,16 @@
           <span style="margin: 5px 0">{{ interviewTag.interviewTagname }}</span>
           <div class="tag-list">
             <div
-              v-for="(
-                interviewInfo, interviewInfoIndex
-              ) in interviewTag.illustrate"
+              v-for="(interviewInfo1, interviewInfoIndex) in interviewTag.tag"
               :key="interviewInfoIndex"
               class="tag-item"
             >
               <el-check-tag
                 ref="checkTagRef"
-                :checked="interviewInfo.checked"
-                @change="changeDirection(interviewInfo, interviewInfoIndex)"
+                :checked="interviewInfo1.checked"
+                @change="handleillustrate(interviewInfo1, interviewTagIndex)"
               >
-                {{ interviewInfo.name }}</el-check-tag
-              >
-            </div>
-            <!-- <div
-              v-for="(
-                interviewInfo, interviewInfoIndex
-              ) in interviewTag.situation"
-              :key="interviewInfoIndex"
-              class="tag-item"
-            >
-              <el-check-tag
-                ref="checkTagRef"
-                :checked="interviewInfo.checked"
-                @change="
-                  changeOnly(
-                    interviewInfo,
-                    interviewInfoIndex,
-                    interviewTag.situation
-                  )
-                "
-              >
-                {{ interviewInfo.name }}</el-check-tag
-              >
-            </div>
-            <div
-              v-for="(interviewInfo, interviewInfoIndex) in interviewTag.time"
-              :key="interviewInfoIndex"
-              class="tag-item"
-            >
-              <el-check-tag
-                ref="checkTagRef"
-                :checked="interviewInfo.checked"
-                @change="
-                  changeOnly(
-                    interviewInfo,
-                    interviewInfoIndex,
-                    interviewTag.time
-                  )
-                "
-              >
-                {{ interviewInfo.name }}</el-check-tag
-              >
-            </div> -->
-            <div
-              v-for="(interviewInfo, interviewInfoIndex) in interviewTag.wheel"
-              :key="interviewInfoIndex"
-              class="tag-item"
-            >
-              <el-check-tag
-                ref="checkTagRef"
-                :checked="interviewInfo.checked"
-                @change="changeDirection(interviewInfo, interviewInfoIndex)"
-              >
-                {{ interviewInfo.name }}</el-check-tag
+                {{ interviewInfo1.name }}</el-check-tag
               >
             </div>
           </div>
@@ -84,14 +29,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-// import { ElMessage } from "element-plus";
+import { watch } from "fs";
 import { ref } from "vue";
 const emit = defineEmits(["submit-data"]);
 
 const interviewTagList = ref([
   {
     interviewTagname: "面试形式",
-    illustrate: [
+    tag: [
       { name: "现场面试", checked: false },
       { name: "视频面试", checked: false },
       { name: "电话面试", checked: false },
@@ -99,7 +44,7 @@ const interviewTagList = ref([
   },
   {
     interviewTagname: "面试轮数",
-    situation: [
+    tag: [
       { name: "1-2轮次", checked: false },
       { name: "3-4轮次", checked: false },
       { name: "5-6轮次", checked: false },
@@ -108,14 +53,14 @@ const interviewTagList = ref([
   },
   {
     interviewTagname: "面试时长",
-    time: [
+    tag: [
       { name: "一天内完成", checked: false },
       { name: "分多次完成", checked: false },
     ],
   },
   {
     interviewTagname: "面试说明",
-    wheel: [
+    tag: [
       { name: "可周末面试", checked: false },
       { name: "包含笔试", checked: false },
       { name: "可下班面试", checked: false },
@@ -123,6 +68,44 @@ const interviewTagList = ref([
     ],
   },
 ]);
+interface InterviewInfo {
+  illustrate: 1 | 2 | 3 | 4;
+
+  situation: 1 | 2 | 3;
+
+  time: 1 | 2;
+
+  wheel: 1 | 2 | 3 | 4;
+}
+const interviewInfo = ref<InterviewInfo>({
+  illustrate: 1,
+  situation: 1,
+  time: 1,
+  wheel: 1,
+});
+const handleillustrate = (data: { name: string; checked: boolean }, index) => {
+  if (data.checked) {
+    interviewInfo.value.illustrate = index + 1;
+  }
+};
+const handlesituation = (data, index) => {
+  if (data.checked) {
+    interviewInfo.value.situation = index + 1;
+  }
+};
+const handletime = (data, index) => {
+  if (data.checked) {
+    interviewInfo.value.time = index + 1;
+  }
+};
+const handlewheel = (data, index) => {
+  if (data.checked) {
+    interviewInfo.value.wheel = index + 1;
+  }
+};
+watch(interviewInfo.value, () => {
+  emit("submit-data", interviewInfo.value);
+});
 // const changeOnly = (
 //   interviewInfo: { checked: boolean; name: string },
 //   interviewInfoIndex: number,
@@ -141,18 +124,17 @@ const interviewTagList = ref([
 //     }
 //   });
 // };
-const changeDirection = (
-  interviewInfo: { checked: boolean },
-  _interviewInfoIndex: number
-) => {
-  interviewInfo.checked = !interviewInfo.checked;
-
-  emit("submit-data", {
-    type: "interviewInfo",
-    data: interviewInfo,
-    index: _interviewInfoIndex,
-  });
-};
+// const changeDirection = (
+//   interviewInfo: { checked: boolean },
+//   _interviewInfoIndex: number
+// ) => {
+//   interviewInfo.checked = !interviewInfo.checked;
+//   emit("submit-data", {
+//     type: "interviewInfo",
+//     data: interviewInfo,
+//     index: _interviewInfoIndex + 1,
+//   });
+// };
 </script>
 <style scoped lang="scss">
 .tag {

@@ -25,7 +25,7 @@
         </div>
         <div class="label">
           <div>
-            <span>{{ interviewNum.length }}</span>
+            <span>{{ interviewNum.length || "0" }}</span>
             <span>新简历</span>
           </div>
           <div>
@@ -167,7 +167,7 @@ getCompanyInfosP0DeliveryRecords(
   valueMap.value
 )
   .then((res) => {
-    interviewNum.value = res.data.body;
+    interviewNum.value = res.data.body.deliveryRecords;
     interviewNum.value.forEach((item) => {
       getCompanyInfosP0PositionInfosP1(
         store.hrInformation.companyInformationId,

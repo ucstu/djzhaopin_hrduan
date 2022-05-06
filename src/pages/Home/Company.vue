@@ -31,16 +31,14 @@
           </el-form-item>
           <el-form-item label="公司logo">
             <div class="avatar">
-              <el-upload
-                ref="uploadRef"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
-                :on-error="handleAvatarError"
-                name="avatar"
-                class="avatar-uploader"
-                action="http://127.0.0.1:4523/mock/743652/avatars"
-              >
+              <div @click="uploadgogo">
+                <input
+                  ref="uploadInput"
+                  type="file"
+                  style="display: none"
+                  name="icon"
+                  @change="dealfilechange"
+                />
                 <img
                   v-if="ImageUrl"
                   :src="VITE_CDN_URL + formCompany?.logoUrl"
@@ -50,7 +48,7 @@
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
                   <Plus />
                 </el-icon>
-              </el-upload>
+              </div>
               <span> logo要求：不能为二维码、营业执照、公司门头等 </span>
             </div>
           </el-form-item>
@@ -81,6 +79,32 @@
               :options="cityMap"
               placeholder="请选择"
             />
+          </el-form-item>
+          <el-form-item label="详细地址" prop="workAreaName">
+            <div class="search">
+              <el-input
+                v-model="formCompany.address"
+                disabled
+                placeholder="请在右方搜索点击选择"
+              />
+              <input id="input" type="text" />
+            </div>
+          </el-form-item>
+          <el-form-item prop="workPlace">
+            <div class="map">
+              <div id="container"></div>
+              <el-scrollbar>
+                <ul>
+                  <li
+                    v-for="address in aboutAddress"
+                    :key="address.id"
+                    @click="handleArea(address)"
+                  >
+                    {{ address.name }}
+                  </li>
+                </ul>
+              </el-scrollbar>
+            </div>
           </el-form-item>
           <el-form-item label="公司规模" prop="scale">
             <el-select v-model="formCompany!.scale" placeholder="请选择">
@@ -200,27 +224,31 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-getCityInformations,
-postCompanyInfos,
-putHrInfosP0
+  getCityInformations,
+  postAvatars,
+  postCompanyInfos,
+  putHrInfosP0,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { onMounted, onUpdated, reactive, ref } from "vue";
+import { ElMessage, FormInstance } from "element-plus";
+import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
 import State from "./State.vue";
 import tag from "./Tag.vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
-const uploadRef = ref<UploadProps>();
+const map = shallowRef<AMap.Map>();
+const placeSearch = shallowRef();
 const store = useMainStore();
 const imageUrl = ref("@/assets/down.png");
 const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
+const aboutAddress = ref<any>([]);
+
 //表格数据
 const formCompany = ref<CompanyInformation>({ ...store.companyInformation });
 const cityInfo = ref([]);
@@ -249,7 +277,7 @@ const scaleMap = [
   "500-2000人",
   "2000人以上",
 ];
-const benefitsMap = ["全年13薪", "全年14薪"];
+const benefitsMap = ["全年13薪", "六险一金", "带薪年假", "员工旅游"];
 interface companyInfo {
   logo: string;
   name: string;
@@ -295,12 +323,7 @@ const formInstance = reactive<companyInfo[]>([
     size: "2000人以上",
   },
 ]);
-const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-  imageUrl.value = response.url;
-};
-const handleAvatarError: UploadProps["onError"] = () => {
-  ElMessage.error("对不起，上传失败，请重试");
-};
+
 const rule = reactive({
   comprehensionName: [
     { required: true, message: "此项不能为空", trigger: "blur" },
@@ -311,7 +334,7 @@ const rule = reactive({
     { required: true, message: "此项不能为空", trigger: "blur" },
   ],
 });
-const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
+const beforeAvatarUpload = (rawFile: File) => {
   const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!imgTypes.includes(rawFile.type)) {
     ElMessage.error("对不起，暂不支持上传该类型文件");
@@ -322,32 +345,110 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
-interface cityInfo {
+//上传头像
+const uploadInput = ref<HTMLElement | null>(null);
+const dealfilechange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    console.log(files[files.length - 1]);
+    if (beforeAvatarUpload(files[files.length - 1])) {
+      postAvatars({ avatar: files[0] })
+        .then((res) => {
+          imageUrl.value = res.d;
+          formCompany.value.logoUrl = res.body;
+        })
+        .catch(failResponseHandler);
+    }
+  }
+};
+const uploadgogo = () => {
+  // console.log(uploadInput.value)
+  let oBtn = uploadInput.value as HTMLInputElement;
+  oBtn.click();
+};
+interface CityInfo {
   children: { value: string; label: string }[];
   value: string;
   label: string;
 }
-const cityMap = ref<cityInfo[]>([]);
+const cityMap = ref<CityInfo[]>([]);
 
 onMounted(() => {
-  getCityInformations()
-    .then((res) => {
-      cityMap.value = res.data.body.map((item) => {
-        return {
-          value: item.provinceName,
-          label: item.provinceName,
-          children: item.cities.map((city) => {
-            return {
-              value: city,
-              label: city,
-            };
-          }),
-        };
+  map.value = new AMap.Map("container", {
+    zoom: 13,
+    center: [116.397428, 39.90923],
+  });
+  AMap.plugin(
+    [
+      "AMap.Geolocation",
+      "AMap.CitySearch",
+      "AMap.AutoComplete",
+      "AMap.PlaceSearch",
+    ],
+    function () {
+      let geolocation = new AMap.Geolocation({
+        zoomToAccuracy: true,
       });
-    })
-    .catch(failResponseHandler);
+      // @ts-ignore
+      geolocation.getCurrentPosition((status: any, result: any) => {
+        map.value?.setCenter(result.position);
+      });
+      let citySearch = new AMap.CitySearch();
+      citySearch.getLocalCity(function (status, result) {
+        if (typeof result != "string") {
+          if (status === "complete") {
+            // @ts-ignore
+            let autocomplete = new AMap.AutoComplete({
+              city: result.city,
+              input: "input",
+            });
+            placeSearch.value = new AMap.PlaceSearch({
+              city: result.city,
+            });
+            // let mark = new AMap.Marker({
+            //   mark:
+            // });
+            autocomplete.on("select", (e: { poi: { name: any } }) => {
+              placeSearch.value.search(
+                e.poi.name,
+                (status: any, result: any) => {
+                  if (status === "complete") {
+                    aboutAddress.value = result.poiList.pois;
+                  }
+                }
+              );
+            });
+          }
+        }
+      });
+    }
+  );
 });
-
+getCityInformations()
+  .then((res) => {
+    cityMap.value = res.data.body.map((item) => {
+      return {
+        value: item.provinceName,
+        label: item.provinceName,
+        children: item.cities.map((city) => {
+          return {
+            value: city,
+            label: city,
+          };
+        }),
+      };
+    });
+  })
+  .catch(failResponseHandler);
+const handleArea = (address: any) => {
+  formCompany.value.address = address.address;
+  let lnglat = {
+    longitude: address.location.lng,
+    latitude: address.location.lat,
+  };
+  formCompany.value.location = lnglat;
+};
 const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
@@ -408,9 +509,62 @@ a:hover {
       }
 
       .el-form-item {
+        .el-select {
+          width: 100%;
+        }
+
+        ::v-deep .el-cascader {
+          width: 400px;
+        }
+
+        .search {
+          display: flex;
+          justify-content: flex-end;
+          width: 600px;
+
+          .el-input {
+            width: 300px;
+          }
+
+          input {
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            outline-style: none;
+          }
+        }
+
+        .map {
+          display: flex;
+          width: 600px;
+          height: 180px;
+
+          #container {
+            width: 290px;
+            height: 180px;
+            border-radius: 5px;
+          }
+
+          .el-scrollbar {
+            width: 45%;
+
+            ul {
+              margin-top: -8px;
+              margin-left: -10px;
+              list-style-type: none;
+
+              li {
+                word-break: keep-all;
+                white-space: nowrap;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+
         .select {
           position: relative;
-          width: 211px;
+          width: 400px;
           height: 30px;
           line-height: 30px;
           border: solid 1px #dcdfe6;

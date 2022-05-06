@@ -185,7 +185,7 @@ getCompanyInfosP0DeliveryRecords(
   valueMap.value
 )
   .then((res) => {
-    deliveryRecords.value = res.data.body;
+    deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       deliveryRecordsCheckeds.value.push(
         Object.assign(item, { checked: false })
@@ -219,7 +219,7 @@ const handleChange = () => {
     valueMap.value
   )
     .then((res) => {
-      deliveryRecords.value = res.data.body;
+      deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
         getUserInfosP0(item.userInformationId)
           .then((response) => {

@@ -23,7 +23,7 @@
                     userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo.education]
+                    educationMap[userInfo.education as 1 | 2 | 3 | 4]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
                     userInfo?.workingYears

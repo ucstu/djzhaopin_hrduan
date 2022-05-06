@@ -11,16 +11,14 @@
         >
           <el-form-item label="头像">
             <div class="avatar">
-              <el-upload
-                ref="uploadRef"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
-                :on-error="handleAvatarError"
-                name="avatar"
-                class="avatar-uploader"
-                action="http://127.0.0.1:4523/mock/743652/avatars"
-              >
+              <div @click="uploadgogo">
+                <input
+                  ref="uploadInput"
+                  type="file"
+                  style="display: none"
+                  name="icon"
+                  @change="dealfilechange"
+                />
                 <img
                   v-if="imageUrl"
                   :src="
@@ -34,7 +32,7 @@
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
                   <Plus />
                 </el-icon>
-              </el-upload>
+              </div>
               <span>
                 建议使用招聘者真实头像提升真实性、专业性
                 支持jpg、jpeg、gif、png，小于10MB
@@ -111,7 +109,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { putHrInfosP0 } from "@/services/services";
+import { postAvatars, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -133,20 +131,11 @@ onMounted(() => {
   formLabelAlign.acceptEmail = route.params.PersonEmail as string;
 });
 const imageUrl = ref("");
-const handleAvatarSuccess: UploadProps["onSuccess"] = (
-  response
-  // uploadFile
-) => {
-  imageUrl.value = response.url;
-  formLabelAlign.avatarUrl = response.url;
+const handleAvatarSuccess = (response) => {
+  imageUrl.value = response.body;
+  formLabelAlign.avatarUrl = response.body;
 };
-const handleAvatarError: UploadProps["onError"] = () =>
-  // err,
-  // uploadFile
-  {
-    ElMessage.error("对不起，上传失败，请重试");
-  };
-const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
+const beforeAvatarUpload = (rawFile) => {
   const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   if (!imgTypes.includes(rawFile.type)) {
     ElMessage.error("对不起，暂不支持上传该类型文件");
@@ -156,6 +145,27 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
     return false;
   }
   return true;
+};
+//上传头像
+const uploadInput = ref<HTMLElement | null>(null);
+const dealfilechange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    console.log(files[files.length - 1]);
+    if (beforeAvatarUpload(files[files.length - 1])) {
+      postAvatars({ avatar: files[0] })
+        .then((res) => {
+          handleAvatarSuccess(res);
+        })
+        .catch(failResponseHandler);
+    }
+  }
+};
+const uploadgogo = () => {
+  // console.log(uploadInput.value)
+  let oBtn = uploadInput.value as HTMLInputElement;
+  oBtn.click();
 };
 const rule = reactive({
   hrName: [{ required: true, message: "此项不能为空", trigger: "blur" }],

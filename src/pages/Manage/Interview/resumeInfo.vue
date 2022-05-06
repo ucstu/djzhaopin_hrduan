@@ -106,7 +106,6 @@ let props = defineProps({
 const delivers = ref({ ...props.deliveryRecordsCheckeds });
 watch(props.deliveryRecordsCheckeds, (oldval: any) => {
   delivers.value = oldval;
-  console.log(delivers.value);
 });
 const handleChecked = (deliveryRecordId: string) => {
   delivers.value.forEach((deliver: any) => {
