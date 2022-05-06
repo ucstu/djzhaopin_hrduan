@@ -79,12 +79,19 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { PositionInformation, UserInformation } from "@/services/types";
+import {
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
+} from "@/services/types";
 import { defineProps, PropType, ref, watch } from "vue";
 
+interface DeliveryRecordChecked extends DeliveryRecord {
+  checked: boolean;
+}
 let props = defineProps({
   deliveryRecordsCheckeds: {
-    type: Array as PropType<any>,
+    type: Array as PropType<DeliveryRecordChecked[]>,
     default: () => [],
   },
   userInformations: {

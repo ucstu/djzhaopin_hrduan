@@ -129,6 +129,9 @@ interface Record {
   sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
+interface DeliveryRecordChecked extends DeliveryRecord {
+  checked: boolean;
+}
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -146,13 +149,15 @@ const total = computed(() => {
   let num = (deliveryRecords.value.length / 7) * 10;
   return Math.ceil(num);
 });
-const deliveryRecordsCheckeds = ref<Array<any>>([]);
+const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
 const checked = ref(false);
 const submitChecked = (data: { checked: boolean }) => {
   checked.value = data.checked;
-  deliveryRecordsCheckeds.value.map((deliveryRecordsChecked: any) => {
-    deliveryRecordsChecked.checked = !deliveryRecordsChecked.checked;
-  });
+  deliveryRecordsCheckeds.value.map(
+    (deliveryRecordsChecked: DeliveryRecordChecked) => {
+      deliveryRecordsChecked.checked = !deliveryRecordsChecked.checked;
+    }
+  );
 };
 const submitPage = (data: { type: string; data: number }) => {
   valueMap.value.page = data.data;
