@@ -26,9 +26,9 @@
             size="large"
             style="max-width: 700px"
           >
-            <el-form-item label="招聘类型" prop="positionType">
+            <el-form-item label="招聘类型" prop="workType">
               <el-select
-                v-model="jobTypeList.positionType"
+                v-model="jobTypeList.workType"
                 placeholder="请选择招聘类型"
               >
                 <el-option
@@ -39,6 +39,31 @@
                 >
                 </el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="职位类型" prop="positionType">
+              <el-input
+                v-model="jobTypeList.positionType"
+                :input-style="{ display: 'none' }"
+              />
+              <div class="select" @click="dialogFormVisible1 = true">
+                <span>{{ jobTypeList.positionType || "请选择" }}</span>
+                <img src="@/assets/down.png" alt="" />
+              </div>
+              <el-dialog v-model="dialogFormVisible1" title="请选择公司行业">
+                <PositionTypeTag @submit-data="submitData" />
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogFormVisible1 = false"
+                      >取消</el-button
+                    >
+                    <el-button
+                      type="primary"
+                      @click="dialogFormVisible1 = false"
+                      >确定</el-button
+                    >
+                  </span>
+                </template>
+              </el-dialog>
             </el-form-item>
             <el-form-item label="职位名称" prop="positionName">
               <el-input
@@ -228,11 +253,11 @@
                 :input-style="{ display: 'none' }"
               />
               <div class="select" @click="dialogFormVisible = true">
-                <span>{{ jobTypeList.interviewInfo || "请选择" }}</span>
+                <span>{{ interviewList || "请选择" }}</span>
                 <img src="@/assets/down.png" alt="" />
               </div>
               <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
-                <InterviewTag @submit-data="submitData" />
+                <InterviewTag @submit-interview="submitInterview" />
                 <template #footer>
                   <span class="dialog-footer">
                     <el-button @click="dialogFormVisible = false"
@@ -279,9 +304,10 @@ import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, reactive, ref, shallowRef } from "vue";
+import { computed, onMounted, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
 import InterviewTag from "./InterviewTag.vue";
+import PositionTypeTag from "./positionTypeTag.vue";
 const store = useMainStore();
 const route = useRoute();
 const map = shallowRef<AMap.Map>();
@@ -349,6 +375,7 @@ const rules = reactive({
   ],
 });
 const dialogFormVisible = ref(false);
+const dialogFormVisible1 = ref(false);
 interface InterviewInfo {
   illustrate: 1 | 2 | 3 | 4;
 
@@ -358,16 +385,30 @@ interface InterviewInfo {
 
   wheel: 1 | 2 | 3 | 4;
 }
-const interviewInfo = ref<InterviewInfo>({
-  illustrate: 1,
-  situation: 1,
-  time: 1,
-  wheel: 1,
-});
-const submitData = (data: any) => {
-  console.log(data);
-  jobTypeList.value.interviewInfo = interviewInfo.value;
+const interviewInfo = ref<Array<string>>([]);
+const submitData = (data: {
+  type: string;
+  data: Ref<{
+    position: string;
+    checked: boolean;
+  }>;
+}) => {
+  jobTypeList.value.positionType = data.data.value.position;
 };
+const submitInterview = (data: {
+  data: InterviewInfo;
+  list: Array<{ name: string; checked: boolean }>;
+}) => {
+  jobTypeList.value.interviewInfo = data.data;
+  data.list.forEach((e) => {
+    interviewInfo.value.push(e.name);
+  });
+  interviewInfo.value = interviewInfo.value.slice(-4);
+};
+const interviewList = computed(() => {
+  return interviewInfo.value.toString();
+});
+
 const aboutAddress = ref<any>([]);
 onMounted(() => {
   map.value = new AMap.Map("container", {
@@ -454,9 +495,9 @@ const publishPost = (formEl: FormInstance | undefined) => {
       jobTypeList.value.hrInformationId =
         store.accountInformation.fullInformationId;
       jobTypeList.value.companyInformationId =
-        store.hrInformation.companyInformationId;
+        store.companyInformation.companyInformationId;
       postCompanyInfosP0PositionInfos(
-        store.hrInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         jobTypeList.value
       )
         .then(() => {

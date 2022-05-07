@@ -10,16 +10,22 @@
           <span style="margin: 5px 0">{{ interviewTag.interviewTagname }}</span>
           <div class="tag-list">
             <div
-              v-for="(interviewInfo1, interviewInfoIndex) in interviewTag.tag"
+              v-for="(interviewInfo, interviewInfoIndex) in interviewTag.tag"
               :key="interviewInfoIndex"
               class="tag-item"
             >
               <el-check-tag
                 ref="checkTagRef"
-                :checked="interviewInfo1.checked"
-                @change="handleillustrate(interviewInfo1, interviewTagIndex)"
+                :checked="interviewInfo.checked"
+                @change="
+                  handleillustrate(
+                    interviewInfo,
+                    interviewInfoIndex,
+                    interviewTagIndex
+                  )
+                "
               >
-                {{ interviewInfo1.name }}</el-check-tag
+                {{ interviewInfo.name }}</el-check-tag
               >
             </div>
           </div>
@@ -29,10 +35,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-const emit = defineEmits(["submit-data"]);
+import { reactive, ref } from "vue";
+const emit = defineEmits(["submit-interview"]);
 
-const interviewTagList = ref([
+const interviewTagList = reactive([
   {
     interviewTagname: "面试形式",
     tag: [
@@ -76,65 +82,55 @@ interface InterviewInfo {
 
   wheel: 1 | 2 | 3 | 4;
 }
-const interviewInfo = ref<InterviewInfo>({
+const interviewInformation = ref<InterviewInfo>({
   illustrate: 1,
   situation: 1,
   time: 1,
   wheel: 1,
 });
+const checkedInterviewTag = ref<{ checked: boolean; name: string }[]>([
+  { checked: false, name: "" },
+  { checked: false, name: "" },
+  { checked: false, name: "" },
+  { checked: false, name: "" },
+]);
 const handleillustrate = (
-  data: { name: string; checked: boolean },
-  index: number
+  data: { checked: boolean; name: string },
+  listIndex: number,
+  tagIndex: number
 ) => {
-  if (data.checked) {
-    interviewInfo.value.illustrate = (index + 1) as 1 | 2 | 3 | 4;
+  if (checkedInterviewTag.value[tagIndex].checked) {
+    checkedInterviewTag.value[tagIndex].checked = false;
   }
-};
-const handlesituation = (data: { checked: any }, index: number) => {
-  if (data.checked) {
-    interviewInfo.value.situation = (index + 1) as 1 | 2 | 3;
+  data.checked = true;
+  checkedInterviewTag.value[tagIndex] = data;
+  if (tagIndex === 0) {
+    if (data.checked) {
+      interviewInformation.value.illustrate = (listIndex + 1) as 1 | 2 | 3 | 4;
+    }
+  } else if (tagIndex === 1) {
+    if (data.checked) {
+      interviewInformation.value.situation = (listIndex + 1) as 1 | 2 | 3;
+    }
+  } else if (tagIndex === 2) {
+    if (data.checked) {
+      interviewInformation.value.time = (listIndex + 1) as 1 | 2;
+    }
+  } else {
+    if (data.checked) {
+      interviewInformation.value.wheel = (listIndex + 1) as 1 | 2 | 3 | 4;
+    }
   }
+  emit("submit-interview", {
+    data: interviewInformation.value,
+    list: [
+      interviewTagList[0].tag[interviewInformation.value.illustrate - 1],
+      interviewTagList[1].tag[interviewInformation.value.situation - 1],
+      interviewTagList[2].tag[interviewInformation.value.time - 1],
+      interviewTagList[3].tag[interviewInformation.value.wheel - 1],
+    ],
+  });
 };
-const handletime = (data: { checked: any }, index: number) => {
-  if (data.checked) {
-    interviewInfo.value.time = (index + 1) as 1 | 2;
-  }
-};
-const handlewheel = (data: { checked: any }, index: number) => {
-  if (data.checked) {
-    interviewInfo.value.wheel = (index + 1) as 1 | 2 | 3 | 4;
-  }
-};
-
-// const changeOnly = (
-//   interviewInfo: { checked: boolean; name: string },
-//   interviewInfoIndex: number,
-//   interviewTag: any
-// ) => {
-//   interviewTag.forEach((item, index) => {
-//     interviewInfo.checked = !interviewInfo.checked;
-//     if (item.checked) {
-//       if (index !== interviewInfoIndex) {
-//         item.checked = false;
-//       } else {
-//         ElMessage.warning("不能选择多种的面试形式");
-//       }
-//     } else {
-//       interviewInfo.checked = !interviewInfo.checked;
-//     }
-//   });
-// };
-// const changeDirection = (
-//   interviewInfo: { checked: boolean },
-//   _interviewInfoIndex: number
-// ) => {
-//   interviewInfo.checked = !interviewInfo.checked;
-//   emit("submit-data", {
-//     type: "interviewInfo",
-//     data: interviewInfo,
-//     index: _interviewInfoIndex + 1,
-//   });
-// };
 </script>
 <style scoped lang="scss">
 .tag {
@@ -157,7 +153,8 @@ const handlewheel = (data: { checked: any }, index: number) => {
   }
 
   .scroll {
-    height: 400px;
+    height: auto;
+    min-height: 400px;
     border: solid 1px rgb(236 198 198);
     border-radius: 5px;
   }

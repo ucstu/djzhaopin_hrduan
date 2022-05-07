@@ -40,9 +40,10 @@
                   @change="dealfilechange"
                 />
                 <img
-                  v-if="ImageUrl"
+                  v-if="formCompany?.logoUrl"
                   :src="VITE_CDN_URL + formCompany?.logoUrl"
                   class="avatar"
+                  style="width: 80px; height: 80px"
                   alt=""
                 />
                 <el-icon v-else class="avatar-uploader-icon" :size="30">
@@ -162,8 +163,8 @@
         <div class="my-company">
           <img
             :src="
-              ImageUrl
-                ? VITE_CDN_URL + ImageUrl
+              formCompany.logoUrl
+                ? VITE_CDN_URL + formCompany.logoUrl
                 : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             alt=""
@@ -243,7 +244,6 @@ const formRef = ref<FormInstance>();
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const store = useMainStore();
-const imageUrl = ref("@/assets/down.png");
 const route = useRoute();
 const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
@@ -339,8 +339,8 @@ const beforeAvatarUpload = (rawFile: File) => {
   if (!imgTypes.includes(rawFile.type)) {
     ElMessage.error("对不起，暂不支持上传该类型文件");
     return false;
-  } else if (rawFile.size / 1024 / 1024 > 10) {
-    ElMessage.error("对不起，上传文件大小不能超过10MB");
+  } else if (rawFile.size / 1024 / 1024 > 1) {
+    ElMessage.error("对不起，上传文件大小不能超过1MB");
     return false;
   }
   return true;
@@ -355,8 +355,7 @@ const dealfilechange = (e: Event) => {
     if (beforeAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[0] })
         .then((res) => {
-          imageUrl.value = res.data;
-          formCompany.value.logoUrl = res.data;
+          formCompany.value.logoUrl = res.data.body;
         })
         .catch(failResponseHandler);
     }
@@ -464,9 +463,9 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
             .then((response) => {
               store.hrInformation = response.data.body;
               store.companyInformation = res.data.body;
-              ElMessage.success("恭喜您，公司创建成功");
+              ElMessage.success("恭喜您，公司创建成功,将前往信息认证");
               dialogFormVisible.value = false;
-              router.replace({ name: "PublishJob" });
+              router.replace({ name: "Execution" });
             })
             .catch(failResponseHandler);
         })

@@ -11,34 +11,29 @@
       >
         <el-form-item label="头像">
           <div class="avatar">
-            <el-upload
-              ref="uploadRef"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :on-error="handleAvatarError"
-              name="avatar"
-              class="avatar-uploader"
-              action="http://127.0.0.1:4523/mock/743652/avatars"
-            >
+            <div @click="uploadgogo">
+              <input
+                ref="uploadInput"
+                type="file"
+                style="display: none"
+                name="icon"
+                @change="dealfilechange"
+              />
               <img
-                v-if="imageUrl"
-                :src="
-                  imageUrl
-                    ? VITE_CDN_URL + imageUrl
-                    : VITE_CDN_URL + formHr.avatarUrl
-                "
+                v-if="formHr.avatarUrl"
+                :src="VITE_CDN_URL + formHr.avatarUrl"
                 class="avatar"
                 alt=""
               />
               <el-icon v-else class="avatar-uploader-icon" :size="30">
                 <Plus />
               </el-icon>
-            </el-upload>
-            <span>
-              建议使用招聘者真实头像提升真实性、专业性
-              支持jpg、jpeg、gif、png，小于10MB
-            </span>
+
+              <span>
+                建议使用招聘者真实头像提升真实性、专业性
+                支持jpg、jpeg、gif、png，小于10MB
+              </span>
+            </div>
           </div>
         </el-form-item>
         <el-form-item label="姓名" prop="hrName">
@@ -84,41 +79,41 @@
   </div>
 </template>
 <script setup lang="ts">
+import usebeforeAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router/index";
-import { getHrInfosP0, putHrInfosP0 } from "@/services/services";
+import { postAvatars, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { onMounted, reactive, ref } from "vue";
-
+import { ElMessage, FormInstance } from "element-plus";
+import { reactive, ref } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useMainStore();
 
 const ruleFormRef = ref<FormInstance>();
-const imageUrl = ref("");
-onMounted(() => {
-  getHrInfosP0(store.hrInformation.hrInformationId)
-    .then((res) => {
-      imageUrl.value = res.data.body.avatarUrl;
-      formHr.hrName = res.data.body.hrName;
-      formHr.postName = res.data.body.postName;
-      formHr.acceptEmail = res.data.body.acceptEmail;
-    })
-    .catch(failResponseHandler);
-});
-const formHr = reactive<HrInformation>({
-  avatarUrl: "",
-  hrName: "",
-  postName: "",
-  acceptEmail: "",
-  hrInformationId: "",
-  createdAt: "",
-  updatedAt: "",
-  companyInformationId: "",
-});
+const formHr = reactive<HrInformation>({ ...store.hrInformation });
 
+const uploadInput = ref<HTMLElement | null>(null);
+const dealfilechange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    let fis = usebeforeAvatarUpload(files[files.length - 1]);
+    if (fis) {
+      postAvatars({ avatar: files[files.length - 1] })
+        .then((res) => {
+          formHr.avatarUrl = res.data.body;
+        })
+        .catch(failResponseHandler);
+    }
+  }
+};
+const uploadgogo = () => {
+  // console.log(uploadInput.value)
+  let oBtn = uploadInput.value as HTMLInputElement;
+  oBtn.click();
+};
 const rules = reactive({
   hrName: [
     {
@@ -154,24 +149,7 @@ const rules = reactive({
 const Topassword = () => {
   router.push("/Setting/Other");
 };
-const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-  imageUrl.value = response.url;
-};
-const handleAvatarError: UploadProps["onError"] = () => {
-  ElMessage.error("对不起，上传失败，请重试");
-};
 
-const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
-  const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-  if (!imgTypes.includes(rawFile.type)) {
-    ElMessage.error("对不起，暂不支持上传该类型文件");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 10) {
-    ElMessage.error("对不起，上传文件大小不能超过10MB");
-    return false;
-  }
-  return true;
-};
 const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
