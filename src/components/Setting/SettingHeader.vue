@@ -93,12 +93,14 @@ a:hover {
 
       .user {
         width: 100%;
+        height: 30px;
         padding-left: 10px;
         text-align: center;
 
         span {
           display: block;
           width: 80px;
+          margin-top: 10px;
         }
       }
     }

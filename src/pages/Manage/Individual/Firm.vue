@@ -64,8 +64,31 @@
             style="width: 411px"
           />
         </el-form-item>
-        <el-form-item label="详细地址" prop="address">
-          <el-input v-model="formCompany.address" type="text" autosize />
+        <el-form-item label="详细地址" prop="workAreaName">
+          <div class="search">
+            <el-input
+              v-model="formCompany.address"
+              disabled
+              placeholder="请在右方搜索点击选择"
+            />
+            <input id="input" type="text" />
+          </div>
+        </el-form-item>
+        <el-form-item prop="workPlace">
+          <div class="map">
+            <div id="container"></div>
+            <el-scrollbar>
+              <ul>
+                <li
+                  v-for="address in aboutAddress"
+                  :key="address.id"
+                  @click="handleArea(address)"
+                >
+                  {{ address.name }}
+                </li>
+              </ul>
+            </el-scrollbar>
+          </div>
         </el-form-item>
         <el-form-item label="公司规模" prop="scale">
           <el-select v-model="formCompany.scale" placeholder="请选择">
@@ -104,7 +127,7 @@ import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance, UploadProps } from "element-plus";
-import { onMounted, onUpdated, reactive, ref } from "vue";
+import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
@@ -113,14 +136,76 @@ const store = useMainStore();
 const imageUrl = ref("@/assets/down.png");
 const dialogFormVisible = ref(false);
 const ImageUrl = ref("");
+const map = shallowRef<AMap.Map>();
+const placeSearch = shallowRef();
+const aboutAddress = ref<any>([]);
 //表格数据
 
 const formCompany = reactive<CompanyInformation>(store.companyInformation);
 const cityInfo = ref([]);
+const handleArea = (address: any) => {
+  formCompany.address = address.address;
+  let lnglat = {
+    longitude: address.location.lng,
+    latitude: address.location.lat,
+  };
+  formCompany.location = lnglat;
+};
 onUpdated(() => {
   if (formCompany) {
     formCompany.cityName = cityInfo.value.toString();
   }
+});
+onMounted(() => {
+  map.value = new AMap.Map("container", {
+    zoom: 13,
+    center: [116.397428, 39.90923],
+  });
+  AMap.plugin(
+    [
+      "AMap.Geolocation",
+      "AMap.CitySearch",
+      "AMap.AutoComplete",
+      "AMap.PlaceSearch",
+    ],
+    function () {
+      let geolocation = new AMap.Geolocation({
+        zoomToAccuracy: true,
+      });
+      // @ts-ignore
+      geolocation.getCurrentPosition((status: any, result: any) => {
+        map.value?.setCenter(result.position);
+      });
+      let citySearch = new AMap.CitySearch();
+      citySearch.getLocalCity(function (status, result) {
+        if (typeof result != "string") {
+          if (status === "complete") {
+            // @ts-ignore
+            let autocomplete = new AMap.AutoComplete({
+              city: result.city,
+              input: "input",
+            });
+            placeSearch.value = new AMap.PlaceSearch({
+              city: result.city,
+            });
+            // let mark = new AMap.Marker({
+            //   mark:
+            // });
+            autocomplete.on("select", (e: { poi: { name: any } }) => {
+              placeSearch.value.search(
+                e.poi.name,
+                (status: any, result: any) => {
+                  if (status === "complete") {
+                    aboutAddress.value = result.poiList.pois;
+                  }
+                }
+              );
+            });
+          }
+        }
+      });
+    }
+  );
 });
 const submitData = (data: {
   data: { checked: boolean; directionName: string };
@@ -155,12 +240,12 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
-interface cityInfo {
+interface CityInfo {
   children: { value: string; label: string }[];
   value: string;
   label: string;
 }
-const cityMap = ref<cityInfo[]>([]);
+const cityMap = ref<CityInfo[]>([]);
 onMounted(() => {
   getCityInformations()
     .then((res) => {
@@ -204,7 +289,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 800px;
+  height: 100%;
   background-color: rgb(255 255 255);
   border: solid 1px rgb(117 244 216);
   border-radius: 5px;
@@ -212,6 +297,7 @@ const updateCompany = (formEl: FormInstance | undefined) => {
   .center {
     width: 90%;
     height: 80%;
+    margin-top: 20px;
 
     .el-form {
       display: flex;
@@ -226,6 +312,52 @@ const updateCompany = (formEl: FormInstance | undefined) => {
       .el-form-item {
         .el-select {
           width: 411px;
+        }
+
+        .search {
+          display: flex;
+          justify-content: flex-end;
+          width: 600px;
+
+          .el-input {
+            width: 380px;
+          }
+
+          input {
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            outline-style: none;
+          }
+        }
+
+        .map {
+          display: flex;
+          justify-content: space-between;
+          width: 1600px;
+          height: 180px;
+
+          #container {
+            width: 380px;
+            height: 180px;
+            border-radius: 5px;
+          }
+
+          .el-scrollbar {
+            width: 240px;
+
+            ul {
+              margin-top: -8px;
+              margin-left: -10px;
+              list-style-type: none;
+
+              li {
+                word-break: keep-all;
+                white-space: nowrap;
+                cursor: pointer;
+              }
+            }
+          }
         }
 
         .select {

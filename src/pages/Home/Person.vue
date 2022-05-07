@@ -108,6 +108,7 @@
 </template>
 
 <script setup lang="ts">
+import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
 import { SwaggerResponse } from "@/services/config";
 import { postAvatars, putHrInfosP0 } from "@/services/services";
@@ -115,14 +116,14 @@ import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
-import type { FormInstance, UploadProps } from "element-plus";
+import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
-const uploadRef = ref<UploadProps>();
+
 const store = useMainStore();
 const formLabelAlign = reactive<HrInformation>({ ...store.hrInformation });
 const company = ref({
@@ -136,25 +137,14 @@ const handleAvatarSuccess = (response: SwaggerResponse<any>) => {
   imageUrl.value = response.data;
   formLabelAlign.avatarUrl = response.data;
 };
-const beforeAvatarUpload = (rawFile: File) => {
-  const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-  if (!imgTypes.includes(rawFile.type)) {
-    ElMessage.error("对不起，暂不支持上传该类型文件");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 10) {
-    ElMessage.error("对不起，上传文件大小不能超过10MB");
-    return false;
-  }
-  return true;
-};
+
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
 const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    console.log(files[files.length - 1]);
-    if (beforeAvatarUpload(files[files.length - 1])) {
+    if (useAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[0] })
         .then((res) => {
           handleAvatarSuccess(res);

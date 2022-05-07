@@ -69,10 +69,10 @@
               </el-select>
 
               <el-input
-                v-model="valueMap.search"
+                v-model="valueMap.userName"
                 class="w-50 m-2"
                 input-style="max-width: 350px;"
-                placeholder="输入搜索内容"
+                placeholder="输入姓名查找"
                 :prefix-icon="Search"
                 @change="handleChange"
               />
@@ -108,6 +108,7 @@ import {
 } from "@/services/services";
 import {
   DeliveryRecord,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
   PositionInformation,
   UserInformation,
 } from "@/services/types";
@@ -117,18 +118,6 @@ import { Search } from "@element-plus/icons-vue";
 import { computed, ref } from "vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
-interface Record {
-  status: Array<1 | 2 | 3 | 4 | 5>;
-  ages?: Array<1 | 2 | 3 | 4 | 5>;
-  deliveryDates?: Array<`${number}-${number}-${number}`>;
-  page?: number;
-  positionInfoIds?: Array<string>;
-  search?: string;
-  sexs?: Array<"男" | "女" | "未知">;
-  size?: number;
-  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
-  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
-}
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
@@ -176,7 +165,7 @@ const changState = (val: any) => {
     deliveryRecordsCheckeds.value = newDeliver;
   }
 };
-const valueMap = ref<Record>({
+const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
   status: [1, 2, 3, 4],
   deliveryDates: deliveryDates.value,
 });

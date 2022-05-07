@@ -53,7 +53,7 @@ const turnDown = () => {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  height: auto;
   background-color: rgb(245 245 250);
 
   .main {
@@ -69,7 +69,7 @@ const turnDown = () => {
       flex-direction: column;
       align-items: center;
       width: 90%;
-      height: 90%;
+      height: 100%;
 
       .header {
         display: flex;

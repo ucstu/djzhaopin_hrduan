@@ -4,7 +4,7 @@
       招聘者企业认定
       <div class="line"></div>
       <div class="information">
-        <img :src="VITE_CDN_URL + imageUrl" alt="加载失败" />
+        <img :src="VITE_CDN_URL + companyInfo.logoUrl" alt="加载失败" />
         <div v-if="companyInfo.establishmentTime" class="comfirm">
           <div class="comfirm-item">
             <span>{{ companyInfo.fullName }}</span>
@@ -46,7 +46,6 @@ import { computed } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useMainStore();
 
-const imageUrl = store.companyInformation.logoUrl;
 const companyInfo = computed(() => store.companyInformation);
 const financingStageMap = [
   "",

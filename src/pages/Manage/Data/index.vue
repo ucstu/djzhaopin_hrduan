@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import { getCompanyInfosP0BigData } from "@/services/services";
+import { GetCompanyInfosP0BigDataQueryParams } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { reactive, ref } from "vue";
 import Communicate from "./Communicate.vue";
@@ -64,27 +65,20 @@ const state = reactive({
   // 默认组件，显示第一个组件
   currentView: "Scan",
 });
-interface bigDate {
-  endDate: string;
-  startDate: string;
-  page?: number;
-  size?: number;
-  sort?: Array<`date,${"asc" | "desc"}`>;
-}
-const Date = ref<bigDate>({
+const bigDataQuery = ref<GetCompanyInfosP0BigDataQueryParams>({
   endDate: "2022-05-05",
   startDate: "2022-05-01",
+  hrInformationId: store.hrInformation.hrInformationId,
 });
 const handleWorkTimeChange = (val: Array<string>) => {
   startTime.value = useDate(val[0]);
   endTime.value = useDate(val[1]);
 };
 
-getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
-  startDate: startTime.value!,
-  endDate: endTime.value!,
-  hrInformationId: store.hrInformation.hrInformationId,
-}).then((res) => {
+getCompanyInfosP0BigData(
+  store.companyInformation.companyInformationId,
+  bigDataQuery.value
+).then((res) => {
   console.log(res);
 });
 </script>

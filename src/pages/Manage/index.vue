@@ -115,8 +115,8 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
-  getCompanyInfosP0,
   getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfos,
   getCompanyInfosP0PositionInfosP1,
   getUserInfosP0,
 } from "@/services/services";
@@ -156,14 +156,14 @@ const valueMap = ref<Record>({
   status: [1, 2, 3, 4, 5],
 });
 const recruitmentPosition = ref(0);
-getCompanyInfosP0(store.companyInformation.companyInformationId)
-  .then((res) => {
-    recruitmentPosition.value = res.data.body.recruitmentPosition;
-  })
-  .catch(failResponseHandler);
+getCompanyInfosP0PositionInfos(store.companyInformation.companyInformationId, {
+  size: 1,
+}).then((res) => {
+  recruitmentPosition.value = res.data.body.totalCount;
+});
 
 getCompanyInfosP0DeliveryRecords(
-  store.hrInformation.companyInformationId,
+  store.companyInformation.companyInformationId,
   valueMap.value
 )
   .then((res) => {

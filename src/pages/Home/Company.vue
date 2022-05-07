@@ -223,6 +223,7 @@
 </template>
 
 <script setup lang="ts">
+import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
 import {
   getCityInformations,
@@ -245,7 +246,6 @@ const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const store = useMainStore();
 const route = useRoute();
-const ImageUrl = ref("");
 const dialogFormVisible = ref(false);
 const aboutAddress = ref<any>([]);
 
@@ -334,25 +334,14 @@ const rule = reactive({
     { required: true, message: "此项不能为空", trigger: "blur" },
   ],
 });
-const beforeAvatarUpload = (rawFile: File) => {
-  const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-  if (!imgTypes.includes(rawFile.type)) {
-    ElMessage.error("对不起，暂不支持上传该类型文件");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 1) {
-    ElMessage.error("对不起，上传文件大小不能超过1MB");
-    return false;
-  }
-  return true;
-};
+
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
 const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    console.log(files[files.length - 1]);
-    if (beforeAvatarUpload(files[files.length - 1])) {
+    if (useAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[0] })
         .then((res) => {
           formCompany.value.logoUrl = res.data.body;
@@ -452,15 +441,19 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      formCompany.value.recruitmentPosition = 0;
       formCompany.value.fullName = route.params.companyName.toString();
       postCompanyInfos(formCompany.value)
         .then((res) => {
           let hrInformation = store.hrInformation;
           hrInformation.companyInformationId =
             res.data.body.companyInformationId;
+          // console.log(hrInformation);
+
           putHrInfosP0(hrInformation.hrInformationId, hrInformation)
             .then((response) => {
+              // console.log(response.data.body);
+              // console.log(res.data.body);
+
               store.hrInformation = response.data.body;
               store.companyInformation = res.data.body;
               ElMessage.success("恭喜您，公司创建成功,将前往信息认证");

@@ -79,7 +79,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import usebeforeAvatarUpload from "@/hooks/useAvatarUpload";
+import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router/index";
 import { postAvatars, putHrInfosP0 } from "@/services/services";
 import { HrInformation } from "@/services/types";
@@ -99,8 +99,7 @@ const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    let fis = usebeforeAvatarUpload(files[files.length - 1]);
-    if (fis) {
+    if (useAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[files.length - 1] })
         .then((res) => {
           formHr.avatarUrl = res.data.body;
