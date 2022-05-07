@@ -602,9 +602,9 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
   positionName?: string;
   /**
    *
-   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   * 职位类型，eg：前端工程师
    */
-  positionTypes?: Array<1 | 2 | 3>;
+  positionType?: string;
   /**
    *
    * 薪资范围，(start,end) ，单位K，eg：1,4
@@ -640,6 +640,11 @@ export interface GetCompanyInfosP0PositionInfosQueryParams {
    * 工作省份，eg：四川省
    */
   workProvinceName?: string;
+  /**
+   *
+   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   */
+  workTypes?: Array<1 | 2 | 3>;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -713,9 +718,9 @@ export interface GetCompanyInfosPositionInfosQueryParams {
   positionName?: string;
   /**
    *
-   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   * 职位类型，eg：前端工程师
    */
-  positionTypes?: Array<1 | 2 | 3>;
+  positionType?: string;
   /**
    *
    * 薪资范围，(start,end) ，单位K，eg：1,4
@@ -751,6 +756,11 @@ export interface GetCompanyInfosPositionInfosQueryParams {
    * 工作省份，eg：四川省
    */
   workProvinceName?: string;
+  /**
+   *
+   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
+   */
+  workTypes?: Array<1 | 2 | 3>;
   /**
    *
    * 经纬度坐标，eg：99.748,74.391846196586
@@ -1376,9 +1386,8 @@ export interface PositionInformation {
    *
    * 职位类型
    *
-   * {1:全职,2:兼职,3:实习}
    */
-  positionType: 1 | 2 | 3;
+  positionType: string;
   /**
    *
    * 起始薪资
@@ -1423,6 +1432,13 @@ export interface PositionInformation {
    *
    */
   workTime: string;
+  /**
+   *
+   * 职位类型
+   *
+   * {1:全职,2:兼职,3:实习}
+   */
+  workType: 1 | 2 | 3;
   /**
    *
    * 上班地点

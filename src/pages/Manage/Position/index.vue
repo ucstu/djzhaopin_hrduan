@@ -60,9 +60,7 @@
                       "-" +
                       educationMap[position.education]
                     }}</span>
-                    <span>{{
-                      "招聘类型:" + slution[position.positionType]
-                    }}</span>
+                    <span>{{ "招聘类型:" + slution[position.workType] }}</span>
                   </div>
                   <div class="item">
                     <span>{{
@@ -113,8 +111,8 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-  deleteCompanyInfosP0PositionInfosP1,
-  getCompanyInfosP0PositionInfos,
+deleteCompanyInfosP0PositionInfosP1,
+getCompanyInfosP0PositionInfos
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
