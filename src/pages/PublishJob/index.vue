@@ -256,7 +256,7 @@
                 <span>{{ interviewList || "请选择" }}</span>
                 <img src="@/assets/down.png" alt="" />
               </div>
-              <el-dialog v-model="dialogFormVisible" title="请选择公司行业">
+              <el-dialog v-model="dialogFormVisible" title="请选择面试信息">
                 <InterviewTag @submit-interview="submitInterview" />
                 <template #footer>
                   <span class="dialog-footer">

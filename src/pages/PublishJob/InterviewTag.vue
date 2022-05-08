@@ -40,20 +40,20 @@ const emit = defineEmits(["submit-interview"]);
 
 const interviewTagList = reactive([
   {
-    interviewTagname: "面试形式",
-    tag: [
-      { name: "现场面试", checked: false },
-      { name: "视频面试", checked: false },
-      { name: "电话面试", checked: false },
-    ],
-  },
-  {
     interviewTagname: "面试轮数",
     tag: [
       { name: "1-2轮次", checked: false },
       { name: "3-4轮次", checked: false },
       { name: "5-6轮次", checked: false },
       { name: "暂不确定", checked: false },
+    ],
+  },
+  {
+    interviewTagname: "面试形式",
+    tag: [
+      { name: "现场面试", checked: false },
+      { name: "视频面试", checked: false },
+      { name: "电话面试", checked: false },
     ],
   },
   {

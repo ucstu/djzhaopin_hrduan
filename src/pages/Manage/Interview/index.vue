@@ -57,53 +57,55 @@ import {
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { computed } from "@vue/reactivity";
-import { onUpdated, ref } from "vue";
+import { computed, toRaw } from "@vue/reactivity";
+import { ref } from "vue";
 import ResumeInfo from "./resumeInfo.vue";
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const checked1 = ref(false);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
+const deliveryDates = ref<Array<string>>([]);
 const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useDate(val[0]);
   let endTime = useDate(val[1]);
   deliveryDates.value[0] = startTime;
   deliveryDates.value[1] = endTime;
-};
-const total = computed(() => {
-  let num = (deliveryRecords.value.length / 7) * 10;
-  return Math.ceil(num);
-});
-onUpdated(() => {
+
   getCompanyInfosP0DeliveryRecords(
     store.companyInformation.companyInformationId,
-    { status: [4], deliveryDates: deliveryDates.value }
+    { status: [1, 2, 3, 4], deliveryDates: toRaw(deliveryDates.value) }
   )
     .then((res) => {
       deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
         getUserInfosP0(item.userInformationId)
-          .then((res) => {
-            userInformations.value.set(item.userInformationId, res.data.body);
+          .then((response) => {
+            userInformations.value.set(
+              item.userInformationId,
+              response.data.body
+            );
           })
           .catch(failResponseHandler);
         getCompanyInfosP0PositionInfosP1(
           store.companyInformation.companyInformationId,
           item.positionInformationId
         )
-          .then((res) => {
+          .then((responseable) => {
             jobInformations.value.set(
               item.positionInformationId,
-              res.data.body
+              responseable.data.body
             );
           })
           .catch(failResponseHandler);
       });
     })
     .catch(failResponseHandler);
+};
+const total = computed(() => {
+  let num = (deliveryRecords.value.length / 7) * 10;
+  return Math.ceil(num);
 });
 </script>
 

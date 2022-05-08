@@ -105,6 +105,7 @@ import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
   getUserInfosP0,
+  putUserInfosP0DeliveryRecordsP1,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -115,6 +116,7 @@ import {
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Search } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { computed, ref } from "vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
@@ -151,18 +153,24 @@ const submitChecked = (data: { checked: boolean }) => {
 const submitPage = (data: { type: string; data: number }) => {
   valueMap.value.page = data.data;
 };
-const changState = (val: any) => {
+const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
   if (deliveryRecordsCheckeds.value) {
     //变更状态函数，将选中的简历信息的状态进行变更
     const newDeliver = deliveryRecordsCheckeds.value.filter(
-      (deliveryRecordsChecked: any) => {
+      (deliveryRecordsChecked: DeliveryRecordChecked) => {
         return deliveryRecordsChecked.checked === true;
       }
     );
-    newDeliver.map((delivery: any) => {
-      delivery.status = val;
+    newDeliver.map((delivery: DeliveryRecordChecked) => {
+      delivery.status = val.state;
+      putUserInfosP0DeliveryRecordsP1(
+        delivery.userInformationId,
+        delivery.deliveryRecordId,
+        delivery
+      ).then((res) => {
+        ElMessage.success("操作成功");
+      });
     });
-    deliveryRecordsCheckeds.value = newDeliver;
   }
 };
 const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({

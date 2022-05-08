@@ -35,9 +35,7 @@
               <el-button v-if="!btn" @click="postverificationCode">{{
                 vcode
               }}</el-button>
-              <el-button v-if="btn" @click="postverificationCode">{{
-                vcode
-              }}</el-button>
+              <el-button v-if="btn" @click="message">{{ vcode }}</el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -73,6 +71,9 @@ const validatePass = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
+const message = () => {
+  ElMessage.warning("您已经发送过验证码，请等待");
+};
 const validatePass2 = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请再次输入密码"));
@@ -101,7 +102,7 @@ const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,
   })
-    .then((res) => {
+    .then(() => {
       ElMessage.success("发送成功");
     })
     .catch(failResponseHandler);

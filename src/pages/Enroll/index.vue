@@ -48,12 +48,12 @@
               placeholder="输入验证码"
             >
               <template #append>
-                <el-button v-if="!btn" @click="postverificationCode">{{
-                  vcode
-                }}</el-button>
-                <el-button v-if="btn" @click="postverificationCode">{{
-                  vcode
-                }}</el-button>
+                <el-button
+                  v-if="!btn"
+                  @click="postverificationCode(ruleForm.user)"
+                  >{{ vcode }}</el-button
+                >
+                <el-button v-if="btn" @click="message">{{ vcode }}</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -78,8 +78,8 @@ import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
-const vcode = ref("获取验证码");
 const btn = ref(false);
+const vcode = ref("获取验证码");
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
@@ -90,6 +90,9 @@ const validatePass = (rule: any, value: any, callback: any) => {
   } else {
     callback();
   }
+};
+const message = () => {
+  ElMessage.warning("您已经发送过验证码，请等待");
 };
 const validateUser = (rule: any, value: any, callback: any) => {
   if (value === "") {
@@ -118,23 +121,28 @@ const ruleForm = reactive({
   checkPass: "",
   verificationCode: "",
 });
-const postverificationCode = () => {
-  getVerificationCode({ email: ruleForm.user })
-    .then((res) => {
-      ElMessage.success("发送成功");
-    })
-    .catch(failResponseHandler);
-  btn.value = true;
-  let time = 60;
-  const timer = setInterval(() => {
-    time--;
-    vcode.value = `${time}s`;
-    if (time === 0) {
-      clearInterval(timer);
-      vcode.value = "获取验证码";
-      btn.value = false;
-    }
-  }, 1000);
+const postverificationCode = (email: string) => {
+  if (email === "") {
+    ElMessage.warning("请输入正确用户名");
+    return;
+  } else {
+    getVerificationCode({ email })
+      .then((res) => {
+        ElMessage.success("验证码已发送，请注意查收");
+      })
+      .catch(failResponseHandler);
+    btn.value = true;
+    let time = 60;
+    const timer = setInterval(() => {
+      time--;
+      vcode.value = `${time}s`;
+      if (time === 0) {
+        clearInterval(timer);
+        vcode.value = "获取验证码";
+        btn.value = false;
+      }
+    }, 1000);
+  }
 };
 const rules = reactive({
   user: [{ validator: validateUser, trigger: "blur" }],
@@ -143,37 +151,25 @@ const rules = reactive({
 });
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  // formEl.validate((valid) => {
-  //   if (valid) {
-  //     console.log(111);
-  //     postAccounts({
-  //       accountType: "2",
-  //       userName: ruleForm.user,
-  //       password: ruleForm.pass,
-  //       verificationCode: ruleForm.verificationCode,
-  //     }).then((res) => {
-  //       console.log(res);
-  //       store.commit("setAccountInfo", res.data.body);
-  //       ElMessage.success("注册成功");
-  //       router.push("/login");
-  //     });
-  //   } else {
-  //     console.log("error submit!");
-  //     return false;
-  //   }
-  // });
-  postAccountInfos({
-    accountType: 2,
-    userName: ruleForm.user,
-    password: ruleForm.pass,
-    verificationCode: ruleForm.verificationCode,
-  })
-    .then((res) => {
-      store.accountInformation = res.data.body;
-      ElMessage.success("注册成功");
-      router.push("/login");
-    })
-    .catch(failResponseHandler);
+  formEl.validate((valid) => {
+    if (valid) {
+      postAccountInfos({
+        accountType: 2,
+        userName: ruleForm.user,
+        password: ruleForm.pass,
+        verificationCode: ruleForm.verificationCode,
+      })
+        .then((res) => {
+          store.accountInformation = res.data.body;
+          ElMessage.success("注册成功");
+          router.push("/login");
+        })
+        .catch(failResponseHandler);
+    } else {
+      console.log("error submit!");
+      return false;
+    }
+  });
 };
 </script>
 <style scoped lang="scss">

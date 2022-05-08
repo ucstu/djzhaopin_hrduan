@@ -18,9 +18,7 @@
               <el-button v-if="!btn" @click="postverificationCode">{{
                 vcode
               }}</el-button>
-              <el-button v-if="btn" @click="postverificationCode">{{
-                vcode
-              }}</el-button>
+              <el-button v-if="btn" @click="message">{{ vcode }}</el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -51,7 +49,9 @@ const ruleFormRef = ref<FormInstance>();
 const store = useMainStore();
 const vcode = ref("获取验证码");
 const btn = ref(false);
-
+const message = () => {
+  ElMessage.warning("您已经发送过验证码，请等待");
+};
 const ruleForm = reactive({
   verificationCode: "",
 });
@@ -60,7 +60,7 @@ const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,
   })
-    .then((res) => {
+    .then(() => {
       ElMessage.success("发送成功");
     })
     .catch(failResponseHandler);

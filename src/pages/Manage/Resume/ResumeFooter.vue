@@ -40,12 +40,12 @@ const handleChecked = () => {
 };
 const requireInterview = () => {
   emit("change-state", {
-    state: [4],
+    state: 4,
   });
 };
 const deleteInterview = () => {
   emit("change-state", {
-    state: [5],
+    state: 5,
   });
 };
 const handleCurrentChange = (val: number) => {

@@ -248,7 +248,6 @@ const store = useMainStore();
 const route = useRoute();
 const dialogFormVisible = ref(false);
 const aboutAddress = ref<any>([]);
-
 //表格数据
 const formCompany = ref<CompanyInformation>({ ...store.companyInformation });
 const cityInfo = ref([]);
@@ -447,13 +446,8 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
           let hrInformation = store.hrInformation;
           hrInformation.companyInformationId =
             res.data.body.companyInformationId;
-          // console.log(hrInformation);
-
           putHrInfosP0(hrInformation.hrInformationId, hrInformation)
             .then((response) => {
-              // console.log(response.data.body);
-              // console.log(res.data.body);
-
               store.hrInformation = response.data.body;
               store.companyInformation = res.data.body;
               ElMessage.success("恭喜您，公司创建成功,将前往信息认证");

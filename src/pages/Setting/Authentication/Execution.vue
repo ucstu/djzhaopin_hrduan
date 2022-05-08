@@ -84,6 +84,7 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { putCompanyInfosP0 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -110,6 +111,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.companyInformation = res.data.body;
+          router.replace("/Manage");
         })
         .catch(failResponseHandler);
     }

@@ -9,14 +9,6 @@
                 <span>招聘中</span>
                 <div class="circle">{{ jobTypeList?.length || "0" }}</div>
               </div>
-              <!-- <div class="left-item">
-                <span>暂停中</span>
-                <div class="circle">{{ 1 }}</div>
-              </div>
-              <div class="left-item">
-                <span>审核中</span>
-                <div class="circle">{{ 1 }}</div>
-              </div> -->
             </div>
             <div class="info-right">
               <el-button type="primary" @click="toPublish">
@@ -38,20 +30,23 @@
             <el-input
               v-model="input2"
               class="w-50 m-2"
-              placeholder="请输入关键字"
+              placeholder="请输入职位名称"
               :suffix-icon="Search"
+              @change="search"
             />
           </div>
         </div>
 
-        <div class="position">
-          <el-scrollbar height="400px">
+        <div ref="positionRef" class="position">
+          <el-scrollbar>
             <template v-for="position in jobTypeList" :key="position.companyId">
-              <div class="position-list">
+              <div ref="postRef" class="position-list">
                 <div class="position-item">
                   <div class="item">
-                    <span>{{ "职位:" + position.positionName }}</span>
-                    <span>{{ "工作地点:" + position.workAreaName }}</span>
+                    <span class="post">职位:{{ position.positionName }}</span>
+                    <span class="address">{{
+                      "工作地点:" + position.workAreaName
+                    }}</span>
                   </div>
                   <div class="item">
                     <span>{{
@@ -93,13 +88,13 @@
           <h3>温馨提示</h3>
           <div class="sentence">
             <span>
-              1、彻底删除:为避免您的资源点或消费损失，请将职位暂停招聘或关闭推广，然后到暂停招聘页面彻底删除职位。</span
+              1、彻底删除:为避免您的资源点或消费损失，请在完成招聘之后尽快删除职位。</span
             ><span>
-              2、取消免费展示:取消职位的免费展示状态，不影响其他商业操作。</span
+              2、取消免费展示:取消职位的免费展示状态，不影响其他商业操作,等待更新推出.....</span
             ><span>
               3、刷新:相当于新发一条信息，在按时间排序的情况下信息将靠前显示。</span
             ><span>
-              4、职位推广:获得更多展示，操作简单，招人更快。推广管理</span
+              4、职位推广:获得更多展示，操作简单，招人更快。推广管理，等待更新....</span
             >
           </div>
         </div>
@@ -111,10 +106,13 @@
 <script setup lang="ts">
 import router from "@/router";
 import {
-deleteCompanyInfosP0PositionInfosP1,
-getCompanyInfosP0PositionInfos
+  deleteCompanyInfosP0PositionInfosP1,
+  getCompanyInfosP0PositionInfos,
 } from "@/services/services";
-import { PositionInformation } from "@/services/types";
+import {
+  GetCompanyInfosP0PositionInfosQueryParams,
+  PositionInformation,
+} from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
@@ -133,15 +131,16 @@ const workingYears = reactive([
   "5-10年",
   "10年以上",
 ]);
+const valueMap = ref<GetCompanyInfosP0PositionInfosQueryParams>({});
 getCompanyInfosP0PositionInfos(
   store.companyInformation.companyInformationId,
-  {}
+  valueMap.value
 )
   .then((res) => {
     jobTypeList.value = res.data.body.positionInformations;
   })
   .catch(failResponseHandler);
-const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+const slution = { 1: "全职", 2: "兼职", 3: "实习" };
 const toPublish = () => {
   router.push("/PublishJob");
 };
@@ -151,7 +150,61 @@ const updatePosition = (id: string) => {
     params: { PublishJobId: id },
   });
 };
+//下拉发请求
+// const positionRef = ref<HTMLElement>(null);
+// const postRef = ref<HTMLElement>(null);
+// onMounted(() => {
+//   console.log(post.value);
+// });
 
+// const updatePositionList = async () => {
+//   // 距离底部200px时加载一次
+//   let bottomOfWindow =
+//     postRef.value.offsetHeight -
+//       postRef.value.scrollTop -
+//       positionRef.value.offsetHeight <=
+//     20;
+//   if (bottomOfWindow && isLoading == true) {
+//     this.page = this.page + 1; //每次分页+1
+//     const data = {
+//       page: this.page,
+//       limit: this.limit,
+//       type: "1",
+//     };
+//     const res = await requset(`url`, data, "get"); //自己封装的请求数据的方法
+//     //有数据的时候加载
+//     if (res.data.length > 0) {
+//       this.list.push(...res.data); //追加数据 使用 ...语法
+//       isLoading = true;
+//     } else {
+//       this.$notify({
+//         title: "温馨提示：",
+//         message: "暂无更多数据信息！",
+//         position: "bottom-right",
+//       });
+//       isLoading = false; //无数据可以加载
+//     }
+//   }
+
+//   getCompanyInfosP0PositionInfos(
+//     store.companyInformation.companyInformationId,
+//     { sort: [] }
+//   )
+//     .then((res) => {
+//       jobTypeList.value = res.data.body.positionInformations;
+//     })
+//     .catch(failResponseHandler);
+// };
+const search = () => {
+  getCompanyInfosP0PositionInfos(
+    store.companyInformation.companyInformationId,
+    { positionName: input2.value }
+  )
+    .then((res) => {
+      jobTypeList.value = res.data.body.positionInformations;
+    })
+    .catch(failResponseHandler);
+};
 const deletePosition = (id: string) => {
   deleteCompanyInfosP0PositionInfosP1(
     store.companyInformation.companyInformationId,
@@ -266,7 +319,7 @@ const deletePosition = (id: string) => {
 
       .position {
         width: 100%;
-        height: 300px;
+        height: 280px;
         margin-top: 28px;
         overflow-y: hidden;
         background: #fff;
@@ -294,14 +347,32 @@ const deletePosition = (id: string) => {
           .position-item {
             display: flex;
             width: 70%;
-            height: auto;
+            height: 50px;
             margin: 10px 0;
 
             .item {
+              position: relative;
               display: flex;
               flex-direction: column;
-              width: 100%;
+              width: 300px;
               text-align: center;
+
+              .post {
+                position: absolute;
+                top: 5px;
+                left: 15px;
+                width: 100%;
+              }
+
+              .address {
+                position: absolute;
+                bottom: 5px;
+                left: 15px;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
             }
           }
 
