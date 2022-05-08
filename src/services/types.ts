@@ -1233,11 +1233,10 @@ export interface MessageRecord {
   initiateId: string;
   /**
    *
-   * 发起方类型
+   * 发起用户类型
    *
-   * {1: 用户,2: HR}
    */
-  initiateType: 1 | 2;
+  initiateType: number;
   /**
    *
    * 消息记录ID
@@ -1246,24 +1245,23 @@ export interface MessageRecord {
   messageRecordId: string;
   /**
    *
+   * 消息类型
+   *
+   * {1:文字,2:图片,3:语音,4:文件}
+   */
+  messageType: 1 | 2 | 3 | 4;
+  /**
+   *
    * 接收用户ID
    *
    */
   serviceId: string;
   /**
    *
-   * 接收方类型
+   * 接收用户类型
    *
-   * {1: 用户,2: HR}
    */
-  serviceType: 1 | 2;
-  /**
-   *
-   * 消息类型
-   *
-   * {1:文字,2:图片,3:语音,4:文件}
-   */
-  type: 1 | 2 | 3 | 4;
+  serviceType: number;
   /**
    *
    * 更新时间
