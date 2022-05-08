@@ -53,7 +53,7 @@
                       "经验和学历:" +
                       workingYears[position.workingYears] +
                       "-" +
-                      educationMap[position.education]
+                      educationMap[position.education - 1]
                     }}</span>
                     <span>{{ "招聘类型:" + slution[position.workType] }}</span>
                   </div>

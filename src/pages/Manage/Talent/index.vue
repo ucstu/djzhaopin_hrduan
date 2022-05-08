@@ -136,7 +136,8 @@ const valueMap = ref({
 const checkeds = ref(false);
 
 const checked = ref({ checked: false });
-const feedbackMap = ["已通过", "已拒绝", "待审核"];
+const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
+
 const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];

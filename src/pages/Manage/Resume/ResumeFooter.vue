@@ -22,7 +22,6 @@
     />
   </div>
 </template>
-
 <script setup lang="ts">
 import { defineProps, ref } from "vue";
 defineProps({
@@ -31,7 +30,6 @@ defineProps({
     default: 0,
   },
 });
-
 const emit = defineEmits(["submit-page", "submit-checked", "change-state"]);
 const handleChecked = () => {
   emit("submit-checked", {

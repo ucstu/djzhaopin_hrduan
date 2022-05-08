@@ -21,7 +21,7 @@
               <ResumeInfo
                 :user-informations="userInformations"
                 :job-informations="jobInformations"
-                :delivery-records="deliveryRecords"
+                :delivery-records-checkeds="deliveryRecordsCheckeds"
                 :checked="checked1"
               />
             </el-scrollbar>
@@ -29,7 +29,17 @@
           <div class="footer">
             <div>
               <el-checkbox v-model="checked1" label="全选" size="large" />
-              <el-button type="primary">发出offer</el-button>
+              <el-button
+                type="primary"
+                @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
+                >发出offer</el-button
+              >
+              <el-button
+                type="primary"
+                plain
+                @click="changeState(5 as 1 | 2 | 3 | 4 | 5 )"
+                >删除简历</el-button
+              >
             </div>
             <el-pagination
               background
@@ -46,26 +56,32 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0,
+putUserInfosP0DeliveryRecordsP1
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { computed, toRaw } from "@vue/reactivity";
+import { computed } from "@vue/reactivity";
+import { ElMessage } from "element-plus";
 import { ref } from "vue";
 import ResumeInfo from "./resumeInfo.vue";
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const checked1 = ref(false);
+interface DeliveryRecordChecked extends DeliveryRecord {
+  checked: boolean;
+}
+const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-const deliveryDates = ref<Array<string>>([]);
+const deliveryDates = ref<Array<string>>(["2022-05-01", "2022-06-01"]);
 const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useDate(val[0]);
@@ -75,11 +91,16 @@ const handleWorkTimeChange = (val: Array<string>) => {
 
   getCompanyInfosP0DeliveryRecords(
     store.companyInformation.companyInformationId,
-    { status: [1, 2, 3, 4], deliveryDates: toRaw(deliveryDates.value) }
+    { status: [4], deliveryDates: deliveryDates.value }
   )
     .then((res) => {
+      console.log(res.data.body.deliveryRecords);
+      deliveryRecordsCheckeds.value = [];
       deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
+        deliveryRecordsCheckeds.value.push(
+          Object.assign(item, { checked: false })
+        );
         getUserInfosP0(item.userInformationId)
           .then((response) => {
             userInformations.value.set(
@@ -103,6 +124,58 @@ const handleWorkTimeChange = (val: Array<string>) => {
     })
     .catch(failResponseHandler);
 };
+const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
+  if (deliveryRecordsCheckeds.value) {
+    //变更状态函数，将选中的简历信息的状态进行变更
+    const newDeliver = deliveryRecordsCheckeds.value.filter(
+      (deliveryRecordsChecked: DeliveryRecordChecked) => {
+        return deliveryRecordsChecked.checked === true;
+      }
+    );
+    newDeliver.map((delivery: DeliveryRecordChecked) => {
+      delivery.status = val;
+      putUserInfosP0DeliveryRecordsP1(
+        delivery.userInformationId,
+        delivery.deliveryRecordId,
+        delivery
+      ).then(() => {
+        ElMessage.success("操作成功");
+      });
+    });
+  }
+};
+getCompanyInfosP0DeliveryRecords(
+  store.companyInformation.companyInformationId,
+  { status: [4] }
+)
+  .then((res) => {
+    deliveryRecords.value = res.data.body.deliveryRecords;
+    deliveryRecords.value.forEach((item) => {
+      deliveryRecordsCheckeds.value.push(
+        Object.assign(item, { checked: false })
+      );
+      getUserInfosP0(item.userInformationId)
+        .then((response) => {
+          userInformations.value.set(
+            item.userInformationId,
+            response.data.body
+          );
+        })
+        .catch(failResponseHandler);
+      getCompanyInfosP0PositionInfosP1(
+        store.companyInformation.companyInformationId,
+        item.positionInformationId
+      )
+        .then((responseable) => {
+          jobInformations.value.set(
+            item.positionInformationId,
+            responseable.data.body
+          );
+        })
+        .catch(failResponseHandler);
+    });
+  })
+  .catch(failResponseHandler);
 const total = computed(() => {
   let num = (deliveryRecords.value.length / 7) * 10;
   return Math.ceil(num);

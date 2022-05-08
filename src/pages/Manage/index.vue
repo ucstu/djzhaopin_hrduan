@@ -91,12 +91,7 @@
                     <div class="right">
                       <el-button
                         type="primary"
-                        @click="
-                          inspectionResume(
-                            interview.userInformationId,
-                            interview.positionInformationId
-                          )
-                        "
+                        @click="inspectionResume(interview)"
                         >查看简历</el-button
                       >
                     </div>
@@ -119,6 +114,7 @@ import {
   getCompanyInfosP0PositionInfos,
   getCompanyInfosP0PositionInfosP1,
   getUserInfosP0,
+  putUserInfosP0DeliveryRecordsP1,
 } from "@/services/services";
 import {
   DeliveryRecord,
@@ -127,6 +123,7 @@ import {
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
+import { ElMessage } from "element-plus";
 import { ref } from "vue";
 
 const store = useMainStore();
@@ -153,7 +150,7 @@ interface Record {
   workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
 }
 const valueMap = ref<Record>({
-  status: [1, 2, 3, 4, 5],
+  status: [1, 2, 3, 4],
 });
 const recruitmentPosition = ref(0);
 getCompanyInfosP0PositionInfos(store.companyInformation.companyInformationId, {
@@ -201,12 +198,23 @@ getCompanyInfosP0DeliveryRecords(
 const goPosition = () => {
   router.push("/System/Position");
 };
-const inspectionResume = (userid: string, postid: string) => {
+const inspectionResume = (delivery: DeliveryRecord) => {
+  //变更状态函数，将选中的简历信息的状态进行变更
+  if (delivery.status === 1) {
+    delivery.status = 2;
+    putUserInfosP0DeliveryRecordsP1(
+      delivery.userInformationId,
+      delivery.deliveryRecordId,
+      delivery
+    ).then(() => {
+      ElMessage.success("查看简历详情");
+    });
+  }
   router.push({
     name: "Resume",
     params: {
-      userId: userid,
-      postId: postid,
+      userId: delivery.userInformationId,
+      postId: delivery.positionInformationId,
     },
   });
 };

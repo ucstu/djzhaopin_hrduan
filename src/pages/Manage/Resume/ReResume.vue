@@ -48,10 +48,10 @@
                 @change="handleChange"
               >
                 <el-option
-                  v-for="(item, index) in gander"
+                  v-for="item in gander"
                   :key="item"
                   :label="item"
-                  :value="index + 1"
+                  :value="item"
                 />
               </el-select>
               <el-select
@@ -84,7 +84,10 @@
                 :user-informations="userInformations"
                 :job-informations="jobInformations"
                 :delivery-records-checkeds="deliveryRecordsCheckeds"
-              ></ResumeInfo>
+              >
+                <!-- 尝试插槽实现 -->
+                <!-- <el-checkbox /> -->
+              </ResumeInfo>
             </el-scrollbar>
           </div>
           <ResumeFooter
@@ -153,6 +156,7 @@ const submitChecked = (data: { checked: boolean }) => {
 const submitPage = (data: { type: string; data: number }) => {
   valueMap.value.page = data.data;
 };
+
 const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
   if (deliveryRecordsCheckeds.value) {
     //变更状态函数，将选中的简历信息的状态进行变更
@@ -167,7 +171,7 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
         delivery.userInformationId,
         delivery.deliveryRecordId,
         delivery
-      ).then((res) => {
+      ).then(() => {
         ElMessage.success("操作成功");
       });
     });
@@ -217,7 +221,11 @@ const handleChange = () => {
   )
     .then((res) => {
       deliveryRecords.value = res.data.body.deliveryRecords;
+      deliveryRecordsCheckeds.value = [];
       deliveryRecords.value.forEach((item) => {
+        deliveryRecordsCheckeds.value.push(
+          Object.assign(item, { checked: false })
+        );
         getUserInfosP0(item.userInformationId)
           .then((response) => {
             userInformations.value.set(
@@ -241,9 +249,10 @@ const handleChange = () => {
     })
     .catch(failResponseHandler);
 };
-const feedbackMap = ["已通过", "已拒绝", "待审核"];
+const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
+
 const gander = ["男", "女"];
-const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
+const workExperience = ["经验不限", "在校/应届", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25岁", "25-35岁", "35-45岁", "45-55岁", "55-65岁"];
 </script>
 

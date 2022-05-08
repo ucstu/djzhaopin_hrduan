@@ -7,9 +7,12 @@
     <div class="resume-item">
       <div class="item-header">
         <el-checkbox
-          :checked="deliveryRecordsChecked.checked"
+          v-model="deliveryRecordsChecked.checked"
           @change="handleChecked(deliveryRecordsChecked.deliveryRecordId)"
         />
+        <!-- 尝试使用插槽 -->
+        <!-- <slot></slot> -->
+        {{ deliveryRecordsChecked.checked }}
         <img
           :src="
             VITE_CDN_URL +
@@ -44,7 +47,7 @@
                 userInformations.get(deliveryRecordsChecked.userInformationId)
                   ?.cityName
               }}</span
-            ><span
+            >|<span
               >{{
                 jobInformations.get(
                   deliveryRecordsChecked.positionInformationId
@@ -69,23 +72,23 @@
       <div class="right">
         <el-button
           type="primary"
-          @click="inspectionResume(userInformations.get(deliveryRecordsChecked.userInformationId)!.userInformationId,jobInformations.get(deliveryRecordsChecked.positionInformationId)!.positionInformationId)"
+          @click="inspectionResume(deliveryRecordsChecked)"
           >查看简历</el-button
         >
       </div>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import router from "@/router";
+import { putUserInfosP0DeliveryRecordsP1 } from "@/services/services";
 import {
   DeliveryRecord,
   PositionInformation,
   UserInformation,
 } from "@/services/types";
+import { ElMessage } from "element-plus";
 import { defineProps, PropType, ref, watch } from "vue";
-
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
@@ -104,34 +107,45 @@ let props = defineProps({
   },
 });
 const delivers = ref({ ...props.deliveryRecordsCheckeds });
-watch(props.deliveryRecordsCheckeds, (oldval: any) => {
-  delivers.value = oldval;
-});
 const handleChecked = (deliveryRecordId: string) => {
-  delivers.value.forEach((deliver: any) => {
+  delivers.value.forEach((deliver: DeliveryRecordChecked) => {
     if (deliver.deliveryRecordId === deliveryRecordId) {
       deliver.checked = !deliver.checked;
     }
   });
 };
-// const deliveryRecordsCheckeds = reactive<any>([]);
-// onMounted(() => {
-//   props.deliveryRecords.map((deliveryRecord) => {
-//     deliveryRecordsCheckeds.push(
-//       Object.assign(deliveryRecord, { checked: false })
-//     );
-//   });
+watch(
+  () => [...props.deliveryRecordsCheckeds],
+  (val) => {
+    delivers.value = val;
+    console.log(delivers.value);
+  },
+  { deep: true }
+);
+// watchEffect(() => {
+//   delivers.value = props.deliveryRecordsCheckeds;
+//   console.log(delivers.value);
 // });
-
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const educations = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
-const inspectionResume = (userid: string, postid: string) => {
+const inspectionResume = (delivery: any) => {
+  // 变更状态函数，将选中的简历信息的状态进行变更
+  if (delivery.status === 1) {
+    delivery.status = 2;
+    putUserInfosP0DeliveryRecordsP1(
+      delivery.userInformationId,
+      delivery.deliveryRecordId,
+      delivery
+    ).then(() => {
+      ElMessage.success("查看简历详情");
+    });
+  }
   router.push({
     name: "Resume",
     params: {
-      userId: userid,
-      postId: postid,
+      userId: delivery.userInformationId,
+      postId: delivery.positionInformationId,
     },
   });
 };

@@ -502,7 +502,7 @@ const publishPost = (formEl: FormInstance | undefined) => {
       )
         .then(() => {
           ElMessage.success("恭喜您，职位发布成功");
-          router.push({ name: "Manage" });
+          router.go(-1);
         })
         .catch(failResponseHandler);
     }
