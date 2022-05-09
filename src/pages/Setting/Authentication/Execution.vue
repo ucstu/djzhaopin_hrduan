@@ -111,7 +111,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.companyInformation = res.data.body;
-          router.replace("/Manage");
+          router.replace({ name: "PublishJob" });
         })
         .catch(failResponseHandler);
     }

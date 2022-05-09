@@ -6,7 +6,7 @@
       class="job-hunter"
       @click="selectPerson(deliveryRecord.userInformationId)"
     >
-      <el-badge is-dot class="item">
+      <el-badge :value="1" :max="10" class="item">
         <div class="hunter">
           <img
             :src="
@@ -52,9 +52,12 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { PropType } from "vue";
-
+import { useMainStore } from "@/stores/main";
+import { defineProps, PropType, ref } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
+const store = useMainStore();
+const condition = ref(false);
+let emit = defineEmits(["submitMessage"]);
 defineProps({
   deliveryRecords: {
     type: Array as PropType<DeliveryRecord[]>,
@@ -69,38 +72,67 @@ defineProps({
     default: () => new Map(),
   },
 });
-// const selectPerson = (id) => {
-//   this.$store.commit("changeCurrentSessionId", id);
-// };
+const selectPerson = (id: string) => {
+  store.charList.push(id);
+  condition.value = true;
+  emit("submitMessage", condition.value);
+};
 </script>
 
 <style lang="scss" scoped>
 #list {
-  li {
-    padding: 12px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #292c33;
+  .job-hunter {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #ccc;
 
-    &:hover {
-      background-color: rgb(255 255 255 / 3%);
+    .el-badge {
+      width: 95%;
+      height: 95%;
+
+      .hunter {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        width: 100%;
+        height: 100%;
+
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+
+        .hunter-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          width: 60%;
+          height: 80%;
+
+          .info {
+            display: flex;
+            justify-content: space-around;
+            margin-left: -10px;
+            font-size: 13px;
+            color: #ccc;
+          }
+        }
+      }
     }
   }
 
-  li.active {
-    /* 注意这个是.不是冒号: */
-    background-color: rgb(255 255 255 / 10%);
+  .job-hunter:hover {
+    cursor: pointer;
+    background-color: rgb(113 255 153);
   }
 
-  .avatar {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    border-radius: 2px;
-  }
-
-  .name {
-    display: inline-block;
-    margin-left: 15px;
+  .job-hunter:active {
+    cursor: pointer;
+    background-color: rgb(0 179 139);
   }
 }
 </style>

@@ -130,22 +130,17 @@ import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance, UploadProps } from "element-plus";
+import { ElMessage, FormInstance } from "element-plus";
 import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
-
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
-const uploadRef = ref<UploadProps>();
 const store = useMainStore();
-const imageUrl = ref("@/assets/down.png");
 const dialogFormVisible = ref(false);
-const ImageUrl = ref("");
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const marker = shallowRef();
 const aboutAddress = ref<any>([]);
 //表格数据
-
 const formCompany = reactive<CompanyInformation>(store.companyInformation);
 const cityInfo = ref([]);
 const handleArea = (address: any) => {

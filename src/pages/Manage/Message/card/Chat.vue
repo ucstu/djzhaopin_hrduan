@@ -1,35 +1,40 @@
 <template>
   <div class="container">
     <div class="chat-content">
-      <template v-if="chatList && chatList.length"> </template>
+      <template v-if="chatList && chatList.length">
+        <div v-for="(chat, index) in chatList" :key="index">
+          <p class="time">
+            <span>{{ chat }}</span>
+          </p>
+          <div class="main" :class="{ self: chat }">
+            <img class="avatar" :src="imageUrl ? imageUrl : ''" alt="" />
+            <p class="text">{{ chat }}</p>
+          </div>
+        </div>
+      </template>
       <div v-else class="empty">没有消息</div>
-    </div>
-    <div class="chat-bottom">
-      <el-input v-model="chatMsg" class="chat-input" placeholder="请输入内容" />
-      <el-button class="chat-btn" type="primary" @click="sendMsg"
-        >发送</el-button
-      >
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { getUserInfosP0 } from "@/services/services";
+import { useMainStore } from "@/stores/main";
 import { ref } from "vue";
-
-const chatList = ref([]); // 消息列表
+const store = useMainStore();
+const imageUrl = ref("");
+getUserInfosP0(store.charList[0]).then((res) => {
+  imageUrl.value = res.data.body.avatarUrl;
+});
+const chatList = ref(["1"]); // 消息列表
 const chatMsg = ref("");
 const sendMsg = () => {};
 </script>
 
 <style lang="scss" scoped>
 .container {
-  padding: 24px;
-}
-
-.chat-content {
-  box-sizing: border-box;
   width: 100%;
-  height: 600px;
+  height: 70%;
   padding: 10px;
   border: 1px solid #ddd;
   border-bottom: none;
@@ -100,27 +105,27 @@ const sendMsg = () => {};
   }
 }
 
-.chat-bottom {
-  display: flex;
+// .chat-bottom {
+//   display: flex;
 
-  .empty {
-    padding: 50px 0;
-    font-size: 14px;
-    text-align: center;
-  }
+//   .empty {
+//     padding: 50px 0;
+//     font-size: 14px;
+//     text-align: center;
+//   }
 
-  .chat-input {
-    &:deep(el-input__inner) {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
+//   .chat-input {
+//     &:deep(el-input__inner) {
+//       border-top-left-radius: 0;
+//       border-top-right-radius: 0;
+//       border-bottom-right-radius: 0;
+//     }
+//   }
 
-  .chat-btn {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-}
+//   .chat-btn {
+//     border-top-left-radius: 0;
+//     border-top-right-radius: 0;
+//     border-bottom-left-radius: 0;
+//   }
+// }
 </style>

@@ -13,14 +13,16 @@
           :user-informations="userInformations"
           :job-informations="jobInformations"
           :delivery-records="deliveryRecords"
+          @submit-message="submitMessage"
         />
       </div>
       <div class="right">
         <el-empty
-          v-show="condition"
+          v-show="!condition"
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
         />
-        <Chat v-show="!condition" />
+        <Chat v-show="condition" />
+        <chat-buttom />
       </div>
     </div>
   </div>
@@ -40,18 +42,21 @@ import {
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ref } from "vue";
-import Card from "./Card.vue";
-import Chat from "./Chat.vue";
-import List from "./List.vue";
-
-const condition = ref(true);
+import Card from "./card/Card.vue";
+import Chat from "./card/Chat.vue";
+import ChatButtom from "./card/ChatButtom.vue";
+import List from "./card/List.vue";
+const submitMessage = () => {
+  condition.value = true;
+};
+const condition = ref(false);
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
-  { status: [2] }
+  { status: [1, 2, 3, 4] }
 )
   .then((res) => {
     deliveryRecords.value = res.data.body.deliveryRecords;
@@ -120,58 +125,10 @@ getCompanyInfosP0DeliveryRecords(
           }
         }
       }
-
-      .job-hunter {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        width: 100%;
-        height: 80px;
-        border-bottom: 1px solid #ccc;
-
-        .el-badge {
-          width: 95%;
-          height: 95%;
-
-          .hunter {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            width: 100%;
-            height: 100%;
-
-            img {
-              width: 50px;
-              height: 50px;
-              border-radius: 50%;
-            }
-
-            .hunter-info {
-              display: flex;
-              flex-direction: column;
-              justify-content: space-around;
-              width: 60%;
-              height: 80%;
-
-              .info {
-                display: flex;
-                justify-content: space-around;
-                margin-left: -10px;
-                font-size: 13px;
-                color: #ccc;
-              }
-            }
-          }
-        }
-      }
-
-      .job-hunter:hover {
-        cursor: pointer;
-        background-color: rgb(0 179 139);
-      }
     }
 
     .right {
+      position: relative;
       width: 75%;
       height: 100%;
     }

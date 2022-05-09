@@ -41,7 +41,6 @@ declare module 'vue' {
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
     Setting: typeof import('./src/components/Setting/Setting.vue')['default']
     SettingHeader: typeof import('./src/components/Setting/SettingHeader.vue')['default']
     System: typeof import('./src/components/System/System.vue')['default']

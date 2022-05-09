@@ -112,7 +112,7 @@ const yesterdayData = ref<{
   deliveryRecordCount: number;
   inspectionRecordCount: number;
   onlineCommunicateCount: number;
-}>({});
+}>({} as any);
 const day = new Date();
 day.setDate(day.getDate() - 1);
 yesterday.value = useDate(day);

@@ -16,6 +16,7 @@ export const useMainStore = defineStore("main", {
     accountInformation: null as unknown as AccountInformation,
     companyInformation: null as unknown as CompanyInformation,
     messages: {} as { [key: string]: withReadStateMessageRecord[] },
+    charList: [] as string[],
   }),
   persist: {
     enabled: true,

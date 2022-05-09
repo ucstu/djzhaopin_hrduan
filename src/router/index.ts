@@ -156,8 +156,8 @@ const router = createRouter({
 });
 
 NProgress.configure({ showSpinner: false });
-const whitelist = ["/Login", "/Enroll"];
-router.beforeEach(async (to, from, next) => {
+
+router.beforeEach(async (to, _, next) => {
   const store = useMainStore();
   NProgress.start();
   if (store.jsonWebToken != null && store.accountInformation != null) {
