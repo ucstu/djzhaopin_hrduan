@@ -13,26 +13,25 @@
         </el-form-item>
         <el-form-item label="公司Logo">
           <div class="avatar">
-            <el-upload
-              ref="uploadRef"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :on-error="handleAvatarError"
-              name="avatar"
-              class="avatar-uploader"
-              action="http://127.0.0.1:4523/mock/743652/avatars"
-            >
+            <div @click="uploadgogo">
+              <input
+                ref="uploadInput"
+                type="file"
+                style="display: none"
+                name="icon"
+                @change="dealfilechange"
+              />
               <img
-                v-if="ImageUrl"
-                :src="VITE_CDN_URL + formCompany.logoUrl"
+                v-if="formCompany?.logoUrl"
+                :src="VITE_CDN_URL + formCompany?.logoUrl"
                 class="avatar"
-                alt="avatar"
+                style="width: 80px; height: 80px"
+                alt=""
               />
               <el-icon v-else class="avatar-uploader-icon" :size="30">
                 <Plus />
               </el-icon>
-            </el-upload>
+            </div>
           </div>
         </el-form-item>
         <el-form-item label="公司行业" prop="comprehensionName">
@@ -120,8 +119,13 @@
 </template>
 
 <script setup lang="ts">
+import useAvatarUpload from "@/hooks/useAvatarUpload";
 import Tag from "@/pages/Home/Tag.vue";
-import { getCityInformations, putCompanyInfosP0 } from "@/services/services";
+import {
+  getCityInformations,
+  postAvatars,
+  putCompanyInfosP0,
+} from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -138,6 +142,7 @@ const dialogFormVisible = ref(false);
 const ImageUrl = ref("");
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
+const marker = shallowRef();
 const aboutAddress = ref<any>([]);
 //表格数据
 
@@ -149,7 +154,14 @@ const handleArea = (address: any) => {
     longitude: address.location.lng,
     latitude: address.location.lat,
   };
+  let markerLnglat = [address.location.lng, address.location.lat] as [
+    number,
+    number
+  ];
   formCompany.location = lnglat;
+  marker.value.setPosition(markerLnglat);
+  map.value?.add(marker.value);
+  map.value?.setCenter(markerLnglat);
 };
 onUpdated(() => {
   if (formCompany) {
@@ -188,9 +200,9 @@ onMounted(() => {
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
             });
-            // let mark = new AMap.Marker({
-            //   mark:
-            // });
+            marker.value = new AMap.Marker({
+              position: [116.397428, 39.90923],
+            });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
                 e.poi.name,
@@ -214,13 +226,6 @@ const submitData = (data: {
     formCompany.comprehensionName = data.data.directionName;
   }
 };
-
-const handleAvatarSuccess: UploadProps["onSuccess"] = (response) => {
-  imageUrl.value = response.url;
-};
-const handleAvatarError: UploadProps["onError"] = () => {
-  ElMessage.error("对不起，上传失败，请重试");
-};
 const rule = reactive({
   comprehensionName: [
     { required: true, message: "此项不能为空", trigger: "blur" },
@@ -229,16 +234,26 @@ const rule = reactive({
   address: [{ required: true, message: "此项不能为空", trigger: "blur" }],
   scale: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 });
-const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
-  const imgTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-  if (!imgTypes.includes(rawFile.type)) {
-    ElMessage.error("对不起，暂不支持上传该类型文件");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 10) {
-    ElMessage.error("对不起，上传文件大小不能超过10MB");
-    return false;
+
+//上传头像
+const uploadInput = ref<HTMLElement | null>(null);
+const dealfilechange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    if (useAvatarUpload(files[files.length - 1])) {
+      postAvatars({ avatar: files[files.length - 1] })
+        .then((res) => {
+          formCompany.logoUrl = res.data.body;
+        })
+        .catch(failResponseHandler);
+    }
   }
-  return true;
+};
+const uploadgogo = () => {
+  // console.log(uploadInput.value)
+  let oBtn = uploadInput.value as HTMLInputElement;
+  oBtn.click();
 };
 interface CityInfo {
   children: { value: string; label: string }[];

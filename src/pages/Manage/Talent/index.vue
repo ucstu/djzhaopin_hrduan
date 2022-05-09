@@ -118,6 +118,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
+import { getRecommendations } from "@/services/services";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
@@ -144,7 +145,9 @@ const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 const slution = ["随时入职", "2周内入职", "1月内入职"];
 const userInfo = ref<UserInformation>();
 const JobExpectative = ref<JobExpectation>();
-
+getRecommendations().then((res) => {
+  console.log(res);
+});
 const TalentInfo = ref([
   {
     ...userInfo.value,

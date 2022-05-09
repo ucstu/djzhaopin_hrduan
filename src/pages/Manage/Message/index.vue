@@ -3,55 +3,17 @@
     <div class="chat">
       <div class="left">
         <div class="left-top">
-          <span>我的消息</span>
-          <span>快速处理</span>
+          <Card />
+          <div class="title">
+            <span>我的消息</span>
+            <span>快速处理</span>
+          </div>
         </div>
-        <div
-          v-for="deliveryRecord in deliveryRecords"
-          :key="deliveryRecord.deliveryRecordId"
-          class="job-hunter"
-          @click="selectPerson(deliveryRecord.userInformationId)"
-        >
-          <el-badge is-dot class="item">
-            <div class="hunter">
-              <img
-                :src="
-                  VITE_CDN_URL +
-                  userInformations.get(deliveryRecord.userInformationId)
-                    ?.avatarUrl
-                "
-                alt=""
-              />
-              <div class="hunter-info">
-                <span>{{
-                  userInformations.get(deliveryRecord.userInformationId)
-                    ?.firstName +
-                  "" +
-                  userInformations.get(deliveryRecord.userInformationId)
-                    ?.lastName
-                }}</span>
-                <div class="info">
-                  <span>{{
-                    userInformations.get(deliveryRecord.userInformationId)
-                      ?.cityName
-                  }}</span>
-                  <span>{{
-                    jobInformations.get(deliveryRecord.positionInformationId)
-                      ?.positionName
-                  }}</span>
-                  <span>{{
-                    jobInformations.get(deliveryRecord.positionInformationId)
-                      ?.startingSalary +
-                    "K-" +
-                    jobInformations.get(deliveryRecord.positionInformationId)
-                      ?.ceilingSalary +
-                    "K"
-                  }}</span>
-                </div>
-              </div>
-            </div>
-          </el-badge>
-        </div>
+        <List
+          :user-informations="userInformations"
+          :job-informations="jobInformations"
+          :delivery-records="deliveryRecords"
+        />
       </div>
       <div class="right">
         <el-empty
@@ -78,9 +40,10 @@ import {
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ref } from "vue";
+import Card from "./Card.vue";
 import Chat from "./Chat.vue";
+import List from "./List.vue";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const condition = ref(true);
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -94,24 +57,27 @@ getCompanyInfosP0DeliveryRecords(
     deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       getUserInfosP0(item.userInformationId)
-        .then((res) => {
-          userInformations.value.set(item.userInformationId, res.data.body);
+        .then((response) => {
+          userInformations.value.set(
+            item.userInformationId,
+            response.data.body
+          );
         })
         .catch(failResponseHandler);
       getCompanyInfosP0PositionInfosP1(
         store.companyInformation.companyInformationId,
         item.positionInformationId
       )
-        .then((res) => {
-          jobInformations.value.set(item.positionInformationId, res.data.body);
+        .then((responseable) => {
+          jobInformations.value.set(
+            item.positionInformationId,
+            responseable.data.body
+          );
         })
         .catch(failResponseHandler);
     });
   })
   .catch(failResponseHandler);
-const selectPerson = (userInformationId: string) => {
-  condition.value = false;
-};
 </script>
 
 <style lang="scss" scoped>
@@ -138,16 +104,20 @@ const selectPerson = (userInformationId: string) => {
 
       .left-top {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
         width: 100%;
-        height: 80px;
-        border-right: solid 1px #ccc;
+        height: 110px;
         border-bottom: solid 1px #ccc;
 
-        span {
-          margin: 0 10px;
-          color: rgb(0 179 139);
+        .title {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+
+          span {
+            margin: 0 10px;
+            color: rgb(0 179 139);
+          }
         }
       }
 

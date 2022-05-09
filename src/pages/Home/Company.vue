@@ -244,6 +244,7 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
+const marker = shallowRef();
 const store = useMainStore();
 const route = useRoute();
 const dialogFormVisible = ref(false);
@@ -341,7 +342,7 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[0] })
+      postAvatars({ avatar: files[files.length - 1] })
         .then((res) => {
           formCompany.value.logoUrl = res.data.body;
         })
@@ -393,6 +394,10 @@ onMounted(() => {
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
             });
+            marker.value = new AMap.Marker({
+              position: [116.397428, 39.90923],
+            });
+
             // let mark = new AMap.Marker({
             //   mark:
             // });
@@ -434,7 +439,14 @@ const handleArea = (address: any) => {
     longitude: address.location.lng,
     latitude: address.location.lat,
   };
+  let markerLnglat = [address.location.lng, address.location.lat] as [
+    number,
+    number
+  ];
   formCompany.value.location = lnglat;
+  marker.value.setPosition(markerLnglat);
+  map.value?.add(marker.value);
+  map.value?.setCenter(markerLnglat);
 };
 const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -526,13 +538,13 @@ a:hover {
           height: 180px;
 
           #container {
-            width: 290px;
+            width: 300px;
             height: 180px;
             border-radius: 5px;
           }
 
           .el-scrollbar {
-            width: 45%;
+            width: 30%;
 
             ul {
               margin-top: -8px;

@@ -20,12 +20,8 @@
                   @change="dealfilechange"
                 />
                 <img
-                  v-if="imageUrl"
-                  :src="
-                    imageUrl
-                      ? VITE_CDN_URL + imageUrl
-                      : VITE_CDN_URL + formLabelAlign.avatarUrl
-                  "
+                  v-if="formLabelAlign.avatarUrl"
+                  :src="VITE_CDN_URL + formLabelAlign.avatarUrl"
                   class="avatar"
                   alt="avatar"
                 />
@@ -55,6 +51,7 @@
             <el-input
               v-model="company.name"
               placeholder="请填写与营业执照名称/劳动合同/公司发票抬头一致的公司全称"
+              @change="checkedCompany"
             />
           </el-form-item>
           <el-form-item
@@ -87,8 +84,8 @@
         <div class="top">
           <img
             :src="
-              imageUrl
-                ? VITE_CDN_URL + imageUrl
+              formLabelAlign.avatarUrl
+                ? VITE_CDN_URL + formLabelAlign.avatarUrl
                 : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
             "
             class="avatar"
@@ -110,8 +107,11 @@
 <script setup lang="ts">
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
-import { SwaggerResponse } from "@/services/config";
-import { postAvatars, putHrInfosP0 } from "@/services/services";
+import {
+  getCompanyInfos,
+  postAvatars,
+  putHrInfosP0,
+} from "@/services/services";
 import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -132,12 +132,13 @@ const company = ref({
 onMounted(() => {
   formLabelAlign.acceptEmail = route.params.PersonEmail as string;
 });
-const imageUrl = ref("");
-const handleAvatarSuccess = (response: SwaggerResponse<any>) => {
-  imageUrl.value = response.data;
-  formLabelAlign.avatarUrl = response.data;
+const checkedCompany = (val: string) => {
+  getCompanyInfos({ companyName: val }).then((res) => {
+    if (res.data.body.totalCount !== 0) {
+      ElMessage.warning("该公司已存在，请重新输入");
+    }
+  });
 };
-
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
 const dealfilechange = (e: Event) => {
@@ -145,9 +146,9 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[0] })
+      postAvatars({ avatar: files[files.length - 1] })
         .then((res) => {
-          handleAvatarSuccess(res);
+          formLabelAlign.avatarUrl = res.data;
         })
         .catch(failResponseHandler);
     }

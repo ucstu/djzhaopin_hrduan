@@ -241,6 +241,7 @@
                       start-placeholder="上班时间"
                       end-placeholder="下班时间"
                       format="HH:mm:ss"
+                      :disabled-seconds="disabledSeconds"
                       @change="handleWorkTimeChange(workTimeing)"
                     />
                   </el-form-item>
@@ -313,6 +314,7 @@ const route = useRoute();
 const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const formRef = ref<FormInstance>();
+const marker = shallowRef();
 const jobTypeList = ref<PositionInformation>({} as PositionInformation);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
@@ -442,8 +444,8 @@ onMounted(() => {
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
             });
-            let mark = new AMap.Marker({
-              map: map.value,
+            marker.value = new AMap.Marker({
+              position: [116.397428, 39.90923],
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -486,6 +488,14 @@ const handleArea = (address: any) => {
     latitude: address.location.lat,
   };
   jobTypeList.value.workingPlace = lnglat;
+
+  let markerLnglat = [address.location.lng, address.location.lat] as [
+    number,
+    number
+  ];
+  marker.value.setPosition(markerLnglat);
+  map.value?.add(marker.value);
+  map.value?.setCenter(markerLnglat);
 };
 const heightLightMap = ["团队和谐"];
 const publishPost = (formEl: FormInstance | undefined) => {
@@ -528,6 +538,16 @@ const updatePost = (formEl: FormInstance | undefined) => {
         .catch(failResponseHandler);
     }
   });
+};
+const makeRange = (start: number, end: number) => {
+  const result: number[] = [];
+  for (let i = start; i <= end; i++) {
+    result.push(i);
+  }
+  return result;
+};
+const disabledSeconds = () => {
+  return makeRange(1, 59);
 };
 </script>
 

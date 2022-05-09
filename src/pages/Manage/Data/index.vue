@@ -5,15 +5,21 @@
       <div class="record">
         <div class="record-item">
           <span>获得浏览量</span>
-          <span class="num">0</span>
+          <span class="num">{{
+            yesterdayData.inspectionRecordCount || "0"
+          }}</span>
         </div>
         <div class="record-item">
           <span>获得简历量</span>
-          <span class="num">0</span>
+          <span class="num">{{
+            yesterdayData.deliveryRecordCount || "0"
+          }}</span>
         </div>
         <div class="record-item">
           <span>在线沟通量</span>
-          <span class="num">0</span>
+          <span class="num">{{
+            yesterdayData.onlineCommunicateCount || "0"
+          }}</span>
         </div>
       </div>
     </div>
@@ -32,14 +38,26 @@
             @change="handleWorkTimeChange(workTimeing)"
           />
         </div>
-        <el-tab-pane :key="Scan" label="获得浏览量" name="Scan">
-          <Scan />
+        <el-tab-pane label="获得浏览量" name="Scan">
+          <Scan
+            :inspection-record-counts="inspectionRecordCounts"
+            :data-info="Datainfo"
+            :title="title[0]"
+          />
         </el-tab-pane>
-        <el-tab-pane :key="Communicate" label="获得简历量" name="Communicate">
-          <Communicate />
+        <el-tab-pane label="获得简历量" name="Communicate">
+          <Scan
+            :inspection-record-counts="deliveryRecordCounts"
+            :data-info="Datainfo"
+            :title="title[1]"
+          />
         </el-tab-pane>
-        <el-tab-pane :key="Vita" label="在线沟通量" name="Vita">
-          <Vita />
+        <el-tab-pane label="在线沟通量" name="Vita">
+          <Scan
+            :inspection-record-counts="onlineCommunicateCounts"
+            :data-info="Datainfo"
+            :title="title[2]"
+          />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -49,37 +67,67 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import { getCompanyInfosP0BigData } from "@/services/services";
-import { GetCompanyInfosP0BigDataQueryParams } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { reactive, ref } from "vue";
-import Communicate from "./Communicate.vue";
 import Scan from "./Scan.vue";
-import Vita from "./Vita.vue";
 const store = useMainStore();
-const workTimeing = ref([]);
-const startTime = ref<`${number}-${number}-${number}`>();
-const endTime = ref<`${number}-${number}-${number}`>();
+const workTimeing = ref<Array<string>>([]);
+const startTime = ref<string>("");
+const endTime = ref<string>("");
 const tabPosition = ref("top");
+const deliveryRecordCounts = ref<Array<number>>();
+const inspectionRecordCounts = ref<Array<number>>();
+const onlineCommunicateCounts = ref<Array<number>>();
 const state = reactive({
   userID: "",
   // 默认组件，显示第一个组件
   currentView: "Scan",
 });
-const bigDataQuery = ref<GetCompanyInfosP0BigDataQueryParams>({
-  endDate: "2022-05-05",
-  startDate: "2022-05-01",
-  hrInformationId: store.hrInformation.hrInformationId,
-});
+const title = ["获得浏览量", "获得简历量", "在线沟通量"];
+const Datainfo = ref<Array<string>>();
 const handleWorkTimeChange = (val: Array<string>) => {
   startTime.value = useDate(val[0]);
   endTime.value = useDate(val[1]);
+  Datainfo.value = [startTime.value, endTime.value];
+  getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
+    startDate: startTime.value,
+    endDate: endTime.value,
+    hrInformationId: store.hrInformation.hrInformationId,
+  }).then((res) => {
+    deliveryRecordCounts.value = res.data.body.map((item) => {
+      return item.deliveryRecordCount;
+    });
+    inspectionRecordCounts.value = res.data.body.map((item) => {
+      return item.inspectionRecordCount;
+    });
+    onlineCommunicateCounts.value = res.data.body.map((item) => {
+      return item.onlineCommunicateCount;
+    });
+  });
 };
 
-getCompanyInfosP0BigData(
-  store.companyInformation.companyInformationId,
-  bigDataQuery.value
-).then((res) => {
-  console.log(res);
+const yesterday = ref();
+const yesterdayData = ref<{
+  date: string;
+  deliveryRecordCount: number;
+  inspectionRecordCount: number;
+  onlineCommunicateCount: number;
+}>({});
+const day = new Date();
+day.setDate(day.getDate() - 1);
+yesterday.value = useDate(day);
+
+getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
+  startDate: yesterday.value,
+  endDate: yesterday.value,
+  hrInformationId: store.hrInformation.hrInformationId,
+}).then((res) => {
+  yesterdayData.value.deliveryRecordCount =
+    res.data.body[0].deliveryRecordCount;
+  yesterdayData.value.inspectionRecordCount =
+    res.data.body[0].inspectionRecordCount;
+  yesterdayData.value.onlineCommunicateCount =
+    res.data.body[0].onlineCommunicateCount;
 });
 </script>
 

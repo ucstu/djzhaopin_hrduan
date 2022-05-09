@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import useGetDayAll from "@/hooks/useGetdata";
 import { LineChart } from "echarts/charts";
 import {
   GridComponent,
@@ -14,9 +15,25 @@ import {
 } from "echarts/components";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { provide, ref } from "vue";
+import { defineProps, PropType, provide, ref, watch, watchEffect } from "vue";
 import VChart, { THEME_KEY } from "vue-echarts";
 
+let props = defineProps({
+  inspectionRecordCounts: {
+    type: Array as PropType<number[]>,
+    default: () => [],
+  },
+  dataInfo: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+  title: {
+    type: String,
+    default: "",
+  },
+});
+const inspectDate = ref();
+const dataList = ref(["2022-05-01", "2022-05-01"]);
 use([
   CanvasRenderer,
   LineChart,
@@ -28,21 +45,17 @@ use([
 provide(THEME_KEY, "dark");
 const option = ref({
   title: {
-    text: "Traffic Sources",
+    text: props.title,
     left: "center",
   },
+
   xAxis: {
-    data: ["A", "B", "C", "D", "E"],
+    data: dataList.value,
   },
   yAxis: {},
   series: [
     {
-      data: [10, 22, 28, 23, 19],
-      type: "line",
-      areaStyle: {},
-    },
-    {
-      data: [25, 14, 23, 35, 10],
+      data: inspectDate.value,
       type: "line",
       areaStyle: {
         color: "#ff0",
@@ -50,6 +63,18 @@ const option = ref({
       },
     },
   ],
+});
+watch(
+  () => [...props.inspectionRecordCounts],
+  (val) => {
+    inspectDate.value = val;
+  },
+  { deep: true }
+);
+watchEffect(() => {
+  let data = props.dataInfo;
+  dataList.value = useGetDayAll(data[0], data[1]);
+  option.value.xAxis.data = dataList.value;
 });
 </script>
 

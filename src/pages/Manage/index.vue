@@ -167,7 +167,7 @@ getCompanyInfosP0DeliveryRecords(
     interviewNum.value = res.data.body.deliveryRecords;
     interviewNum.value.forEach((item) => {
       getCompanyInfosP0PositionInfosP1(
-        store.hrInformation.companyInformationId,
+        store.companyInformation.companyInformationId,
         item.positionInformationId
       )
         .then((response) => {
