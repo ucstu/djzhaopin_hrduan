@@ -71,15 +71,18 @@ let props = defineProps({
 const { messages: _messages } = storeToRefs(store);
 const userinfomartion = toRefs(props.userInfo);
 
-let chatList = _messages.value[props.chatId];
-if (route.params) {
-  chatList = _messages.value[route.params.chatId as string];
-}
+const chatList = _messages.value[props.chatId];
+
+// if (route.params) {
+//   chatList = _messages.value[route.params.chatId as string];
+// }
 
 onMounted(() => {
-  chatList.forEach((item) => {
-    item.haveRead = true;
-  });
+  if (chatList) {
+    chatList.forEach((item) => {
+      item.haveRead = true;
+    });
+  }
 });
 
 watchEffect(() => {

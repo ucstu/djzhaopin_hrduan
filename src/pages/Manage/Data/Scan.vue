@@ -62,6 +62,14 @@ const option = ref({
         opacity: 0.5,
       },
     },
+    {
+      data: [10, 15, 32, 21, 23],
+      type: "line",
+      areaStyle: {
+        color: "#ff0",
+        opacity: 0.5,
+      },
+    },
   ],
 });
 watch(

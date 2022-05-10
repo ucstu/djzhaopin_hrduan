@@ -52,6 +52,7 @@ defineProps({
     default: () => new Map(),
   },
 });
+
 const { messages: _messages } = storeToRefs(store);
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;

@@ -105,14 +105,14 @@ const handleWorkTimeChange = (val: Array<string>) => {
     });
   });
 };
-
-const yesterday = ref();
-const yesterdayData = ref<{
+interface Data {
   date: string;
   deliveryRecordCount: number;
   inspectionRecordCount: number;
   onlineCommunicateCount: number;
-}>({} as any);
+}
+const yesterday = ref();
+const yesterdayData = ref<Data>({} as Data);
 const day = new Date();
 day.setDate(day.getDate() - 1);
 yesterday.value = useDate(day);
@@ -128,6 +128,7 @@ getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
     res.data.body[0].inspectionRecordCount;
   yesterdayData.value.onlineCommunicateCount =
     res.data.body[0].onlineCommunicateCount;
+  console.log(res.data.body);
 });
 </script>
 
