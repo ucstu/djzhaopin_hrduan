@@ -1,43 +1,22 @@
 <template>
   <div id="list">
     <div
-      v-for="deliveryRecord in deliveryRecords"
-      :key="deliveryRecord.deliveryRecordId"
+      v-for="(messages, key) in _messages"
+      :key="key"
       class="job-hunter"
-      @click="selectPerson(deliveryRecord.userInformationId)"
+      @click="selectPerson(key, _userinfos.get(key))"
     >
-      <el-badge :value="1" :max="10" class="item">
+      <el-badge :value="countNum(messages)" :max="10" class="item">
         <div class="hunter">
-          <img
-            :src="
-              VITE_CDN_URL +
-              userInformations.get(deliveryRecord.userInformationId)?.avatarUrl
-            "
-            alt=""
-          />
+          <img :src="VITE_CDN_URL + _userinfos.get(key)?.avatarUrl" alt="" />
           <div class="hunter-info">
             <span>{{
-              userInformations.get(deliveryRecord.userInformationId)
-                ?.firstName +
+              _userinfos.get(key)?.firstName +
               "" +
-              userInformations.get(deliveryRecord.userInformationId)?.lastName
+              _userinfos.get(key)?.lastName
             }}</span>
             <div class="info">
-              <span>{{
-                userInformations.get(deliveryRecord.userInformationId)?.cityName
-              }}</span>
-              <span>{{
-                jobInformations.get(deliveryRecord.positionInformationId)
-                  ?.positionName
-              }}</span>
-              <span>{{
-                jobInformations.get(deliveryRecord.positionInformationId)
-                  ?.startingSalary +
-                "K-" +
-                jobInformations.get(deliveryRecord.positionInformationId)
-                  ?.ceilingSalary +
-                "K"
-              }}</span>
+              <span>{{ _userinfos.get(key)?.cityName }}</span>
             </div>
           </div>
         </div>
@@ -47,16 +26,17 @@
 </template>
 
 <script lang="ts" setup>
+import { getUserInfosP0 } from "@/services/services";
 import {
   DeliveryRecord,
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { useMainStore } from "@/stores/main";
+import { useMessageStore, withReadStateMessageRecord } from "@/stores/main";
+import { storeToRefs } from "pinia";
 import { defineProps, PropType, ref } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
-const store = useMainStore();
-const condition = ref(false);
+const store = useMessageStore();
 let emit = defineEmits(["submitMessage"]);
 defineProps({
   deliveryRecords: {
@@ -72,10 +52,42 @@ defineProps({
     default: () => new Map(),
   },
 });
-const selectPerson = (id: string) => {
-  store.charList.push(id);
-  condition.value = true;
-  emit("submitMessage", condition.value);
+const { messages: _messages } = storeToRefs(store);
+const countNum = (messages: withReadStateMessageRecord[]) => {
+  let num = 0;
+  messages.forEach((item) => {
+    if (!item.haveRead && item.initiateType === 1) {
+      num++;
+    }
+  });
+  if (num === 0) {
+    return "";
+  }
+  return num;
+};
+// _messages.value["d5ec4bd5-da73-441c-a9ea-3db0b148649a"] = [
+//   {
+//     haveRead: true,
+//     content: "string",
+//     createdAt: "string",
+//     initiateId: "d5ec4bd5-da73-441c-a9ea-3db0b148649a",
+//     initiateType: 1,
+//     messageRecordId: "dfsfsf",
+//     messageType: 2,
+//     serviceId: "7b8b5d6a-6d62-4314-9785-a166c0349531",
+//     serviceType: 1,
+//     updatedAt: "string",
+//   },
+// ];
+
+const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
+for (const key in _messages.value) {
+  getUserInfosP0(key).then((res) => {
+    _userinfos.value.set(key, res.data.body);
+  });
+}
+const selectPerson = (id: string | number, userInfo: UserInformation) => {
+  emit("submitMessage", { id: id, userInfo: userInfo });
 };
 </script>
 
@@ -115,8 +127,7 @@ const selectPerson = (id: string) => {
 
           .info {
             display: flex;
-            justify-content: space-around;
-            margin-left: -10px;
+            margin-left: 5px;
             font-size: 13px;
             color: #ccc;
           }

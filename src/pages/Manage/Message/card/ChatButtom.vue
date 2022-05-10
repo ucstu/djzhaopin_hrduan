@@ -9,24 +9,46 @@
     />
     <el-input
       v-model="content"
-      :autosize="{ minRows: 11, maxRows: 101 }"
+      :autosize="{ minRows: 9, maxRows: 9 }"
       type="textarea"
       placeholder="按下Enter 发送"
-      @keyup="addMessage"
+      @keyup="sentMessage"
     />
-    <el-button>发送</el-button>
+    <el-button type="primary" @click="sentMessage1">发送</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from "@/stores/main";
-import { ref } from "vue";
+import { sendMessage } from "@/utils/stomp";
+import { defineProps, ref, watchEffect } from "vue";
 const isEmpty = ref(true);
 const content = ref("");
-const store = useMainStore();
-const addMessage = (e: any) => {
-  // if (e.key === "Enter") {
-  // }
+
+let props = defineProps({
+  chatId: {
+    type: String,
+    default: "",
+  },
+});
+
+watchEffect(() => {
+  let id = props.chatId;
+});
+
+const sentMessage = (e: any) => {
+  if (e.key === "Enter") {
+    if (content.value) {
+      sendMessage(content.value, 1, props.chatId, 1);
+      content.value = "";
+    }
+  }
+};
+
+const sentMessage1 = () => {
+  if (content.value) {
+    sendMessage(content.value, 1, props.chatId, 1);
+    content.value = "";
+  }
 };
 </script>
 
@@ -36,6 +58,8 @@ const addMessage = (e: any) => {
   right: 0;
   bottom: 0;
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   width: 100%;
   height: 30%;
   border-top: solid 1px #ddd;
@@ -44,6 +68,12 @@ const addMessage = (e: any) => {
     max-height: 100%;
     border: none;
     border-top: transparent;
+  }
+
+  .el-button {
+    display: flex;
+    width: 120px;
+    height: 100%;
   }
 }
 </style>

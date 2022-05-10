@@ -23,7 +23,7 @@
                     userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo.education as 1 | 2 | 3 | 4]
+                    educationMap[userInfo.education+1 as 1 | 2 | 3 | 4]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
                     userInfo?.workingYears
@@ -33,7 +33,7 @@
                 </el-breadcrumb></span
               >
               <span class="state"
-                >求职状态：{{ jobStatusMap[userInfo!.jobStatus as 1 | 2 | 3 ] }}</span
+                >求职状态：{{ jobStatusMap[userInfo!.jobStatus+1 as 1 | 2 | 3 ] }}</span
               >
               <span class="state"
                 >期望职位：{{ positionInfo?.positionName }}</span
@@ -53,19 +53,73 @@
                 @click="toMessage(userInfo!.userInformationId)"
                 >在线沟通</el-button
               >
-              <h3>工作经历：</h3>
-              <p></p>
+              <div v-if="works.length > 0" class="project-docu">
+                <h3>工作经历:</h3>
+                <div v-for="work in works" :key="work.workExperienceId">
+                  <span>公司名称：{{ work.corporateName }}</span>
+                  <span>公司领域：{{ work.companyIndustry }}</span>
+                  <span>部门名称{{ work.departmentName }}</span>
+                  <span>职位名称{{ work.positionName }}</span>
+                  <span>工作内容{{ work.jobContent }}</span>
+                  <span>就职时间{{ work.startTime }}</span>
+                  <span>离职时间{{ work.endTime }}</span>
+                </div>
+              </div>
+              <div v-else>
+                <h3>项目经历：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
+              </div>
             </div>
             <div class="info2">
-              <div class="img-docu">
-                <h3>图片作品：{{ userInfo?.pictureWorks }}</h3>
+              <div v-if="works.length > 0" class="img-docu">
+                <h3>图片作品：</h3>
+                <div v-for="(imageurl, i) in userInfo.pictureWorks" :key="i">
+                  <img src="imageurl" alt="图片作品" />
+                </div>
               </div>
-              <div class="project-docu">
-                <h3>项目经历:{{}}</h3>
+              <div v-else>
+                <h3>图片作品：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
+              </div>
+              <div v-if="projects.length > 0" class="project-docu">
+                <h3>项目经历:</h3>
+                <div
+                  v-for="project in projects"
+                  :key="project.projectExperienceId"
+                >
+                  <span>项目名：{{ project.projectName }}</span>
+                  <span>项目描述：{{ project.projectDescription }}</span>
+                  <span>项目成就：{{ project.achievement }}</span>
+                  <span>项目开始时间：{{ project.startTime }}</span>
+                  <span>项目结束时间：{{ project.endTime }}</span>
+                  <span>项目链接：{{ project.projectLink }}</span>
+                  <span
+                    >项目开始时间-项目截至时间{{
+                      project.startTime + "-" + project.endTime
+                    }}</span
+                  >
+                  <span>{{ project.achievement }}</span>
+                  <span>{{ project.projectLink }}</span>
+                </div>
+              </div>
+              <div v-else>
+                <h3>项目经历：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
               </div>
             </div>
           </div>
-
           <div class="right">
             <el-divider
               direction="vertical"
@@ -88,8 +142,15 @@ import router from "@/router";
 import {
   getCompanyInfosP0PositionInfosP1,
   getUserInfosP0,
+  getUserInfosP0ProjectExperiences,
+  getUserInfosP0WorkExperiences,
 } from "@/services/services";
-import { PositionInformation, UserInformation } from "@/services/types";
+import {
+  PositionInformation,
+  ProjectExperience,
+  UserInformation,
+  WorkExperience,
+} from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { computed, ref } from "vue";
@@ -101,6 +162,18 @@ const store = useMainStore();
 const userInfo = ref<UserInformation>({} as UserInformation);
 const userName = computed(() => {
   return userInfo.value.firstName + userInfo.value.lastName;
+});
+const projects = ref<ProjectExperience[]>([]);
+const works = ref<WorkExperience[]>([]);
+
+getUserInfosP0ProjectExperiences(route.params.userId as string, {}).then(
+  (res) => {
+    projects.value = res.data.body.projectExperiences;
+  }
+);
+
+getUserInfosP0WorkExperiences(route.params.userId as string, {}).then((res) => {
+  works.value = res.data.body.workExperiences;
 });
 const positionInfo = ref<PositionInformation>();
 const educationMap = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };

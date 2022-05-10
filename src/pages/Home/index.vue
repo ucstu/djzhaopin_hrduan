@@ -22,7 +22,7 @@
           <span>HR端</span>
         </div>
         <div class="back">
-          <span>确认公司，开始招聘</span>
+          <span>确认信息，开始招聘</span>
         </div>
       </div>
       <router-view />

@@ -173,6 +173,14 @@
                 />
               </el-select>
             </el-form-item>
+            <el-form-item label="所在城市">
+              <el-cascader
+                v-model="cityInfo"
+                :options="cityMap"
+                placeholder="请选择"
+                @change="cityChange"
+              />
+            </el-form-item>
             <el-form-item label="工作地点" prop="workAreaName">
               <div class="search">
                 <el-input
@@ -297,9 +305,10 @@
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-  getCompanyInfosP0PositionInfosP1,
-  postCompanyInfosP0PositionInfos,
-  putCompanyInfosP0PositionInfosP1,
+getCityInformations,
+getCompanyInfosP0PositionInfosP1,
+postCompanyInfosP0PositionInfos,
+putCompanyInfosP0PositionInfosP1
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -410,7 +419,10 @@ const submitInterview = (data: {
 const interviewList = computed(() => {
   return interviewInfo.value.toString();
 });
-
+const cityChange = (val: Array<string>) => {
+  jobTypeList.value.workProvinceName = val[0];
+  jobTypeList.value.workCityName = val[1];
+};
 const aboutAddress = ref<any>([]);
 onMounted(() => {
   map.value = new AMap.Map("container", {
@@ -473,6 +485,30 @@ onMounted(() => {
       .catch(failResponseHandler);
   }
 });
+interface CityInfo {
+  children: { value: string; label: string }[];
+  value: string;
+  label: string;
+}
+const cityMap = ref<CityInfo[]>([]);
+const cityInfo = ref([]);
+
+getCityInformations()
+  .then((res) => {
+    cityMap.value = res.data.body.map((item) => {
+      return {
+        value: item.provinceName,
+        label: item.provinceName,
+        children: item.cities.map((city) => {
+          return {
+            value: city,
+            label: city,
+          };
+        }),
+      };
+    });
+  })
+  .catch(failResponseHandler);
 
 const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
@@ -612,6 +648,10 @@ a {
 
       .el-form-item {
         .light-select {
+          width: 600px;
+        }
+
+        ::v-deep .el-cascader {
           width: 600px;
         }
 

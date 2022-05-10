@@ -40,8 +40,8 @@
                   @change="dealfilechange"
                 />
                 <img
-                  v-if="formCompany?.logoUrl"
-                  :src="VITE_CDN_URL + formCompany?.logoUrl"
+                  v-if="formCompany.logoUrl"
+                  :src="VITE_CDN_URL + formCompany.logoUrl"
                   class="avatar"
                   style="width: 80px; height: 80px"
                   alt=""
@@ -165,7 +165,7 @@
             :src="
               formCompany.logoUrl
                 ? VITE_CDN_URL + formCompany.logoUrl
-                : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
+                : VITE_CDN_URL + '/image/heard3.webp'
             "
             alt=""
           />
@@ -226,10 +226,10 @@
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
 import {
-  getCityInformations,
-  postAvatars,
-  postCompanyInfos,
-  putHrInfosP0,
+getCityInformations,
+postAvatars,
+postCompanyInfos,
+putHrInfosP0
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -252,6 +252,7 @@ const aboutAddress = ref<any>([]);
 //表格数据
 const formCompany = ref<CompanyInformation>({ ...store.companyInformation });
 const cityInfo = ref([]);
+
 onUpdated(() => {
   if (formCompany.value) {
     formCompany.value.cityName = cityInfo.value.toString();

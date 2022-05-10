@@ -1,7 +1,7 @@
 <template>
   <div id="card">
     <header class="header">
-      <img class="avatar" :src="avatarUrl" alt="" />
+      <img class="avatar" :src="VITE_CDN_URL + avatarUrl" alt="" />
       <p class="name">{{ hrName }}</p>
       <p class="position">{{ postName }}</p>
     </header>
@@ -20,6 +20,7 @@
 import { useMainStore } from "@/stores/main";
 import { Search } from "@element-plus/icons-vue";
 import { ref, toRefs } from "vue";
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useMainStore();
 const { avatarUrl, hrName, postName } = toRefs(store.hrInformation);
 const input2 = ref("");

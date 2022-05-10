@@ -6,7 +6,7 @@ import {
 } from "@/services/types";
 import { defineStore } from "pinia";
 
-interface withReadStateMessageRecord extends MessageRecord {
+export interface withReadStateMessageRecord extends MessageRecord {
   haveRead: boolean;
 }
 export const useMainStore = defineStore("main", {
@@ -15,8 +15,6 @@ export const useMainStore = defineStore("main", {
     hrInformation: null as unknown as HrInformation,
     accountInformation: null as unknown as AccountInformation,
     companyInformation: null as unknown as CompanyInformation,
-    messages: {} as { [key: string]: withReadStateMessageRecord[] },
-    charList: [] as string[],
   }),
   persist: {
     enabled: true,
@@ -37,6 +35,21 @@ export const useCompriseStore = defineStore("comprise", {
     strategies: [
       {
         key: "pinia-comprise",
+        storage: localStorage,
+      },
+    ],
+  },
+});
+
+export const useMessageStore = defineStore("message", {
+  state: () => ({
+    messages: {} as { [key: string]: withReadStateMessageRecord[] },
+  }),
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        key: "pinia-message",
         storage: localStorage,
       },
     ],

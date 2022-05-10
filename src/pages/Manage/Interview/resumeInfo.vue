@@ -6,13 +6,15 @@
   >
     <div class="resume-item">
       <div class="item-header">
-        <el-checkbox
-          v-model="deliveryRecordsChecked.checked"
+        <!-- <el-checkbox
+          :checked="deliveryRecordsChecked.checked"
+          @change="handleChecked(deliveryRecordsChecked.deliveryRecordId)"
+        /> -->
+        <input
+          type="checkbox"
+          :checked="deliveryRecordsChecked.checked"
           @change="handleChecked(deliveryRecordsChecked.deliveryRecordId)"
         />
-        <!-- 尝试使用插槽 -->
-        <!-- <slot></slot> -->
-        {{ deliveryRecordsChecked.checked }}
         <img
           :src="
             VITE_CDN_URL +
@@ -87,7 +89,6 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { ElMessage } from "element-plus";
 import { defineProps, PropType, ref, watch } from "vue";
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
@@ -138,16 +139,23 @@ const inspectionResume = (delivery: any) => {
       delivery.deliveryRecordId,
       delivery
     ).then(() => {
-      ElMessage.success("查看简历详情");
+      router.push({
+        name: "Resume",
+        params: {
+          userId: delivery.userInformationId,
+          postId: delivery.positionInformationId,
+        },
+      });
+    });
+  } else {
+    router.push({
+      name: "Resume",
+      params: {
+        userId: delivery.userInformationId,
+        postId: delivery.positionInformationId,
+      },
     });
   }
-  router.push({
-    name: "Resume",
-    params: {
-      userId: delivery.userInformationId,
-      postId: delivery.positionInformationId,
-    },
-  });
 };
 </script>
 

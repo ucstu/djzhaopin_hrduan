@@ -85,8 +85,6 @@
                 :job-informations="jobInformations"
                 :delivery-records-checkeds="deliveryRecordsCheckeds"
               >
-                <!-- 尝试插槽实现 -->
-                <!-- <el-checkbox /> -->
               </ResumeInfo>
             </el-scrollbar>
           </div>

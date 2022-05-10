@@ -18,11 +18,11 @@
       </div>
       <div class="right">
         <el-empty
-          v-show="!condition"
+          v-if="!condition"
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
         />
-        <Chat v-show="condition" />
-        <chat-buttom />
+        <Chat v-if="condition" :chat-id="ChatId" :user-info="UserInfo" />
+        <chat-buttom :chat-id="ChatId" />
       </div>
     </div>
   </div>
@@ -46,10 +46,16 @@ import Card from "./card/Card.vue";
 import Chat from "./card/Chat.vue";
 import ChatButtom from "./card/ChatButtom.vue";
 import List from "./card/List.vue";
-const submitMessage = () => {
+
+const submitMessage = (val: { id: string; userInfo: UserInformation }) => {
   condition.value = true;
+  ChatId.value = val.id;
+  UserInfo.value = val.userInfo;
 };
+const UserInfo = ref<UserInformation>();
+const ChatId = ref("");
 const condition = ref(false);
+
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());

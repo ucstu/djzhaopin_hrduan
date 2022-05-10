@@ -1,131 +1,173 @@
 <template>
   <div class="container">
-    <div class="chat-content">
-      <template v-if="chatList && chatList.length">
-        <div v-for="(chat, index) in chatList" :key="index">
+    <template v-if="chatList">
+      <el-scrollbar ref="scrollbarRef">
+        <div v-for="(chat, index) in chatList" :key="index" class="chat-list">
           <p class="time">
-            <span>{{ chat }}</span>
+            <span>{{ formatDate(chat.updatedAt) }}</span>
           </p>
-          <div class="main" :class="{ self: chat }">
-            <img class="avatar" :src="imageUrl ? imageUrl : ''" alt="" />
-            <p class="text">{{ chat }}</p>
+          <div v-if="chat.initiateType === 1" class="user-main">
+            <img
+              class="user-avatar"
+              :src="
+                userinfomartion.avatarUrl
+                  ? VITE_CDN_URL + userinfomartion.avatarUrl.value
+                  : ''
+              "
+              alt=""
+            />
+            <div class="left-farm">
+              <div></div>
+              <p class="text">{{ chat.content }}</p>
+            </div>
+          </div>
+          <div v-else class="hr-main">
+            <img :src="VITE_CDN_URL + hravatarUrl" alt="" class="hr-avatar" />
+            <div class="right-farm">
+              <div></div>
+              <p class="text">{{ chat.content }}</p>
+            </div>
           </div>
         </div>
-      </template>
-      <div v-else class="empty">没有消息</div>
-    </div>
+      </el-scrollbar>
+    </template>
+    <div v-else class="empty">没有消息</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getUserInfosP0 } from "@/services/services";
-import { useMainStore } from "@/stores/main";
-import { ref } from "vue";
-const store = useMainStore();
-const imageUrl = ref("");
-getUserInfosP0(store.charList[0]).then((res) => {
-  imageUrl.value = res.data.body.avatarUrl;
+import { UserInformation } from "@/services/types";
+import { useMainStore, useMessageStore } from "@/stores/main";
+import { ElScrollbar } from "element-plus";
+import { storeToRefs } from "pinia";
+import {
+  defineProps,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  toRefs,
+  watchEffect,
+} from "vue";
+import { useRoute } from "vue-router";
+
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
+const store = useMessageStore();
+const route = useRoute();
+const mainStore = useMainStore();
+const { avatarUrl: hravatarUrl, hrName } = mainStore.hrInformation;
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
+let props = defineProps({
+  chatId: {
+    type: String,
+    default: "",
+  },
+  userInfo: {
+    type: Object as PropType<UserInformation>,
+    default: () => ({}),
+  },
 });
-const chatList = ref(["1"]); // 消息列表
-const chatMsg = ref("");
-const sendMsg = () => {};
+
+const { messages: _messages } = storeToRefs(store);
+const userinfomartion = toRefs(props.userInfo);
+
+let chatList = _messages.value[props.chatId];
+if (route.params) {
+  chatList = _messages.value[route.params.chatId as string];
+}
+
+onMounted(() => {
+  chatList.forEach((item) => {
+    item.haveRead = true;
+  });
+});
+
+watchEffect(() => {
+  if (scrollbarRef.value && chatList.length) {
+    nextTick(() => {
+      scrollbarRef.value!.scrollTo(
+        0,
+        scrollbarRef.value!.resize$!.offsetHeight
+      );
+    });
+  }
+  let userinfo = props.userInfo;
+  let id = props.chatId;
+});
+const formatDate = (timestamp: any) => {
+  return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
+};
 </script>
 
 <style lang="scss" scoped>
 .container {
   width: 100%;
   height: 70%;
-  padding: 10px;
   border: 1px solid #ddd;
   border-bottom: none;
 
-  .message-box {
-    margin-bottom: 10px;
+  .el-scrollbar {
+    width: 100%;
+    height: 100%;
+  }
 
-    .message {
-      box-sizing: border-box;
-      width: 100%;
-      margin-top: 5px;
-      margin-left: 42px;
-      border-radius: 4px;
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
 
-      .block {
-        display: inline-block;
-        padding: 8px;
-        font-size: 14px;
-        line-height: 1.5;
-        background-color: #eee;
-        border-radius: 4px;
-      }
-    }
-
-    .user {
-      .avatar {
-        width: 32px;
-        height: 32px;
-        margin-right: 10px;
-      }
-    }
-
-    .info {
+    .time {
       display: flex;
       justify-content: center;
       font-size: 12px;
-      color: #999;
+    }
 
-      .name {
+    .user-main {
+      display: flex;
+      height: 60px;
+
+      .left-farm {
+        display: flex;
+        align-items: center;
+        width: auto;
+        height: 30px;
+        padding: 5px;
         margin-left: 10px;
+        background-color: #4dcaae;
+        border: #ddd 1px solid;
+        border-radius: 10px;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
       }
     }
 
-    &.right-message {
-      text-align: right;
+    .hr-main {
+      display: flex;
+      flex-direction: row-reverse;
 
-      .message {
-        padding-right: 42px;
-        margin-left: auto;
+      .right-farm {
+        display: flex;
+        align-items: center;
+        width: auto;
+        height: 30px;
+        padding: 5px;
+        margin-right: 10px;
+        background-color: #4dcaae;
+        border: #ddd 1px solid;
+        border-radius: 10px;
       }
 
-      .user {
-        justify-content: flex-end;
-        margin-right: 0;
-        margin-left: 10px;
-
-        .name {
-          margin-right: 0;
-          margin-left: 10px;
-        }
-      }
-
-      .avatar {
-        margin-right: 0;
-        margin-left: 10px;
+      .hr-avatar {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+        border-radius: 50%;
       }
     }
   }
 }
-
-// .chat-bottom {
-//   display: flex;
-
-//   .empty {
-//     padding: 50px 0;
-//     font-size: 14px;
-//     text-align: center;
-//   }
-
-//   .chat-input {
-//     &:deep(el-input__inner) {
-//       border-top-left-radius: 0;
-//       border-top-right-radius: 0;
-//       border-bottom-right-radius: 0;
-//     }
-//   }
-
-//   .chat-btn {
-//     border-top-left-radius: 0;
-//     border-top-right-radius: 0;
-//     border-bottom-left-radius: 0;
-//   }
-// }
 </style>

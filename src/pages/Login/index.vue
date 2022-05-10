@@ -57,6 +57,7 @@ import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
+import { sendPing } from "@/utils/stomp";
 
 const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
@@ -112,6 +113,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   getCompanyInfosP0(res.data.body.companyInformationId)
                     .then((res) => {
                       store.companyInformation = res.data.body;
+                      sendPing();
                       router.replace("/Manage");
                     })
                     .catch((err) => {

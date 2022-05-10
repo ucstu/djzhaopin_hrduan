@@ -14,13 +14,7 @@
           <div class="person">
             <span>姓名:{{ formLabelAlign.hrName }}</span>
             <span>职位:{{ formLabelAlign.postName }}</span>
-            <span>
-              <img
-                src="@/assets/phone.png"
-                alt=""
-                style="width: 25px; height: 25px"
-              />:{{ formLabelAlign.acceptEmail }}
-            </span>
+
             <span
               ><img
                 src="@/assets/Email.png"

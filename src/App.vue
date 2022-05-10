@@ -2,62 +2,13 @@
   <router-view />
 </template>
 <script setup lang="ts">
-import { getAxiosInstance } from "@/services/config";
-import { MessageRecord } from "@/services/types";
-import { useMainStore } from "@/stores/main";
-import Stomp from "stompjs";
-
-const VITE_BASE_URL = import.meta.env.VITE_BASE_URL as string;
+import { getAxiosInstance } from "./services/config";
+import { useMainStore } from "./stores/main";
 
 const store = useMainStore();
 
 getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
   "Bearer " + store.jsonWebToken;
-
-const socket = new WebSocket(`${VITE_BASE_URL.replace(/^http/, "ws")}/ws`);
-
-const stompClient = Stomp.over(socket);
-
-stompClient.connect(
-  { Authorization: "Bearer " + store.jsonWebToken },
-  (frame) => {
-    stompClient.subscribe("/user/queue/message", (message) => {
-      // 没接收到一次消息都会触发这个回调
-      let data = JSON.parse(message.body) as {
-        body: MessageRecord[];
-        message: string;
-        status: number;
-        timestamp: string;
-      };
-      for (let messageRecord of data.body) {
-        store.messages[messageRecord.initiateId].push({
-          ...messageRecord,
-          haveRead: false,
-        });
-      }
-    });
-  }
-);
-
-const sendMessage = (
-  content: string,
-  messageType: number,
-  serviceId: string,
-  serviceType: number
-) => {
-  stompClient.send(
-    "/message",
-    {},
-    JSON.stringify({
-      content,
-      initiateId: store.accountInformation.fullInformationId,
-      initiateType: 1,
-      messageType,
-      serviceId,
-      serviceType,
-    })
-  );
-};
 </script>
 
 <style lang="scss">

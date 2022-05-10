@@ -123,7 +123,6 @@ import {
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { ElMessage } from "element-plus";
 import { ref } from "vue";
 
 const store = useMainStore();
@@ -198,8 +197,9 @@ getCompanyInfosP0DeliveryRecords(
 const goPosition = () => {
   router.push("/System/Position");
 };
+
 const inspectionResume = (delivery: DeliveryRecord) => {
-  //变更状态函数，将选中的简历信息的状态进行变更
+  // 变更状态函数，将选中的简历信息的状态进行变更
   if (delivery.status === 1) {
     delivery.status = 2;
     putUserInfosP0DeliveryRecordsP1(
@@ -207,16 +207,23 @@ const inspectionResume = (delivery: DeliveryRecord) => {
       delivery.deliveryRecordId,
       delivery
     ).then(() => {
-      ElMessage.success("查看简历详情");
+      router.push({
+        name: "Resume",
+        params: {
+          userId: delivery.userInformationId,
+          postId: delivery.positionInformationId,
+        },
+      });
+    });
+  } else {
+    router.push({
+      name: "Resume",
+      params: {
+        userId: delivery.userInformationId,
+        postId: delivery.positionInformationId,
+      },
     });
   }
-  router.push({
-    name: "Resume",
-    params: {
-      userId: delivery.userInformationId,
-      postId: delivery.positionInformationId,
-    },
-  });
 };
 </script>
 

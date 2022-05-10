@@ -31,7 +31,7 @@
               </div>
               <span>
                 建议使用招聘者真实头像提升真实性、专业性
-                支持jpg、jpeg、gif、png，小于10MB
+                支持jpg、jpeg、gif、png，小于5MB
               </span>
             </div>
           </el-form-item>
@@ -109,6 +109,7 @@ import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
 import {
   getCompanyInfos,
+  getCompanyInfosP0,
   postAvatars,
   putHrInfosP0,
 } from "@/services/services";
@@ -125,17 +126,19 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 
 const store = useMainStore();
-const formLabelAlign = reactive<HrInformation>({ ...store.hrInformation });
+const formLabelAlign = ref<HrInformation>({ ...store.hrInformation });
 const company = ref({
   name: "",
 });
 onMounted(() => {
-  formLabelAlign.acceptEmail = route.params.PersonEmail as string;
+  formLabelAlign.value.acceptEmail = route.params.PersonEmail as string;
 });
+const alive = ref(true);
 const checkedCompany = (val: string) => {
-  getCompanyInfos({ companyName: val }).then((res) => {
+  return getCompanyInfos({ companyName: val }).then((res) => {
     if (res.data.body.totalCount !== 0) {
-      ElMessage.warning("该公司已存在，请重新输入");
+      formLabelAlign.value.companyInformationId =
+        res.data.body.companyInformations[0].companyInformationId;
     }
   });
 };
@@ -148,7 +151,7 @@ const dealfilechange = (e: Event) => {
     if (useAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[files.length - 1] })
         .then((res) => {
-          formLabelAlign.avatarUrl = res.data;
+          formLabelAlign.value.avatarUrl = res.data.body;
         })
         .catch(failResponseHandler);
     }
@@ -170,19 +173,37 @@ const rule = reactive({
   ],
   postName: [{ required: true, message: "此项填入职位", trigger: "blur" }],
 });
+
 const confirmPerson = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  formEl.validate(async (valid) => {
+  formEl.validate((valid) => {
     if (valid) {
-      putHrInfosP0(store.accountInformation.fullInformationId, formLabelAlign)
-        .then((res) => {
-          store.hrInformation = res.data.body;
-          router.replace({
-            name: "Company",
-            params: { companyName: company.value.name },
-          });
-        })
-        .catch(failResponseHandler);
+      if (alive.value) {
+        putHrInfosP0(
+          store.accountInformation.fullInformationId,
+          formLabelAlign.value
+        )
+          .then((res) => {
+            store.hrInformation = res.data.body;
+            if (res.data.body.companyInformationId) {
+              getCompanyInfosP0(res.data.body.companyInformationId).then(
+                (response) => {
+                  store.companyInformation = response.data.body;
+                }
+              );
+
+              router.replace({ name: "Manage" });
+            } else {
+              router.replace({
+                name: "Company",
+                params: { companyName: company.value.name },
+              });
+            }
+          })
+          .catch(failResponseHandler);
+      } else {
+        ElMessage.warning("该公司已存在，请重新输入");
+      }
     } else {
       ElMessage.error("请填写完整信息");
     }
