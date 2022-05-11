@@ -56,21 +56,20 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0,
-putUserInfosP0DeliveryRecordsP1
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
+  putUserInfosP0DeliveryRecordsP1,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { computed } from "@vue/reactivity";
 import { ElMessage } from "element-plus";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import ResumeInfo from "./resumeInfo.vue";
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -78,6 +77,7 @@ const checked1 = ref(false);
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
+
 const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
@@ -94,7 +94,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
     { status: [4], deliveryDates: deliveryDates.value }
   )
     .then((res) => {
-      console.log(res.data.body.deliveryRecords);
+      totalCount.value = res.data.body.totalCount;
       deliveryRecordsCheckeds.value = [];
       deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecords.value.forEach((item) => {
@@ -144,11 +144,17 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
     });
   }
 };
+const totalCount = ref(0);
+const total = computed(() => {
+  let num: number = (total.value / 7) * 10;
+  return Math.ceil(num);
+});
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   { status: [4] }
 )
   .then((res) => {
+    totalCount.value = res.data.body.totalCount;
     deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       deliveryRecordsCheckeds.value.push(
@@ -176,10 +182,6 @@ getCompanyInfosP0DeliveryRecords(
     });
   })
   .catch(failResponseHandler);
-const total = computed(() => {
-  let num = (deliveryRecords.value.length / 7) * 10;
-  return Math.ceil(num);
-});
 </script>
 
 <style scoped lang="scss">

@@ -27,20 +27,10 @@
                 </el-icon>
                 <span>职位管理</span>
               </el-menu-item>
-              <el-sub-menu index="3">
-                <template #title>
-                  <el-icon> <Document /> </el-icon>简历管理
-                </template>
-                <el-menu-item-group class="item-text">
-                  <template #title></template>
-                  <el-menu-item index="/System/ResumeRecevie"
-                    >收到的简历</el-menu-item
-                  >
-                  <el-menu-item index="/System/ResumeDownload"
-                    >下载的简历</el-menu-item
-                  >
-                </el-menu-item-group>
-              </el-sub-menu>
+              <el-menu-item index="/System/ResumeRecevie">
+                <el-icon> <Document /> </el-icon>
+                <span>简历管理</span>
+              </el-menu-item>
               <el-menu-item index="/System/Interview">
                 <el-icon>
                   <alarm-clock />

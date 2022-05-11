@@ -1,52 +1,59 @@
 <template>
   <div class="container">
-    <template v-if="chatList">
-      <el-scrollbar ref="scrollbarRef">
-        <div v-for="(chat, index) in chatList" :key="index" class="chat-list">
-          <p class="time">
-            <span>{{ formatDate(chat.updatedAt) }}</span>
-          </p>
-          <div v-if="chat.initiateType === 1" class="user-main">
+    <el-scrollbar ref="scrollbarRef">
+      <div v-for="(chat, index) in chatList" :key="index" class="chat-list">
+        <p class="time">
+          <span>{{ formatDate(chat.updatedAt) }}</span>
+        </p>
+        <div v-if="chat.initiateType === 1" class="user-main">
+          <div class="user-info">
             <img
               class="user-avatar"
               :src="
                 userinfomartion.avatarUrl
-                  ? VITE_CDN_URL + userinfomartion.avatarUrl.value
+                  ? VITE_CDN_URL + userinfomartion.avatarUrl
                   : ''
               "
               alt=""
             />
-            <div class="left-farm">
-              <div></div>
-              <p class="text">{{ chat.content }}</p>
-            </div>
+            <span class="name">{{
+              userinfomartion.firstName + userinfomartion.lastName
+            }}</span>
           </div>
-          <div v-else class="hr-main">
-            <img :src="VITE_CDN_URL + hravatarUrl" alt="" class="hr-avatar" />
-            <div class="right-farm">
-              <div></div>
-              <p class="text">{{ chat.content }}</p>
-            </div>
+          <div class="left-farm">
+            <p class="text">{{ chat.content }}</p>
           </div>
         </div>
-      </el-scrollbar>
-    </template>
-    <div v-else class="empty">没有消息</div>
+        <div v-else class="hr-main">
+          <div class="hr-info">
+            <img :src="VITE_CDN_URL + hravatarUrl" alt="" class="hr-avatar" />
+            <span class="name">{{ hrName }}</span>
+          </div>
+          <div class="right-farm">
+            <p class="text">{{ chat.content }}</p>
+          </div>
+        </div>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
 import { UserInformation } from "@/services/types";
-import { useMainStore, useMessageStore } from "@/stores/main";
+import {
+  useMainStore,
+  useMessageStore,
+  withReadStateMessageRecord,
+} from "@/stores/main";
 import { ElScrollbar } from "element-plus";
 import { storeToRefs } from "pinia";
 import {
+  computed,
   defineProps,
   nextTick,
   onMounted,
   PropType,
   ref,
-  toRefs,
   watchEffect,
 } from "vue";
 import { useRoute } from "vue-router";
@@ -69,24 +76,11 @@ let props = defineProps({
 });
 
 const { messages: _messages } = storeToRefs(store);
-const userinfomartion = toRefs(props.userInfo);
+const userinfomartion = ref<UserInformation>({ ...props.userInfo });
 
-const chatList = _messages.value[props.chatId];
-
-// if (route.params) {
-//   chatList = _messages.value[route.params.chatId as string];
-// }
-
-onMounted(() => {
-  if (chatList) {
-    chatList.forEach((item) => {
-      item.haveRead = true;
-    });
-  }
-});
-
+const chatList = ref<withReadStateMessageRecord[]>([]);
 watchEffect(() => {
-  if (scrollbarRef.value && chatList.length) {
+  if (scrollbarRef.value && chatList.value.length) {
     nextTick(() => {
       scrollbarRef.value!.scrollTo(
         0,
@@ -96,7 +90,21 @@ watchEffect(() => {
   }
   let userinfo = props.userInfo;
   let id = props.chatId;
+  chatList.value = store.messages[id];
+  userinfomartion.value = userinfo;
 });
+
+onMounted(() => {
+  if (chatList.value) {
+    chatList.value.forEach((item) => {
+      item.haveRead = true;
+    });
+  }
+  if (route.params) {
+    chatList.value = computed(() => store.messages[props.chatId]).value;
+  }
+});
+
 const formatDate = (timestamp: any) => {
   return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
 };
@@ -129,6 +137,16 @@ const formatDate = (timestamp: any) => {
       display: flex;
       height: 60px;
 
+      .user-info {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          font-size: 8px;
+          color: #999;
+        }
+      }
+
       .left-farm {
         display: flex;
         align-items: center;
@@ -152,6 +170,16 @@ const formatDate = (timestamp: any) => {
       display: flex;
       flex-direction: row-reverse;
 
+      .hr-info {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          font-size: 8px;
+          color: #999;
+        }
+      }
+
       .right-farm {
         display: flex;
         align-items: center;
@@ -162,6 +190,11 @@ const formatDate = (timestamp: any) => {
         background-color: #4dcaae;
         border: #ddd 1px solid;
         border-radius: 10px;
+
+        .name {
+          font-size: 14px;
+          color: #fff;
+        }
       }
 
       .hr-avatar {

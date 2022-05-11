@@ -10,7 +10,7 @@ import Axios, {
   AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse,
+  AxiosResponse
 } from "axios";
 import httpAdapter from "axios/lib/adapters/http";
 import settle from "axios/lib/core/settle";
@@ -27,7 +27,7 @@ Axios.defaults.adapter = function (config) {
         text: "Loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-    }, 500);
+    }, 1500);
     return httpAdapter(config)
       .then((result) => {
         // We would have more logic here in the production code

@@ -122,13 +122,14 @@ getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
   endDate: yesterday.value,
   hrInformationId: store.hrInformation.hrInformationId,
 }).then((res) => {
-  yesterdayData.value.deliveryRecordCount =
-    res.data.body[0].deliveryRecordCount;
-  yesterdayData.value.inspectionRecordCount =
-    res.data.body[0].inspectionRecordCount;
-  yesterdayData.value.onlineCommunicateCount =
-    res.data.body[0].onlineCommunicateCount;
-  console.log(res.data.body);
+  if (res.data.body.length > 0) {
+    yesterdayData.value.deliveryRecordCount =
+      res.data.body[0].deliveryRecordCount;
+    yesterdayData.value.inspectionRecordCount =
+      res.data.body[0].inspectionRecordCount;
+    yesterdayData.value.onlineCommunicateCount =
+      res.data.body[0].onlineCommunicateCount;
+  }
 });
 </script>
 

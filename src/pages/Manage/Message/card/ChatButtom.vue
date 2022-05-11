@@ -31,6 +31,9 @@
               :command="prise"
               >{{ prise }}</el-dropdown-item
             >
+            <el-dropdown-item v-if="comprise.length === 0" disabled
+              >请点击左边前往添加常用语</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>

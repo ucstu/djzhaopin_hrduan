@@ -11,7 +11,6 @@
       <el-button type="primary" plain @click="deleteInterview"
         >删除简历</el-button
       >
-      <el-button type="primary" plain>导出简历</el-button>
     </div>
     <el-pagination
       v-model="currentPage"

@@ -153,6 +153,7 @@ import {
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
+import { sendMessage } from "@/utils/stomp";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -214,6 +215,7 @@ if (typeof route.params.postId === "string") {
     .catch(failResponseHandler);
 }
 const toMessage = (userId: string) => {
+  sendMessage("你好，欢迎投递简历", 1, userId, 1);
   router.push({
     name: "Message",
     params: {

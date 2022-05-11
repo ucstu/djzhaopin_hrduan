@@ -80,14 +80,16 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
 //     updatedAt: "string",
 //   },
 // ];
-
 const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
 for (const key in _messages.value) {
   getUserInfosP0(key).then((res) => {
     _userinfos.value.set(key, res.data.body);
   });
 }
-const selectPerson = (id: string | number, userInfo: UserInformation) => {
+const selectPerson = (
+  id: string | number,
+  userInfo: UserInformation | undefined
+) => {
   emit("submitMessage", { id: id, userInfo: userInfo });
 };
 </script>

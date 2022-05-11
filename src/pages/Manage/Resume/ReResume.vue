@@ -137,8 +137,9 @@ const handleWorkTimeChange = (val: Array<string>) => {
   deliveryDates.value[1] = endTime;
   handleChange();
 };
+const totalCount = ref(0);
 const total = computed(() => {
-  let num = (deliveryRecords.value.length / 7) * 10;
+  let num: number = (total.value / 7) * 10;
   return Math.ceil(num);
 });
 const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
@@ -151,8 +152,48 @@ const submitChecked = (data: { checked: boolean }) => {
     }
   );
 };
+const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
+  status: [1, 2, 3, 4],
+  size: 7,
+  deliveryDates: deliveryDates.value,
+  page: 0,
+});
 const submitPage = (data: { type: string; data: number }) => {
-  valueMap.value.page = data.data;
+  valueMap.value.page = data.data - 1;
+
+  getCompanyInfosP0DeliveryRecords(
+    store.companyInformation.companyInformationId,
+    valueMap.value
+  )
+    .then((res) => {
+      totalCount.value = res.data.body.totalCount;
+      deliveryRecords.value = res.data.body.deliveryRecords;
+      deliveryRecords.value.forEach((item) => {
+        deliveryRecordsCheckeds.value.push(
+          Object.assign(item, { checked: false })
+        );
+        getUserInfosP0(item.userInformationId)
+          .then((response) => {
+            userInformations.value.set(
+              item.userInformationId,
+              response.data.body
+            );
+          })
+          .catch(failResponseHandler);
+        getCompanyInfosP0PositionInfosP1(
+          store.companyInformation.companyInformationId,
+          item.positionInformationId
+        )
+          .then((respones) => {
+            jobInformations.value.set(
+              item.positionInformationId,
+              respones.data.body
+            );
+          })
+          .catch(failResponseHandler);
+      });
+    })
+    .catch(failResponseHandler);
 };
 
 const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
@@ -174,16 +215,47 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
       });
     });
   }
+  getCompanyInfosP0DeliveryRecords(
+    store.companyInformation.companyInformationId,
+    valueMap.value
+  )
+    .then((res) => {
+      totalCount.value = res.data.body.totalCount;
+      deliveryRecords.value = res.data.body.deliveryRecords;
+      deliveryRecords.value.forEach((item) => {
+        deliveryRecordsCheckeds.value.push(
+          Object.assign(item, { checked: false })
+        );
+        getUserInfosP0(item.userInformationId)
+          .then((response) => {
+            userInformations.value.set(
+              item.userInformationId,
+              response.data.body
+            );
+          })
+          .catch(failResponseHandler);
+        getCompanyInfosP0PositionInfosP1(
+          store.companyInformation.companyInformationId,
+          item.positionInformationId
+        )
+          .then((response) => {
+            jobInformations.value.set(
+              item.positionInformationId,
+              response.data.body
+            );
+          })
+          .catch(failResponseHandler);
+      });
+    })
+    .catch(failResponseHandler);
 };
-const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
-  status: [1, 2, 3, 4],
-  deliveryDates: deliveryDates.value,
-});
+
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   valueMap.value
 )
   .then((res) => {
+    totalCount.value = res.data.body.totalCount;
     deliveryRecords.value = res.data.body.deliveryRecords;
     deliveryRecords.value.forEach((item) => {
       deliveryRecordsCheckeds.value.push(

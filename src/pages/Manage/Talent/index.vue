@@ -118,7 +118,6 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { getRecommendations } from "@/services/services";
 import { JobExpectation, UserInformation } from "@/services/types";
 import { Search } from "@element-plus/icons-vue";
 import { ref } from "vue";
@@ -134,7 +133,6 @@ const valueMap = ref({
   state: "",
   workingYears: "",
 });
-const checkeds = ref(false);
 
 const checked = ref({ checked: false });
 const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
@@ -144,14 +142,26 @@ const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以�
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 const slution = ["随时入职", "2周内入职", "1月内入职"];
 const userInfo = ref<UserInformation>();
-const JobExpectative = ref<JobExpectation>();
-getRecommendations().then((res) => {
-  console.log(res);
-});
+const JobExpectative = ref<JobExpectation[]>([]);
+// getRecommendations()
+//   .then((res) => {
+//     const userIds = res.data.body;
+//     userIds.map((item) => {
+//       getUserInfosP0(item)
+//         .then((res) => {
+//           userInfo.value = res.data.body;
+//         })
+//         .catch(failResponseHandler);
+//       getUserInfosP0JobExpectations(item, {}).then((res) => {
+//         JobExpectative.value = res.data.body.jobExpectations;
+//       });
+//     });
+//   })
+//   .catch(failResponseHandler);
 const TalentInfo = ref([
   {
     ...userInfo.value,
-    ...JobExpectative.value,
+    ...JobExpectative.value[0],
     ...checked.value,
   },
 ]);
