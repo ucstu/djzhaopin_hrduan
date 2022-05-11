@@ -78,7 +78,7 @@
               <div v-if="works.length > 0" class="img-docu">
                 <h3>图片作品：</h3>
                 <div v-for="(imageurl, i) in userInfo.pictureWorks" :key="i">
-                  <img src="imageurl" alt="图片作品" />
+                  <img :src="imageurl" alt="图片作品" />
                 </div>
               </div>
               <div v-else>
