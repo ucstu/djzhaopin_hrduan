@@ -28,7 +28,7 @@
           </div>
           <div class="footer">
             <div>
-              <el-checkbox v-model="checked1" label="全选" size="large" />
+              <el-checkbox v-model="totalSelect" label="全选" size="large" />
               <el-button
                 type="primary"
                 @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
@@ -144,9 +144,34 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
     });
   }
 };
+const submitChecked = (data) => {
+  deliveryRecordsCheckeds.value.map(
+    (deliveryRecordsChecked: DeliveryRecordChecked) => {
+      deliveryRecordsChecked.checked = data;
+    }
+  );
+};
+const totalli = computed(() => {
+  return deliveryRecordsCheckeds.value.length;
+});
+const totalDone = computed(() => {
+  return deliveryRecordsCheckeds.value.reduce(
+    (per, cur) => per + (cur.checked ? 1 : 0),
+    0
+  );
+});
+
+const totalSelect = computed({
+  get() {
+    return totalDone.value === totalli.value && totalli.value > 0;
+  },
+  set(value) {
+    submitChecked(value);
+  },
+});
 const totalCount = ref(0);
 const total = computed(() => {
-  let num: number = (total.value / 7) * 10;
+  let num: number = (totalCount.value / 7) * 10;
   return Math.ceil(num);
 });
 getCompanyInfosP0DeliveryRecords(

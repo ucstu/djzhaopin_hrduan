@@ -265,7 +265,7 @@
                 <span>{{ interviewList || "请选择" }}</span>
                 <img src="@/assets/down.png" alt="" />
               </div>
-              <el-dialog v-model="dialogFormVisible" title="请选择面试信息">
+              <el-dialog v-model="dialogFormVisible" title="请选择职位类型">
                 <InterviewTag @submit-interview="submitInterview" />
                 <template #footer>
                   <span class="dialog-footer">
@@ -305,10 +305,10 @@
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-getCityInformations,
-getCompanyInfosP0PositionInfosP1,
-postCompanyInfosP0PositionInfos,
-putCompanyInfosP0PositionInfosP1
+  getCityInformations,
+  getCompanyInfosP0PositionInfosP1,
+  postCompanyInfosP0PositionInfos,
+  putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
 import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";

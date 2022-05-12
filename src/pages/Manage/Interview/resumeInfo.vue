@@ -1,15 +1,11 @@
 <template>
   <div
-    v-for="deliveryRecordsChecked in delivers"
+    v-for="deliveryRecordsChecked in props.deliveryRecordsCheckeds"
     :key="deliveryRecordsChecked.deliveryRecordId"
     class="resume-item"
   >
     <div class="resume-item">
       <div class="item-header">
-        <!-- <el-checkbox
-          :checked="deliveryRecordsChecked.checked"
-          @change="handleChecked(deliveryRecordsChecked.deliveryRecordId)"
-        /> -->
         <input
           type="checkbox"
           :checked="deliveryRecordsChecked.checked"
@@ -38,8 +34,8 @@
                   ?.age
               }}</span
               >岁·<span
-                >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)!.education as 1 | 2 | 3 | 4]}}</span
-              >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)!.jobStatus as 1 | 2 | 3 ]
+                >{{educations[userInformations.get(deliveryRecordsChecked.userInformationId)?.education as 1 | 2 | 3 | 4]}}</span
+              >·{{slution[userInformations.get(deliveryRecordsChecked.userInformationId)?.jobStatus as 1 | 2 | 3 ]
               }}</span
             >
           </div>
@@ -89,8 +85,8 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { defineProps, PropType, ref, watch } from "vue";
-interface DeliveryRecordChecked extends DeliveryRecord {
+import { defineProps, PropType, watchEffect } from "vue";
+export interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
 let props = defineProps({
@@ -107,26 +103,23 @@ let props = defineProps({
     default: () => new Map(),
   },
 });
-const delivers = ref({ ...props.deliveryRecordsCheckeds });
+
+let emit = defineEmits(["sub-checked"]);
+
 const handleChecked = (deliveryRecordId: string) => {
-  delivers.value.forEach((deliver: DeliveryRecordChecked) => {
-    if (deliver.deliveryRecordId === deliveryRecordId) {
-      deliver.checked = !deliver.checked;
-    }
-  });
+  emit("sub-checked", deliveryRecordId);
 };
-watch(
-  () => [...props.deliveryRecordsCheckeds],
-  (val) => {
-    delivers.value = val;
-    console.log(delivers.value);
-  },
-  { deep: true }
-);
-// watchEffect(() => {
-//   delivers.value = props.deliveryRecordsCheckeds;
-//   console.log(delivers.value);
-// });
+// watch(
+//   () => props.deliveryRecordsCheckeds,
+//   (val) => {
+//     delivers.value = val;
+//   },
+//   { deep: true }
+// );
+watchEffect(() => {
+  let delivery = props.deliveryRecordsCheckeds;
+  console.log(delivery);
+});
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const educations = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };

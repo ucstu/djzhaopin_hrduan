@@ -9,7 +9,9 @@
                 v-model="valueMap.status"
                 class="m-2"
                 placeholder="按反馈"
+                clearable
                 @change="handleChange"
+                @clear="handleClear"
               >
                 <el-option
                   v-for="(item, index) in feedbackMap"
@@ -22,6 +24,7 @@
                 v-model="valueMap.workingYears"
                 class="m-2"
                 placeholder="工作经验"
+                clearable
                 @change="handleChange"
               >
                 <el-option
@@ -45,6 +48,7 @@
                 v-model="valueMap.sexs"
                 class="m-2"
                 placeholder="性别"
+                clearable
                 @change="handleChange"
               >
                 <el-option
@@ -58,6 +62,7 @@
                 v-model="valueMap.ages"
                 class="m-2"
                 placeholder="年龄"
+                clearable
                 @change="handleChange"
               >
                 <el-option
@@ -67,13 +72,13 @@
                   :value="index + 1"
                 />
               </el-select>
-
               <el-input
                 v-model="valueMap.userName"
                 class="w-50 m-2"
                 input-style="max-width: 350px;"
                 placeholder="输入姓名查找"
                 :prefix-icon="Search"
+                clearable
                 @change="handleChange"
               />
             </div>
@@ -84,12 +89,29 @@
                 :user-informations="userInformations"
                 :job-informations="jobInformations"
                 :delivery-records-checkeds="deliveryRecordsCheckeds"
+                @sub-checked="handleChecked"
               >
               </ResumeInfo>
             </el-scrollbar>
           </div>
+          <el-dialog v-model="dialogTableVisible" title="选择面试时间">
+            <el-date-picker
+              v-model="interviewTime"
+              type="date"
+              placeholder="选择面试日期"
+            />
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="dialogTableVisible = false">取消</el-button>
+                <el-button type="primary" @click="confirmInterviewTime">
+                  >确定</el-button
+                >
+              </span>
+            </template>
+          </el-dialog>
           <ResumeFooter
             :total="total"
+            :delivery-records-checkeds="deliveryRecordsCheckeds"
             @change-state="changState"
             @submit-page="submitPage"
             @submit-checked="submitChecked"
@@ -124,31 +146,38 @@ import ResumeFooter from "./ResumeFooter.vue";
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
+const interviewTime = ref();
 const store = useMainStore();
+const dialogTableVisible = ref(false);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const workTimeing = ref([]);
 const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
-const handleWorkTimeChange = (val: Array<string>) => {
-  let startTime = useDate(val[0]);
-  let endTime = useDate(val[1]);
-  deliveryDates.value[0] = startTime;
-  deliveryDates.value[1] = endTime;
-  handleChange();
-};
+
 const totalCount = ref(0);
 const total = computed(() => {
-  let num: number = (total.value / 7) * 10;
+  let num: number = (totalCount.value / 7) * 10;
   return Math.ceil(num);
 });
 const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
-const checked = ref(false);
+const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
+  dialogTableVisible.value = false;
+  putUserInfosP0DeliveryRecordsP1(
+    delivery.userInformationId,
+    delivery.deliveryRecordId,
+    delivery
+  ).then(() => {
+    ElMessage.success("操作成功");
+  });
+};
+const handleClear = () => {
+  valueMap.value.status = [1, 2, 3, 4];
+};
 const submitChecked = (data: { checked: boolean }) => {
-  checked.value = data.checked;
   deliveryRecordsCheckeds.value.map(
     (deliveryRecordsChecked: DeliveryRecordChecked) => {
-      deliveryRecordsChecked.checked = !deliveryRecordsChecked.checked;
+      deliveryRecordsChecked.checked = data.checked;
     }
   );
 };
@@ -160,40 +189,7 @@ const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
 });
 const submitPage = (data: { type: string; data: number }) => {
   valueMap.value.page = data.data - 1;
-
-  getCompanyInfosP0DeliveryRecords(
-    store.companyInformation.companyInformationId,
-    valueMap.value
-  )
-    .then((res) => {
-      totalCount.value = res.data.body.totalCount;
-      deliveryRecords.value = res.data.body.deliveryRecords;
-      deliveryRecords.value.forEach((item) => {
-        deliveryRecordsCheckeds.value.push(
-          Object.assign(item, { checked: false })
-        );
-        getUserInfosP0(item.userInformationId)
-          .then((response) => {
-            userInformations.value.set(
-              item.userInformationId,
-              response.data.body
-            );
-          })
-          .catch(failResponseHandler);
-        getCompanyInfosP0PositionInfosP1(
-          store.companyInformation.companyInformationId,
-          item.positionInformationId
-        )
-          .then((respones) => {
-            jobInformations.value.set(
-              item.positionInformationId,
-              respones.data.body
-            );
-          })
-          .catch(failResponseHandler);
-      });
-    })
-    .catch(failResponseHandler);
+  handleChange();
 };
 
 const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
@@ -204,50 +200,29 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
         return deliveryRecordsChecked.checked === true;
       }
     );
-    newDeliver.map((delivery: DeliveryRecordChecked) => {
-      delivery.status = val.state;
-      putUserInfosP0DeliveryRecordsP1(
-        delivery.userInformationId,
-        delivery.deliveryRecordId,
-        delivery
-      ).then(() => {
-        ElMessage.success("操作成功");
+    if (newDeliver.length > 0) {
+      //邀请面试打开寻找日期页面
+      dialogTableVisible.value = true;
+
+      newDeliver.map((delivery: DeliveryRecordChecked) => {
+        delivery.status = val.state;
+        confirmInterviewTime(delivery);
       });
+      handleChange();
+    } else {
+      ElMessage.error("请选择简历");
+    }
+  }
+};
+
+const handleChecked = (deliveryRecordId: string) => {
+  if (deliveryRecordsCheckeds.value) {
+    deliveryRecordsCheckeds.value.map((deliver: DeliveryRecordChecked) => {
+      if (deliver.deliveryRecordId === deliveryRecordId) {
+        deliver.checked = !deliver.checked;
+      }
     });
   }
-  getCompanyInfosP0DeliveryRecords(
-    store.companyInformation.companyInformationId,
-    valueMap.value
-  )
-    .then((res) => {
-      totalCount.value = res.data.body.totalCount;
-      deliveryRecords.value = res.data.body.deliveryRecords;
-      deliveryRecords.value.forEach((item) => {
-        deliveryRecordsCheckeds.value.push(
-          Object.assign(item, { checked: false })
-        );
-        getUserInfosP0(item.userInformationId)
-          .then((response) => {
-            userInformations.value.set(
-              item.userInformationId,
-              response.data.body
-            );
-          })
-          .catch(failResponseHandler);
-        getCompanyInfosP0PositionInfosP1(
-          store.companyInformation.companyInformationId,
-          item.positionInformationId
-        )
-          .then((response) => {
-            jobInformations.value.set(
-              item.positionInformationId,
-              response.data.body
-            );
-          })
-          .catch(failResponseHandler);
-      });
-    })
-    .catch(failResponseHandler);
 };
 
 getCompanyInfosP0DeliveryRecords(
@@ -290,6 +265,7 @@ const handleChange = () => {
     valueMap.value
   )
     .then((res) => {
+      totalCount.value = res.data.body.totalCount;
       deliveryRecords.value = res.data.body.deliveryRecords;
       deliveryRecordsCheckeds.value = [];
       deliveryRecords.value.forEach((item) => {
@@ -319,8 +295,18 @@ const handleChange = () => {
     })
     .catch(failResponseHandler);
 };
-const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试", "不合适"];
-
+const handleWorkTimeChange = (val: Array<string>) => {
+  console.log(val);
+  if (val) {
+    deliveryDates.value[0] = useDate(val[0]);
+    deliveryDates.value[1] = useDate(val[1]);
+  } else {
+    valueMap.value.status = [1, 2, 3, 4];
+    deliveryDates.value = [];
+  }
+  handleChange();
+};
+const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试"];
 const gander = ["男", "女"];
 const workExperience = ["经验不限", "在校/应届", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25岁", "25-35岁", "35-45岁", "45-55岁", "55-65岁"];
