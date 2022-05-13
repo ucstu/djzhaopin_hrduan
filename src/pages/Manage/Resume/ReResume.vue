@@ -94,27 +94,13 @@
               </ResumeInfo>
             </el-scrollbar>
           </div>
-          <el-dialog v-model="dialogTableVisible" title="选择面试时间">
-            <el-date-picker
-              v-model="interviewTime"
-              type="date"
-              placeholder="选择面试日期"
-            />
-            <template #footer>
-              <span class="dialog-footer">
-                <el-button @click="dialogTableVisible = false">取消</el-button>
-                <el-button type="primary" @click="confirmInterviewTime">
-                  >确定</el-button
-                >
-              </span>
-            </template>
-          </el-dialog>
           <ResumeFooter
             :total="total"
             :delivery-records-checkeds="deliveryRecordsCheckeds"
             @change-state="changState"
             @submit-page="submitPage"
             @submit-checked="submitChecked"
+            @submit-interview-time="submitInterviewTime"
           />
         </div>
       </div>
@@ -146,7 +132,7 @@ import ResumeFooter from "./ResumeFooter.vue";
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
-const interviewTime = ref();
+const interviewTime = ref("");
 const store = useMainStore();
 const dialogTableVisible = ref(false);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
@@ -154,7 +140,9 @@ const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const workTimeing = ref([]);
 const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
-
+const submitInterviewTime = (data: { time: string }) => {
+  interviewTime.value = data.time;
+};
 const totalCount = ref(0);
 const total = computed(() => {
   let num: number = (totalCount.value / 7) * 10;
@@ -202,13 +190,17 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
     );
     if (newDeliver.length > 0) {
       //邀请面试打开寻找日期页面
-      dialogTableVisible.value = true;
-
-      newDeliver.map((delivery: DeliveryRecordChecked) => {
-        delivery.status = val.state;
-        confirmInterviewTime(delivery);
-      });
-      handleChange();
+      if (interviewTime.value) {
+        newDeliver.map((delivery: DeliveryRecordChecked) => {
+          delivery.status = val.state;
+          delivery.interviewTime = interviewTime.value;
+          confirmInterviewTime(delivery);
+        });
+        handleChange();
+        interviewTime.value = "";
+      } else {
+        ElMessage.warning("请选择面试时间");
+      }
     } else {
       ElMessage.error("请选择简历");
     }

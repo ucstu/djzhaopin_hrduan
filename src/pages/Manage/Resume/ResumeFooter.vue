@@ -5,18 +5,15 @@
       <el-popover
         placement="top-start"
         title="面试时间"
-        :width="400"
+        :width="240"
         trigger="click"
       >
-        <el-date-picker v-model="value1" type="date" placeholder="Pick a day" />
-        <div style="margin: 0; text-align: right">
-          <el-button size="small" text @click="visible = false"
-            >cancel</el-button
-          >
-          <el-button size="small" type="primary" @click="visible = false"
-            >confirm</el-button
-          >
-        </div>
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          placeholder="选择面试时间"
+          @change="handleInterviewTime"
+        />
         <template #reference>
           <el-button type="primary" @click="requireInterview"
             >面试邀请</el-button
@@ -41,6 +38,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import useDate from "@/hooks/useDate";
 import { computed, defineProps, PropType, ref } from "vue";
 import { DeliveryRecordChecked } from "../Interview/resumeInfo.vue";
 const value1 = ref();
@@ -58,8 +56,13 @@ let props = defineProps({
     default: () => [],
   },
 });
-const visible = ref(false);
-const emit = defineEmits(["submit-page", "submit-checked", "change-state"]);
+
+const emit = defineEmits([
+  "submit-page",
+  "submit-checked",
+  "change-state",
+  "submit-interview-time",
+]);
 const handleChecked = (value) => {
   emit("submit-checked", {
     checked: value,
@@ -79,6 +82,11 @@ const totalDone = computed(() => {
     0
   );
 });
+const handleInterviewTime = () => {
+  emit("submit-interview-time", {
+    time: useDate(value1.value),
+  });
+};
 const totalSelect = computed({
   get() {
     return totalDone.value === total.value && total.value > 0;
