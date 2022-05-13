@@ -47,6 +47,7 @@ import router from "@/router";
 import { useCompriseStore } from "@/stores/main";
 import { sendMessage } from "@/utils/stomp";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { defineProps, ref, watchEffect } from "vue";
 const isEmpty = ref(true);
 const content = ref("");
@@ -65,9 +66,13 @@ watchEffect(() => {
 
 const sentMessage = (e: any) => {
   if (e.key === "Enter") {
-    if (content.value) {
-      sendMessage(content.value, 1, props.chatId, 1);
-      content.value = "";
+    if (props.chatId) {
+      if (content.value) {
+        sendMessage(content.value, 1, props.chatId, 1);
+        content.value = "";
+      }
+    } else {
+      ElMessage.warning("请先选择聊天对象");
     }
   }
 };
@@ -75,9 +80,13 @@ const handleCommand = (command: string) => {
   content.value = content.value + command;
 };
 const sentMessage1 = () => {
-  if (content.value) {
-    sendMessage(content.value, 1, props.chatId, 1);
-    content.value = "";
+  if (props.chatId) {
+    if (content.value) {
+      sendMessage(content.value, 1, props.chatId, 1);
+      content.value = "";
+    }
+  } else {
+    ElMessage.warning("请先选择聊天对象");
   }
 };
 const addComprise = () => {

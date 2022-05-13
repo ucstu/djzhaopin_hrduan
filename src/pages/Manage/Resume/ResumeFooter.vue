@@ -63,7 +63,7 @@ const emit = defineEmits([
   "change-state",
   "submit-interview-time",
 ]);
-const handleChecked = (value) => {
+const handleChecked = (value: any) => {
   emit("submit-checked", {
     checked: value,
   });

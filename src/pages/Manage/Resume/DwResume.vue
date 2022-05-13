@@ -58,14 +58,14 @@
 
 <script setup lang="ts">
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";

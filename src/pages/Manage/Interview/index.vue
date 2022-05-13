@@ -34,12 +34,16 @@
                 @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
                 >发出offer</el-button
               >
-              <el-button
-                type="primary"
-                plain
-                @click="changeState(5 as 1 | 2 | 3 | 4 | 5 )"
-                >删除简历</el-button
-              >
+              <el-popconfirm title="确定删除该简历?">
+                <template #reference>
+                  <el-button
+                    type="primary"
+                    plain
+                    @click="changeState(5 as 1 | 2 | 3 | 4 | 5 )"
+                    >删除简历</el-button
+                  >
+                </template>
+              </el-popconfirm>
             </div>
             <el-pagination
               background
@@ -144,7 +148,7 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
     });
   }
 };
-const submitChecked = (data) => {
+const submitChecked = (data: any) => {
   deliveryRecordsCheckeds.value.map(
     (deliveryRecordsChecked: DeliveryRecordChecked) => {
       deliveryRecordsChecked.checked = data;

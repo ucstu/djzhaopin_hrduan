@@ -74,11 +74,14 @@
                     @click="updatePosition(position.positionInformationId)"
                     >编辑职位</el-button
                   >
-                  <el-button
-                    type="danger"
-                    @click="deletePosition(position.positionInformationId)"
-                    >删除职位</el-button
+                  <el-popconfirm
+                    title="确定删除该职位?"
+                    @confirm="deletePosition(position.positionInformationId)"
                   >
+                    <template #reference>
+                      <el-button type="danger">删除职位</el-button>
+                    </template>
+                  </el-popconfirm>
                 </div>
               </div>
             </template>

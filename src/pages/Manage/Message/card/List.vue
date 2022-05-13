@@ -66,20 +66,7 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
   }
   return num;
 };
-// _messages.value["d5ec4bd5-da73-441c-a9ea-3db0b148649a"] = [
-//   {
-//     haveRead: true,
-//     content: "string",
-//     createdAt: "string",
-//     initiateId: "d5ec4bd5-da73-441c-a9ea-3db0b148649a",
-//     initiateType: 1,
-//     messageRecordId: "dfsfsf",
-//     messageType: 2,
-//     serviceId: "7b8b5d6a-6d62-4314-9785-a166c0349531",
-//     serviceType: 1,
-//     updatedAt: "string",
-//   },
-// ];
+
 const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
 for (const key in _messages.value) {
   getUserInfosP0(key).then((res) => {
@@ -144,7 +131,7 @@ const selectPerson = (
     background-color: rgb(113 255 153);
   }
 
-  .job-hunter:active {
+  .job-hunter:focus {
     cursor: pointer;
     background-color: rgb(0 179 139);
   }

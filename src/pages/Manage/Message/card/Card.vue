@@ -2,8 +2,10 @@
   <div id="card">
     <header class="header">
       <img class="avatar" :src="VITE_CDN_URL + avatarUrl" alt="" />
-      <p class="name">{{ hrName }}</p>
-      <p class="position">{{ postName }}</p>
+      <div class="info">
+        <p class="name">{{ hrName }}</p>
+        <p class="position">{{ postName }}</p>
+      </div>
     </header>
     <footer>
       <el-input
@@ -28,27 +30,46 @@ const input2 = ref("");
 
 <style lang="scss" scoped>
 #card {
+  background-color: rgb(255 228 228 / 50%);
+
   .header {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    height: 60px;
 
     .avatar {
       width: 40px;
       height: 40px;
       margin: 0 10px;
       vertical-align: middle; /* 这个是图片和文字居中对齐 */
+      border-radius: 50%;
     }
 
-    .name {
-      display: block;
-      font-size: 16px;
+    .info {
+      margin-left: 10px;
+
+      .name {
+        display: block;
+        font-size: 16px;
+        color: #999;
+      }
+
+      .position {
+        display: block;
+        font-size: 14px;
+        color: #999;
+      }
     }
   }
 
-  ::v-deep .el-input {
-    border: none;
-    border-left: transparent;
+  footer {
+    display: flex;
+    justify-content: center;
+
+    .el-input {
+      width: 85%;
+      border-radius: 100px;
+    }
   }
 }
 </style>
