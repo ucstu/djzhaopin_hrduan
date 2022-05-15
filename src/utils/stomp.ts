@@ -54,7 +54,6 @@ const connect = () => {
           status: number;
           timestamp: string;
         };
-        console.log(data);
       });
       stompClient.subscribe("/topic/pingpong", (pong) => {});
       setInterval(() => {

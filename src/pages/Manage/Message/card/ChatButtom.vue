@@ -1,21 +1,23 @@
 <template>
   <div id="chat-bottom">
-    <el-input
-      v-if="!isEmpty"
+    <textarea
       v-model="content"
-      autosize
-      type="textarea"
-      placeholder="Please input"
-    />
-    <el-input
-      v-model="content"
-      :autosize="{ minRows: 9, maxRows: 9 }"
-      type="textarea"
-      placeholder="按下Enter 发送"
+      placeholder="按下Enter发送"
+      class="input-content"
       @keyup="sentMessage"
-    />
+    ></textarea>
     <div class="button">
-      <el-button type="primary" :icon="Plus" @click="addComprise" />
+      <el-button type="primary" :icon="Plus" round @click="addComprise" />
+      <div class="icon" @click="uploadimg">
+        <input
+          ref="uploadInput"
+          type="file"
+          style="display: none"
+          name="icon"
+          @change="dealimgchange"
+        />
+        <el-icon size="40px" color="#999"><PictureFilled /></el-icon>
+      </div>
       <el-dropdown size="large" @command="handleCommand">
         <span class="el-dropdown-link">
           使用常用语
@@ -37,19 +39,32 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-button type="primary" @click="sentMessage1">发送</el-button>
+      <div class="icon" @click="uploadFile">
+        <input
+          ref="uploadfileInput"
+          type="file"
+          style="display: none"
+          name="icon"
+          @change="dealfilechange"
+        />
+        <el-icon size="40px" color="#999"><FolderOpened /></el-icon>
+      </div>
+      <el-button type="primary" round @click="sentMessage1">发送</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
+import { postAvatars, postFiles } from "@/services/services";
 import { useCompriseStore } from "@/stores/main";
+import { failResponseHandler } from "@/utils/handler";
 import { sendMessage } from "@/utils/stomp";
-import { Plus } from "@element-plus/icons-vue";
+import { FolderOpened, PictureFilled, Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { defineProps, ref, watchEffect } from "vue";
-const isEmpty = ref(true);
+const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const content = ref("");
 const store = useCompriseStore();
 const comprise = store.comprise;
@@ -59,11 +74,53 @@ let props = defineProps({
     default: "",
   },
 });
-
+//上传，发送图片
+const uploadInput = ref<HTMLElement | null>(null);
+const uploadimg = () => {
+  if (props.chatId) {
+    let oBtn = uploadInput.value as HTMLInputElement;
+    oBtn.click();
+  } else {
+    ElMessage.error("请先选择聊天对象");
+  }
+};
+const dealimgchange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    if (useAvatarUpload(files[files.length - 1])) {
+      postAvatars({ avatar: files[files.length - 1] })
+        .then((res) => {
+          sendMessage(VITE_CDN_URL + res.data.body, 2, props.chatId, 1);
+        })
+        .catch(failResponseHandler);
+    }
+  }
+};
+const uploadfileInput = ref<HTMLElement | null>(null);
+const uploadFile = () => {
+  if (props.chatId) {
+    let oBtn = uploadfileInput.value as HTMLInputElement;
+    oBtn.click();
+  } else {
+    ElMessage.error("请先选择聊天对象");
+  }
+};
+//上传，发送文件
+const dealfilechange = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  let files = input.files;
+  if (files) {
+    postFiles({ file: files[files.length - 1] })
+      .then((res) => {
+        sendMessage(VITE_CDN_URL + res.data.body, 4, props.chatId, 1);
+      })
+      .catch(failResponseHandler);
+  }
+};
 watchEffect(() => {
   let id = props.chatId;
 });
-
 const sentMessage = (e: any) => {
   if (e.key === "Enter") {
     if (props.chatId) {
@@ -106,21 +163,42 @@ const addComprise = () => {
   height: 30%;
   border-top: solid 1px #ddd;
 
-  ::v-deep .el-input {
-    max-height: 100%;
+  .input-content {
+    width: 99%;
+    height: 1100px;
+    overflow: hidden;
+    font-size: 16px;
+    resize: none;
     border: none;
-    border-top: transparent;
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      position: relative;
+      top: -80px;
+      left: 20px;
+    }
   }
 
   .button {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
     height: 100%;
+    border-top: solid 1px #ddd;
+
+    .icon {
+      width: 60px;
+      height: 100%;
+    }
 
     .el-button {
-      width: 120px;
-      height: 100%;
+      width: 100px;
+      height: 80%;
+      margin: 0 5px;
     }
   }
 }

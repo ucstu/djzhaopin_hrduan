@@ -117,17 +117,20 @@ getCompanyInfosP0DeliveryRecords(
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 110px;
+        height: 130px;
         border-bottom: solid 1px #ccc;
 
         .title {
           display: flex;
           justify-content: space-between;
           width: 100%;
+          height: 30px;
+          margin: 5px 0;
 
           span {
             margin: 0 10px;
             color: rgb(0 179 139);
+            cursor: pointer;
           }
         }
       }
