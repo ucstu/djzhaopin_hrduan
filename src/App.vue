@@ -3,71 +3,11 @@
 </template>
 <script setup lang="ts">
 import { getAxiosInstance } from "./services/config";
-import { useMainStore } from "./stores/main";
-
-const store = useMainStore();
-
+import { useMainStore, useMessageStore } from "./stores/main";
+const mainStore = useMainStore();
+const messageStore = useMessageStore();
 getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-  "Bearer " + store.jsonWebToken;
-//定时删除
-// const lsc = ((self) => {
-//   var prefix = "one_more_lsc_";
-//   var list = [];
-//   //初始化list
-//   self.init = function () {
-//     var keys = Object.keys(localStorage);
-//     var reg = new RegExp("^" + prefix);
-//     var temp = [];
-//     //遍历所有localStorage中的所有key
-//     for (var i = 0; i < keys.length; i++) {
-//       //找出可过期缓存的key
-//       if (reg.test(keys[i])) {
-//         temp.push(keys[i]);
-//       }
-//     }
-//     list = temp;
-//   };
-//   self.init();
-//   self.check = () => {
-//     if (!list || list.length == 0) {
-//       return;
-//     }
-//     var checkCount = 0;
-//     while (checkCount < 500) {
-//       var expireCount = 0;
-//       //随机测试20个设置了过期时间的key
-//       for (var i = 0; i < 20; i++) {
-//         if (list.length == 0) {
-//           break;
-//         }
-//         var index = Math.floor(Math.random() * list.length);
-//         var key = list[index];
-//         var val = localStorage.getItem(list[index]);
-//         //从list中删除被惰性删除的key
-//         if (!val) {
-//           list.splice(index, 1);
-//           expireCount++;
-//           continue;
-//         }
-//         val = JSON.parse(val);
-//         //删除所有发现的已过期的key
-//         if (val.expires < new Date().getTime()) {
-//           list.splice(index, 1);
-//           localStorage.removeItem(key);
-//           expireCount++;
-//         }
-//       }
-//       //若删除的key不超过5个则跳出循环
-//       if (expireCount <= 5 || list.length == 0) {
-//         break;
-//       }
-//       checkCount++;
-//     }
-//   };
-//   //每隔一秒执行一次定时删除
-//   window.setInterval(self.check, 1000);
-//   return self;
-// })(lsc || {});
+  "Bearer " + mainStore.jsonWebToken;
 </script>
 
 <style lang="scss">

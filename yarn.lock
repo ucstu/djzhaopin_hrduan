@@ -160,6 +160,18 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.11.tgz"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
+"@types/lodash.clonedeep@^4.5.6":
+  version "4.5.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.7.tgz#0e119f582ed6f9e6b373c04a644651763214f197"
+  integrity sha512-ccNqkPptFIXrpVqUECi60/DFxjNKsfoQxSQsgcBJCX/fuX1wgyQieojkcWH/KpE3xzLoWN/2k+ZeGqIN3paSvw==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.182"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.182.tgz#05301a4d5e62963227eaafe0ce04dd77c54ea5c2"
+  integrity sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==
+
 "@types/minimist@^1.2.0":
   version "1.2.2"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.2.tgz"
@@ -1741,7 +1753,7 @@ js-stringify@^1.0.2:
   resolved "https://registry.npmjs.org/js-stringify/-/js-stringify-1.0.2.tgz"
   integrity sha1-Fzb939lyTyijaCrcYjCufk6Weds=
 
-js-tokens@^4.0.0:
+"js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
@@ -1875,6 +1887,11 @@ lodash-unified@^1.0.2:
   resolved "https://registry.npmjs.org/lodash-unified/-/lodash-unified-1.0.2.tgz"
   integrity sha512-OGbEy+1P+UT26CYi4opY4gebD8cWRDxAT6MAObIVQMiqYdxZr1g3QHWCToVsm31x2NkLS4K3+MC2qInaRMa39g==
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
@@ -1909,6 +1926,13 @@ log-update@^4.0.0:
     cli-cursor "^3.1.0"
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
+
+loose-envify@^1.1.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
+  integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
+  dependencies:
+    js-tokens "^3.0.0 || ^4.0.0"
 
 lru-cache@^6.0.0:
   version "6.0.0"
@@ -2034,6 +2058,11 @@ ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+nanoid@^3.1.30:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
+  integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
 nanoid@^3.3.1, nanoid@^3.3.2:
   version "3.3.2"
@@ -2424,7 +2453,7 @@ punycode@^2.1.0:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-qs@^6.10.3:
+qs@^6.10.1, qs@^6.10.3:
   version "6.10.3"
   resolved "https://registry.npmjs.org/qs/-/qs-6.10.3.tgz"
   integrity sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==
@@ -2440,6 +2469,14 @@ quick-lru@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-4.0.1.tgz"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
+
+"react@^16.12.0 || ^17.0.0":
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 read-pkg-up@^7.0.1:
   version "7.0.1"
@@ -3472,6 +3509,17 @@ write-file-atomic@^4.0.1:
   dependencies:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
+
+xijs@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/xijs/-/xijs-1.1.2.tgz#80a96ed378793ea32b8bf1bdce68e6c79b647cfe"
+  integrity sha512-X/WvZR3PXwpKOgLNNxqhX3o2KxrPzd83pPEKqWYXWEaObn3SBEMJRNRLCtc8pfKoikX0aBBrDiGO8I3hhHZAVQ==
+  dependencies:
+    "@types/lodash.clonedeep" "^4.5.6"
+    lodash.clonedeep "^4.5.0"
+    nanoid "^3.1.30"
+    qs "^6.10.1"
+    react "^16.12.0 || ^17.0.0"
 
 yaeti@^0.0.6:
   version "0.0.6"

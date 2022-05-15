@@ -4,6 +4,7 @@
       v-for="(messages, key) in _messages"
       :key="key"
       class="job-hunter"
+      :class="{ active: key === activeKey }"
       @click="selectPerson(key, _userinfos.get(key))"
     >
       <el-badge :value="countNum(messages)" :max="10" class="item">
@@ -73,11 +74,14 @@ for (const key in _messages.value) {
     _userinfos.value.set(key, res.data.body);
   });
 }
+const activeKey = ref<string | number>("");
 const selectPerson = (
   id: string | number,
   userInfo: UserInformation | undefined
 ) => {
   emit("submitMessage", { id: id, userInfo: userInfo });
+  activeKey.value = id;
+  console.log(activeKey.value);
 };
 </script>
 
@@ -124,16 +128,16 @@ const selectPerson = (
         }
       }
     }
+
+    &.active {
+      cursor: pointer;
+      background-color: rgb(147 255 232);
+    }
   }
 
   .job-hunter:hover {
     cursor: pointer;
-    background-color: rgb(113 255 153);
-  }
-
-  .job-hunter:focus {
-    cursor: pointer;
-    background-color: rgb(0 179 139);
+    background-color: rgb(191 254 209);
   }
 }
 </style>
