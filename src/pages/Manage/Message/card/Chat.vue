@@ -3,7 +3,7 @@
     <el-scrollbar ref="scrollbarRef">
       <div v-for="(chat, index) in chatList" :key="index" class="chat-list">
         <p class="time">
-          <span>{{ formatDate(chat.createdAt) }}</span>
+          <span>{{ timeNow(chat.createdAt) }}</span>
         </p>
         <div v-if="chat.initiateType === 1" class="user-main">
           <div class="user-info">
@@ -73,6 +73,7 @@
 </template>
 
 <script setup lang="ts">
+import useTimeChange from "@/hooks/useTimeChange";
 import { UserInformation } from "@/services/types";
 import {
   useMainStore,
@@ -112,8 +113,11 @@ let props = defineProps({
 
 const { messages: _messages } = storeToRefs(store);
 const userinfomartion = ref<UserInformation>({ ...props.userInfo });
-
+const time = ref();
 const chatList = ref<withReadStateMessageRecord[]>([]);
+const formatDate = (timestamp: any) => {
+  return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
+};
 watchEffect(() => {
   if (scrollbarRef.value && chatList.value.length) {
     nextTick(() => {
@@ -134,6 +138,13 @@ watchEffect(() => {
   }
   userinfomartion.value = userinfo;
 });
+const timeNow = (messageTime) => {
+  let str = formatDate(messageTime);
+  str = str.replace(/-/g, "/");
+  let date = new Date(str);
+  time.value = useTimeChange(date);
+  return time.value;
+};
 
 onMounted(() => {
   if (route.params) {
@@ -146,10 +157,6 @@ onMounted(() => {
   //   item.
   // });
 });
-
-const formatDate = (timestamp: any) => {
-  return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
-};
 </script>
 
 <style lang="scss" scoped>
