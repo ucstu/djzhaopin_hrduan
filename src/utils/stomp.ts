@@ -1,3 +1,5 @@
+import useDate from "@/hooks/useDate";
+import useTime from "@/hooks/useTime";
 import {
   AccountInformation,
   CompanyInformation,
@@ -168,13 +170,15 @@ export const sendMessage = (
     messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId] =
       [];
   }
+
+  const time = new Date().toISOString();
   messageStore.messages[mainStore.hrInformation.hrInformationId][
     serviceId
   ].push({
     ...message,
-    haveRead: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    haveRead: true,
+    createdAt: useDate(time) + " " + useTime(time),
+    updatedAt: useDate(time) + " " + useTime(time),
     messageRecordId: "",
   });
 };
