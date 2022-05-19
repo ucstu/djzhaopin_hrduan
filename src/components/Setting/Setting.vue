@@ -1,5 +1,5 @@
 <template>
-  <setting-header />
+  <system-header />
   <div class="outer">
     <div class="sidebar">
       <div class="title">
@@ -34,7 +34,9 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SystemHeader from "../System/SystemHeader.vue";
+</script>
 
 <style scoped lang="scss">
 .outer {
