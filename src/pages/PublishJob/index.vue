@@ -1,6 +1,6 @@
 <template>
   <div>
-    <setting-header />
+    <SystemHeader />
     <div class="upside">
       <div class="upside-lia">
         <div>
@@ -302,6 +302,7 @@
 </template>
 
 <script setup lang="ts">
+import SystemHeader from "@/components/System/SystemHeader.vue";
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
