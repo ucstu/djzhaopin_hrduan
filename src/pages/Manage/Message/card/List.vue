@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar height="670px">
     <div id="list">
       <div
         v-for="(messages, key) in _messages[
