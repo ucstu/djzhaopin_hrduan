@@ -29,7 +29,7 @@
             <span>新简历</span>
           </div>
           <div>
-            <span>{{ num.countComunication }}</span>
+            <span>{{ num.countCommunication }}</span>
             <span>待沟通</span>
           </div>
           <div>
@@ -110,16 +110,16 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfos,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0,
-putUserInfosP0DeliveryRecordsP1
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfos,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
+  putUserInfosP0DeliveryRecordsP1,
 } from "@/services/services";
 import {
-DeliveryRecord,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -131,7 +131,7 @@ const greet = "";
 const interviewNum = ref<DeliveryRecord[]>([]);
 const num = ref({
   count: 0,
-  countComunication: 0,
+  countCommunication: 0,
   countInterviewed: 0,
 });
 const userInformations = ref<Map<string, UserInformation>>(new Map());
@@ -187,13 +187,14 @@ getCompanyInfosP0DeliveryRecords(
       if (item.status == 4) {
         num.value.count = num.value.count + 1;
       } else if (item.status == 2) {
-        num.value.countComunication = num.value.countComunication + 1;
+        num.value.countCommunication = num.value.countCommunication + 1;
       } else if (item.status == 3) {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
     });
   })
   .catch(failResponseHandler);
+
 const goPosition = () => {
   router.push("/System/Position");
 };
