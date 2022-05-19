@@ -153,51 +153,7 @@ const updatePosition = (id: string) => {
     params: { PublishJobId: id },
   });
 };
-//下拉发请求
-// const positionRef = ref<HTMLElement>(null);
-// const postRef = ref<HTMLElement>(null);
-// onMounted(() => {
-//   console.log(post.value);
-// });
 
-// const updatePositionList = async () => {
-//   // 距离底部200px时加载一次
-//   let bottomOfWindow =
-//     postRef.value.offsetHeight -
-//       postRef.value.scrollTop -
-//       positionRef.value.offsetHeight <=
-//     20;
-//   if (bottomOfWindow && isLoading == true) {
-//     this.page = this.page + 1; //每次分页+1
-//     const data = {
-//       page: this.page,
-//       limit: this.limit,
-//       type: "1",
-//     };
-//     const res = await requset(`url`, data, "get"); //自己封装的请求数据的方法
-//     //有数据的时候加载
-//     if (res.data.length > 0) {
-//       this.list.push(...res.data); //追加数据 使用 ...语法
-//       isLoading = true;
-//     } else {
-//       this.$notify({
-//         title: "温馨提示：",
-//         message: "暂无更多数据信息！",
-//         position: "bottom-right",
-//       });
-//       isLoading = false; //无数据可以加载
-//     }
-//   }
-
-//   getCompanyInfosP0PositionInfos(
-//     store.companyInformation.companyInformationId,
-//     { sort: [] }
-//   )
-//     .then((res) => {
-//       jobTypeList.value = res.data.body.positionInformations;
-//     })
-//     .catch(failResponseHandler);
-// };
 const search = () => {
   getCompanyInfosP0PositionInfos(
     store.companyInformation.companyInformationId,

@@ -166,7 +166,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         })
         .catch(failResponseHandler);
     } else {
-      console.log("error submit!");
+      ElMessage.warning("请检查表单信息");
       return false;
     }
   });

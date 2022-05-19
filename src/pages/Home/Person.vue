@@ -158,7 +158,6 @@ const dealfilechange = (e: Event) => {
   }
 };
 const uploadgogo = () => {
-  // console.log(uploadInput.value)
   let oBtn = uploadInput.value as HTMLInputElement;
   oBtn.click();
 };

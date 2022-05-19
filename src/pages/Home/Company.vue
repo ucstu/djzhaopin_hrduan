@@ -226,10 +226,10 @@
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
 import {
-getCityInformations,
-postAvatars,
-postCompanyInfos,
-putHrInfosP0
+  getCityInformations,
+  postAvatars,
+  postCompanyInfos,
+  putHrInfosP0,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
@@ -352,7 +352,6 @@ const dealfilechange = (e: Event) => {
   }
 };
 const uploadgogo = () => {
-  // console.log(uploadInput.value)
   let oBtn = uploadInput.value as HTMLInputElement;
   oBtn.click();
 };

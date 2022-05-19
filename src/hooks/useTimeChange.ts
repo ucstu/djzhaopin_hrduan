@@ -19,7 +19,6 @@ const isYear = (timeValue: any) => {
   // 是否为今年
   const dateyear = new Date(timeValue).getFullYear();
   const toyear = new Date().getFullYear();
-  // console.log(dateyear, toyear)
   if (dateyear === toyear) {
     return true;
   } else {

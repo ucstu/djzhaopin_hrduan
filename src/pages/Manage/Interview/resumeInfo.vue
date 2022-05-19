@@ -118,7 +118,6 @@ const handleChecked = (deliveryRecordId: string) => {
 // );
 watchEffect(() => {
   let delivery = props.deliveryRecordsCheckeds;
-  console.log(delivery);
 });
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };

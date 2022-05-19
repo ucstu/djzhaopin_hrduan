@@ -111,16 +111,16 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
-  putUserInfosP0DeliveryRecordsP1,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0,
+putUserInfosP0DeliveryRecordsP1
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  GetCompanyInfosP0DeliveryRecordsQueryParams,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+GetCompanyInfosP0DeliveryRecordsQueryParams,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -288,7 +288,6 @@ const handleChange = () => {
     .catch(failResponseHandler);
 };
 const handleWorkTimeChange = (val: Array<string>) => {
-  console.log(val);
   if (val) {
     deliveryDates.value[0] = useDate(val[0]);
     deliveryDates.value[1] = useDate(val[1]);

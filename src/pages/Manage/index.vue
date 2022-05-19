@@ -183,7 +183,6 @@ getCompanyInfosP0DeliveryRecords(
           );
         })
         .catch(failResponseHandler);
-      console.log(item.interviewTime);
       if (item.status === 1) {
         num.value.count = num.value.count + 1;
       } else if (item.status === 2) {
