@@ -7,19 +7,17 @@
       <div class="content">
         <div class="solution">
           <span
-            v-if="
-              (greet =
-                ho < 9
-                  ? '早上好'
-                  : ho < 12
-                  ? '上午好'
-                  : ho < 15
-                  ? '中午好'
-                  : ho < 19
-                  ? '下午好'
-                  : '晚上好')
-            "
-            >{{ greet }}，{{ store.hrInformation.hrName }}</span
+            >{{
+              ho < 9
+                ? "早上好"
+                : ho < 12
+                ? "上午好"
+                : ho < 15
+                ? "中午好"
+                : ho < 19
+                ? "下午好"
+                : "晚上好"
+            }}，{{ store.hrInformation.hrName }}</span
           >
           <span>时间和注意力是你最宝贵的财富！~</span>
         </div>
@@ -127,7 +125,6 @@ import { ref } from "vue";
 
 const store = useMainStore();
 const ho = new Date().getHours();
-const greet = "";
 const interviewNum = ref<DeliveryRecord[]>([]);
 const num = ref({
   count: 0,
