@@ -41,20 +41,20 @@
 <script setup lang="ts">
 import { UserInformation } from "@/services/types";
 import {
-useMainStore,
-useMessageStore,
-withReadStateMessageRecord
+  useMainStore,
+  useMessageStore,
+  withReadStateMessageRecord,
 } from "@/stores/main";
 import { ElScrollbar } from "element-plus";
 import { storeToRefs } from "pinia";
 import {
-computed,
-defineProps,
-nextTick,
-onMounted,
-PropType,
-ref,
-watchEffect
+  computed,
+  defineProps,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  watchEffect,
 } from "vue";
 import { useRoute } from "vue-router";
 
@@ -103,11 +103,6 @@ onMounted(() => {
   if (route.params) {
     chatList.value = computed(() => store.messages[props.chatId]).value;
   }
-  store.messages[props.chatId].forEach((item) => {
-    const date=new Date(item.updatedAt);
-    const now= Date.now();
-    item.
-  });
 });
 
 const formatDate = (timestamp: any) => {
