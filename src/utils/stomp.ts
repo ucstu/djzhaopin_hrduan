@@ -127,6 +127,7 @@ export const connectStomp = (
           timestamp: string;
         };
       });
+      stompClient.subscribe("/topic/pingpong", (pong) => {});
       setInterval(() => {
         stompClient.send(
           "/ping",
