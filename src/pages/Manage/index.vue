@@ -61,7 +61,7 @@
                 <el-card class="el-card-define">
                   <div class="card">
                     <div class="left">
-                      <img src="@/assets/message.png" />
+                      <img src="@/assets/message.png" alt="" />
                       <div>
                         <h4>面试提醒</h4>
                         <div class="hint">
