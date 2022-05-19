@@ -183,7 +183,8 @@ getCompanyInfosP0DeliveryRecords(
           );
         })
         .catch(failResponseHandler);
-      if (item.status === 1) {
+
+      if (item.status === 1 && useDate(item.createdAt) === day) {
         num.value.count = num.value.count + 1;
       } else if (item.status === 2) {
         num.value.countCommunication = num.value.countCommunication + 1;

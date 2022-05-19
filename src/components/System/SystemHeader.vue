@@ -21,11 +21,7 @@
     <div class="right">
       <img
         id="avatar"
-        :src="
-          avatarUrl
-            ? VITE_CDN_URL + avatarUrl
-            : 'https://tse4-mm.cn.bing.net/th/id/OIP-C.W3zARu1eQ44qyPGNAj0GPgAAAA?w=172&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
-        "
+        :src="VITE_CDN_URL + (avatarUrl ? avatarUrl : '/image/heard2.jpg')"
         alt=""
       />
       <div class="dropdown">

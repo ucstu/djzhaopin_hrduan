@@ -10,9 +10,10 @@
             <img
               class="user-avatar"
               :src="
-                userinfomartion.avatarUrl
-                  ? VITE_CDN_URL + userinfomartion.avatarUrl
-                  : ''
+                VITE_CDN_URL +
+                (userinfomartion.avatarUrl
+                  ? userinfomartion.avatarUrl
+                  : '/image/heard2.jpg')
               "
               alt=""
             />
@@ -42,7 +43,13 @@
         </div>
         <div v-else class="hr-main">
           <div class="hr-info">
-            <img :src="VITE_CDN_URL + hravatarUrl" alt="" class="hr-avatar" />
+            <img
+              :src="
+                VITE_CDN_URL + (hravatarUrl ? hravatarUrl : '/image/heard2.jpg')
+              "
+              alt=""
+              class="hr-avatar"
+            />
             <span class="name">{{ hrName }}</span>
           </div>
           <div v-if="chat.messageType === 1" class="right-farm">

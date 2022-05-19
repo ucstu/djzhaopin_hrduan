@@ -163,9 +163,8 @@
         <div class="my-company">
           <img
             :src="
-              formCompany.logoUrl
-                ? VITE_CDN_URL + formCompany.logoUrl
-                : VITE_CDN_URL + '/image/heard3.webp'
+              VITE_CDN_URL +
+              (formCompany.logoUrl ? formCompany.logoUrl : '/image/heard3.webp')
             "
             alt=""
           />

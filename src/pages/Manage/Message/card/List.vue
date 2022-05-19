@@ -76,9 +76,9 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
   }
   return num;
 };
-
+const store = useMainStore();
 const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
-for (const key in _messages.value) {
+for (const key in _messages.value[store.hrInformation.hrInformationId]) {
   getUserInfosP0(key).then((res) => {
     _userinfos.value.set(key, res.data.body);
   });
