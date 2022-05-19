@@ -90,6 +90,7 @@ import { storeToRefs } from "pinia";
 import {
   computed,
   defineProps,
+  nextTick,
   onMounted,
   PropType,
   ref,
@@ -122,21 +123,27 @@ const formatDate = (timestamp: any) => {
   return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
 };
 watchEffect(() => {
-  // if (scrollbarRef.value && chatList.value.length) {
-  //   nextTick(() => {
-  //     scrollbarRef.value!.scrollTo(
-  //       0,
-  //       scrollbarRef.value!.resize$!.offsetHeight
-  //     );
-  //   });
-  // }
-  chatList.value =
-    store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
+  if (!store.messages[mainStore.hrInformation.hrInformationId]) {
+    store.messages[mainStore.hrInformation.hrInformationId] = {};
+  }
+  if (store.messages[mainStore.hrInformation.hrInformationId][props.chatId]) {
+    chatList.value =
+      store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
+  }
+  console.log(chatList.value);
   if (chatList.value) {
     chatList.value.forEach((item) => {
       item.haveRead = true;
     });
     srcList.value = chatList.value.map((obj) => obj.content);
+  }
+  if (scrollbarRef.value && chatList.value.length) {
+    nextTick(() => {
+      scrollbarRef.value!.scrollTo(
+        0,
+        scrollbarRef.value!.resize$!.offsetHeight
+      );
+    });
   }
 });
 const timeNow = (messageTime: any) => {
