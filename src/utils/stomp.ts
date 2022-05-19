@@ -1,21 +1,43 @@
 import { MessageRecord } from "@/services/types";
-import { useMainStore, useMessageStore } from "@/stores/main";
 import { ElMessage } from "element-plus";
 import Stomp from "stompjs";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL as string;
-
-const mainStore = useMainStore();
-const messageStore = useMessageStore();
 
 const socket = new WebSocket(`${VITE_BASE_URL.replace(/^http/, "ws")}/ws`);
 const stompClient = Stomp.over(socket);
 
 const messageIds = new Set<string>();
 
-export const connectStomp = () => {
+let mainStore: any;
+let messageStore: any;
+
+// @ts-ignore
+// stompClient.debug = null;
+
+export const connectStomp = (
+  _mainStore: { jsonWebToken: string },
+  _messageStore: {
+    messages: {
+      [x: string]: {
+        haveRead: boolean;
+        content: string;
+        createdAt: string;
+        initiateId: string;
+        initiateType: number;
+        messageRecordId: string;
+        messageType: 1 | 2 | 3 | 4;
+        serviceId: string;
+        serviceType: number;
+        updatedAt: string;
+      }[];
+    };
+  }
+) => {
+  mainStore = _mainStore;
+  messageStore = _messageStore;
   stompClient.connect(
-    { Authorization: "Bearer " + mainStore.jsonWebToken },
+    { Authorization: "Bearer " + _mainStore.jsonWebToken },
     (frame) => {
       stompClient.subscribe("/user/queue/message", (message) => {
         // 每接收到一次消息都会触发这个回调
@@ -28,10 +50,10 @@ export const connectStomp = () => {
             timestamp: string;
           };
           for (const messageRecord of data.body) {
-            if (!messageStore.messages[messageRecord.initiateId]) {
-              messageStore.messages[messageRecord.initiateId] = [];
+            if (!_messageStore.messages[messageRecord.initiateId]) {
+              _messageStore.messages[messageRecord.initiateId] = [];
             }
-            messageStore.messages[messageRecord.initiateId].push({
+            _messageStore.messages[messageRecord.initiateId].push({
               ...messageRecord,
               haveRead: false,
             });
@@ -71,9 +93,7 @@ export const connectStomp = () => {
 };
 
 const handleDisconnect = () => {
-  if (mainStore.jsonWebToken) {
-    connectStomp();
-  }
+  connectStomp(mainStore, messageStore);
 };
 
 // 发送消息

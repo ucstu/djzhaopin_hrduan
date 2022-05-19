@@ -4,10 +4,15 @@
 <script setup lang="ts">
 import { getAxiosInstance } from "./services/config";
 import { useMainStore, useMessageStore } from "./stores/main";
+import { connectStomp } from "./utils/stomp";
 const mainStore = useMainStore();
 const messageStore = useMessageStore();
-getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-  "Bearer " + mainStore.jsonWebToken;
+if (mainStore.jsonWebToken != null) {
+  getAxiosInstance(undefined).defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${mainStore.jsonWebToken}`;
+  connectStomp(mainStore, messageStore);
+}
 </script>
 
 <style lang="scss">

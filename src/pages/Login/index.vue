@@ -53,13 +53,14 @@ import {
   postAccountInfosLogin,
 } from "@/services/services";
 import { CompanyInformation, HrInformation } from "@/services/types";
-import { useMainStore } from "@/stores/main";
+import { useMainStore, useMessageStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { connectStomp } from "@/utils/stomp";
 import { ElMessage, FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 
-const store = useMainStore();
+const mainStore = useMainStore();
+const messageStore = useMessageStore();
 const ruleFormRef = ref<FormInstance>();
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
@@ -102,33 +103,33 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       postAccountInfosLogin(ruleForm)
         .then((res) => {
-          store.jsonWebToken = res.data.body.token;
-          store.accountInformation = res.data.body.accountInformation;
+          mainStore.jsonWebToken = res.data.body.token;
+          mainStore.accountInformation = res.data.body.accountInformation;
           getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
             "Bearer " + res.data.body.token;
-          getHrInfosP0(store.accountInformation.fullInformationId)
+          getHrInfosP0(mainStore.accountInformation.fullInformationId)
             .then((res) => {
               if (res.data.body.hrName !== null) {
                 if (res.data.body.companyInformationId !== null) {
                   getCompanyInfosP0(res.data.body.companyInformationId)
                     .then((res) => {
-                      store.companyInformation = res.data.body;
-                      connectStomp();
+                      mainStore.companyInformation = res.data.body;
+                      connectStomp(mainStore, messageStore);
                       router.replace("/Manage");
                     })
                     .catch((err) => {
                       failResponseHandler(err);
                     });
-                  store.hrInformation = res.data.body;
+                  mainStore.hrInformation = res.data.body;
                 } else {
-                  store.hrInformation = res.data.body;
-                  store.companyInformation =
+                  mainStore.hrInformation = res.data.body;
+                  mainStore.companyInformation =
                     null as unknown as CompanyInformation;
                   router.replace("/Home/Company");
                 }
               } else {
-                store.hrInformation = null as unknown as HrInformation;
-                store.companyInformation =
+                mainStore.hrInformation = null as unknown as HrInformation;
+                mainStore.companyInformation =
                   null as unknown as CompanyInformation;
                 router.replace({
                   name: "Person",
