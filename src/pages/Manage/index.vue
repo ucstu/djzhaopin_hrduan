@@ -51,7 +51,7 @@
             <div class="add"></div>
           </div>
           <div class="time-line">
-            <el-timeline>
+            <!-- <el-timeline>
               <el-timeline-item
                 v-for="interview in interviewNum"
                 :key="interview.updatedAt"
@@ -98,7 +98,7 @@
                   </div>
                 </el-card>
               </el-timeline-item>
-            </el-timeline>
+            </el-timeline> -->
           </div>
         </div>
       </div>

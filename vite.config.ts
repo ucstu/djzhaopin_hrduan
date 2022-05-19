@@ -1,4 +1,3 @@
-import legacy from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
@@ -45,9 +44,6 @@ export default defineConfig({
     }),
     ElementPlus({
       useSource: true,
-    }),
-    legacy({
-      targets: ["defaults", "not IE 11"],
     }),
   ],
 });
