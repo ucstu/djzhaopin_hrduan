@@ -135,7 +135,7 @@ a:hover {
     .dropdown-content {
       position: absolute;
       top: 25px;
-      left: -6px;
+      left: 5px;
       display: none;
       width: 60px;
       height: 55px;

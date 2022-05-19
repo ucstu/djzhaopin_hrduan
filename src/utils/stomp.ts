@@ -13,7 +13,7 @@ const stompClient = Stomp.over(socket);
 
 const messageIds = new Set<string>();
 
-const connect = () => {
+export const connectStomp = () => {
   stompClient.connect(
     { Authorization: "Bearer " + mainStore.jsonWebToken },
     (frame) => {
@@ -72,11 +72,9 @@ const connect = () => {
 
 const handleDisconnect = () => {
   if (mainStore.jsonWebToken) {
-    connect();
+    connectStomp();
   }
 };
-
-connect();
 
 // 发送消息
 export const sendMessage = (
@@ -104,14 +102,4 @@ export const sendMessage = (
     updatedAt: new Date().toISOString(),
     messageRecordId: "",
   });
-};
-
-export const sendPing = () => {
-  stompClient.send(
-    "/ping",
-    {},
-    JSON.stringify({
-      timestamp: new Date().toISOString(),
-    })
-  );
 };
