@@ -81,20 +81,19 @@
 import useTimeChange from "@/hooks/useTimeChange";
 import { UserInformation } from "@/services/types";
 import {
-useMainStore,
-useMessageStore,
-withReadStateMessageRecord
+  useMainStore,
+  useMessageStore,
+  withReadStateMessageRecord,
 } from "@/stores/main";
 import { ElScrollbar } from "element-plus";
 import { storeToRefs } from "pinia";
 import {
-computed,
-defineProps,
-nextTick,
-onMounted,
-PropType,
-ref,
-watchEffect
+  computed,
+  defineProps,
+  onMounted,
+  PropType,
+  ref,
+  watchEffect,
 } from "vue";
 import { useRoute } from "vue-router";
 
@@ -116,8 +115,6 @@ let props = defineProps({
   },
 });
 
-console.log(props.userInfo);
-
 const { messages: _messages } = storeToRefs(store);
 const time = ref();
 const chatList = ref<withReadStateMessageRecord[]>([]);
@@ -125,14 +122,14 @@ const formatDate = (timestamp: any) => {
   return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
 };
 watchEffect(() => {
-  if (scrollbarRef.value && chatList.value.length) {
-    nextTick(() => {
-      scrollbarRef.value!.scrollTo(
-        0,
-        scrollbarRef.value!.resize$!.offsetHeight
-      );
-    });
-  }
+  // if (scrollbarRef.value && chatList.value.length) {
+  //   nextTick(() => {
+  //     scrollbarRef.value!.scrollTo(
+  //       0,
+  //       scrollbarRef.value!.resize$!.offsetHeight
+  //     );
+  //   });
+  // }
   chatList.value =
     store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
   if (chatList.value) {
