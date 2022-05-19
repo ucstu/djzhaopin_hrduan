@@ -11,14 +11,12 @@
               class="user-avatar"
               :src="
                 VITE_CDN_URL +
-                (userinfomartion.avatarUrl
-                  ? userinfomartion.avatarUrl
-                  : '/image/heard2.jpg')
+                (userInfo.avatarUrl ? userInfo.avatarUrl : '/image/heard1.jpg')
               "
               alt=""
             />
             <span class="name">{{
-              userinfomartion.firstName + userinfomartion.lastName
+              userInfo.firstName + userInfo.lastName
             }}</span>
           </div>
           <div v-if="chat.messageType === 1" class="left-farm">
@@ -83,20 +81,20 @@
 import useTimeChange from "@/hooks/useTimeChange";
 import { UserInformation } from "@/services/types";
 import {
-  useMainStore,
-  useMessageStore,
-  withReadStateMessageRecord,
+useMainStore,
+useMessageStore,
+withReadStateMessageRecord
 } from "@/stores/main";
 import { ElScrollbar } from "element-plus";
 import { storeToRefs } from "pinia";
 import {
-  computed,
-  defineProps,
-  nextTick,
-  onMounted,
-  PropType,
-  ref,
-  watchEffect,
+computed,
+defineProps,
+nextTick,
+onMounted,
+PropType,
+ref,
+watchEffect
 } from "vue";
 import { useRoute } from "vue-router";
 
@@ -118,8 +116,9 @@ let props = defineProps({
   },
 });
 
+console.log(props.userInfo);
+
 const { messages: _messages } = storeToRefs(store);
-const userinfomartion = ref<UserInformation>({ ...props.userInfo });
 const time = ref();
 const chatList = ref<withReadStateMessageRecord[]>([]);
 const formatDate = (timestamp: any) => {
@@ -134,16 +133,14 @@ watchEffect(() => {
       );
     });
   }
-  let userinfo = props.userInfo;
-  let id = props.chatId;
-  chatList.value = store.messages[mainStore.hrInformation.hrInformationId][id];
+  chatList.value =
+    store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
   if (chatList.value) {
     chatList.value.forEach((item) => {
       item.haveRead = true;
     });
     srcList.value = chatList.value.map((obj) => obj.content);
   }
-  userinfomartion.value = userinfo;
 });
 const timeNow = (messageTime: any) => {
   let str = formatDate(messageTime);
@@ -160,12 +157,6 @@ onMounted(() => {
         store.messages[mainStore.hrInformation.hrInformationId][props.chatId]
     ).value;
   }
-  // store.messages[props.chatId].forEach((item) => {
-  //   let date=new Date(item.updatedAt);
-  //  let now= Date.now();
-
-  //   item.
-  // });
 });
 </script>
 

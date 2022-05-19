@@ -17,11 +17,11 @@
         />
       </div>
       <div class="right">
+        <Chat v-if="condition" :chat-id="ChatId" :user-info="UserInfo" />
         <el-empty
-          v-if="!condition"
+          v-else
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
         />
-        <Chat v-if="condition" :chat-id="ChatId" :user-info="UserInfo" />
         <chat-buttom :chat-id="ChatId" />
       </div>
     </div>
@@ -41,7 +41,8 @@ import {
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router";
 import Card from "./card/Card.vue";
 import Chat from "./card/Chat.vue";
 import ChatButtom from "./card/ChatButtom.vue";
@@ -55,11 +56,30 @@ const submitMessage = (val: { id: string; userInfo: UserInformation }) => {
 const UserInfo = ref<UserInformation>();
 const ChatId = ref("");
 const condition = ref(false);
-
+const route = useRoute();
 const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+
+onBeforeMount(() => {
+  if (route.params) {
+    ChatId.value = route.params.userId.toString();
+    condition.value = true;
+    const setUserInfoInterval = setInterval(() => {
+      if (userInformations.value.get(ChatId.value)) {
+        UserInfo.value = userInformations.value.get(ChatId.value);
+        clearInterval(setUserInfoInterval);
+      }
+    }, 500);
+  }
+  // store.messages[props.chatId].forEach((item) => {
+  //   let date=new Date(item.updatedAt);
+  //  let now= Date.now();
+
+  //   item.
+  // });
+});
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
   { status: [1, 2, 3, 4] }

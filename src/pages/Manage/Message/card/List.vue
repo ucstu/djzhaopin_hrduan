@@ -1,6 +1,6 @@
 <template>
-  <div id="list">
-    <el-scrollbar>
+  <el-scrollbar>
+    <div id="list">
       <div
         v-for="(messages, key) in _messages[
           mainStore.hrInformation.hrInformationId
@@ -26,8 +26,8 @@
           </div>
         </el-badge>
       </div>
-    </el-scrollbar>
-  </div>
+    </div>
+  </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -43,7 +43,8 @@ import {
   withReadStateMessageRecord,
 } from "@/stores/main";
 import { storeToRefs } from "pinia";
-import { defineProps, PropType, ref } from "vue";
+import { defineProps, onMounted, PropType, ref } from "vue";
+import { useRoute } from "vue-router";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const mainStore = useMainStore();
 const messageStore = useMessageStore();
@@ -62,7 +63,7 @@ defineProps({
     default: () => new Map(),
   },
 });
-
+const route = useRoute();
 const { messages: _messages } = storeToRefs(messageStore);
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
@@ -76,6 +77,18 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
   }
   return num;
 };
+onMounted(() => {
+  if (route.params) {
+    activeKey.value = route.params.userId.toString();
+  }
+
+  // store.messages[props.chatId].forEach((item) => {
+  //   let date=new Date(item.updatedAt);
+  //  let now= Date.now();
+
+  //   item.
+  // });
+});
 const store = useMainStore();
 const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
 for (const key in _messages.value[store.hrInformation.hrInformationId]) {
