@@ -32,6 +32,7 @@
     "@types/stompjs": "^2.3.5",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
+    "@vitejs/plugin-legacy": "^1.8.2",
     "@vitejs/plugin-vue": "^2.3.3",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",

@@ -1,3 +1,4 @@
+import legacy from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
 import AutoImport from "unplugin-auto-import/vite";
@@ -23,10 +24,15 @@ export default defineConfig({
     },
   },
   build: {
+    minify: false,
+    target: "es2015",
     sourcemap: "inline",
   },
   plugins: [
     vue(),
+    legacy({
+      targets: ["defaults", "not IE 11"],
+    }),
     checker({ typescript: true }),
     AutoImport({
       resolvers: [
