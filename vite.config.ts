@@ -22,6 +22,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    sourcemap: "inline",
+  },
   plugins: [
     vue(),
     checker({ typescript: true }),

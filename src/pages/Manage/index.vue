@@ -110,16 +110,16 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfos,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
-  putUserInfosP0DeliveryRecordsP1,
+getCompanyInfosP0DeliveryRecords,
+getCompanyInfosP0PositionInfos,
+getCompanyInfosP0PositionInfosP1,
+getUserInfosP0,
+putUserInfosP0DeliveryRecordsP1
 } from "@/services/services";
 import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
+DeliveryRecord,
+PositionInformation,
+UserInformation
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";

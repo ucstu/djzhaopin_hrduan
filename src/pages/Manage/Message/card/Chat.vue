@@ -138,7 +138,7 @@ watchEffect(() => {
   }
   userinfomartion.value = userinfo;
 });
-const timeNow = (messageTime) => {
+const timeNow = (messageTime: any) => {
   let str = formatDate(messageTime);
   str = str.replace(/-/g, "/");
   let date = new Date(str);
