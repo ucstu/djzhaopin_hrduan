@@ -346,7 +346,7 @@ const age = ["18-25岁", "25-35岁", "35-45岁", "45-55岁", "55-65岁"];
             justify-content: space-between;
             height: 50px;
 
-            .data-picker {
+            .el-data-picker {
               max-width: 200px;
               margin: 0 2px;
             }

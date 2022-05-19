@@ -253,6 +253,10 @@ getCompanyInfosP0DeliveryRecords(
             display: flex;
             align-items: center;
             height: 50px;
+
+            .el-data-picker {
+              width: 100%;
+            }
           }
         }
 
