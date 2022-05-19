@@ -1,5 +1,12 @@
-import { MessageRecord } from "@/services/types";
+import {
+  AccountInformation,
+  CompanyInformation,
+  HrInformation,
+  MessageRecord
+} from "@/services/types";
+import { withReadStateMessageRecord } from "@/stores/main";
 import { ElMessage } from "element-plus";
+import { Store } from "pinia";
 import Stomp from "stompjs";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL as string;
@@ -9,30 +16,57 @@ const stompClient = Stomp.over(socket);
 
 const messageIds = new Set<string>();
 
-let mainStore: any;
-let messageStore: any;
+let mainStore: Store<
+  "main",
+  {
+    jsonWebToken: string;
+    hrInformation: HrInformation;
+    accountInformation: AccountInformation;
+    companyInformation: CompanyInformation;
+  },
+  {},
+  {}
+>;
+let messageStore: Store<
+  "message",
+  {
+    messages: {
+      [key: string]: {
+        [key: string]: withReadStateMessageRecord[];
+      };
+    };
+  },
+  {},
+  {}
+>;
 
 // @ts-ignore
 // stompClient.debug = null;
 
 export const connectStomp = (
-  _mainStore: { jsonWebToken: string },
-  _messageStore: {
-    messages: {
-      [x: string]: {
-        haveRead: boolean;
-        content: string;
-        createdAt: string;
-        initiateId: string;
-        initiateType: number;
-        messageRecordId: string;
-        messageType: 1 | 2 | 3 | 4;
-        serviceId: string;
-        serviceType: number;
-        updatedAt: string;
-      }[];
-    };
-  }
+  _mainStore: Store<
+    "main",
+    {
+      jsonWebToken: string;
+      hrInformation: HrInformation;
+      accountInformation: AccountInformation;
+      companyInformation: CompanyInformation;
+    },
+    {},
+    {}
+  >,
+  _messageStore: Store<
+    "message",
+    {
+      messages: {
+        [key: string]: {
+          [key: string]: withReadStateMessageRecord[];
+        };
+      };
+    },
+    {},
+    {}
+  >
 ) => {
   mainStore = _mainStore;
   messageStore = _messageStore;
@@ -50,10 +84,18 @@ export const connectStomp = (
             timestamp: string;
           };
           for (const messageRecord of data.body) {
-            if (!_messageStore.messages[messageRecord.initiateId]) {
-              _messageStore.messages[messageRecord.initiateId] = [];
+            if (
+              !_messageStore.messages[mainStore.hrInformation.hrInformationId][
+                messageRecord.initiateId
+              ]
+            ) {
+              _messageStore.messages[mainStore.hrInformation.hrInformationId][
+                messageRecord.initiateId
+              ] = [];
             }
-            _messageStore.messages[messageRecord.initiateId].push({
+            _messageStore.messages[mainStore.hrInformation.hrInformationId][
+              messageRecord.initiateId
+            ].push({
               ...messageRecord,
               haveRead: false,
             });
@@ -111,10 +153,15 @@ export const sendMessage = (
     serviceType,
   };
   stompClient.send("/message", {}, JSON.stringify(message));
-  if (!messageStore.messages[serviceId]) {
-    messageStore.messages[serviceId] = [];
+  if (
+    !messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId]
+  ) {
+    messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId] =
+      [];
   }
-  messageStore.messages[serviceId].push({
+  messageStore.messages[mainStore.hrInformation.hrInformationId][
+    serviceId
+  ].push({
     ...message,
     haveRead: false,
     createdAt: new Date().toISOString(),

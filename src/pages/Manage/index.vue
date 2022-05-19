@@ -32,7 +32,7 @@
           </div>
           <div>
             <span>{{ num.countInterviewed }}</span>
-            <span> 今日已面试</span>
+            <span> 今日待面试</span>
           </div>
           <div @click="goPosition">
             <span>{{ recruitmentPosition }}</span>
@@ -49,7 +49,7 @@
             <div class="add"></div>
           </div>
           <div class="time-line">
-            <!-- <el-timeline>
+            <el-timeline>
               <el-timeline-item
                 v-for="interview in interviewNum"
                 :key="interview.updatedAt"
@@ -96,7 +96,7 @@
                   </div>
                 </el-card>
               </el-timeline-item>
-            </el-timeline> -->
+            </el-timeline>
           </div>
         </div>
       </div>
@@ -106,6 +106,7 @@
 
 <script setup lang="ts">
 import SystemHeader from "@/components/System/SystemHeader.vue";
+import useDate from "@/hooks/useDate";
 import router from "@/router";
 import {
   getCompanyInfosP0DeliveryRecords,
@@ -125,6 +126,7 @@ import { ref } from "vue";
 
 const store = useMainStore();
 const ho = new Date().getHours();
+const day = useDate(new Date());
 const interviewNum = ref<DeliveryRecord[]>([]);
 const num = ref({
   count: 0,
@@ -181,11 +183,12 @@ getCompanyInfosP0DeliveryRecords(
           );
         })
         .catch(failResponseHandler);
-      if (item.status == 4) {
+      console.log(item.interviewTime);
+      if (item.status === 1) {
         num.value.count = num.value.count + 1;
-      } else if (item.status == 2) {
+      } else if (item.status === 2) {
         num.value.countCommunication = num.value.countCommunication + 1;
-      } else if (item.status == 3) {
+      } else if (item.status === 4 && item.interviewTime === day) {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
     });

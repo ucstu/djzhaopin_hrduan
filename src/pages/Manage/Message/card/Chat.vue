@@ -129,7 +129,7 @@ watchEffect(() => {
   }
   let userinfo = props.userInfo;
   let id = props.chatId;
-  chatList.value = store.messages[id];
+  chatList.value = store.messages[mainStore.hrInformation.hrInformationId][id];
   if (chatList.value) {
     chatList.value.forEach((item) => {
       item.haveRead = true;
@@ -148,7 +148,10 @@ const timeNow = (messageTime: any) => {
 
 onMounted(() => {
   if (route.params) {
-    chatList.value = computed(() => store.messages[props.chatId]).value;
+    chatList.value = computed(
+      () =>
+        store.messages[mainStore.hrInformation.hrInformationId][props.chatId]
+    ).value;
   }
   // store.messages[props.chatId].forEach((item) => {
   //   let date=new Date(item.updatedAt);

@@ -2,7 +2,9 @@
   <div id="list">
     <el-scrollbar>
       <div
-        v-for="(messages, key) in _messages"
+        v-for="(messages, key) in _messages[
+          mainStore.hrInformation.hrInformationId
+        ]"
         :key="key"
         class="job-hunter"
         :class="{ active: key === activeKey }"
@@ -35,11 +37,16 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { useMessageStore, withReadStateMessageRecord } from "@/stores/main";
+import {
+  useMainStore,
+  useMessageStore,
+  withReadStateMessageRecord,
+} from "@/stores/main";
 import { storeToRefs } from "pinia";
 import { defineProps, PropType, ref } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
-const store = useMessageStore();
+const mainStore = useMainStore();
+const messageStore = useMessageStore();
 let emit = defineEmits(["submitMessage"]);
 defineProps({
   deliveryRecords: {
@@ -56,7 +63,7 @@ defineProps({
   },
 });
 
-const { messages: _messages } = storeToRefs(store);
+const { messages: _messages } = storeToRefs(messageStore);
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
   messages.forEach((item) => {

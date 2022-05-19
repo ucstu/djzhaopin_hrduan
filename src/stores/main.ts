@@ -43,7 +43,9 @@ export const useCompriseStore = defineStore("comprise", {
 
 export const useMessageStore = defineStore("message", {
   state: () => ({
-    messages: {} as { [key: string]: withReadStateMessageRecord[] },
+    messages: {} as {
+      [key: string]: { [key: string]: withReadStateMessageRecord[] };
+    },
   }),
   persist: {
     enabled: true,
