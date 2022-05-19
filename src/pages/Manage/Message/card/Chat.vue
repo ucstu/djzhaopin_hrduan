@@ -25,7 +25,7 @@
           </div>
           <div v-else-if="chat.messageType === 2">
             <el-image
-              :src="chat.content"
+              :src="VITE_CDN_URL + chat.content"
               alt=""
               :preview-src-list="srcList"
               :initial-index="index"
@@ -50,7 +50,7 @@
           </div>
           <div v-else-if="chat.messageType === 2">
             <el-image
-              :src="chat.content"
+              :src="VITE_CDN_URL + chat.content"
               alt=""
               :preview-src-list="srcList"
               :initial-index="index"

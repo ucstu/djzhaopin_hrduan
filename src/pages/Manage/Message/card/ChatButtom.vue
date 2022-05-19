@@ -91,7 +91,7 @@ const dealimgchange = (e: Event) => {
     if (useAvatarUpload(files[files.length - 1])) {
       postAvatars({ avatar: files[files.length - 1] })
         .then((res) => {
-          sendMessage(VITE_CDN_URL + res.data.body, 2, props.chatId, 1);
+          sendMessage(res.data.body, 2, props.chatId, 1);
         })
         .catch(failResponseHandler);
     }
