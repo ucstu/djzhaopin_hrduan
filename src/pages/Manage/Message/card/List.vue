@@ -1,28 +1,30 @@
 <template>
   <div id="list">
-    <div
-      v-for="(messages, key) in _messages"
-      :key="key"
-      class="job-hunter"
-      :class="{ active: key === activeKey }"
-      @click="selectPerson(key, _userinfos.get(key))"
-    >
-      <el-badge :value="countNum(messages)" :max="10" class="item">
-        <div class="hunter">
-          <img :src="VITE_CDN_URL + _userinfos.get(key)?.avatarUrl" alt="" />
-          <div class="hunter-info">
-            <span>{{
-              _userinfos.get(key)?.firstName +
-              "" +
-              _userinfos.get(key)?.lastName
-            }}</span>
-            <div class="info">
-              <span>{{ _userinfos.get(key)?.cityName }}</span>
+    <el-scrollbar>
+      <div
+        v-for="(messages, key) in _messages"
+        :key="key"
+        class="job-hunter"
+        :class="{ active: key === activeKey }"
+        @click="selectPerson(key, _userinfos.get(key))"
+      >
+        <el-badge :value="countNum(messages)" :max="10" class="item">
+          <div class="hunter">
+            <img :src="VITE_CDN_URL + _userinfos.get(key)?.avatarUrl" alt="" />
+            <div class="hunter-info">
+              <span>{{
+                _userinfos.get(key)?.firstName +
+                "" +
+                _userinfos.get(key)?.lastName
+              }}</span>
+              <div class="info">
+                <span>{{ _userinfos.get(key)?.cityName }}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </el-badge>
-    </div>
+        </el-badge>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -81,7 +83,6 @@ const selectPerson = (
 ) => {
   emit("submitMessage", { id: id, userInfo: userInfo });
   activeKey.value = id;
-  console.log(activeKey.value);
 };
 </script>
 
