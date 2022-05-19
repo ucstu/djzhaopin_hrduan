@@ -216,6 +216,9 @@ if (typeof route.params.postId === "string") {
 }
 const messageStore = useMessageStore();
 const toMessage = (userId: string) => {
+  if (!messageStore.messages[store.hrInformation.hrInformationId]) {
+    messageStore.messages[store.hrInformation.hrInformationId] = {};
+  }
   if (!messageStore.messages[store.hrInformation.hrInformationId][userId]) {
     sendMessage("你好，欢迎投递简历", 1, userId, 1);
   }
