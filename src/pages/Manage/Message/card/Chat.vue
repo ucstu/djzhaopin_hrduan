@@ -130,7 +130,7 @@ watchEffect(() => {
     chatList.value =
       store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
   }
-  console.log(chatList.value);
+
   if (chatList.value) {
     chatList.value.forEach((item) => {
       item.haveRead = true;

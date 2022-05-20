@@ -2,25 +2,28 @@
   <el-scrollbar height="670px">
     <div id="list">
       <div
-        v-for="(messages, key) in _messages[
+        v-for="(message, key) in props.messages[
           mainStore.hrInformation.hrInformationId
         ]"
         :key="key"
         class="job-hunter"
         :class="{ active: key === activeKey }"
-        @click="selectPerson(key, _userinfos.get(key))"
+        @click="selectPerson(key, props.userInfos.get(key))"
       >
-        <el-badge :value="countNum(messages)" :max="10" class="item">
+        <el-badge :value="countNum(message)" :max="10" class="item">
           <div class="hunter">
-            <img :src="VITE_CDN_URL + _userinfos.get(key)?.avatarUrl" alt="" />
+            <img
+              :src="VITE_CDN_URL + props.userInfos.get(key)?.avatarUrl"
+              alt=""
+            />
             <div class="hunter-info">
               <span>{{
-                _userinfos.get(key)?.firstName +
+                props.userInfos.get(key)?.firstName +
                 "" +
-                _userinfos.get(key)?.lastName
+                props.userInfos.get(key)?.lastName
               }}</span>
               <div class="info">
-                <span>{{ _userinfos.get(key)?.cityName }}</span>
+                <span>{{ props.userInfos.get(key)?.cityName }}</span>
               </div>
             </div>
           </div>
@@ -31,40 +34,44 @@
 </template>
 
 <script lang="ts" setup>
-import { getUserInfosP0 } from "@/services/services";
-import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
-} from "@/services/types";
-import {
-  useMainStore,
-  useMessageStore,
-  withReadStateMessageRecord,
-} from "@/stores/main";
-import { storeToRefs } from "pinia";
-import { defineProps, onMounted, PropType, ref } from "vue";
+import { UserInformation } from "@/services/types";
+import { useMainStore, withReadStateMessageRecord } from "@/stores/main";
+import { defineProps, onMounted, PropType, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const mainStore = useMainStore();
-const messageStore = useMessageStore();
-let emit = defineEmits(["submitMessage"]);
-defineProps({
-  deliveryRecords: {
-    type: Array as PropType<DeliveryRecord[]>,
-    default: () => [],
+const props = defineProps({
+  messages: {
+    type: Object as PropType<{
+      [x: string]: {
+        [x: string]: {
+          haveRead: boolean;
+          content: string;
+          createdAt: string;
+          initiateId: string;
+          initiateType: number;
+          messageRecordId: string;
+          messageType: 1 | 2 | 3 | 4;
+          serviceId: string;
+          serviceType: number;
+          updatedAt: string;
+        }[];
+      };
+    }>,
+    default: () => ({}),
   },
-  userInformations: {
-    type: Map as PropType<Map<string, UserInformation>>,
-    default: () => new Map(),
-  },
-  jobInformations: {
-    type: Map as PropType<Map<string, PositionInformation>>,
+  userInfos: {
+    type: Object as PropType<Map<string | number, UserInformation>>,
     default: () => new Map(),
   },
 });
+let emit = defineEmits(["submitMessage"]);
+watchEffect(() => {
+  const msg = props.messages;
+  const user = props.userInfos;
+});
 const route = useRoute();
-const { messages: _messages } = storeToRefs(messageStore);
+
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
   messages.forEach((item) => {
@@ -78,24 +85,11 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
   return num;
 };
 onMounted(() => {
-  if (route.params) {
+  if (route.params.userId) {
     activeKey.value = route.params.userId.toString();
   }
-
-  // store.messages[props.chatId].forEach((item) => {
-  //   let date=new Date(item.updatedAt);
-  //  let now= Date.now();
-
-  //   item.
-  // });
 });
-const store = useMainStore();
-const _userinfos = ref<Map<string | number, UserInformation>>(new Map());
-for (const key in _messages.value[store.hrInformation.hrInformationId]) {
-  getUserInfosP0(key).then((res) => {
-    _userinfos.value.set(key, res.data.body);
-  });
-}
+
 const activeKey = ref<string | number>("");
 const selectPerson = (
   id: string | number,

@@ -11,7 +11,6 @@
                 placeholder="按反馈"
                 clearable
                 @change="handleChange"
-                @clear="handleClear"
               >
                 <el-option
                   v-for="(item, index) in feedbackMap"
@@ -111,16 +110,16 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import {
-getCompanyInfosP0DeliveryRecords,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0,
-putUserInfosP0DeliveryRecordsP1
+  getCompanyInfosP0DeliveryRecords,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0,
+  putUserInfosP0DeliveryRecordsP1,
 } from "@/services/services";
 import {
-DeliveryRecord,
-GetCompanyInfosP0DeliveryRecordsQueryParams,
-PositionInformation,
-UserInformation
+  DeliveryRecord,
+  GetCompanyInfosP0DeliveryRecordsQueryParams,
+  PositionInformation,
+  UserInformation,
 } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
@@ -159,9 +158,7 @@ const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
     ElMessage.success("操作成功");
   });
 };
-const handleClear = () => {
-  valueMap.value.status = [1, 2, 3, 4];
-};
+
 const submitChecked = (data: { checked: boolean }) => {
   deliveryRecordsCheckeds.value.map(
     (deliveryRecordsChecked: DeliveryRecordChecked) => {
@@ -189,17 +186,26 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
       }
     );
     if (newDeliver.length > 0) {
-      //邀请面试打开寻找日期页面
-      if (interviewTime.value) {
+      if (val.state === 4) {
+        //邀请面试打开寻找日期页面
+        if (interviewTime.value) {
+          newDeliver.map((delivery: DeliveryRecordChecked) => {
+            delivery.status = val.state;
+            delivery.interviewTime = interviewTime.value;
+            confirmInterviewTime(delivery);
+          });
+          handleChange();
+          interviewTime.value = "";
+        } else {
+          ElMessage.warning("请选择面试时间");
+        }
+      } else {
         newDeliver.map((delivery: DeliveryRecordChecked) => {
           delivery.status = val.state;
           delivery.interviewTime = interviewTime.value;
           confirmInterviewTime(delivery);
         });
         handleChange();
-        interviewTime.value = "";
-      } else {
-        ElMessage.warning("请选择面试时间");
       }
     } else {
       ElMessage.error("请选择简历");
@@ -292,7 +298,6 @@ const handleWorkTimeChange = (val: Array<string>) => {
     deliveryDates.value[0] = useDate(val[0]);
     deliveryDates.value[1] = useDate(val[1]);
   } else {
-    valueMap.value.status = [1, 2, 3, 4];
     deliveryDates.value = [];
   }
   handleChange();

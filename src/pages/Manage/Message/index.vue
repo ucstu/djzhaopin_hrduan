@@ -10,9 +10,8 @@
           </div>
         </div>
         <List
-          :user-informations="userInformations"
-          :job-informations="jobInformations"
-          :delivery-records="deliveryRecords"
+          :user-infos="_userInfos"
+          :messages="_messages"
           @submit-message="submitMessage"
         />
       </div>
@@ -39,8 +38,9 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { useMainStore } from "@/stores/main";
+import { useMainStore, useMessageStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
+import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
 import Card from "./card/Card.vue";
@@ -61,9 +61,12 @@ const store = useMainStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const _userInfos = ref<Map<string | number, UserInformation>>(new Map());
+const messageStore = useMessageStore();
+const { messages: _messages } = storeToRefs(messageStore);
 
 onBeforeMount(() => {
-  if (route.params) {
+  if (route.params.userId) {
     ChatId.value = route.params.userId.toString();
     condition.value = true;
     const setUserInfoInterval = setInterval(() => {
@@ -72,13 +75,13 @@ onBeforeMount(() => {
         clearInterval(setUserInfoInterval);
       }
     }, 500);
+  } else {
+    for (const key in _messages.value[store.hrInformation.hrInformationId]) {
+      getUserInfosP0(key).then((res) => {
+        _userInfos.value.set(key, res.data.body);
+      });
+    }
   }
-  // store.messages[props.chatId].forEach((item) => {
-  //   let date=new Date(item.updatedAt);
-  //  let now= Date.now();
-
-  //   item.
-  // });
 });
 getCompanyInfosP0DeliveryRecords(
   store.companyInformation.companyInformationId,
