@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <el-scrollbar ref="scrollbarRef">
-      <div v-for="(chat, index) in chatList" :key="index" class="chat-list">
+      <div
+        v-for="(chat, index) in props.chatList"
+        :key="index"
+        class="chat-list"
+      >
         <p class="time">
           <span>{{ timeNow(chat.createdAt) }}</span>
         </p>
@@ -80,27 +84,10 @@
 <script setup lang="ts">
 import useTimeChange from "@/hooks/useTimeChange";
 import { UserInformation } from "@/services/types";
-import {
-  useMainStore,
-  useMessageStore,
-  withReadStateMessageRecord,
-} from "@/stores/main";
+import { useMainStore, withReadStateMessageRecord } from "@/stores/main";
 import { ElScrollbar } from "element-plus";
-import { storeToRefs } from "pinia";
-import {
-  computed,
-  defineProps,
-  nextTick,
-  onMounted,
-  PropType,
-  ref,
-  watchEffect,
-} from "vue";
-import { useRoute } from "vue-router";
-
+import { defineProps, nextTick, PropType, ref, watchEffect } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
-const store = useMessageStore();
-const route = useRoute();
 const mainStore = useMainStore();
 const srcList = ref<string[]>([]);
 const { avatarUrl: hravatarUrl, hrName } = mainStore.hrInformation;
@@ -114,30 +101,18 @@ let props = defineProps({
     type: Object as PropType<UserInformation>,
     default: () => ({}),
   },
+  chatList: {
+    type: Array as PropType<withReadStateMessageRecord[]>,
+    default: () => [],
+  },
 });
-
-const { messages: _messages } = storeToRefs(store);
 const time = ref();
-const chatList = ref<withReadStateMessageRecord[]>([]);
 const formatDate = (timestamp: any) => {
   return timestamp.replace(/T/g, " ").replace(/\.[\d]{3}Z/, "");
 };
 watchEffect(() => {
-  if (!store.messages[mainStore.hrInformation.hrInformationId]) {
-    store.messages[mainStore.hrInformation.hrInformationId] = {};
-  }
-  if (store.messages[mainStore.hrInformation.hrInformationId][props.chatId]) {
-    chatList.value =
-      store.messages[mainStore.hrInformation.hrInformationId][props.chatId];
-  }
-
-  if (chatList.value) {
-    chatList.value.forEach((item) => {
-      item.haveRead = true;
-    });
-    srcList.value = chatList.value.map((obj) => obj.content);
-  }
-  if (scrollbarRef.value && chatList.value.length) {
+  srcList.value = props.chatList.map((obj) => obj.content);
+  if (scrollbarRef.value && props.chatList.length) {
     nextTick(() => {
       scrollbarRef.value!.scrollTo(
         0,
@@ -153,15 +128,6 @@ const timeNow = (messageTime: any) => {
   time.value = useTimeChange(date);
   return time.value;
 };
-
-onMounted(() => {
-  if (route.params) {
-    chatList.value = computed(
-      () =>
-        store.messages[mainStore.hrInformation.hrInformationId][props.chatId]
-    ).value;
-  }
-});
 </script>
 
 <style lang="scss" scoped>

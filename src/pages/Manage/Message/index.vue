@@ -10,13 +10,18 @@
           </div>
         </div>
         <List
-          :user-infos="_userInfos"
+          :user-informations="userInformations"
           :messages="_messages"
           @submit-message="submitMessage"
         />
       </div>
       <div class="right">
-        <Chat v-if="condition" :chat-id="ChatId" :user-info="UserInfo" />
+        <Chat
+          v-if="condition"
+          :chat-id="ChatId"
+          :user-info="UserInfo"
+          :chat-list="chatList"
+        />
         <el-empty
           v-else
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
@@ -38,10 +43,14 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import { useMainStore, useMessageStore } from "@/stores/main";
+import {
+  useMainStore,
+  useMessageStore,
+  withReadStateMessageRecord,
+} from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { storeToRefs } from "pinia";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import Card from "./card/Card.vue";
 import Chat from "./card/Chat.vue";
@@ -57,34 +66,55 @@ const UserInfo = ref<UserInformation>();
 const ChatId = ref("");
 const condition = ref(false);
 const route = useRoute();
-const store = useMainStore();
+const mainStore = useMainStore();
+const store = useMessageStore();
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const _userInfos = ref<Map<string | number, UserInformation>>(new Map());
 const messageStore = useMessageStore();
 const { messages: _messages } = storeToRefs(messageStore);
-
+for (const key in _messages.value[mainStore.hrInformation.hrInformationId]) {
+  getUserInfosP0(key).then((res) => {
+    _userInfos.value.set(key, res.data.body);
+  });
+}
 onBeforeMount(() => {
-  if (route.params.userId) {
-    ChatId.value = route.params.userId.toString();
-    condition.value = true;
-    const setUserInfoInterval = setInterval(() => {
-      if (userInformations.value.get(ChatId.value)) {
-        UserInfo.value = userInformations.value.get(ChatId.value);
-        clearInterval(setUserInfoInterval);
-      }
-    }, 500);
-  } else {
-    for (const key in _messages.value[store.hrInformation.hrInformationId]) {
-      getUserInfosP0(key).then((res) => {
-        _userInfos.value.set(key, res.data.body);
-      });
+  ChatId.value = route.params.userId.toString();
+  condition.value = true;
+  const setUserInfoInterval = setInterval(() => {
+    if (userInformations.value.get(ChatId.value)) {
+      UserInfo.value = userInformations.value.get(ChatId.value);
+      clearInterval(setUserInfoInterval);
     }
+  }, 500);
+});
+const chatList = ref<withReadStateMessageRecord[]>([]);
+watchEffect(() => {
+  if (!store.messages[mainStore.hrInformation.hrInformationId]) {
+    store.messages[mainStore.hrInformation.hrInformationId] = {};
+  }
+  if (store.messages[mainStore.hrInformation.hrInformationId][ChatId.value]) {
+    chatList.value =
+      store.messages[mainStore.hrInformation.hrInformationId][ChatId.value];
+  }
+  if (chatList.value) {
+    chatList.value.forEach((item) => {
+      item.haveRead = true;
+    });
   }
 });
+onMounted(() => {
+  if (route.params) {
+    chatList.value = computed(
+      () =>
+        store.messages[mainStore.hrInformation.hrInformationId][ChatId.value]
+    ).value;
+  }
+});
+
 getCompanyInfosP0DeliveryRecords(
-  store.companyInformation.companyInformationId,
+  mainStore.companyInformation.companyInformationId,
   { status: [1, 2, 3, 4] }
 )
   .then((res) => {
@@ -99,7 +129,7 @@ getCompanyInfosP0DeliveryRecords(
         })
         .catch(failResponseHandler);
       getCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
+        mainStore.companyInformation.companyInformationId,
         item.positionInformationId
       )
         .then((responseable) => {

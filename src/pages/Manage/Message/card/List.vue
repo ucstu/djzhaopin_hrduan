@@ -8,22 +8,22 @@
         :key="key"
         class="job-hunter"
         :class="{ active: key === activeKey }"
-        @click="selectPerson(key, props.userInfos.get(key))"
+        @click="selectPerson(key, props.userInformations.get(key))"
       >
         <el-badge :value="countNum(message)" :max="10" class="item">
           <div class="hunter">
             <img
-              :src="VITE_CDN_URL + props.userInfos.get(key)?.avatarUrl"
+              :src="VITE_CDN_URL + props.userInformations.get(key)?.avatarUrl"
               alt=""
             />
             <div class="hunter-info">
               <span>{{
-                props.userInfos.get(key)?.firstName +
+                props.userInformations.get(key)?.firstName +
                 "" +
-                props.userInfos.get(key)?.lastName
+                props.userInformations.get(key)?.lastName
               }}</span>
               <div class="info">
-                <span>{{ props.userInfos.get(key)?.cityName }}</span>
+                <span>{{ props.userInformations.get(key)?.cityName }}</span>
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@ const props = defineProps({
     }>,
     default: () => ({}),
   },
-  userInfos: {
+  userInformations: {
     type: Object as PropType<Map<string | number, UserInformation>>,
     default: () => new Map(),
   },
@@ -68,7 +68,7 @@ const props = defineProps({
 let emit = defineEmits(["submitMessage"]);
 watchEffect(() => {
   const msg = props.messages;
-  const user = props.userInfos;
+  const userInfo = props.userInformations;
 });
 const route = useRoute();
 

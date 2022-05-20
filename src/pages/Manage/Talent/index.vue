@@ -30,13 +30,18 @@
                 />
               </el-select>
 
-              <el-date-picker
-                v-model="valueMap.deliveryDate"
-                type="date"
-                placeholder="选择日期"
-                class="data-picker"
-                :default-value="new Date(2010, 9, 1)"
-              />
+              <el-select
+                v-model="valueMap.education"
+                class="m-2"
+                placeholder="学历"
+              >
+                <el-option
+                  v-for="(item, index) in educationMap"
+                  :key="item"
+                  :label="item"
+                  :value="index - 1"
+                />
+              </el-select>
             </div>
             <div class="second-line">
               <el-select v-model="valueMap.sex" class="m-2" placeholder="性别">
@@ -59,7 +64,7 @@
               <el-input
                 v-model="valueMap.search"
                 class="w-50 m-2"
-                input-style="max-width: 220px;"
+                input-style="max-width: 212px;"
                 placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
@@ -132,6 +137,7 @@ const valueMap = ref({
   sex: "",
   state: "",
   workingYears: "",
+  education: "",
 });
 
 const checked = ref({ checked: false });
@@ -141,6 +147,7 @@ const gander = ["男", "女"];
 const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以上"];
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 const slution = ["随时入职", "2周内入职", "1月内入职"];
+const educationMap = ["不限", "大专", "本科", "硕士", "博士"];
 const userInfo = ref<UserInformation>();
 const JobExpectative = ref<JobExpectation[]>([]);
 // getRecommendations()
@@ -217,11 +224,6 @@ const inspectionResume = (id: string) => {
             align-items: center;
             justify-content: space-between;
             height: 50px;
-
-            .data-picker {
-              max-width: 200px;
-              margin: 0 2px;
-            }
           }
 
           .second-line {

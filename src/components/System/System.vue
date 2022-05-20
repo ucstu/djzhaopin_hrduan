@@ -41,7 +41,7 @@
                 <el-icon>
                   <search />
                 </el-icon>
-                <span>人才库</span>
+                <span>匹配人才</span>
               </el-menu-item>
               <el-menu-item index="/System/Data">
                 <el-icon>

@@ -23,7 +23,7 @@
         </div>
         <div class="label">
           <div>
-            <span>{{ interviewNum.length || "0" }}</span>
+            <span>{{ num.count }}</span>
             <span>新简历</span>
           </div>
           <div>
@@ -184,10 +184,11 @@ getCompanyInfosP0DeliveryRecords(
         })
         .catch(failResponseHandler);
 
-      if (item.status === 1 && useDate(item.createdAt) === day) {
-        num.value.count = num.value.count + 1;
-      } else if (item.status === 2) {
+      if (item.status === 1) {
         num.value.countCommunication = num.value.countCommunication + 1;
+        if (useDate(item.createdAt) === day) {
+          num.value.count = num.value.count + 1;
+        }
       } else if (item.status === 4 && item.interviewTime === day) {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }

@@ -12,6 +12,7 @@
           v-model="value1"
           type="date"
           placeholder="选择面试时间"
+          :disabled-date="disabledDate"
           @change="handleInterviewTime"
         />
         <template #reference>
@@ -56,7 +57,10 @@ let props = defineProps({
     default: () => [],
   },
 });
-
+//禁止选择今天之前的日期
+const disabledDate = (current: Date) => {
+  return current && current.valueOf() < Date.now();
+};
 const emit = defineEmits([
   "submit-page",
   "submit-checked",
