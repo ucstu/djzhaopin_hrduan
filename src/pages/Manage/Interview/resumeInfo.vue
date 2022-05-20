@@ -29,7 +29,10 @@
                 ?.lastName
             }}</span>
             <span
-              >·男·<span>{{
+              >·{{
+                userInformations.get(deliveryRecordsChecked.userInformationId)
+                  ?.sex
+              }}·<span>{{
                 userInformations.get(deliveryRecordsChecked.userInformationId)
                   ?.age
               }}</span

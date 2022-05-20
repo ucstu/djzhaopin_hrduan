@@ -38,24 +38,25 @@
             @change="handleWorkTimeChange(workTimeing)"
           />
         </div>
+
         <el-tab-pane label="获得浏览量" name="Scan">
           <Scan
             :inspection-record-counts="inspectionRecordCounts"
-            :data-info="Datainfo"
+            :data-info="dataList"
             :title="title[0]"
           />
         </el-tab-pane>
         <el-tab-pane label="获得简历量" name="Communicate">
           <Scan
             :inspection-record-counts="deliveryRecordCounts"
-            :data-info="Datainfo"
+            :data-info="dataList"
             :title="title[1]"
           />
         </el-tab-pane>
         <el-tab-pane label="在线沟通量" name="Vita">
           <Scan
             :inspection-record-counts="onlineCommunicateCounts"
-            :data-info="Datainfo"
+            :data-info="dataList"
             :title="title[2]"
           />
         </el-tab-pane>
@@ -66,9 +67,10 @@
 
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
+import useGetDayAll from "@/hooks/useGetdata";
 import { getCompanyInfosP0BigData } from "@/services/services";
-import { useMainStore } from "@/stores/main";
-import { reactive, ref } from "vue";
+import { useMainStore, useMessageStore } from "@/stores/main";
+import { reactive, ref, watchEffect } from "vue";
 import Scan from "./Scan.vue";
 const store = useMainStore();
 const workTimeing = ref<Array<string>>([]);
@@ -84,7 +86,16 @@ const state = reactive({
   currentView: "Scan",
 });
 const title = ["获得浏览量", "获得简历量", "在线沟通量"];
-const Datainfo = ref<Array<string>>();
+const Datainfo = ref<Array<string>>([""]);
+const messageStore = useMessageStore();
+
+const dataList = ref(["2022-05-01", "2022-05-01"]);
+watchEffect(() => {
+  if (!messageStore.messages[store.hrInformation.hrInformationId]) {
+    messageStore.messages[store.hrInformation.hrInformationId] = {};
+  }
+  dataList.value = useGetDayAll(Datainfo.value[0], Datainfo.value[1]);
+});
 const handleWorkTimeChange = (val: Array<string>) => {
   startTime.value = useDate(val[0]);
   endTime.value = useDate(val[1]);
@@ -100,11 +111,10 @@ const handleWorkTimeChange = (val: Array<string>) => {
     inspectionRecordCounts.value = res.data.body.map((item) => {
       return item.inspectionRecordCount;
     });
-    onlineCommunicateCounts.value = res.data.body.map((item) => {
-      return item.onlineCommunicateCount;
-    });
   });
 };
+// const onlineCommunicateCountsInfo =
+//   ref<Array<{ date: string; onlineCommunicateCount: number }>>();
 interface Data {
   date: string;
   deliveryRecordCount: number;
@@ -116,6 +126,9 @@ const yesterdayData = ref<Data>({} as Data);
 const day = new Date();
 day.setDate(day.getDate() - 1);
 yesterday.value = useDate(day);
+yesterdayData.value.onlineCommunicateCount = Object.keys(
+  messageStore.messages[store.hrInformation.hrInformationId]
+).length;
 
 getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
   startDate: yesterday.value,
@@ -127,8 +140,6 @@ getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
       res.data.body[0].deliveryRecordCount;
     yesterdayData.value.inspectionRecordCount =
       res.data.body[0].inspectionRecordCount;
-    yesterdayData.value.onlineCommunicateCount =
-      res.data.body[0].onlineCommunicateCount;
   }
 });
 </script>

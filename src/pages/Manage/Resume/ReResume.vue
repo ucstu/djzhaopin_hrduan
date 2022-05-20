@@ -58,17 +58,17 @@
                 />
               </el-select>
               <el-select
-                v-model="valueMap.ages"
+                v-model="Ages"
                 class="m-2"
                 placeholder="年龄"
                 clearable
-                @change="handleChange"
+                @change="handleAgeChange"
               >
                 <el-option
-                  v-for="(item, index) in age"
-                  :key="item"
-                  :label="item"
-                  :value="index + 1"
+                  v-for="(item, index) in ages"
+                  :key="index"
+                  :label="index"
+                  :value="index"
                 />
               </el-select>
               <el-input
@@ -109,6 +109,7 @@
 
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
+import useGetDayAll from "@/hooks/useGetdata";
 import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
@@ -157,6 +158,11 @@ const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
   ).then(() => {
     ElMessage.success("操作成功");
   });
+};
+const Ages = ref<Array<number>>([]);
+const handleAgeChange = (value: string) => {
+  valueMap.value.ages = ages.value[value];
+  handleChange();
 };
 
 const submitChecked = (data: { checked: boolean }) => {
@@ -294,18 +300,26 @@ const handleChange = () => {
     .catch(failResponseHandler);
 };
 const handleWorkTimeChange = (val: Array<string>) => {
-  if (val) {
-    deliveryDates.value[0] = useDate(val[0]);
-    deliveryDates.value[1] = useDate(val[1]);
+  if (val !== null) {
+    valueMap.value.deliveryDates = useGetDayAll(
+      useDate(val[0]),
+      useDate(val[1])
+    );
   } else {
-    deliveryDates.value = [];
+    valueMap.value.deliveryDates = [];
   }
   handleChange();
 };
 const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试"];
 const gander = ["男", "女"];
 const workExperience = ["经验不限", "在校/应届", "3-5年", "5-10年", "10年以上"];
-const age = ["18-25岁", "25-35岁", "35-45岁", "45-55岁", "55-65岁"];
+const ages = ref<{ [key: string]: Array<number> }>({
+  "18-25岁": [18, 19, 20, 21, 22, 23, 24, 25],
+  "25-35岁": [26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+  "35-45岁": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
+  "45-55岁": [46, 47, 48, 49, 50, 51, 52, 53, 54, 55],
+  "55岁以上": [56, 57, 58, 59, 60, 61, 62, 63, 64, 65],
+});
 </script>
 
 <style scoped lang="scss">

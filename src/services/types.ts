@@ -511,7 +511,7 @@ export interface GetCompanyInfosP0DeliveryRecordsQueryParams {
    *
    * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
    */
-  ages?: Array<1 | 2 | 3 | 4 | 5>;
+  ages?: Array<number>;
   /**
    *
    * 投递时间，eg：2022-04-02

@@ -5,9 +5,10 @@
         <div class="header-person">
           <img
             :src="
-              formLabelAlign.avatarUrl
-                ? VITE_CDN_URL + formLabelAlign.avatarUrl
-                : VITE_CDN_URL + imgUrl
+              VITE_CDN_URL +
+              (formLabelAlign.avatarUrl
+                ? formLabelAlign.avatarUrl
+                : '/image/heard2.jpg')
             "
             alt=""
           />

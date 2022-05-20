@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import useGetDayAll from "@/hooks/useGetdata";
 import { LineChart } from "echarts/charts";
 import {
   GridComponent,
@@ -15,7 +14,7 @@ import {
 } from "echarts/components";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { defineProps, PropType, provide, ref, watch, watchEffect } from "vue";
+import { defineProps, PropType, provide, ref, watchEffect } from "vue";
 import VChart, { THEME_KEY } from "vue-echarts";
 
 let props = defineProps({
@@ -32,8 +31,7 @@ let props = defineProps({
     default: "",
   },
 });
-const inspectDate = ref();
-const dataList = ref(["2022-05-01", "2022-05-01"]);
+
 use([
   CanvasRenderer,
   LineChart,
@@ -50,12 +48,12 @@ const option = ref({
   },
 
   xAxis: {
-    data: dataList.value,
+    data: props.dataInfo,
   },
   yAxis: {},
   series: [
     {
-      data: inspectDate.value,
+      data: props.inspectionRecordCounts,
       type: "line",
       areaStyle: {
         color: "#ff0",
@@ -64,17 +62,11 @@ const option = ref({
     },
   ],
 });
-watch(
-  () => [...props.inspectionRecordCounts],
-  (val) => {
-    inspectDate.value = val;
-  },
-  { deep: true }
-);
+
 watchEffect(() => {
-  let data = props.dataInfo;
-  dataList.value = useGetDayAll(data[0], data[1]);
-  option.value.xAxis.data = dataList.value;
+  let p = props.inspectionRecordCounts;
+  option.value.xAxis.data = props.dataInfo;
+  option.value.series[0].data = p;
 });
 </script>
 

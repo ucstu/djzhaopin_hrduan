@@ -29,11 +29,11 @@
           <div class="footer">
             <div>
               <el-checkbox v-model="totalSelect" label="全选" size="large" />
-              <el-button
+              <!-- <el-button
                 type="primary"
                 @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
                 >发出offer</el-button
-              >
+              > -->
               <el-popconfirm title="确定删除该简历?">
                 <template #reference>
                   <el-button
@@ -59,6 +59,7 @@
 
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
+import useGetDayAll from "@/hooks/useGetdata";
 import {
   getCompanyInfosP0DeliveryRecords,
   getCompanyInfosP0PositionInfosP1,
@@ -88,11 +89,11 @@ const jobInformations = ref<Map<string, PositionInformation>>(new Map());
 const deliveryDates = ref<Array<string>>(["2022-05-01", "2022-06-01"]);
 const workTimeing = ref([]);
 const handleWorkTimeChange = (val: Array<string>) => {
-  let startTime = useDate(val[0]);
-  let endTime = useDate(val[1]);
-  deliveryDates.value[0] = startTime;
-  deliveryDates.value[1] = endTime;
-
+  if (val !== null) {
+    deliveryDates.value = useGetDayAll(useDate(val[0]), useDate(val[1]));
+  } else {
+    deliveryDates.value = [];
+  }
   getCompanyInfosP0DeliveryRecords(
     store.companyInformation.companyInformationId,
     { status: [4], deliveryDates: deliveryDates.value }

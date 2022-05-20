@@ -1,34 +1,38 @@
 <template>
   <el-scrollbar height="670px">
     <div id="list">
-      <div
+      <template
         v-for="(message, key) in props.messages[
           mainStore.hrInformation.hrInformationId
         ]"
         :key="key"
-        class="job-hunter"
-        :class="{ active: key === activeKey }"
-        @click="selectPerson(key, props.userInformations.get(key))"
       >
-        <el-badge :value="countNum(message)" :max="10" class="item">
-          <div class="hunter">
-            <img
-              :src="VITE_CDN_URL + props.userInformations.get(key)?.avatarUrl"
-              alt=""
-            />
-            <div class="hunter-info">
-              <span>{{
-                props.userInformations.get(key)?.firstName +
-                "" +
-                props.userInformations.get(key)?.lastName
-              }}</span>
-              <div class="info">
-                <span>{{ props.userInformations.get(key)?.cityName }}</span>
+        <div
+          class="job-hunter"
+          :class="{ active: key === activeKey }"
+          @click="selectPerson(key, props.userInformations.get(key))"
+        >
+          <el-badge :value="countNum(message)" :max="10" class="item">
+            <div class="hunter">
+              <img
+                :src="VITE_CDN_URL + props.userInformations.get(key)?.avatarUrl"
+                alt=""
+              />
+              <div class="hunter-info">
+                <span>{{
+                  props.userInformations.get(key)?.firstName +
+                  "" +
+                  props.userInformations.get(key)?.lastName
+                }}</span>
+                <div class="info">
+                  <span>{{ props.userInformations.get(key)?.cityName }}</span>
+                </div>
+                {{ props.time }}
               </div>
             </div>
-          </div>
-        </el-badge>
-      </div>
+          </el-badge>
+        </div>
+      </template>
     </div>
   </el-scrollbar>
 </template>
@@ -64,11 +68,16 @@ const props = defineProps({
     type: Object as PropType<Map<string | number, UserInformation>>,
     default: () => new Map(),
   },
+  time: {
+    type: String,
+    default: "",
+  },
 });
 let emit = defineEmits(["submitMessage"]);
 watchEffect(() => {
   const msg = props.messages;
   const userInfo = props.userInformations;
+  console.log(props.time);
 });
 const route = useRoute();
 
