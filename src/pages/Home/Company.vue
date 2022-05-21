@@ -286,10 +286,10 @@ interface companyInfo {
   size: string;
 }
 const submitData = (data: {
-  data: { checked: any; directionName: string };
+  data: Ref<{ checked: boolean; directionName: string }>;
 }) => {
-  if (data.data.checked) {
-    formCompany.value.comprehensionName = data.data.directionName;
+  if (data.data.value.checked) {
+    formCompany.value.comprehensionName = data.data.value.directionName;
   }
 };
 

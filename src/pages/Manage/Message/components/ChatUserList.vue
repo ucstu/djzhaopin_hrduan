@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="670px">
+  <el-scrollbar>
     <div id="list">
       <template
         v-for="(message, userInformationId) in props.messages"

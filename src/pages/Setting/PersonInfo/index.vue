@@ -31,7 +31,7 @@
 
               <span>
                 建议使用招聘者真实头像提升真实性、专业性
-                支持jpg、jpeg、gif、png，小于10MB
+                支持jpg、jpeg、gif、png，小于5MB
               </span>
             </div>
           </div>

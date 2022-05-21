@@ -497,22 +497,25 @@ const cityChange = (val: Array<string>) => {
   jobTypeList.value.workCityName = val[1];
 };
 const aboutAddress = ref<any>([]);
-onMounted(() => {
-  if (route.params.PublishJobId) {
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      route.params.PublishJobId.toString()
-    )
-      .then((res) => {
-        jobTypeList.value = res.data.body;
-      })
-      .catch(failResponseHandler);
-  }
 
+const loadMap = () => {
   map.value = new AMap.Map("container", {
     zoom: 13,
-    center: [116.397428, 39.90923],
   });
+  if (jobTypeList.value.workingPlace.longitude !== null) {
+    marker.value = new AMap.Marker({
+      map: map.value,
+      position: [
+        jobTypeList.value.workingPlace.longitude,
+        jobTypeList.value.workingPlace.latitude,
+      ],
+    });
+    map.value?.add(marker.value);
+    map.value?.setCenter([
+      jobTypeList.value.workingPlace.longitude,
+      jobTypeList.value.workingPlace.latitude,
+    ]);
+  }
   AMap.plugin(
     [
       "AMap.Geolocation",
@@ -522,13 +525,6 @@ onMounted(() => {
       "AMap.Geocoder",
     ],
     function () {
-      let geolocation = new AMap.Geolocation({
-        zoomToAccuracy: true,
-      });
-      // @ts-ignore
-      geolocation.getCurrentPosition((status: any, result: any) => {
-        map.value?.setCenter(result.position);
-      });
       let citySearch = new AMap.CitySearch();
       citySearch.getLocalCity(function (status, result) {
         if (typeof result != "string") {
@@ -540,12 +536,6 @@ onMounted(() => {
             });
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
-            });
-            marker.value = new AMap.Marker({
-              position: [
-                jobTypeList.value.workingPlace.longitude,
-                jobTypeList.value.workingPlace.latitude,
-              ],
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -561,18 +551,27 @@ onMounted(() => {
         }
       });
       map.value?.on("click", (e: any) => {
-        marker.value?.setPosition(e.lnglat);
-        let lnglat = {
+        if (!marker.value) {
+          marker.value = new AMap.Marker({
+            map: map.value,
+            position: e.lnglat,
+          });
+          map.value?.add(marker.value);
+        }
+        map.value?.setCenter(e.lnglat);
+        jobTypeList.value.workingPlace = {
           longitude: e.lnglat.lng,
           latitude: e.lnglat.lat,
         };
-        jobTypeList.value.workingPlace = lnglat;
         regeoCode(e.lnglat);
       });
       let geocoder = new AMap.Geocoder();
       const regeoCode = (lnglat: any) => {
         if (!marker.value) {
-          marker.value = new AMap.Marker({});
+          marker.value = new AMap.Marker({
+            map: map.value,
+            position: lnglat,
+          });
           map.value?.add(marker.value);
         }
         marker.value.setPosition(lnglat); //设置标记的位置
@@ -582,18 +581,39 @@ onMounted(() => {
             jobTypeList.value.workAreaName = address;
           }
         });
-        marker.value.setMap(map); //在地图上显示一个标记
+        // marker.value.setMap(map.value!); //在地图上显示一个标记
       };
     }
   );
+};
+
+onMounted(() => {
+  if (route.params.PublishJobId) {
+    getCompanyInfosP0PositionInfosP1(
+      store.companyInformation.companyInformationId,
+      route.params.PublishJobId.toString()
+    )
+      .then((res) => {
+        jobTypeList.value = res.data.body;
+        cityInfo.value = [
+          jobTypeList.value.workProvinceName,
+          jobTypeList.value.workCityName,
+        ];
+        loadMap();
+      })
+      .catch(failResponseHandler);
+  } else {
+    loadMap();
+  }
 });
+
 interface CityInfo {
   children: { value: string; label: string }[];
   value: string;
   label: string;
 }
 const cityMap = ref<CityInfo[]>([]);
-const cityInfo = ref([]);
+const cityInfo = ref<string[]>([]);
 
 getCityInformations()
   .then((res) => {

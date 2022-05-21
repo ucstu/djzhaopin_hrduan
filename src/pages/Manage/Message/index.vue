@@ -9,12 +9,14 @@
             <span>快速处理</span>
           </div>
         </div>
-        <ChatUserList
-          :user-informations="userInformations"
-          :messages="messages[mainStore.accountInformation.fullInformationId]"
-          :active-user-information-id="activeUserInformationId"
-          @chat-with-user="chatWithUser"
-        />
+        <div style="height: calc(100% - 130px)">
+          <ChatUserList
+            :user-informations="userInformations"
+            :messages="messages[mainStore.accountInformation.fullInformationId]"
+            :active-user-information-id="activeUserInformationId"
+            @chat-with-user="chatWithUser"
+          />
+        </div>
       </div>
       <div class="right">
         <ChatBox
@@ -70,10 +72,10 @@ const chatWithUser = (_activeUserInformationId: string | number) => {
   }
 };
 
-const readAllMessage = (activeUserInformationId: string) => {
+const readAllMessage = (ActiveUserInformationId: string) => {
   for (const message of messages.value[
     mainStore.accountInformation.fullInformationId
-  ][activeUserInformationId]) {
+  ][ActiveUserInformationId]) {
     message.haveRead = true;
   }
 };
@@ -104,15 +106,15 @@ watchEffect(() => {
             userName: res.data.body.firstName + res.data.body.lastName,
             status: [1, 2, 3, 4, 5],
           }
-        ).then((res) => {
-          if (res.data.body.totalCount > 0) {
+        ).then((response) => {
+          if (response.data.body.totalCount > 0) {
             deliveryRecords.value.set(
               messageKey,
-              res.data.body.deliveryRecords[0]
+              response.data.body.deliveryRecords[0]
             );
             getCompanyInfosP0PositionInfosP1(
               mainStore.companyInformation.companyInformationId,
-              res.data.body.deliveryRecords[0].positionInformationId
+              response.data.body.deliveryRecords[0].positionInformationId
             ).then((res) => {
               positionInformations.value.set(
                 res.data.body.positionInformationId,
@@ -147,7 +149,7 @@ watchEffect(() => {
   .chat {
     display: flex;
     width: 95%;
-    height: 800px;
+    height: 95%;
     background-color: rgb(255 255 255);
     border: solid 1px #ccc;
     border-radius: 5px;

@@ -216,13 +216,14 @@ if (typeof route.params.postId === "string") {
 }
 const messageStore = useMessageStore();
 const toMessage = (userId: string) => {
-  if (!messageStore.messages[store.accountInformation.fullInformationId]) {
-    messageStore.messages[store.accountInformation.fullInformationId] = {};
+  if (userId === undefined) {
+    return;
   }
   if (
     !messageStore.messages[store.accountInformation.fullInformationId][userId]
   ) {
-    sendMessage("你好，欢迎投递简历", 1, userId, 1);
+    messageStore.messages[store.accountInformation.fullInformationId][userId] =
+      [];
   }
   router.push({
     name: "Message",

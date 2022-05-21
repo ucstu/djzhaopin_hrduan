@@ -88,13 +88,11 @@ const dealimgchange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[files.length - 1] })
-        .then((res) => {
-          sendMessage(res.data.body, 2, props.chatId, 1);
-        })
-        .catch(failResponseHandler);
-    }
+    postFiles({ file: files[files.length - 1] })
+      .then((res) => {
+        sendMessage(res.data.body, 2, props.chatId, 1);
+      })
+      .catch(failResponseHandler);
   }
 };
 const uploadfileInput = ref<HTMLElement | null>(null);

@@ -122,28 +122,27 @@
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import Tag from "@/pages/Home/Tag.vue";
 import {
-getCityInformations,
-postAvatars,
-putCompanyInfosP0
+  getCityInformations,
+  postAvatars,
+  putCompanyInfosP0,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance } from "element-plus";
-import { AnyKindOfDictionary } from "lodash";
-import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
+import { onMounted, onUpdated, reactive, Ref, ref, shallowRef } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const store = useMainStore();
 const dialogFormVisible = ref(false);
 const map = shallowRef<AMap.Map>();
+const marker = shallowRef<AMap.Marker>();
 const placeSearch = shallowRef();
-const marker = shallowRef();
 const aboutAddress = ref<any>([]);
 //表格数据
 const formCompany = reactive<CompanyInformation>(store.companyInformation);
-const cityInfo = ref([]);
+const cityInfo = ref<string[]>([]);
 const handleArea = (address: any) => {
   formCompany.address = address.address;
   let lnglat = {
@@ -155,20 +154,39 @@ const handleArea = (address: any) => {
     number
   ];
   formCompany.location = lnglat;
+  if (!map.value) {
+    return;
+  }
+  if (!marker.value) {
+    marker.value = new AMap.Marker({
+      map: map.value,
+      position: markerLnglat,
+    });
+    map.value?.add(marker.value);
+  }
   marker.value.setPosition(markerLnglat);
-  map.value?.add(marker.value);
-  map.value?.setCenter(markerLnglat);
+  map.value.setCenter(markerLnglat);
 };
 onUpdated(() => {
   if (formCompany) {
-    formCompany.cityName = cityInfo.value.toString();
+    formCompany.cityName = cityInfo.value[1];
   }
 });
 onMounted(() => {
   map.value = new AMap.Map("container", {
     zoom: 13,
-    center: [116.397428, 39.90923],
   });
+  if (formCompany.location.latitude !== null) {
+    marker.value = new AMap.Marker({
+      map: map.value,
+      position: [formCompany.location.longitude, formCompany.location.latitude],
+    });
+    map.value?.add(marker.value);
+    map.value?.setCenter([
+      formCompany.location.longitude,
+      formCompany.location.latitude,
+    ]);
+  }
   AMap.plugin(
     [
       "AMap.Geolocation",
@@ -178,13 +196,6 @@ onMounted(() => {
       "AMap.Geocoder",
     ],
     function () {
-      let geolocation = new AMap.Geolocation({
-        zoomToAccuracy: true,
-      });
-      // @ts-ignore
-      geolocation.getCurrentPosition((status: any, result: any) => {
-        map.value?.setCenter(result.position);
-      });
       let citySearch = new AMap.CitySearch();
       citySearch.getLocalCity(function (status, result) {
         if (typeof result != "string") {
@@ -196,9 +207,6 @@ onMounted(() => {
             });
             placeSearch.value = new AMap.PlaceSearch({
               city: result.city,
-            });
-            marker.value = new AMap.Marker({
-              position: [116.397428, 39.90923],
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -214,37 +222,46 @@ onMounted(() => {
         }
       });
       map.value?.on("click", (e: any) => {
-        marker.value?.setPosition(e.lnglat);
-        let lnglat = {
+        if (!marker.value) {
+          marker.value = new AMap.Marker({
+            map: map.value,
+            position: e.lnglat,
+          });
+          map.value?.add(marker.value);
+        }
+        map.value?.setCenter(e.lnglat);
+        formCompany.location = {
           longitude: e.lnglat.lng,
           latitude: e.lnglat.lat,
         };
-        formCompany.location = lnglat;
         regeoCode(e.lnglat);
       });
       let geocoder = new AMap.Geocoder();
       const regeoCode = (lnglat: any) => {
         if (!marker.value) {
-          marker.value = new AMap.Marker({});
+          marker.value = new AMap.Marker({
+            map: map.value,
+            position: lnglat,
+          });
           map.value?.add(marker.value);
         }
         marker.value.setPosition(lnglat); //设置标记的位置
-        geocoder.getAddress(lnglat, function (status, result:any) {
+        geocoder.getAddress(lnglat, function (status, result: any) {
           if (status === "complete" && result.regeocode) {
             var address = result.regeocode.formattedAddress;
             formCompany.address = address;
           }
         });
-        marker.value.setMap(map); //在地图上显示一个标记
+        // marker.value.setMap(map.value!); //在地图上显示一个标记
       };
     }
   );
 });
 const submitData = (data: {
-  data: { checked: boolean; directionName: string };
+  data: Ref<{ checked: boolean; fieldName: string }>;
 }) => {
-  if (data.data.checked) {
-    formCompany.comprehensionName = data.data.directionName;
+  if (data.data.value.checked) {
+    formCompany.comprehensionName = data.data.value.fieldName;
   }
 };
 const rule = reactive({
@@ -281,24 +298,22 @@ interface CityInfo {
   label: string;
 }
 const cityMap = ref<CityInfo[]>([]);
-onMounted(() => {
-  getCityInformations()
-    .then((res) => {
-      cityMap.value = res.data.body.map((item) => {
-        return {
-          value: item.provinceName,
-          label: item.provinceName,
-          children: item.cities.map((city) => {
-            return {
-              value: city,
-              label: city,
-            };
-          }),
-        };
-      });
-    })
-    .catch(failResponseHandler);
-});
+getCityInformations()
+  .then((res) => {
+    cityMap.value = res.data.body.map((item) => {
+      return {
+        value: item.provinceName,
+        label: item.provinceName,
+        children: item.cities.map((city) => {
+          return {
+            value: city,
+            label: city,
+          };
+        }),
+      };
+    });
+  })
+  .catch(failResponseHandler);
 
 const updateCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
