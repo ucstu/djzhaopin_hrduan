@@ -6,7 +6,6 @@
           <div class="item" :class="type ? 'header-left' : ' '" @click="turnUp">
             <span>个人中心</span>
           </div>
-
           <div
             class="item"
             :class="types ? 'header-right' : ' '"
@@ -15,7 +14,9 @@
             <span>企业资料</span>
           </div>
         </div>
-        <router-view></router-view>
+        <keep-alive>
+          <router-view />
+        </keep-alive>
       </div>
     </div>
   </div>

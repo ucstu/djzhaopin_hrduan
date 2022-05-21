@@ -25,7 +25,9 @@
           <span>确认信息，开始招聘</span>
         </div>
       </div>
-      <router-view />
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </div>
     <div class="bottom">
       <div></div>

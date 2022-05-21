@@ -87,12 +87,6 @@ export const connectStomp = (
           };
           for (const messageRecord of data.body) {
             if (
-              !messageStore.messages[mainStore.hrInformation.hrInformationId]
-            ) {
-              messageStore.messages[mainStore.hrInformation.hrInformationId] =
-                {};
-            }
-            if (
               !_messageStore.messages[mainStore.hrInformation.hrInformationId][
                 messageRecord.initiateId
               ]
@@ -162,16 +156,12 @@ export const sendMessage = (
     serviceType,
   };
   stompClient.send("/message", {}, JSON.stringify(message));
-  if (!messageStore.messages[mainStore.hrInformation.hrInformationId]) {
-    messageStore.messages[mainStore.hrInformation.hrInformationId] = {};
-  }
   if (
     !messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId]
   ) {
     messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId] =
       [];
   }
-
   const time = new Date().toISOString();
   messageStore.messages[mainStore.hrInformation.hrInformationId][
     serviceId

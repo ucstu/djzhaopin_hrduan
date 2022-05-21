@@ -114,6 +114,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   getCompanyInfosP0(res.data.body.companyInformationId)
                     .then((res) => {
                       mainStore.companyInformation = res.data.body;
+                      if (
+                        !messageStore.messages[
+                          mainStore.hrInformation.hrInformationId
+                        ]
+                      ) {
+                        messageStore.messages[
+                          mainStore.hrInformation.hrInformationId
+                        ] = {};
+                      }
                       connectStomp(mainStore, messageStore);
                       router.replace("/Manage");
                     })

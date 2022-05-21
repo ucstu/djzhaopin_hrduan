@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <keep-alive>
+    <router-view />
+  </keep-alive>
 </template>
 <script setup lang="ts">
 import { getAxiosInstance } from "./services/config";
@@ -11,6 +13,9 @@ if (mainStore.jsonWebToken != null) {
   getAxiosInstance(undefined).defaults.headers.common[
     "Authorization"
   ] = `Bearer ${mainStore.jsonWebToken}`;
+  if (!messageStore.messages[mainStore.hrInformation.hrInformationId]) {
+    messageStore.messages[mainStore.hrInformation.hrInformationId] = {};
+  }
   connectStomp(mainStore, messageStore);
 }
 </script>

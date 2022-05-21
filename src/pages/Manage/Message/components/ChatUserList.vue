@@ -2,32 +2,39 @@
   <el-scrollbar height="670px">
     <div id="list">
       <template
-        v-for="(message, key) in props.messages[
-          mainStore.hrInformation.hrInformationId
-        ]"
-        :key="key"
+        v-for="(message, userInformationId) in props.messages"
+        :key="userInformationId"
       >
         <div
           class="job-hunter"
-          :class="{ active: key === activeKey }"
-          @click="selectPerson(key, props.userInformations.get(key))"
+          :class="{ active: userInformationId === activeUserInformationId }"
+          @click="emits('chatWithUser', userInformationId)"
         >
+          >
           <el-badge :value="countNum(message)" :max="10" class="item">
             <div class="hunter">
               <img
-                :src="VITE_CDN_URL + props.userInformations.get(key)?.avatarUrl"
+                :src="
+                  props.userInformations.get(userInformationId)
+                    ? VITE_CDN_URL +
+                      props.userInformations.get(userInformationId)?.avatarUrl
+                    : ''
+                "
                 alt=""
               />
               <div class="hunter-info">
                 <span>{{
-                  props.userInformations.get(key)?.firstName +
-                  "" +
-                  props.userInformations.get(key)?.lastName
+                  props.userInformations.get(userInformationId)
+                    ? props.userInformations.get(userInformationId)?.firstName +
+                      "" +
+                      props.userInformations.get(userInformationId)?.lastName
+                    : ""
                 }}</span>
                 <div class="info">
-                  <span>{{ props.userInformations.get(key)?.cityName }}</span>
+                  <span>{{
+                    props.userInformations.get(userInformationId)?.cityName
+                  }}</span>
                 </div>
-                {{ props.time }}
               </div>
             </div>
           </el-badge>
@@ -39,28 +46,26 @@
 
 <script lang="ts" setup>
 import { UserInformation } from "@/services/types";
-import { useMainStore, withReadStateMessageRecord } from "@/stores/main";
-import { defineProps, onMounted, PropType, ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { withReadStateMessageRecord } from "@/stores/main";
+import { defineProps, PropType } from "vue";
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
-const mainStore = useMainStore();
+
 const props = defineProps({
   messages: {
     type: Object as PropType<{
       [x: string]: {
-        [x: string]: {
-          haveRead: boolean;
-          content: string;
-          createdAt: string;
-          initiateId: string;
-          initiateType: number;
-          messageRecordId: string;
-          messageType: 1 | 2 | 3 | 4;
-          serviceId: string;
-          serviceType: number;
-          updatedAt: string;
-        }[];
-      };
+        haveRead: boolean;
+        content: string;
+        createdAt: string;
+        initiateId: string;
+        initiateType: number;
+        messageRecordId: string;
+        messageType: 1 | 2 | 3 | 4;
+        serviceId: string;
+        serviceType: number;
+        updatedAt: string;
+      }[];
     }>,
     default: () => ({}),
   },
@@ -68,18 +73,15 @@ const props = defineProps({
     type: Object as PropType<Map<string | number, UserInformation>>,
     default: () => new Map(),
   },
-  time: {
-    type: String,
+  activeUserInformationId: {
+    type: String as PropType<string>,
     default: "",
   },
 });
-let emit = defineEmits(["submitMessage"]);
-watchEffect(() => {
-  const msg = props.messages;
-  const userInfo = props.userInformations;
-  console.log(props.time);
-});
-const route = useRoute();
+
+const emits = defineEmits<{
+  (e: "chatWithUser", activeUserInformationId: string | number): void;
+}>();
 
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
@@ -92,20 +94,6 @@ const countNum = (messages: withReadStateMessageRecord[]) => {
     return "";
   }
   return num;
-};
-onMounted(() => {
-  if (route.params.userId) {
-    activeKey.value = route.params.userId.toString();
-  }
-});
-
-const activeKey = ref<string | number>("");
-const selectPerson = (
-  id: string | number,
-  userInfo: UserInformation | undefined
-) => {
-  emit("submitMessage", { id: id, userInfo: userInfo });
-  activeKey.value = id;
 };
 </script>
 

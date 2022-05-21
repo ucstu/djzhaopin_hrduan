@@ -3,30 +3,35 @@
     <div class="chat">
       <div class="left">
         <div class="left-top">
-          <Card />
+          <SelfInformationCard />
           <div class="title">
             <span>我的消息</span>
             <span>快速处理</span>
           </div>
         </div>
-        <List
+        <ChatUserList
           :user-informations="userInformations"
-          :messages="_messages"
-          @submit-message="submitMessage"
+          :messages="messages[mainStore.hrInformation.hrInformationId]"
+          :active-user-information-id="activeUserInformationId"
+          @chat-with-user="chatWithUser"
         />
       </div>
       <div class="right">
-        <Chat
-          v-if="condition"
-          :chat-id="ChatId"
-          :user-info="UserInfo"
-          :chat-list="chatList"
+        <ChatBox
+          v-if="activeUserInformationId !== null"
+          :chat-id="activeUserInformationId"
+          :user-info="userInformations.get(activeUserInformationId)"
+          :chat-list="
+            messages[mainStore.hrInformation.hrInformationId][
+              activeUserInformationId
+            ]
+          "
         />
         <el-empty
           v-else
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
         />
-        <chat-buttom :chat-id="ChatId" />
+        <ChatBoxBottom :chat-id="activeUserInformationId" />
       </div>
     </div>
   </div>
@@ -43,73 +48,53 @@ import {
   PositionInformation,
   UserInformation,
 } from "@/services/types";
-import {
-  useMainStore,
-  useMessageStore,
-  withReadStateMessageRecord,
-} from "@/stores/main";
+import { useMainStore, useMessageStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { storeToRefs } from "pinia";
-import { computed, onBeforeMount, onMounted, ref, watchEffect } from "vue";
+import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import Card from "./card/Card.vue";
-import Chat from "./card/Chat.vue";
-import ChatButtom from "./card/ChatButtom.vue";
-import List from "./card/List.vue";
+import ChatBox from "./components/ChatBox.vue";
+import ChatBoxBottom from "./components/ChatBoxBottom.vue";
+import ChatUserList from "./components/ChatUserList.vue";
+import SelfInformationCard from "./components/SelfInformationCard.vue";
 
-const submitMessage = (val: { id: string; userInfo: UserInformation }) => {
-  condition.value = true;
-  ChatId.value = val.id;
-  UserInfo.value = val.userInfo;
-};
-const UserInfo = ref<UserInformation>();
-const ChatId = ref("");
-const condition = ref(false);
 const route = useRoute();
 const mainStore = useMainStore();
-const store = useMessageStore();
+const messageStore = useMessageStore();
+
+const activeUserInformationId = ref<string>(null as unknown as string);
+
+const chatWithUser = (_activeUserInformationId: string | number) => {
+  if (typeof _activeUserInformationId === "string") {
+    activeUserInformationId.value = _activeUserInformationId.toString();
+    readAllMessage(_activeUserInformationId);
+  }
+};
+
+const readAllMessage = (activeUserInformationId: string) => {
+  for (const message of messages.value[mainStore.hrInformation.hrInformationId][
+    activeUserInformationId
+  ]) {
+    message.haveRead = true;
+  }
+};
+
 const deliveryRecords = ref<DeliveryRecord[]>([]);
 const userInformations = ref<Map<string, UserInformation>>(new Map());
-const jobInformations = ref<Map<string, PositionInformation>>(new Map());
-const _userInfos = ref<Map<string | number, UserInformation>>(new Map());
-const messageStore = useMessageStore();
-const { messages: _messages } = storeToRefs(messageStore);
-for (const key in _messages.value[mainStore.hrInformation.hrInformationId]) {
-  getUserInfosP0(key).then((res) => {
-    _userInfos.value.set(key, res.data.body);
-  });
-}
+const positionInformations = ref<Map<string, PositionInformation>>(new Map());
+const { messages } = storeToRefs(messageStore);
+
 onBeforeMount(() => {
-  ChatId.value = route.params.userId.toString();
-  condition.value = true;
-  const setUserInfoInterval = setInterval(() => {
-    if (userInformations.value.get(ChatId.value)) {
-      UserInfo.value = userInformations.value.get(ChatId.value);
-      clearInterval(setUserInfoInterval);
-    }
-  }, 500);
+  activeUserInformationId.value = route.params.userId.toString();
 });
-const chatList = ref<withReadStateMessageRecord[]>([]);
+
 watchEffect(() => {
-  if (!store.messages[mainStore.hrInformation.hrInformationId]) {
-    store.messages[mainStore.hrInformation.hrInformationId] = {};
-  }
-  if (store.messages[mainStore.hrInformation.hrInformationId][ChatId.value]) {
-    chatList.value =
-      store.messages[mainStore.hrInformation.hrInformationId][ChatId.value];
-  }
-  if (chatList.value) {
-    chatList.value.forEach((item) => {
-      item.haveRead = true;
-    });
-  }
-});
-onMounted(() => {
-  if (route.params) {
-    chatList.value = computed(
-      () =>
-        store.messages[mainStore.hrInformation.hrInformationId][ChatId.value]
-    ).value;
+  if (
+    messages.value[mainStore.hrInformation.hrInformationId][
+      activeUserInformationId.value
+    ]
+  ) {
+    readAllMessage(activeUserInformationId.value);
   }
 });
 
@@ -132,10 +117,10 @@ getCompanyInfosP0DeliveryRecords(
         mainStore.companyInformation.companyInformationId,
         item.positionInformationId
       )
-        .then((responseable) => {
-          jobInformations.value.set(
+        .then((response) => {
+          positionInformations.value.set(
             item.positionInformationId,
-            responseable.data.body
+            response.data.body
           );
         })
         .catch(failResponseHandler);
