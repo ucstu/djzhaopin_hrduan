@@ -502,7 +502,7 @@ const loadMap = () => {
   map.value = new AMap.Map("container", {
     zoom: 13,
   });
-  if (jobTypeList.value.workingPlace.longitude !== null) {
+  if (jobTypeList.value?.workingPlace?.longitude) {
     marker.value = new AMap.Marker({
       map: map.value,
       position: [
