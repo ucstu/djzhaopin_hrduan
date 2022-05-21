@@ -91,8 +91,8 @@ const messageStore = useMessageStore();
 
 const dataList = ref(["2022-05-01", "2022-05-01"]);
 watchEffect(() => {
-  if (!messageStore.messages[store.hrInformation.hrInformationId]) {
-    messageStore.messages[store.hrInformation.hrInformationId] = {};
+  if (!messageStore.messages[store.accountInformation.fullInformationId]) {
+    messageStore.messages[store.accountInformation.fullInformationId] = {};
   }
   dataList.value = useGetDayAll(Datainfo.value[0], Datainfo.value[1]);
 });
@@ -103,7 +103,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
   getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
     startDate: startTime.value,
     endDate: endTime.value,
-    hrInformationId: store.hrInformation.hrInformationId,
+    hrInformationId: store.accountInformation.fullInformationId,
   }).then((res) => {
     deliveryRecordCounts.value = res.data.body.map((item) => {
       return item.deliveryRecordCount;
@@ -127,13 +127,13 @@ const day = new Date();
 day.setDate(day.getDate() - 1);
 yesterday.value = useDate(day);
 yesterdayData.value.onlineCommunicateCount = Object.keys(
-  messageStore.messages[store.hrInformation.hrInformationId]
+  messageStore.messages[store.accountInformation.fullInformationId]
 ).length;
 
 getCompanyInfosP0BigData(store.companyInformation.companyInformationId, {
   startDate: yesterday.value,
   endDate: yesterday.value,
-  hrInformationId: store.hrInformation.hrInformationId,
+  hrInformationId: store.accountInformation.fullInformationId,
 }).then((res) => {
   if (res.data.body.length > 0) {
     yesterdayData.value.deliveryRecordCount =

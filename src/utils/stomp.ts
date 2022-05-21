@@ -32,6 +32,7 @@ let mainStore: Store<
   {},
   {}
 >;
+
 let messageStore: Store<
   "message",
   {
@@ -87,17 +88,17 @@ export const connectStomp = (
           };
           for (const messageRecord of data.body) {
             if (
-              !_messageStore.messages[mainStore.hrInformation.hrInformationId][
-                messageRecord.initiateId
-              ]
+              !_messageStore.messages[
+                mainStore.accountInformation.fullInformationId
+              ][messageRecord.initiateId]
             ) {
-              _messageStore.messages[mainStore.hrInformation.hrInformationId][
-                messageRecord.initiateId
-              ] = [];
+              _messageStore.messages[
+                mainStore.accountInformation.fullInformationId
+              ][messageRecord.initiateId] = [];
             }
-            _messageStore.messages[mainStore.hrInformation.hrInformationId][
-              messageRecord.initiateId
-            ].push({
+            _messageStore.messages[
+              mainStore.accountInformation.fullInformationId
+            ][messageRecord.initiateId].push({
               ...messageRecord,
               haveRead: false,
             });
@@ -147,13 +148,16 @@ export const sendMessage = (
   };
   stompClient.send("/message", {}, JSON.stringify(message));
   if (
-    !messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId]
+    !messageStore.messages[mainStore.accountInformation.fullInformationId][
+      serviceId
+    ]
   ) {
-    messageStore.messages[mainStore.hrInformation.hrInformationId][serviceId] =
-      [];
+    messageStore.messages[mainStore.accountInformation.fullInformationId][
+      serviceId
+    ] = [];
   }
   const time = new Date().toISOString();
-  messageStore.messages[mainStore.hrInformation.hrInformationId][
+  messageStore.messages[mainStore.accountInformation.fullInformationId][
     serviceId
   ].push({
     ...message,

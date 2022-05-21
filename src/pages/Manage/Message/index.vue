@@ -11,7 +11,7 @@
         </div>
         <ChatUserList
           :user-informations="userInformations"
-          :messages="messages[mainStore.hrInformation.hrInformationId]"
+          :messages="messages[mainStore.accountInformation.fullInformationId]"
           :active-user-information-id="activeUserInformationId"
           @chat-with-user="chatWithUser"
         />
@@ -22,7 +22,7 @@
           :chat-id="activeUserInformationId"
           :user-info="userInformations.get(activeUserInformationId)"
           :chat-list="
-            messages[mainStore.hrInformation.hrInformationId][
+            messages[mainStore.accountInformation.fullInformationId][
               activeUserInformationId
             ]
           "
@@ -49,7 +49,6 @@ import {
   UserInformation,
 } from "@/services/types";
 import { useMainStore, useMessageStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
@@ -72,14 +71,16 @@ const chatWithUser = (_activeUserInformationId: string | number) => {
 };
 
 const readAllMessage = (activeUserInformationId: string) => {
-  for (const message of messages.value[mainStore.hrInformation.hrInformationId][
-    activeUserInformationId
-  ]) {
+  for (const message of messages.value[
+    mainStore.accountInformation.fullInformationId
+  ][activeUserInformationId]) {
     message.haveRead = true;
   }
 };
 
-const deliveryRecords = ref<DeliveryRecord[]>([]);
+let loadedInformationCount = 0;
+
+const deliveryRecords = ref<Map<string, DeliveryRecord>>(new Map());
 const userInformations = ref<Map<string, UserInformation>>(new Map());
 const positionInformations = ref<Map<string, PositionInformation>>(new Map());
 const { messages } = storeToRefs(messageStore);
@@ -89,44 +90,49 @@ onBeforeMount(() => {
 });
 
 watchEffect(() => {
+  const messageKeys = Object.keys(
+    messages.value[mainStore.accountInformation.fullInformationId]
+  );
+  const messageKeysCount = messageKeys.length;
+  if (messageKeysCount > loadedInformationCount) {
+    messageKeys.forEach((messageKey) => {
+      getUserInfosP0(messageKey).then((res) => {
+        userInformations.value.set(messageKey, res.data.body);
+        getCompanyInfosP0DeliveryRecords(
+          mainStore.companyInformation.companyInformationId,
+          {
+            userName: res.data.body.firstName + res.data.body.lastName,
+            status: [1, 2, 3, 4, 5],
+          }
+        ).then((res) => {
+          if (res.data.body.totalCount > 0) {
+            deliveryRecords.value.set(
+              messageKey,
+              res.data.body.deliveryRecords[0]
+            );
+            getCompanyInfosP0PositionInfosP1(
+              mainStore.companyInformation.companyInformationId,
+              res.data.body.deliveryRecords[0].positionInformationId
+            ).then((res) => {
+              positionInformations.value.set(
+                res.data.body.positionInformationId,
+                res.data.body
+              );
+            });
+          }
+        });
+      });
+    });
+    loadedInformationCount = messageKeysCount;
+  }
   if (
-    messages.value[mainStore.hrInformation.hrInformationId][
+    messages.value[mainStore.accountInformation.fullInformationId][
       activeUserInformationId.value
     ]
   ) {
     readAllMessage(activeUserInformationId.value);
   }
 });
-
-getCompanyInfosP0DeliveryRecords(
-  mainStore.companyInformation.companyInformationId,
-  { status: [1, 2, 3, 4] }
-)
-  .then((res) => {
-    deliveryRecords.value = res.data.body.deliveryRecords;
-    deliveryRecords.value.forEach((item) => {
-      getUserInfosP0(item.userInformationId)
-        .then((response) => {
-          userInformations.value.set(
-            item.userInformationId,
-            response.data.body
-          );
-        })
-        .catch(failResponseHandler);
-      getCompanyInfosP0PositionInfosP1(
-        mainStore.companyInformation.companyInformationId,
-        item.positionInformationId
-      )
-        .then((response) => {
-          positionInformations.value.set(
-            item.positionInformationId,
-            response.data.body
-          );
-        })
-        .catch(failResponseHandler);
-    });
-  })
-  .catch(failResponseHandler);
 </script>
 
 <style lang="scss" scoped>

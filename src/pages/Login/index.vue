@@ -48,9 +48,9 @@
 import router from "@/router";
 import { getAxiosInstance } from "@/services/config";
 import {
-  getCompanyInfosP0,
-  getHrInfosP0,
-  postAccountInfosLogin,
+getCompanyInfosP0,
+getHrInfosP0,
+postAccountInfosLogin
 } from "@/services/services";
 import { CompanyInformation, HrInformation } from "@/services/types";
 import { useMainStore, useMessageStore } from "@/stores/main";
@@ -109,21 +109,21 @@ const submitForm = (formEl: FormInstance | undefined) => {
             "Bearer " + res.data.body.token;
           getHrInfosP0(mainStore.accountInformation.fullInformationId)
             .then((res) => {
+              if (
+                !messageStore.messages[
+                  mainStore.accountInformation.fullInformationId
+                ]
+              ) {
+                messageStore.messages[
+                  mainStore.accountInformation.fullInformationId
+                ] = {};
+              }
+              connectStomp(mainStore, messageStore);
               if (res.data.body.hrName !== null) {
                 if (res.data.body.companyInformationId !== null) {
                   getCompanyInfosP0(res.data.body.companyInformationId)
                     .then((res) => {
                       mainStore.companyInformation = res.data.body;
-                      if (
-                        !messageStore.messages[
-                          mainStore.hrInformation.hrInformationId
-                        ]
-                      ) {
-                        messageStore.messages[
-                          mainStore.hrInformation.hrInformationId
-                        ] = {};
-                      }
-                      connectStomp(mainStore, messageStore);
                       router.replace("/Manage");
                     })
                     .catch((err) => {

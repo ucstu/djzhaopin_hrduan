@@ -23,8 +23,11 @@ if (mainStore.jsonWebToken != null) {
   ] = `Bearer ${mainStore.jsonWebToken}`;
   getHrInfosP0(mainStore.accountInformation.fullInformationId)
     .then((res) => {
-      if (!messageStore.messages[mainStore.hrInformation.hrInformationId]) {
-        messageStore.messages[mainStore.hrInformation.hrInformationId] = {};
+      if (
+        !messageStore.messages[mainStore.accountInformation.fullInformationId]
+      ) {
+        messageStore.messages[mainStore.accountInformation.fullInformationId] =
+          {};
       }
       connectStomp(mainStore, messageStore);
     })

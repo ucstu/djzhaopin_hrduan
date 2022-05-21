@@ -152,7 +152,7 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrInfosP0(store.hrInformation.hrInformationId, formHr)
+      putHrInfosP0(store.accountInformation.fullInformationId, formHr)
         .then((res) => {
           store.hrInformation = res.data.body;
           ElMessage.success("修改成功");
