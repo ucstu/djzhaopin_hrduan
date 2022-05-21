@@ -4,7 +4,15 @@
   </keep-alive>
 </template>
 <script setup lang="ts">
+import { ElMessage } from "element-plus";
+import router from "./router";
 import { getAxiosInstance } from "./services/config";
+import { getHrInfosP0 } from "./services/services";
+import {
+  AccountInformation,
+  CompanyInformation,
+  HrInformation,
+} from "./services/types";
 import { useMainStore, useMessageStore } from "./stores/main";
 import { connectStomp } from "./utils/stomp";
 const mainStore = useMainStore();
@@ -13,10 +21,21 @@ if (mainStore.jsonWebToken != null) {
   getAxiosInstance(undefined).defaults.headers.common[
     "Authorization"
   ] = `Bearer ${mainStore.jsonWebToken}`;
-  if (!messageStore.messages[mainStore.hrInformation.hrInformationId]) {
-    messageStore.messages[mainStore.hrInformation.hrInformationId] = {};
-  }
-  connectStomp(mainStore, messageStore);
+  getHrInfosP0(mainStore.accountInformation.fullInformationId)
+    .then((res) => {
+      if (!messageStore.messages[mainStore.hrInformation.hrInformationId]) {
+        messageStore.messages[mainStore.hrInformation.hrInformationId] = {};
+      }
+      connectStomp(mainStore, messageStore);
+    })
+    .catch(() => {
+      ElMessage.error("登录失效，请重新登录");
+      mainStore.jsonWebToken = null as unknown as string;
+      mainStore.hrInformation = null as unknown as HrInformation;
+      mainStore.accountInformation = null as unknown as AccountInformation;
+      mainStore.companyInformation = null as unknown as CompanyInformation;
+      router.replace("/Login");
+    });
 }
 </script>
 
