@@ -16,6 +16,9 @@ const VITE_BASE_URL = import.meta.env.VITE_BASE_URL as string;
 const socket = new WebSocket(`${VITE_BASE_URL.replace(/^http/, "ws")}/ws`);
 const stompClient = Stomp.over(socket);
 
+// @ts-ignore
+// stompClient.debug = null;
+
 const messageIds = new Set<string>();
 
 let mainStore: Store<
@@ -41,9 +44,6 @@ let messageStore: Store<
   {},
   {}
 >;
-
-// @ts-ignore
-// stompClient.debug = null;
 
 export const connectStomp = (
   _mainStore: Store<
@@ -121,16 +121,6 @@ export const connectStomp = (
           timestamp: string;
         };
       });
-      stompClient.subscribe("/topic/pingpong", (pong) => {});
-      setInterval(() => {
-        stompClient.send(
-          "/ping",
-          {},
-          JSON.stringify({
-            timestamp: new Date().toISOString(),
-          })
-        );
-      }, 30000);
     },
     handleDisconnect
   );
