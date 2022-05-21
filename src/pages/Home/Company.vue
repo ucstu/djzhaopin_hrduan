@@ -285,14 +285,14 @@ interface companyInfo {
   industry: string;
   size: string;
 }
+
 const submitData = (data: {
-  data: Ref<{ checked: boolean; directionName: string }>;
+  data: Ref<{ checked: boolean; fieldName: string }>;
 }) => {
   if (data.data.value.checked) {
-    formCompany.value.comprehensionName = data.data.value.directionName;
+    formCompany.value.comprehensionName = data.data.value.fieldName;
   }
 };
-
 const formInstance = reactive<companyInfo[]>([
   {
     logo: "https://tse1-mm.cn.bing.net/th/id/R-C.f6ea7adbf0fd0e4b2f3299308aa92471?rik=YzXBT59%2bWCTZBQ&riu=http%3a%2f%2fwww.gaoruiad.com%2fuploads%2fimage%2f20190621%2f20190621181458_89994.jpg&ehk=vb99sP9BQF%2fKTXBJ6pul4F95H53QX22GJ36iRya2OQs%3d&risl=&pid=ImgRaw&r=0",
