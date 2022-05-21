@@ -235,7 +235,7 @@ import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance } from "element-plus";
-import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
+import { onMounted, onUpdated, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
 import State from "./State.vue";
 import tag from "./Tag.vue";
