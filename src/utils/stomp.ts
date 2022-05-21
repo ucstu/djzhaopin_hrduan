@@ -4,7 +4,7 @@ import {
   AccountInformation,
   CompanyInformation,
   HrInformation,
-  MessageRecord
+  MessageRecord,
 } from "@/services/types";
 import { withReadStateMessageRecord } from "@/stores/main";
 import { ElMessage } from "element-plus";
@@ -20,6 +20,8 @@ const stompClient = Stomp.over(socket);
 // stompClient.debug = null;
 
 const messageIds = new Set<string>();
+
+let connected = false;
 
 let mainStore: Store<
   "main",
@@ -76,6 +78,7 @@ export const connectStomp = (
   stompClient.connect(
     { Authorization: "Bearer " + _mainStore.jsonWebToken },
     (frame) => {
+      connected = true;
       stompClient.subscribe("/user/queue/message", (message) => {
         // 每接收到一次消息都会触发这个回调
         // @ts-ignore
@@ -138,6 +141,12 @@ export const sendMessage = (
   serviceId: string,
   serviceType: number
 ) => {
+  if (!connected) {
+    ElMessage.error({
+      message: "暂未连接到消息服务器，请耐心等待或重新进入程序",
+    });
+    return;
+  }
   const message = {
     content,
     initiateId: mainStore.accountInformation.fullInformationId,
