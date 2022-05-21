@@ -366,12 +366,14 @@ onMounted(() => {
     zoom: 13,
     center: [116.397428, 39.90923],
   });
+
   AMap.plugin(
     [
       "AMap.Geolocation",
       "AMap.CitySearch",
       "AMap.AutoComplete",
       "AMap.PlaceSearch",
+      "AMap.Geocoder",
     ],
     function () {
       let geolocation = new AMap.Geolocation({
@@ -397,9 +399,6 @@ onMounted(() => {
               position: [116.397428, 39.90923],
             });
 
-            // let mark = new AMap.Marker({
-            //   mark:
-            // });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
                 e.poi.name,
@@ -413,6 +412,30 @@ onMounted(() => {
           }
         }
       });
+      map.value?.on("click", (e: any) => {
+        marker.value?.setPosition(e.lnglat);
+        let lnglat = {
+          longitude: e.lnglat.lng,
+          latitude: e.lnglat.lat,
+        };
+        formCompany.value.location = lnglat;
+        regeoCode(e.lnglat);
+      });
+      let geocoder = new AMap.Geocoder();
+      const regeoCode = (lnglat: any) => {
+        if (!marker.value) {
+          marker.value = new AMap.Marker({});
+          map.value?.add(marker.value);
+        }
+        marker.value.setPosition(lnglat); //设置标记的位置
+        geocoder.getAddress(lnglat, function (status, result: any) {
+          if (status === "complete" && result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+            formCompany.value.address = address;
+          }
+        });
+        marker.value.setMap(map); //在地图上显示一个标记
+      };
     }
   );
 });

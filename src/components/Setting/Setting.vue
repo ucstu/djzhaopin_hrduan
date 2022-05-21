@@ -13,7 +13,7 @@
         </div>
         <div>
           <router-link to="/setting/Authentication">
-            <span>身份认证</span>
+            <span>企业认证</span>
           </router-link>
         </div>
         <div>

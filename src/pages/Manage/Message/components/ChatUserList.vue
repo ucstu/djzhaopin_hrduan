@@ -10,7 +10,6 @@
           :class="{ active: userInformationId === activeUserInformationId }"
           @click="emits('chatWithUser', userInformationId)"
         >
-          >
           <el-badge :value="countNum(message)" :max="10" class="item">
             <div class="hunter">
               <img

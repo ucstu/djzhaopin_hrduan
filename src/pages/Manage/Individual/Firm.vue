@@ -122,15 +122,16 @@
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import Tag from "@/pages/Home/Tag.vue";
 import {
-  getCityInformations,
-  postAvatars,
-  putCompanyInfosP0,
+getCityInformations,
+postAvatars,
+putCompanyInfosP0
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, FormInstance } from "element-plus";
+import { AnyKindOfDictionary } from "lodash";
 import { onMounted, onUpdated, reactive, ref, shallowRef } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
@@ -174,6 +175,7 @@ onMounted(() => {
       "AMap.CitySearch",
       "AMap.AutoComplete",
       "AMap.PlaceSearch",
+      "AMap.Geocoder",
     ],
     function () {
       let geolocation = new AMap.Geolocation({
@@ -211,6 +213,30 @@ onMounted(() => {
           }
         }
       });
+      map.value?.on("click", (e: any) => {
+        marker.value?.setPosition(e.lnglat);
+        let lnglat = {
+          longitude: e.lnglat.lng,
+          latitude: e.lnglat.lat,
+        };
+        formCompany.location = lnglat;
+        regeoCode(e.lnglat);
+      });
+      let geocoder = new AMap.Geocoder();
+      const regeoCode = (lnglat: any) => {
+        if (!marker.value) {
+          marker.value = new AMap.Marker({});
+          map.value?.add(marker.value);
+        }
+        marker.value.setPosition(lnglat); //设置标记的位置
+        geocoder.getAddress(lnglat, function (status, result:any) {
+          if (status === "complete" && result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+            formCompany.address = address;
+          }
+        });
+        marker.value.setMap(map); //在地图上显示一个标记
+      };
     }
   );
 });

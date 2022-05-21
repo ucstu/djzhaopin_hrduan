@@ -38,7 +38,7 @@
         :disable-transitions="false"
         effect="plain"
         type="info"
-        @close="direction.checked = false"
+        @close="changeDirection(direction)"
         >{{ direction.directionName }}</el-tag
       >
     </div>
@@ -48,7 +48,7 @@
 import { getDirectionTags } from "@/services/services";
 import { failResponseHandler } from "@/utils/handler";
 import { onMounted, reactive, ref } from "vue";
-const emit = defineEmits(["submit-data"]);
+const emit = defineEmits(["submit-direction"]);
 interface PositionType {
   subdivisionLabels: {
     directionName: string;
@@ -56,9 +56,12 @@ interface PositionType {
   }[];
   classificationName: string;
 }
-const changeDirection = (direction: { checked: boolean }) => {
+const changeDirection = (direction: {
+  directionName: string;
+  checked: boolean;
+}) => {
   direction.checked = !direction.checked;
-  emit("submit-data", {
+  emit("submit-direction", {
     type: "direction",
     data: direction,
   });
@@ -97,6 +100,7 @@ onMounted(() => {
 .tag {
   position: relative;
   width: 80%;
+  height: 100%;
   padding: 20px;
   margin: 0 auto;
   background-color: rgb(255 255 255);
@@ -114,7 +118,7 @@ onMounted(() => {
   }
 
   .scroll {
-    height: 400px;
+    height: auto;
     border: solid 1px rgb(236 198 198);
     border-radius: 5px;
   }

@@ -2,35 +2,51 @@
   <div class="tag">
     <el-scrollbar height="400px">
       <div class="scroll">
-        <div
+        <template
           v-for="(jobType, jobTypeIndex) in checkablePositionTypes"
           :key="jobTypeIndex"
-          class="tag-field"
         >
-          <span style="margin: 5px 0">{{ jobType.fieldName }}</span>
-          <div
-            v-for="(direction, directionIndex) in jobType.directions"
-            :key="directionIndex"
-            class="tag-list"
-          >
-            <span>{{ direction.directionName }}</span>
-            <div class="list-item">
-              <div
-                v-for="(position, positionIndex) in direction.positions"
-                :key="positionIndex"
-                class="tag-item"
-              >
-                <el-check-tag
-                  ref="checkTagRef"
-                  :checked="position.value.checked"
-                  @change="changeDirection(position)"
+          <div v-if="jobType.directions.length > 0" class="tag-field">
+            <span
+              style="
+                margin: 5px 0;
+                font-weight: bolder;
+                border-bottom: 1px solid black;
+              "
+              >{{ jobType.fieldName }}</span
+            >
+            <template
+              v-for="(direction, directionIndex) in jobType.directions"
+              :key="directionIndex"
+            >
+              <div v-if="direction.positions.length > 0" class="tag-list">
+                <span
+                  style="
+                    margin: 10px 0;
+                    font-weight: bold;
+                    border-bottom: 0.5px solid darkgray;
+                  "
+                  >{{ direction.directionName }}</span
                 >
-                  {{ position.value.position }}</el-check-tag
-                >
+                <div class="list-item">
+                  <div
+                    v-for="(position, positionIndex) in direction.positions"
+                    :key="positionIndex"
+                    class="tag-item"
+                  >
+                    <el-check-tag
+                      ref="checkTagRef"
+                      :checked="position.value.checked"
+                      @change="changeDirection(position)"
+                    >
+                      {{ position.value.position }}</el-check-tag
+                    >
+                  </div>
+                </div>
               </div>
-            </div>
+            </template>
           </div>
-        </div>
+        </template>
       </div>
     </el-scrollbar>
   </div>
@@ -117,6 +133,7 @@ onMounted(() => {
   .scroll {
     height: auto;
     min-height: 400px;
+    padding: 10px;
     border: solid 1px rgb(236 198 198);
     border-radius: 5px;
   }

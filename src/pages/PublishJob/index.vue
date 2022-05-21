@@ -4,7 +4,10 @@
     <div class="upside">
       <div class="upside-lia">
         <div>
-          <span class="title">发布职位，开启招聘之旅~</span>
+          <span v-if="route.params.PublishJobId" class="title"
+            >修改职位，请注意信息的真实性噢~</span
+          >
+          <span v-else class="title">发布职位，开启招聘之旅~</span>
           <router-link to="/Manage"> 跳过发布 </router-link>
         </div>
         <div class="line"></div>
@@ -40,16 +43,24 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="职位名称" prop="positionName">
+              <el-input
+                v-model="jobTypeList.positionName"
+                placeholder="职位名称建议包括工作内容和职位等级"
+              />
+            </el-form-item>
             <el-form-item label="职位类型" prop="positionType">
               <el-input
                 v-model="jobTypeList.positionType"
                 :input-style="{ display: 'none' }"
               />
               <div class="select" @click="dialogFormVisible1 = true">
-                <span>{{ jobTypeList.positionType || "请选择" }}</span>
+                <div class="font">
+                  {{ jobTypeList.positionType || "请选择" }}
+                </div>
                 <img src="@/assets/down.png" alt="" />
               </div>
-              <el-dialog v-model="dialogFormVisible1" title="请选择公司行业">
+              <el-dialog v-model="dialogFormVisible1" title="请选择职位类型">
                 <PositionTypeTag @submit-data="submitData" />
                 <template #footer>
                   <span class="dialog-footer">
@@ -65,12 +76,49 @@
                 </template>
               </el-dialog>
             </el-form-item>
-            <el-form-item label="职位名称" prop="positionName">
+            <el-form-item label="细分标签" prop="positionType">
               <el-input
-                v-model="jobTypeList.positionName"
-                placeholder="职位名称建议包括工作内容和职位等级"
+                v-model="jobTypeList.directionTags"
+                :input-style="{ display: 'none' }"
               />
+              <div class="select" @click="dialogFormVisible2 = true">
+                <el-scrollbar>
+                  <div class="font">
+                    <div
+                      v-if="jobTypeList.directionTags"
+                      style="display: inline-block"
+                    >
+                      <el-tag
+                        v-for="(directName, index) in jobTypeList.directionTags"
+                        :key="index"
+                        class="ml-2"
+                        type="info"
+                        style="margin-right: 5px"
+                        >{{ directName }}</el-tag
+                      >
+                    </div>
+                    <div v-else class="rechar">
+                      <span> {{ "请选择" }}</span>
+                      <img src="@/assets/down.png" alt="" />
+                    </div>
+                  </div>
+                </el-scrollbar>
+              </div>
+              <el-dialog v-model="dialogFormVisible2" title="请选择细分标签">
+                <direction-tag @submit-direction="submitDirection" />
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogFormVisible2 = false"
+                      >取消</el-button
+                    >
+                    <el-button type="primary" @click="comfirmDirection"
+                      >确定</el-button
+                    >
+                  </span>
+                </template>
+              </el-dialog>
             </el-form-item>
+
             <el-form-item label="经验和学历" prop="name">
               <el-col :span="11">
                 <el-select
@@ -262,7 +310,7 @@
                 :input-style="{ display: 'none' }"
               />
               <div class="select" @click="dialogFormVisible = true">
-                <span>{{ interviewList || "请选择" }}</span>
+                <div class="font">{{ interviewList || "请选择" }}</div>
                 <img src="@/assets/down.png" alt="" />
               </div>
               <el-dialog v-model="dialogFormVisible" title="请选择职位类型">
@@ -279,7 +327,6 @@
                 </template>
               </el-dialog>
             </el-form-item>
-
             <el-form-item>
               <el-button
                 v-if="!route.params.PublishJobId"
@@ -317,6 +364,7 @@ import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { computed, onMounted, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
+import directionTag from "./directionTag.vue";
 import InterviewTag from "./InterviewTag.vue";
 import PositionTypeTag from "./positionTypeTag.vue";
 const store = useMainStore();
@@ -328,11 +376,11 @@ const marker = shallowRef();
 const jobTypeList = ref<PositionInformation>({} as PositionInformation);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
-const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
+const educationMap = reactive(["不要求", "大专", "本科", "硕士", "博士"]);
 const workingYears = reactive([
-  "不限",
-  "应届毕业生",
-  "1-3年",
+  "经验不限",
+  "在校/应届",
+  "3年及以下",
   "3-5年",
   "5-10年",
   "10年以上",
@@ -388,6 +436,7 @@ const rules = reactive({
 });
 const dialogFormVisible = ref(false);
 const dialogFormVisible1 = ref(false);
+const dialogFormVisible2 = ref(false);
 interface InterviewInfo {
   illustrate: 1 | 2 | 3 | 4;
 
@@ -406,6 +455,29 @@ const submitData = (data: {
   }>;
 }) => {
   jobTypeList.value.positionType = data.data.value.position;
+};
+const directions = ref<Array<string>>([]);
+
+const submitDirection = (data: {
+  type: string;
+  data: {
+    directionName: string;
+    checked: boolean;
+  };
+}) => {
+  if (data.data) {
+    if (data.data.checked) {
+      directions.value.push(data.data.directionName);
+    } else {
+      directions.value = directions.value.filter(
+        (item) => item !== data.data.directionName
+      );
+    }
+  }
+};
+const comfirmDirection = () => {
+  jobTypeList.value.directionTags = directions.value;
+  dialogFormVisible2.value = false;
 };
 const submitInterview = (data: {
   data: InterviewInfo;
@@ -426,6 +498,17 @@ const cityChange = (val: Array<string>) => {
 };
 const aboutAddress = ref<any>([]);
 onMounted(() => {
+  if (route.params.PublishJobId) {
+    getCompanyInfosP0PositionInfosP1(
+      store.companyInformation.companyInformationId,
+      route.params.PublishJobId.toString()
+    )
+      .then((res) => {
+        jobTypeList.value = res.data.body;
+      })
+      .catch(failResponseHandler);
+  }
+
   map.value = new AMap.Map("container", {
     zoom: 13,
     center: [116.397428, 39.90923],
@@ -436,6 +519,7 @@ onMounted(() => {
       "AMap.CitySearch",
       "AMap.AutoComplete",
       "AMap.PlaceSearch",
+      "AMap.Geocoder",
     ],
     function () {
       let geolocation = new AMap.Geolocation({
@@ -458,7 +542,10 @@ onMounted(() => {
               city: result.city,
             });
             marker.value = new AMap.Marker({
-              position: [116.397428, 39.90923],
+              position: [
+                jobTypeList.value.workingPlace.longitude,
+                jobTypeList.value.workingPlace.latitude,
+              ],
             });
             autocomplete.on("select", (e: { poi: { name: any } }) => {
               placeSearch.value.search(
@@ -473,18 +560,32 @@ onMounted(() => {
           }
         }
       });
+      map.value?.on("click", (e: any) => {
+        marker.value?.setPosition(e.lnglat);
+        let lnglat = {
+          longitude: e.lnglat.lng,
+          latitude: e.lnglat.lat,
+        };
+        jobTypeList.value.workingPlace = lnglat;
+        regeoCode(e.lnglat);
+      });
+      let geocoder = new AMap.Geocoder();
+      const regeoCode = (lnglat: any) => {
+        if (!marker.value) {
+          marker.value = new AMap.Marker({});
+          map.value?.add(marker.value);
+        }
+        marker.value.setPosition(lnglat); //设置标记的位置
+        geocoder.getAddress(lnglat, function (status, result: any) {
+          if (status === "complete" && result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+            jobTypeList.value.workAreaName = address;
+          }
+        });
+        marker.value.setMap(map); //在地图上显示一个标记
+      };
     }
   );
-  if (route.params.PublishJobId) {
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      route.params.PublishJobId.toString()
-    )
-      .then((res) => {
-        jobTypeList.value = res.data.body;
-      })
-      .catch(failResponseHandler);
-  }
 });
 interface CityInfo {
   children: { value: string; label: string }[];
@@ -674,12 +775,25 @@ a {
           border: solid 1px #dcdfe6;
           border-radius: 4px;
 
-          span {
+          .font {
             position: absolute;
             top: 4px;
             left: 12px;
+            width: 100%;
+            overflow-x: auto;
             font-size: 14px;
             color: #ababb2;
+            white-space: nowrap;
+
+            .rechar {
+              img {
+                position: absolute;
+                top: 10px;
+                right: 25px;
+                width: 16px;
+                height: 16px;
+              }
+            }
           }
 
           img {

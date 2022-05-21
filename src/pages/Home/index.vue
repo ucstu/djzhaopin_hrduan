@@ -25,9 +25,11 @@
           <span>确认信息，开始招聘</span>
         </div>
       </div>
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <router-view v-slot="{ Component }">
+        <keep-alive :include="includeList">
+          <component :is="Component"></component>
+        </keep-alive>
+      </router-view>
     </div>
     <div class="bottom">
       <div></div>
@@ -37,10 +39,10 @@
 
 <script lang="ts" setup>
 import { useMainStore } from "@/stores/main";
-import { toRefs } from "vue";
+import { ref, toRefs } from "vue";
 
 const store = useMainStore();
-
+const includeList = ref(["Person", "Company"]);
 const { hrName } = toRefs(store.hrInformation);
 </script>
 
