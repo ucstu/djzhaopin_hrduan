@@ -49,9 +49,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getPositionTypes } from "@/services/services";
+import { getDirectionTags } from "@/services/services";
 import { failResponseHandler } from "@/utils/handler";
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
 interface PositionType {
   directions: {
@@ -68,32 +68,30 @@ const checkableJobTypes = ref<PositionType[]>([]);
 
 const checkablePositions = ref<PositionType["directions"][0]["positions"]>([]);
 
-onMounted(() => {
-  getPositionTypes()
-    .then((res) => {
-      checkableJobTypes.value = res.data.body.map((jobType) => {
-        const checkableDirections = jobType.directions.map((direction) => {
-          const _checkablePositions = direction.positions.map((position) => {
-            let checkablePosition = reactive({
-              positionName: position,
-              checked: false,
-            });
-            checkablePositions.value.push(checkablePosition);
-            return checkablePosition;
+getDirectionTags({ positionName: "软件工程师" })
+  .then((res) => {
+    checkableJobTypes.value = res.data.body.map((jobType) => {
+      const checkableDirections = jobType.subdivisionLabels.map((direction) => {
+        const _checkablePositions = direction.positions.map((position) => {
+          let checkablePosition = reactive({
+            positionName: position,
+            checked: false,
           });
-          return {
-            directionName: direction.directionName,
-            positions: _checkablePositions,
-          };
+          checkablePositions.value.push(checkablePosition);
+          return checkablePosition;
         });
         return {
-          fieldName: jobType.fieldName,
-          directions: checkableDirections,
+          directionName: direction.directionName,
+          positions: _checkablePositions,
         };
       });
-    })
-    .catch(failResponseHandler);
-});
+      return {
+        fieldName: jobType.fieldName,
+        directions: checkableDirections,
+      };
+    });
+  })
+  .catch(failResponseHandler);
 </script>
 <style scoped lang="scss">
 .tag {
