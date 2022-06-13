@@ -61,7 +61,7 @@
                 <img src="@/assets/down.png" alt="" />
               </div>
               <el-dialog v-model="dialogFormVisible1" title="请选择职位类型">
-                <PositionTypeTag @submit-data="submitData" />
+                <PositionTagSelector @position-select="submitData" />
                 <template #footer>
                   <span class="dialog-footer">
                     <el-button @click="dialogFormVisible1 = false"
@@ -105,7 +105,7 @@
                 </el-scrollbar>
               </div>
               <el-dialog v-model="dialogFormVisible2" title="请选择细分标签">
-                <direction-tag @submit-direction="submitDirection" />
+                <direction-tag-selector @direction-selected="submitDirection" />
                 <template #footer>
                   <span class="dialog-footer">
                     <el-button @click="dialogFormVisible2 = false"
@@ -314,7 +314,7 @@
                 <img src="@/assets/down.png" alt="" />
               </div>
               <el-dialog v-model="dialogFormVisible" title="请选择职位类型">
-                <InterviewTag @submit-interview="submitInterview" />
+                <InterviewTagSelector @submit-interview="submitInterview" />
                 <template #footer>
                   <span class="dialog-footer">
                     <el-button @click="dialogFormVisible = false"
@@ -364,9 +364,9 @@ import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { computed, onMounted, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
-import directionTag from "./directionTag.vue";
-import InterviewTag from "./InterviewTag.vue";
-import PositionTypeTag from "./positionTypeTag.vue";
+import DirectionTagSelector from "./DirectionTagSelector.vue";
+import InterviewTagSelector from "./InterviewTagSelector.vue";
+import PositionTagSelector from "./PositionTagSelector.vue";
 const store = useMainStore();
 const route = useRoute();
 const map = shallowRef<AMap.Map>();
@@ -447,33 +447,20 @@ interface InterviewInfo {
   wheel: 1 | 2 | 3 | 4;
 }
 const interviewInfo = ref<Array<string>>([]);
-const submitData = (data: {
-  type: string;
-  data: Ref<{
-    position: string;
-    checked: boolean;
-  }>;
-}) => {
-  jobTypeList.value.positionType = data.data.value.position;
+const submitData = (data: Ref<{ tagName: string; checked: boolean }>) => {
+  jobTypeList.value.positionType = data.value.tagName;
 };
 const directions = ref<Array<string>>([]);
 
-const submitDirection = (data: {
-  type: string;
-  data: {
-    directionName: string;
-    checked: boolean;
-  };
-}) => {
-  if (data.data) {
-    if (data.data.checked) {
-      directions.value.push(data.data.directionName);
-    } else {
-      directions.value = directions.value.filter(
-        (item) => item !== data.data.directionName
-      );
-    }
-  }
+const submitDirection = (
+  data: Ref<
+    Ref<{
+      tagName: string;
+      checked: boolean;
+    }>[][]
+  >
+) => {
+  directions.value = data.value.flat().map((item) => item.value.tagName);
 };
 const comfirmDirection = () => {
   jobTypeList.value.directionTags = directions.value;

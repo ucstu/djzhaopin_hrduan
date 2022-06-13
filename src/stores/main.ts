@@ -1,8 +1,10 @@
 import {
   AccountInformation,
   CompanyInformation,
+  DirectionTags,
   HrInformation,
-  MessageRecord
+  MessageRecord,
+  PositionTypes
 } from "@/services/types";
 import { defineStore } from "pinia";
 
@@ -15,6 +17,8 @@ export const useMainStore = defineStore("main", {
     hrInformation: null as unknown as HrInformation,
     accountInformation: null as unknown as AccountInformation,
     companyInformation: null as unknown as CompanyInformation,
+    positionTypes: null as unknown as PositionTypes,
+    directionTags: null as unknown as DirectionTags,
   }),
   persist: {
     enabled: true,

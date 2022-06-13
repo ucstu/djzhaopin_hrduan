@@ -38,6 +38,7 @@
   position: relative;
   flex: 0 0 300px;
   align-items: center;
+  width: 200px;
   height: 95vh;
   background: #fff9f9;
 

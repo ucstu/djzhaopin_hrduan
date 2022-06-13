@@ -11,7 +11,12 @@
             v-if="jobType.subdivisionLabels.length > 0"
             :title="jobType.classificationName"
             :tags="jobType.subdivisionLabels"
-            @multiple-select="handleMultipleSelect"
+            :multiple="true"
+            @multiple-select="
+              (checkedTags:any) => {
+                handleMultipleSelect(checkedTags, jobTypeIndex);
+              }
+            "
           />
         </div>
       </div>
@@ -30,9 +35,9 @@
         :key="checkedDirectionTagIndex"
       >
         <el-tag
+          v-if="checkedDirectionTag.value.checked"
           class="mx-1"
           closable
-          :disable-transitions="false"
           effect="plain"
           type="info"
           @close="changeDirection(checkedDirectionTag)"
@@ -59,7 +64,7 @@ const changeDirection = (
     checked: boolean;
   }>
 ) => {
-  checkedDirectionTag.value.checked = !checkedDirectionTag.value.checked;
+  checkedDirectionTag.value.checked = false;
   emits("direction-selected", allCheckedDirectionTags);
 };
 const { directionTags } = storeToRefs(store);
@@ -73,13 +78,15 @@ const allCheckedDirectionTags = ref<
     >
   >
 >([]);
+
 const handleMultipleSelect = (
-  checkedTags: Array<Ref<{ tagName: string; checked: boolean }>>
+  checkedTags: Array<Ref<{ tagName: string; checked: boolean }>>,
+  index: number
 ) => {
-  allCheckedDirectionTags.value.push(checkedTags);
+  allCheckedDirectionTags.value[index] = checkedTags;
   emits("direction-selected", allCheckedDirectionTags);
 };
-if (directionTags === null) {
+if (directionTags.value === null) {
   getDirectionTags({ positionName: "软件工程师" })
     .then((res) => {
       store.directionTags = res.data.body;

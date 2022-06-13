@@ -51,9 +51,8 @@ const handleTagSelect = (
 ) => {
   emits("position-select", position);
 };
-
 const { positionTypes } = storeToRefs(store);
-if (positionTypes === null) {
+if (positionTypes.value === null) {
   getPositionTypes()
     .then((res) => {
       store.positionTypes = res.data.body;

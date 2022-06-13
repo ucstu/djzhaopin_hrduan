@@ -26,7 +26,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     name: "PublishJob",
     path: "/PublishJob/:PublishJobId?",
-    component: () => import("../pages/PublishJob/index.vue"),
+    component: () => import("../pages/PublishJob/PublishJob.vue"),
   },
   {
     meta: { requiresAuth: true },

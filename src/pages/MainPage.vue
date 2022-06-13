@@ -1,5 +1,8 @@
 <template>
-  <div class="common-layout">
+  <div
+    v-if="routerPath === '/System' || routerPath === '/setting'"
+    class="common-layout"
+  >
     <el-container>
       <el-header>
         <div>
@@ -7,7 +10,11 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="200px" style="background-color: rgb(240 250 250)">
+        <el-aside
+          v-if="routerPath === '/System'"
+          width="200px"
+          style="background-color: rgb(240 250 250)"
+        >
           <el-scrollbar>
             <el-menu
               active-text-color="#999"
@@ -58,19 +65,16 @@
             </el-menu>
           </el-scrollbar>
         </el-aside>
-        <el-main>
-          <router-view #="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
-        </el-main>
+
+        <el-main> </el-main>
       </el-container>
     </el-container>
   </div>
+  <CommonPage v-else />
 </template>
 
 <script setup lang="ts">
+import SystemHeader from "@/components/System/SystemHeader.vue";
 import {
   AlarmClock,
   ChatDotSquare,
@@ -80,9 +84,11 @@ import {
   Search,
   User,
 } from "@element-plus/icons-vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
-import SystemHeader from "./SystemHeader.vue";
+
 const route = useRoute();
+const routerPath = ref();
 </script>
 
 <style scoped lang="scss">
@@ -96,7 +102,9 @@ const route = useRoute();
 }
 
 .common-layout {
-  height: 100vw;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .el-container {
@@ -107,6 +115,7 @@ const route = useRoute();
   }
 
   .el-main {
+    width: 100%;
     height: 100%;
     background-color: rgb(240 255 250);
   }

@@ -1,7 +1,9 @@
 <template>
-  <keep-alive>
-    <router-view />
-  </keep-alive>
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
