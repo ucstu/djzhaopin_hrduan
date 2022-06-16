@@ -45,6 +45,7 @@
 </template>
 
 <script lang="ts" setup>
+import { encrypt } from "@/hooks/useMd5";
 import router from "@/router";
 import { getAxiosInstance } from "@/services/config";
 import {
@@ -101,7 +102,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postAccountInfosLogin(ruleForm)
+      postAccountInfosLogin({
+        ...ruleForm,
+        password: encrypt(ruleForm.password),
+      })
         .then((res) => {
           mainStore.jsonWebToken = res.data.body.token;
           mainStore.accountInformation = res.data.body.accountInformation;

@@ -19,6 +19,7 @@ import { useMainStore, useMessageStore } from "./stores/main";
 import { connectStomp } from "./utils/stomp";
 const mainStore = useMainStore();
 const messageStore = useMessageStore();
+
 if (mainStore.jsonWebToken != null) {
   getAxiosInstance(undefined).defaults.headers.common[
     "Authorization"

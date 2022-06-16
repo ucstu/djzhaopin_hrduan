@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <system-header />
+  <div class="outer">
     <div class="sidebar">
       <div class="title">
         <span>招聘设置</span>
@@ -28,61 +29,70 @@
       </div>
       <div class="line"></div>
     </div>
+    <keep-alive>
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SystemHeader from "../System/SystemHeader.vue";
+</script>
 
 <style scoped lang="scss">
-.sidebar {
-  position: relative;
-  flex: 0 0 300px;
-  align-items: center;
-  width: 200px;
-  height: 95vh;
-  background: #fff9f9;
+.outer {
+  display: flex;
+  flex-direction: row;
 
-  .title {
-    margin-top: 90px;
-    font-size: 16px;
-    text-align: center;
-    text-shadow: 4px 4px 5px rgb(50 55 62);
+  .sidebar {
+    position: relative;
+    flex: 0 0 300px;
+    align-items: center;
+    height: 95vh;
+    background: #fff9f9;
+
+    .title {
+      margin-top: 90px;
+      font-size: 16px;
+      text-align: center;
+      text-shadow: 4px 4px 5px rgb(50 55 62);
+    }
+
+    .list {
+      text-align: center;
+
+      a {
+        color: rgb(0 0 0);
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: rgb(0 139 179);
+      }
+
+      a::selection {
+        color: rgb(0 139 179);
+      }
+
+      div {
+        margin-top: 40px;
+        list-style: none;
+      }
+    }
   }
 
-  .list {
-    text-align: center;
-
-    a {
-      color: rgb(0 0 0);
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: rgb(0 139 179);
-    }
-
-    a::selection {
-      color: rgb(0 139 179);
-    }
-
-    div {
-      margin-top: 40px;
-      list-style: none;
-    }
+  .line {
+    position: absolute;
+    top: 11%;
+    right: 0;
+    width: 1px;
+    height: 70vh;
+    background-color: rgb(0 0 0 / 50%);
   }
-}
 
-.line {
-  position: absolute;
-  top: 11%;
-  right: 0;
-  width: 1px;
-  height: 70vh;
-  background-color: rgb(0 0 0 / 50%);
-}
-
-.content {
-  flex: 1;
-  background: #fff;
+  .content {
+    flex: 1;
+    background: #fff;
+  }
 }
 </style>

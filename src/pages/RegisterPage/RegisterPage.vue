@@ -70,6 +70,7 @@
 </template>
 
 <script lang="ts" setup>
+import { encrypt } from "@/hooks/useMd5";
 import router from "@/router";
 import { getVerificationCode, postAccountInfos } from "@/services/services";
 import { useMainStore } from "@/stores/main";
@@ -156,7 +157,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       postAccountInfos({
         accountType: 2,
         userName: ruleForm.user,
-        password: ruleForm.pass,
+        password: encrypt(ruleForm.pass),
         verificationCode: ruleForm.verificationCode,
       })
         .then((res) => {

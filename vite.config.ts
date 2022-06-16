@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import legacy from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
@@ -51,4 +53,8 @@ export default defineConfig({
       useSource: true,
     }),
   ],
+  // @ts-ignore
+  test: {
+    environment: "happy-dom",
+  },
 });

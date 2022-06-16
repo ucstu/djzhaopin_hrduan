@@ -32,7 +32,7 @@ const leftBarRouteList: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     path: "/Setting/",
     redirect: "/Setting/PersonInfo",
-    component: () => import("../components/Setting/Setting.vue"),
+    component: () => import("../pages/Setting/SettingSidebar.vue"),
     children: [
       {
         name: "PersonInfo",
@@ -136,12 +136,12 @@ const unAuthRouterList: RouteRecordRaw[] = [
   },
   {
     path: "/Login",
-    component: () => import("../pages/Login/index.vue"),
+    component: () => import("../pages/LoginPage/LoginPage.vue"),
     meta: { requiresAuth: false },
   },
   {
     path: "/Enroll",
-    component: () => import("../pages/Enroll/index.vue"),
+    component: () => import("../pages/RegisterPage/RegisterPage.vue"),
     meta: { requiresAuth: false },
   },
 ];
