@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import SystemHeader from "../System/SystemHeader.vue";
+import SystemHeader from "@/components/System/SystemHeader.vue";
 </script>
 
 <style scoped lang="scss">
