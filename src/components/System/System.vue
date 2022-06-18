@@ -28,7 +28,9 @@
                 <span>职位管理</span>
               </el-menu-item>
               <el-menu-item index="/System/ResumeRecevie">
-                <el-icon> <Document /> </el-icon>
+                <el-icon>
+                  <Document />
+                </el-icon>
                 <span>简历管理</span>
               </el-menu-item>
               <el-menu-item index="/System/Interview">
@@ -59,9 +61,11 @@
           </el-scrollbar>
         </el-aside>
         <el-main>
-          <keep-alive>
-            <router-view />
-          </keep-alive>
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
         </el-main>
       </el-container>
     </el-container>

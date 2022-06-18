@@ -7,6 +7,7 @@
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
+import { onMounted } from "vue";
 import router from "./router";
 import { getAxiosInstance } from "./services/config";
 import { getHrInfosP0 } from "./services/services";
@@ -25,7 +26,7 @@ if (mainStore.jsonWebToken != null) {
     "Authorization"
   ] = `Bearer ${mainStore.jsonWebToken}`;
   getHrInfosP0(mainStore.accountInformation.fullInformationId)
-    .then((res) => {
+    .then(() => {
       if (
         !messageStore.messages[mainStore.accountInformation.fullInformationId]
       ) {
@@ -43,6 +44,9 @@ if (mainStore.jsonWebToken != null) {
       router.replace("/Login");
     });
 }
+onMounted(() => {
+  document.getElementById("loading")?.remove();
+});
 </script>
 
 <style lang="scss">
@@ -50,6 +54,10 @@ if (mainStore.jsonWebToken != null) {
 ** 请将全局样式拷贝到项目的全局 CSS 文件或者当前页面的顶部 **
 ** 否则页面将无法正常显示                                  **
 ************************************************************/
+
+:root {
+  --el-color-primary: #00b38b;
+}
 
 html {
   font-size: 16px;

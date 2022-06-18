@@ -14,9 +14,11 @@
             <span>企业资料</span>
           </div>
         </div>
-        <keep-alive>
-          <router-view />
-        </keep-alive>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </div>
     </div>
   </div>

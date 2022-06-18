@@ -55,15 +55,19 @@
 </template>
 
 <script lang="ts" setup>
-import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
-import { postAvatars, postFiles } from "@/services/services";
+import { postFiles } from "@/services/services";
 import { useCompriseStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { sendMessage } from "@/utils/stomp";
-import { FolderOpened, PictureFilled, Plus } from "@element-plus/icons-vue";
+import {
+  ArrowDown,
+  FolderOpened,
+  PictureFilled,
+  Plus,
+} from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { defineProps, ref, watchEffect } from "vue";
+import { defineProps, ref } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const content = ref("");
 const store = useCompriseStore();
@@ -116,10 +120,7 @@ const dealfilechange = (e: Event) => {
       .catch(failResponseHandler);
   }
 };
-watchEffect(() => {
-  let id = props.chatId;
-});
-const sentMessage = (e: any) => {
+const sentMessage = (e: KeyboardEvent) => {
   if (e.key === "Enter") {
     if (props.chatId) {
       if (content.value) {

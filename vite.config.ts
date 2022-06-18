@@ -3,11 +3,8 @@
 import legacy from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
-import AutoImport from "unplugin-auto-import/vite";
-import ElementPlus from "unplugin-element-plus/vite";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
 import { defineConfig } from "vite";
+import importToCDN from "vite-plugin-cdn-import";
 import checker from "vite-plugin-checker";
 
 // https://vitejs.dev/config/
@@ -15,7 +12,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use './src/styles/element/index.scss' as *; @use '@/styles/them.scss' as dj;`,
+        additionalData: `@import "@/styles/them.scss";`,
       },
     },
   },
@@ -35,25 +32,72 @@ export default defineConfig({
       targets: ["defaults", "not IE 11"],
     }),
     checker({ typescript: true }),
-    AutoImport({
-      resolvers: [
-        ElementPlusResolver({
-          importStyle: "sass",
-        }),
+    importToCDN({
+      modules: [
+        {
+          name: "@element-plus/icons-vue",
+          var: "ElementPlusIconsVue",
+          path: "https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.0.4/dist/index.iife.min.js",
+        },
+        {
+          name: "axios",
+          var: "axios",
+          path: "https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js",
+        },
+        {
+          name: "echarts",
+          var: "echarts",
+          path: "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js",
+        },
+        {
+          name: "element-plus",
+          var: "ElementPlus",
+          css: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.css",
+          path: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.full.min.js",
+        },
+        {
+          name: "nprogress",
+          var: "NProgress",
+          path: "https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js",
+        },
+        {
+          name: "pinia",
+          var: "Pinia",
+          path: "https://cdn.jsdelivr.net/npm/pinia@2.0.14/dist/pinia.iife.min.js",
+        },
+        {
+          name: "pinia-plugin-persist",
+          var: "PiniaPluginPersist",
+          path: "https://cdn.jsdelivr.net/npm/pinia-plugin-persist@1.0.0/dist/pinia-persist.umd.min.js",
+        },
+        {
+          name: "qs",
+          var: "qs",
+          path: "https://cdn.jsdelivr.net/npm/qs@6.10.5/lib/index.min.js",
+        },
+        {
+          name: "stompjs",
+          var: "stompjs",
+          path: "https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js",
+        },
+        {
+          name: "vue",
+          var: "Vue",
+          path: "https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.min.js",
+        },
+        {
+          name: "vue-echarts",
+          var: "VueEcharts",
+          path: "https://cdn.jsdelivr.net/npm/vue-echarts@6.1.0/dist/index.umd.min.js",
+        },
+        {
+          name: "vue-router",
+          var: "VueRouter",
+          path: "https://cdn.jsdelivr.net/npm/vue-router@4.0.16/dist/vue-router.global.min.js",
+        },
       ],
-    }),
-    Components({
-      resolvers: [
-        ElementPlusResolver({
-          importStyle: "sass",
-        }),
-      ],
-    }),
-    ElementPlus({
-      useSource: true,
     }),
   ],
-  // @ts-ignore
   test: {
     environment: "happy-dom",
   },
