@@ -16,7 +16,7 @@ import httpAdapter from "axios/lib/adapters/http";
 import settle from "axios/lib/core/settle";
 import { ElLoading } from "element-plus";
 //@ts-ignore
-import qs from "qs";
+import Qs from "qs";
 
 Axios.defaults.adapter = function (config) {
   return new Promise((resolve, reject) => {
@@ -50,7 +50,7 @@ const baseConfig: AxiosRequestConfig = {
     Accept: "application/json",
     "Content-Type": "application/json-patch+json",
   },
-  paramsSerializer: (param) => qs.stringify(param, { indices: false }),
+  paramsSerializer: (param) => Qs.stringify(param, { indices: false }),
 };
 
 let axiosInstance: AxiosInstance;

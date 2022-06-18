@@ -50,7 +50,7 @@ export default defineConfig({
         },
         {
           name: "qs",
-          var: "qs",
+          var: "Qs",
           path: "https://cdn.jsdelivr.net/npm/qs@6.10.5/dist/qs.js",
         },
         {
