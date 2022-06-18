@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 
-import legacy from "@vitejs/plugin-legacy";
+// import legacy from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
 import { defineConfig } from "vite";
@@ -24,20 +24,19 @@ export default defineConfig({
   },
   build: {
     target: "es2015",
-    sourcemap: "inline",
   },
   plugins: [
     vue(),
-    legacy({
-      targets: ["defaults", "not IE 11"],
-    }),
+    // legacy({
+    //   targets: ["defaults", "not IE 11"],
+    // }),
     checker({ typescript: true }),
     importToCDN({
       modules: [
         {
-          name: "@element-plus/icons-vue",
-          var: "ElementPlusIconsVue",
-          path: "https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.0.4/dist/index.iife.min.js",
+          name: "nprogress",
+          var: "NProgress",
+          path: "https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js",
         },
         {
           name: "axios",
@@ -50,15 +49,29 @@ export default defineConfig({
           path: "https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js",
         },
         {
-          name: "element-plus",
-          var: "ElementPlus",
-          css: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.css",
-          path: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.full.min.js",
+          name: "qs",
+          var: "qs",
+          path: "https://cdn.jsdelivr.net/npm/qs@6.10.5/dist/qs.js",
         },
         {
-          name: "nprogress",
-          var: "NProgress",
-          path: "https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js",
+          name: "stompjs",
+          var: "Stomp",
+          path: "https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js",
+        },
+        {
+          name: "vue",
+          var: "Vue",
+          path: "https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.prod.js",
+        },
+        // {
+        //   name: "pinia-plugin-persist",
+        //   var: "PiniaPluginPersist",
+        //   path: "https://cdn.jsdelivr.net/npm/pinia-plugin-persist@1.0.0/dist/pinia-persist.umd.min.js",
+        // },
+        {
+          name: "vue-echarts",
+          var: "VueECharts",
+          path: "https://cdn.jsdelivr.net/npm/vue-echarts@6.1.0/dist/index.umd.min.js",
         },
         {
           name: "pinia",
@@ -66,34 +79,20 @@ export default defineConfig({
           path: "https://cdn.jsdelivr.net/npm/pinia@2.0.14/dist/pinia.iife.min.js",
         },
         {
-          name: "pinia-plugin-persist",
-          var: "PiniaPluginPersist",
-          path: "https://cdn.jsdelivr.net/npm/pinia-plugin-persist@1.0.0/dist/pinia-persist.umd.min.js",
-        },
-        {
-          name: "qs",
-          var: "qs",
-          path: "https://cdn.jsdelivr.net/npm/qs@6.10.5/lib/index.min.js",
-        },
-        {
-          name: "stompjs",
-          var: "stompjs",
-          path: "https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js",
-        },
-        {
-          name: "vue",
-          var: "Vue",
-          path: "https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.min.js",
-        },
-        {
-          name: "vue-echarts",
-          var: "VueEcharts",
-          path: "https://cdn.jsdelivr.net/npm/vue-echarts@6.1.0/dist/index.umd.min.js",
-        },
-        {
           name: "vue-router",
           var: "VueRouter",
           path: "https://cdn.jsdelivr.net/npm/vue-router@4.0.16/dist/vue-router.global.min.js",
+        },
+        {
+          name: "@element-plus/icons-vue",
+          var: "ElementPlusIconsVue",
+          path: "https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.0.4/dist/index.iife.min.js",
+        },
+        {
+          name: "element-plus",
+          var: "ElementPlus",
+          css: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.css",
+          path: "https://cdn.jsdelivr.net/npm/element-plus@2.2.5/dist/index.full.min.js",
         },
       ],
     }),
