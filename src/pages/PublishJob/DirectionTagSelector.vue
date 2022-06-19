@@ -48,7 +48,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { getDirectionTags } from "@/services/services";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { storeToRefs } from "pinia";
@@ -86,13 +85,6 @@ const handleMultipleSelect = (
   allCheckedDirectionTags.value[index] = checkedTags;
   emits("direction-selected", allCheckedDirectionTags);
 };
-if (directionTags.value === null) {
-  getDirectionTags({ positionName: "软件工程师" })
-    .then((res) => {
-      store.directionTags = res.data.body;
-    })
-    .catch(failResponseHandler);
-}
 </script>
 <style scoped lang="scss">
 .tag {

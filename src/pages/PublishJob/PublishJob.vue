@@ -353,6 +353,7 @@ import SystemHeader from "@/components/System/SystemHeader.vue";
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
+  getDirectionTags,
   getCityInformations,
   getCompanyInfosP0PositionInfosP1,
   postCompanyInfosP0PositionInfos,
@@ -593,6 +594,15 @@ onMounted(() => {
     loadMap();
   }
 });
+
+const { directionTags } = storeToRefs(store);
+if (directionTags.value === null) {
+  getDirectionTags({ positionName: "软件工程师" })
+    .then((res) => {
+      store.directionTags = res.data.body;
+    })
+    .catch(failResponseHandler);
+}
 
 interface CityInfo {
   children: { value: string; label: string }[];
