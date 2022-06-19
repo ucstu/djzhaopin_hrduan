@@ -365,6 +365,7 @@ import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
 import { computed, onMounted, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
 import DirectionTagSelector from "./DirectionTagSelector.vue";
 import InterviewTagSelector from "./InterviewTagSelector.vue";
 import PositionTagSelector from "./PositionTagSelector.vue";
