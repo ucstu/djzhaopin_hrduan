@@ -61,11 +61,7 @@
           </el-scrollbar>
         </el-aside>
         <el-main>
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>

@@ -48,8 +48,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import TagSelectBlock from "@/components/TagSelectBlock.vue";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
 import { storeToRefs } from "pinia";
 import { ref, Ref } from "vue";
 const store = useMainStore();

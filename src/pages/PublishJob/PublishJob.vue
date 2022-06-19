@@ -662,12 +662,14 @@ const publishPost = (formEl: FormInstance | undefined) => {
         store.accountInformation.fullInformationId;
       jobTypeList.value.companyInformationId =
         store.companyInformation.companyInformationId;
+      handleWorkTimeChange(workTimeing.value);
       postCompanyInfosP0PositionInfos(
         store.companyInformation.companyInformationId,
         jobTypeList.value
       )
         .then(() => {
           ElMessage.success("恭喜您，职位发布成功");
+          jobTypeList.value = {};
           router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);
@@ -689,6 +691,7 @@ const updatePost = (formEl: FormInstance | undefined) => {
       )
         .then(() => {
           ElMessage.success("恭喜您，职位修改成功");
+          jobTypeList.value = {};
           router.go(-1);
         })
         .catch(failResponseHandler);

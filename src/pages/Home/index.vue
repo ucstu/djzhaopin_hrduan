@@ -25,11 +25,7 @@
           <span>确认信息，开始招聘</span>
         </div>
       </div>
-      <router-view v-slot="{ Component }">
-        <keep-alive :include="includeList">
-          <component :is="Component"></component>
-        </keep-alive>
-      </router-view>
+      <router-view></router-view>
     </div>
     <div class="bottom">
       <div></div>
