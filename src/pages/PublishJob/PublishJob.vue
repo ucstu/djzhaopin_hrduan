@@ -690,7 +690,6 @@ const updatePost = (formEl: FormInstance | undefined) => {
       )
         .then(() => {
           ElMessage.success("恭喜您，职位修改成功");
-          jobTypeList.value = {};
           router.go(-1);
         })
         .catch(failResponseHandler);
