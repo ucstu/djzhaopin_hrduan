@@ -669,7 +669,6 @@ const publishPost = (formEl: FormInstance | undefined) => {
       )
         .then(() => {
           ElMessage.success("恭喜您，职位发布成功");
-          jobTypeList.value = {};
           router.push({ name: "Manage" });
         })
         .catch(failResponseHandler);
