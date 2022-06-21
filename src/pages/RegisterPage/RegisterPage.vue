@@ -23,7 +23,7 @@
               v-model="ruleForm.user"
               type="text"
               autocomplete="off"
-              placeholder="请输入用户名"
+              placeholder="请输入邮箱地址"
             />
           </el-form-item>
           <el-form-item label="密码" prop="pass">
