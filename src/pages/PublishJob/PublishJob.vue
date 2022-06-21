@@ -452,7 +452,7 @@ const interviewInfo = ref<Array<string>>([]);
 const submitData = (data: Ref<{ tagName: string; checked: boolean }>) => {
   jobTypeList.value.positionType = data.value.tagName;
 };
-const directions = ref<Array<string>>([]);
+const directions = ref<Array<Array<string>>>([]);
 
 const submitDirection = (
   data: Ref<
