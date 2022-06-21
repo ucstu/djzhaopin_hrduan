@@ -10,6 +10,7 @@ import { withReadStateMessageRecord } from "@/stores/main";
 import { ElMessage } from "element-plus";
 import { Store } from "pinia";
 import Stomp from "stompjs";
+import { ref } from "vue";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
@@ -21,7 +22,7 @@ const stompClient = Stomp.over(socket);
 
 const messageIds = new Set<string>();
 
-let connected = false;
+export const connected = ref(false);
 
 let mainStore: Store<
   "main",
@@ -78,7 +79,7 @@ export const connectStomp = (
   stompClient.connect(
     { Authorization: "Bearer " + _mainStore.jsonWebToken },
     (frame) => {
-      connected = true;
+      connected.value = true;
       stompClient.subscribe("/user/queue/message", (message) => {
         // 每接收到一次消息都会触发这个回调
         // @ts-ignore
@@ -131,6 +132,7 @@ export const connectStomp = (
 };
 
 const handleDisconnect = () => {
+  connected.value = false;
   connectStomp(mainStore, messageStore);
 };
 
@@ -141,7 +143,7 @@ export const sendMessage = (
   serviceId: string,
   serviceType: number
 ) => {
-  if (!connected) {
+  if (!connected.value) {
     ElMessage.error({
       message: "暂未连接到消息服务器，请耐心等待或重新进入程序",
     });

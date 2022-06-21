@@ -6,7 +6,7 @@
           <SelfInformationCard />
           <div class="title">
             <span>我的消息</span>
-            <span>快速处理</span>
+            <span>{{ connected ? "已连接" : "未连接" }}</span>
           </div>
         </div>
         <div style="height: calc(100% - 130px)">
@@ -58,6 +58,7 @@ import ChatBox from "./components/ChatBox.vue";
 import ChatBoxBottom from "./components/ChatBoxBottom.vue";
 import ChatUserList from "./components/ChatUserList.vue";
 import SelfInformationCard from "./components/SelfInformationCard.vue";
+import { connected } from "@/utils/stomp";
 
 const route = useRoute();
 const mainStore = useMainStore();
