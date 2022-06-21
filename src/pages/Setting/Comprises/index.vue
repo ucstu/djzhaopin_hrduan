@@ -43,6 +43,7 @@ const store = useCompriseStore();
 const inputVisible = ref(false);
 const InputRef = ref<InstanceType<typeof ElInput>>();
 const inputValue = ref("");
+// 一种专注于输入元素的方法。
 const addPrise = () => {
   inputVisible.value = true;
   nextTick(() => {
@@ -50,6 +51,7 @@ const addPrise = () => {
   });
 };
 
+// 用于添加和删除输入值的函数。
 const handleInputConfirm = () => {
   if (inputValue.value && store.comprise.length < 16) {
     store.comprise.unshift(inputValue.value);

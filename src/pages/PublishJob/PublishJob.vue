@@ -353,9 +353,9 @@ import SystemHeader from "@/components/System/SystemHeader.vue";
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import {
-  getDirectionTags,
   getCityInformations,
   getCompanyInfosP0PositionInfosP1,
+  getDirectionTags,
   postCompanyInfosP0PositionInfos,
   putCompanyInfosP0PositionInfosP1,
 } from "@/services/services";
@@ -363,9 +363,9 @@ import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
 import { ElMessage, FormInstance } from "element-plus";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, Ref, ref, shallowRef } from "vue";
 import { useRoute } from "vue-router";
-import { storeToRefs } from "pinia";
 import DirectionTagSelector from "./DirectionTagSelector.vue";
 import InterviewTagSelector from "./InterviewTagSelector.vue";
 import PositionTagSelector from "./PositionTagSelector.vue";
@@ -493,6 +493,7 @@ const cityChange = (val: Array<string>) => {
 };
 const aboutAddress = ref<any>([]);
 
+// 上面的代码是页面加载时调用的函数。它用于加载地图并在地图上设置标记。
 const loadMap = () => {
   map.value = new AMap.Map("container", {
     zoom: 13,
@@ -637,12 +638,14 @@ getCityInformations()
   .catch(failResponseHandler);
 
 const workTimeing = ref([]);
+// 当用户更改工作时间时调用的函数。
 const handleWorkTimeChange = (val: Array<string>) => {
   let startTime = useTime(val[0]);
   let endTime = useTime(val[1]);
   jobTypeList.value.workTime = startTime;
   jobTypeList.value.overTime = endTime;
 };
+// 当用户在地图上选择一个位置时调用的函数。
 const handleArea = (address: any) => {
   jobTypeList.value.workAreaName = address.address;
   let lnglat = {

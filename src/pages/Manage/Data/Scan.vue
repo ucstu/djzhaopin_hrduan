@@ -32,6 +32,7 @@ let props = defineProps({
   },
 });
 
+// 使用 echarts 库创建图表。
 use([
   CanvasRenderer,
   LineChart,

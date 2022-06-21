@@ -151,6 +151,7 @@ const valueMap = ref<Record>({
   status: [1, 2, 3, 4],
 });
 const recruitmentPosition = ref(0);
+// 获取位置信息的总数。
 getCompanyInfosP0PositionInfos(store.companyInformation.companyInformationId, {
   size: 1,
 }).then((res) => {

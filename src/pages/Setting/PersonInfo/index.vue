@@ -93,7 +93,7 @@ const store = useMainStore();
 
 const ruleFormRef = ref<FormInstance>();
 const formHr = reactive<HrInformation>({ ...store.hrInformation });
-
+//上传头像
 const uploadInput = ref<HTMLElement | null>(null);
 const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;

@@ -35,10 +35,10 @@
 
 <script lang="ts" setup>
 import { useMainStore } from "@/stores/main";
-import { ref, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const store = useMainStore();
-const includeList = ref(["Person", "Company"]);
+
 const { hrName } = toRefs(store.hrInformation);
 </script>
 

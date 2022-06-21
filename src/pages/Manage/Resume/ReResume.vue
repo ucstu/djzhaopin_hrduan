@@ -151,6 +151,7 @@ const total = computed(() => {
   return Math.ceil(num);
 });
 const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
+// 确定面试时间设置
 const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
   dialogTableVisible.value = false;
   putUserInfosP0DeliveryRecordsP1(
@@ -162,11 +163,13 @@ const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
   });
 };
 const Ages = ref<Array<number>>([]);
+// 创建一个将在年龄更改时调用的函数。
 const handleAgeChange = (value: string) => {
   valueMap.value.ages = ages.value[value];
   handleChange();
 };
 
+// 选中或取消选中复选框时调用的函数将映射内容返回字符放入选择器显示。
 const submitChecked = (data: { checked: boolean }) => {
   deliveryRecordsCheckeds.value.map(
     (deliveryRecordsChecked: DeliveryRecordChecked) => {
@@ -221,6 +224,7 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
   }
 };
 
+// 用于检查是否勾选的功能。
 const handleChecked = (deliveryRecordId: string) => {
   if (deliveryRecordsCheckeds.value) {
     deliveryRecordsCheckeds.value.map((deliver: DeliveryRecordChecked) => {

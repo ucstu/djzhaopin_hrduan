@@ -55,7 +55,7 @@ const message = () => {
 const ruleForm = reactive({
   verificationCode: "",
 });
-
+//发送验证码
 const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,

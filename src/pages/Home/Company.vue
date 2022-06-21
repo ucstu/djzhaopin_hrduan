@@ -361,6 +361,7 @@ interface CityInfo {
 }
 const cityMap = ref<CityInfo[]>([]);
 
+// 上面的代码是使用 AMap API 创建地图并在地图上添加标记。
 onMounted(() => {
   map.value = new AMap.Map("container", {
     zoom: 13,
@@ -455,6 +456,7 @@ getCityInformations()
     });
   })
   .catch(failResponseHandler);
+// 当用户从下拉列表中选择地址时调用的函数。
 const handleArea = (address: any) => {
   formCompany.value.address = address.address;
   let lnglat = {

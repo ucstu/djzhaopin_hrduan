@@ -88,6 +88,7 @@ const uploadimg = () => {
     ElMessage.error("请先选择聊天对象");
   }
 };
+// 上传图片并发送给对方的功能。
 const dealimgchange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
@@ -135,6 +136,7 @@ const sentMessage = (e: KeyboardEvent) => {
 const handleCommand = (command: string) => {
   content.value = content.value + command;
 };
+// 发送消息的功能。
 const sentMessage1 = () => {
   if (props.chatId) {
     if (content.value) {

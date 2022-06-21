@@ -80,6 +80,7 @@ const requireInterview = () => {
 const total = computed(() => {
   return props.deliveryRecordsCheckeds.length;
 });
+// 一个计算属性，它返回 deliveryRecordsCheckeds 数组中已检查项目的数量。
 const totalDone = computed(() => {
   return props.deliveryRecordsCheckeds.reduce(
     (per, cur) => per + (cur.checked ? 1 : 0),
@@ -91,6 +92,7 @@ const handleInterviewTime = () => {
     time: useDate(value1.value),
   });
 };
+// 一个计算属性，它返回 deliveryRecordsCheckeds 数组中已检查项目的数量。
 const totalSelect = computed({
   get() {
     return totalDone.value === total.value && total.value > 0;

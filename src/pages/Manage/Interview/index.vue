@@ -39,7 +39,7 @@
                   <el-button
                     type="primary"
                     plain
-                    @click="changeState(5 as 1 | 2 | 3 | 4 | 5 )"
+                    @click="changeState(5 as 1 | 2 | 3 | 4 | 5)"
                     >删除简历</el-button
                   >
                 </template>
@@ -129,6 +129,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
     })
     .catch(failResponseHandler);
 };
+// 更改所选简历信息状态的功能。
 const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
   if (deliveryRecordsCheckeds.value) {
     //变更状态函数，将选中的简历信息的状态进行变更
@@ -137,6 +138,7 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
         return deliveryRecordsChecked.checked === true;
       }
     );
+    // 更改所选简历信息的状态。
     newDeliver.map((delivery: DeliveryRecordChecked) => {
       delivery.status = val;
       putUserInfosP0DeliveryRecordsP1(
@@ -156,9 +158,11 @@ const submitChecked = (data: any) => {
     }
   );
 };
+// 计算属性。
 const totalli = computed(() => {
   return deliveryRecordsCheckeds.value.length;
 });
+// 一个计算函数，返回检查项目的数量。
 const totalDone = computed(() => {
   return deliveryRecordsCheckeds.value.reduce(
     (per, cur) => per + (cur.checked ? 1 : 0),
@@ -166,6 +170,7 @@ const totalDone = computed(() => {
   );
 });
 
+// 计算属性。
 const totalSelect = computed({
   get() {
     return totalDone.value === totalli.value && totalli.value > 0;

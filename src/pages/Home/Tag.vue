@@ -25,6 +25,7 @@ interface PositionType {
   checked: boolean;
 }
 const checkedPosition = ref<Ref<{ checked: boolean; fieldName: string }>>();
+// 当用户点击标签时调用的函数。它用于更改标签的状态。
 const changeDirection = (
   direction: Ref<{
     fieldName: string;

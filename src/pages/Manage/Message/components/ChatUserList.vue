@@ -82,6 +82,7 @@ const emits = defineEmits<{
   (e: "chatWithUser", activeUserInformationId: string | number): void;
 }>();
 
+// 计算未读消息数的函数。
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
   messages.forEach((item) => {

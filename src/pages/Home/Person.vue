@@ -131,10 +131,12 @@ const formLabelAlign = ref<HrInformation>({ ...store.hrInformation });
 const company = ref({
   name: "",
 });
+// 将电子邮件地址设置为路由参数的值。
 onMounted(() => {
   formLabelAlign.value.acceptEmail = route.params.PersonEmail as string;
 });
 const alive = ref(true);
+// 更改公司名称时将调用的函数。它将检查公司名称是否已在数据库中。如果是，它将获取公司 id 并将其存储在 formLabelAlign.value.companyInformationId 中。
 const checkedCompany = (val: string) => {
   return getCompanyInfos({ companyName: val }).then((res) => {
     if (res.data.body.totalCount !== 0) {
@@ -185,6 +187,8 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
         )
           .then((res) => {
             store.hrInformation = res.data.body;
+            // 如果companyInformationId不为null，则获取公司信息并存储在store中。然后它将替换到管理的路线。如果 companyInformationId 为
+            // null，它将替换到 Company 的路由。
             if (res.data.body.companyInformationId) {
               getCompanyInfosP0(res.data.body.companyInformationId).then(
                 (response) => {

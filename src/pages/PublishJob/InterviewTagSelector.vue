@@ -94,6 +94,7 @@ const checkedInterviewTag = ref<{ checked: boolean; name: string }[]>([
   { checked: false, name: "" },
   { checked: false, name: "" },
 ]);
+// 用于处理复选框的函数。
 const handleillustrate = (
   data: { checked: boolean; name: string },
   listIndex: number,

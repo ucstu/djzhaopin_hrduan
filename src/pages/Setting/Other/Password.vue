@@ -98,6 +98,7 @@ const ruleForm = reactive<rlueAccount>({
   verificationCode: "",
 });
 
+// 用于获取验证码的函数。
 const postverificationCode = () => {
   getVerificationCode({
     email: store.hrInformation.acceptEmail,

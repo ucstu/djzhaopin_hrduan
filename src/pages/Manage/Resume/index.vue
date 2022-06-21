@@ -23,7 +23,7 @@
                     userInfo?.age + "岁"
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
-                    educationMap[userInfo.education+1 as 1 | 2 | 3 | 4]
+                    educationMap[(userInfo.education + 1) as 1 | 2 | 3 | 4]
                   }}</el-breadcrumb-item>
                   <el-breadcrumb-item>{{
                     userInfo?.workingYears
@@ -33,7 +33,9 @@
                 </el-breadcrumb></span
               >
               <span class="state"
-                >求职状态：{{ jobStatusMap[userInfo!.jobStatus+1 as 1 | 2 | 3 ] }}</span
+                >求职状态：{{
+                  jobStatusMap[(userInfo!.jobStatus + 1) as 1 | 2 | 3]
+                }}</span
               >
               <span class="state"
                 >期望职位：{{ positionInfo?.positionName }}</span
@@ -153,7 +155,6 @@ import {
 } from "@/services/types";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import { failResponseHandler } from "@/utils/handler";
-import { sendMessage } from "@/utils/stomp";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
@@ -215,6 +216,7 @@ if (typeof route.params.postId === "string") {
     .catch(failResponseHandler);
 }
 const messageStore = useMessageStore();
+// 用于将用户推送到消息页面的功能。
 const toMessage = (userId: string) => {
   if (userId === undefined) {
     return;

@@ -17,6 +17,7 @@ import { connectStomp } from "./utils/stomp";
 const mainStore = useMainStore();
 const messageStore = useMessageStore();
 
+// 检查用户是否登录，如果用户已经登录，它会为axios设置授权头，并获取用户的信息。如果用户没有登录，它会将用户重定向到登录页面。
 if (mainStore.jsonWebToken != null) {
   getAxiosInstance(undefined).defaults.headers.common[
     "Authorization"

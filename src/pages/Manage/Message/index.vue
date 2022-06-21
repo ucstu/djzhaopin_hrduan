@@ -66,13 +66,14 @@ const messageStore = useMessageStore();
 
 const activeUserInformationId = ref<string>(null as unknown as string);
 
+// 当用户点击聊天列表中的用户时调用的函数。
 const chatWithUser = (_activeUserInformationId: string | number) => {
   if (typeof _activeUserInformationId === "string") {
     activeUserInformationId.value = _activeUserInformationId.toString();
     readAllMessage(_activeUserInformationId);
   }
 };
-
+// 当用户单击聊天页面左侧的用户时将调用的函数。它会将来自用户的所有消息设置为已读
 const readAllMessage = (ActiveUserInformationId: string) => {
   for (const message of messages.value[
     mainStore.accountInformation.fullInformationId

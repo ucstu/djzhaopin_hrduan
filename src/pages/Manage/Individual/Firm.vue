@@ -167,11 +167,13 @@ const handleArea = (address: any) => {
   marker.value.setPosition(markerLnglat);
   map.value.setCenter(markerLnglat);
 };
+// 上面的代码是一个 Vue 生命周期钩子。它在组件更新时调用。
 onUpdated(() => {
   if (formCompany) {
     formCompany.cityName = cityInfo.value[1];
   }
 });
+// 安装组件时调用的 Vue 钩子。它使用 AMap API 创建地图并为其添加标记。
 onMounted(() => {
   map.value = new AMap.Map("container", {
     zoom: 13,
@@ -257,6 +259,7 @@ onMounted(() => {
     }
   );
 });
+// 当用户单击提交按钮时调用的函数。
 const submitData = (data: {
   data: Ref<{ checked: boolean; fieldName: string }>;
 }) => {
