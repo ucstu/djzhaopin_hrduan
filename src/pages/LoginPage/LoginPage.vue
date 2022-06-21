@@ -109,48 +109,55 @@ const submitForm = (formEl: FormInstance | undefined) => {
         .then((res) => {
           mainStore.jsonWebToken = res.data.body.token;
           mainStore.accountInformation = res.data.body.accountInformation;
-          getAxiosInstance(undefined).defaults.headers.common["Authorization"] =
-            "Bearer " + res.data.body.token;
-          getHrInfosP0(mainStore.accountInformation.fullInformationId)
-            .then((res) => {
-              if (
-                !messageStore.messages[
-                  mainStore.accountInformation.fullInformationId
-                ]
-              ) {
-                messageStore.messages[
-                  mainStore.accountInformation.fullInformationId
-                ] = {};
-              }
-              connectStomp(mainStore, messageStore);
-              if (res.data.body.hrName !== null) {
-                if (res.data.body.companyInformationId !== null) {
-                  getCompanyInfosP0(res.data.body.companyInformationId)
-                    .then((res) => {
-                      mainStore.companyInformation = res.data.body;
-                      router.replace("/Manage");
-                    })
-                    .catch((err) => {
-                      failResponseHandler(err);
-                    });
-                  mainStore.hrInformation = res.data.body;
+          if (res.data.body.accountInformation.accountType !== 2) {
+            ElMessage.error("您的账号不是HR账号");
+            ruleForm.userName = "";
+            ruleForm.password = "";
+          } else {
+            getAxiosInstance(undefined).defaults.headers.common[
+              "Authorization"
+            ] = "Bearer " + res.data.body.token;
+            getHrInfosP0(mainStore.accountInformation.fullInformationId)
+              .then((res) => {
+                if (
+                  !messageStore.messages[
+                    mainStore.accountInformation.fullInformationId
+                  ]
+                ) {
+                  messageStore.messages[
+                    mainStore.accountInformation.fullInformationId
+                  ] = {};
+                }
+                connectStomp(mainStore, messageStore);
+                if (res.data.body.hrName !== null) {
+                  if (res.data.body.companyInformationId !== null) {
+                    getCompanyInfosP0(res.data.body.companyInformationId)
+                      .then((res) => {
+                        mainStore.companyInformation = res.data.body;
+                        router.replace("/Manage");
+                      })
+                      .catch((err) => {
+                        failResponseHandler(err);
+                      });
+                    mainStore.hrInformation = res.data.body;
+                  } else {
+                    mainStore.hrInformation = res.data.body;
+                    mainStore.companyInformation =
+                      null as unknown as CompanyInformation;
+                    router.replace("/Home/Company");
+                  }
                 } else {
-                  mainStore.hrInformation = res.data.body;
+                  mainStore.hrInformation = null as unknown as HrInformation;
                   mainStore.companyInformation =
                     null as unknown as CompanyInformation;
-                  router.replace("/Home/Company");
+                  router.replace({
+                    name: "Person",
+                    params: { PersonEmail: ruleForm.userName },
+                  });
                 }
-              } else {
-                mainStore.hrInformation = null as unknown as HrInformation;
-                mainStore.companyInformation =
-                  null as unknown as CompanyInformation;
-                router.replace({
-                  name: "Person",
-                  params: { PersonEmail: ruleForm.userName },
-                });
-              }
-            })
-            .catch(failResponseHandler);
+              })
+              .catch(failResponseHandler);
+          }
         })
         .catch(failResponseHandler);
     } else {
