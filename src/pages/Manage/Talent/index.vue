@@ -64,7 +64,7 @@
               <el-input
                 v-model="valueMap.search"
                 class="w-50 m-2"
-                input-style="max-width: 212px;"
+                input-style="max-width: 215px;"
                 placeholder="输入搜索内容"
                 :prefix-icon="Search"
               />
@@ -82,13 +82,13 @@
                     <el-checkbox v-model="Talent.checked" />
                     <img :src="VITE_CDN_URL + Talent.avatarUrl" alt="avatar" />
                     <div class="header-person">
-                      <span
-                        >{{ Talent.firstName as string + Talent.lastName }}</span
-                      >
+                      <span>{{
+                        (Talent.firstName as string) + Talent.lastName
+                      }}</span>
                       <span
                         >{{ Talent.sex }}·{{ Talent.age }}岁·{{
                           Talent.education
-                        }}·{{ slution[Talent.jobStatus as number +1] }}</span
+                        }}·{{ slution[(Talent.jobStatus as number) + 1] }}</span
                       >
                       <span
                         >想找：{{ Talent.cityName }}|{{
@@ -105,7 +105,9 @@
                   <div>
                     <el-button
                       type="primary"
-                      @click="inspectionResume(Talent.userInformationId as string)"
+                      @click="
+                        inspectionResume(Talent.userInformationId as string)
+                      "
                     >
                       查看简历</el-button
                     >

@@ -33,14 +33,17 @@
                   :value="index + 1"
                 />
               </el-select>
-              <el-date-picker
-                v-model="workTimeing"
-                type="daterange"
-                range-separator="到"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
-                @change="handleWorkTimeChange(workTimeing)"
-              />
+              <div style="width: 350px">
+                <el-date-picker
+                  v-model="workTimeing"
+                  style="width: 330px"
+                  type="daterange"
+                  range-separator="到"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                  @change="handleWorkTimeChange(workTimeing)"
+                />
+              </div>
             </div>
             <div class="second-line">
               <el-select
@@ -73,7 +76,6 @@
               </el-select>
               <el-input
                 v-model="valueMap.userName"
-                class="w-50 m-2"
                 input-style="max-width: 350px;"
                 placeholder="输入姓名查找"
                 :prefix-icon="Search"
@@ -364,7 +366,7 @@ const ages = ref<{ [key: string]: Array<number> }>({
             justify-content: space-between;
             height: 50px;
 
-            .el-data-picker {
+            ::v-deep .el-data-picker {
               max-width: 200px;
               margin: 0 2px;
             }
@@ -399,5 +401,23 @@ const ages = ref<{ [key: string]: Array<number> }>({
       }
     }
   }
+}
+
+.demo-date-picker {
+  display: flex;
+  flex-wrap: wrap;
+  width: 300px;
+  padding: 0;
+}
+
+.demo-date-picker .block {
+  flex: 1;
+  padding: 30px 0;
+  text-align: center;
+  border-right: solid 1px var(--el-border-color);
+}
+
+.demo-date-picker .block:last-child {
+  border-right: none;
 }
 </style>
