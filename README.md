@@ -1,16 +1,55 @@
-# Vue 3 + Typescript + Vite
+# 东江人才招聘-HR端
 
-This template should help get you started developing with Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 📃 相关地址
 
-## Recommended IDE Setup
+东江人才招聘-用户端：[演示地址](https://djyh.ucstu.com) [Github仓库](https://github.com/ucstu/djzhaopin_yonghuduan)
+东江人才招聘-HR端：[演示地址](https://djhr.ucstu.com) [Github仓库](https://github.com/ucstu/djzhaopin_hrduan)
+东江人才招聘-管理端：[演示地址](https://djadmin.ucstu.com) [Github仓库](https://github.com/ucstu/djzhaopin_admin)
+东江人才招聘-后端：[Github仓库](https://github.com/ucstu/djzhaopin_backend)
+演示视频：
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+## Ⓜ️ 主要功能
 
-## Type Support For `.vue` Imports in TS
+### 1、登陆注册
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+![image.png](https://s2.loli.net/2022/11/01/geumtz6bGjNJAIL.png)
+![image.png](https://s2.loli.net/2022/11/01/1zj2gQ9FnlS8VMh.png)
 
-1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+### 2、首页数据总览
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+![image.png](https://s2.loli.net/2022/11/01/luYAzIaNUh5dHLD.png)
+
+### 3、查看简历
+
+![image.png](https://s2.loli.net/2022/11/01/fjKq2CMcQBSIyX9.png)
+
+### 4、职位管理
+
+![image.png](https://s2.loli.net/2022/11/01/sTMBm57wAJhkLn1.png)
+
+### 5、简历管理
+
+![image.png](https://s2.loli.net/2022/11/01/FR8WKnGDZMlyOqw.png)
+
+### 6、数据中心
+
+![image.png](https://s2.loli.net/2022/11/01/dX64QIJNcPSeWMl.png)
+
+### 7、消息页面
+
+![image.png](https://s2.loli.net/2022/11/01/9mhgNnH7v2byr6J.png)
+
+### 8、发布职位
+
+![image.png](https://s2.loli.net/2022/11/01/R8mMinpylD3hLks.png)
+
+## 🎖️ 整体功能
+
+![image.png](https://s2.loli.net/2022/11/01/RrP1TY2hMBcDoup.png)
+![image.png](https://s2.loli.net/2022/11/01/d6ZkbQzJTl597Pp.png)
+![image.png](https://s2.loli.net/2022/11/01/AXbsmM4Z76SnwE9.png)
+Figma：[东江人才招聘-HR端](https://www.figma.com/file/O7lc9NdDxOm4GLxcSMJTVb/%E4%B8%9C%E6%B1%9F%E4%BA%BA%E6%89%8D%E6%8B%9B%E8%81%98-HR%E7%AB%AF?node-id=0%3A1)
+
+## 📦 运行方式
+
+详见 package.json
